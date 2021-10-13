@@ -1,0 +1,5 @@
+print('Hello,Python!')
+print ('Program　is done. Any Press Key')
+#buf = input('')
+#print('buf = ' + buf)
+input()
