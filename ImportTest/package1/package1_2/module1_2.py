@@ -11,7 +11,7 @@ def main():
 
 class class1_2:
     print('class module1_2 do')
-    def get_class_name():
+    def get_class_name(self):
         return 'get_class_name : module1_2'
 
 def module1_2():
