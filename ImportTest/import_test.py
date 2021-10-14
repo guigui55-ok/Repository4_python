@@ -28,14 +28,16 @@ print('c1.get_class_name = ' + str(buf))
 print('c1.get_class_name = ' + str(class1_1().get_class_name()))
 
 c2 = class1_2()
-buf = c2.get_class_name()
+buf = c2.get_class_name(c2)
+print('c2.get_class_name = ' + str(buf))
+buf = class1_2.get_class_name()
 print('c2.get_class_name = ' + str(buf))
 
 # インスタンス生成しないパターン
 c2_2 = class2_2
 buf = c2_2.get_class_name()
 print('c2_2.get_class_name() = ' + str(buf))
-buf = c2_2.get_class_name()
+buf = class2_2.get_class_name()
 print('c2_2.get_class_name() = ' + str(buf))
 
 # 以下は className() かっこがない状態での代入で、get_class_name実行時にエラーとなる
