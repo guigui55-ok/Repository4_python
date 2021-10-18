@@ -1,0 +1,8 @@
+2021-10-19 07:32:05,097 __main__:30 log_test1 [INFO]: message
+2021-10-19 07:32:05,099 __main__:39 log_test1 [INFO]: this messege is never displayed.
+2021-10-19 07:32:05,102 __main__:41 log_test1 [WARNING]: unauthorized.
+2021-10-19 07:32:05,104 __main__:44 log_test1 [INFO]: Process Start!
+2021-10-19 07:32:05,106 __main__:46 log_test1 [INFO]: info
+2021-10-19 07:32:05,107 __main__:47 log_test1 [WARNING]: warning
+2021-10-19 07:32:05,109 __main__:48 log_test1 [ERROR]: error
+2021-10-19 07:32:05,110 __main__:49 log_test1 [INFO]: Process End!

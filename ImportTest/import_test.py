@@ -4,15 +4,17 @@ import package1
 import sys
 sys.path.append('/')
 
-# 基本的なimport
+# import 列挙して一度に import が可能
 from package1.module1_1 import class1_1, module1_1
-# 下位packageもimport可能
+
+# 下位 ディレクトリ(package) の import
 from package1.package1_2.module1_2 import class1_2
-# 先頭に数字を使うとimportができず、SyntaxError: invalid syntax となる
+
+# 先頭に数字を使うと import ができず、SyntaxError: invalid syntax となる
 # from package1.1_3package import class1_3_1
 # from .package1 import 1_3package
 
-# __init__.py(中身は空でOK)がpapckage(Package2 folder)直下にないと、import error となる
+# __init__.py(中身は空でOK)がpapckage(Package2 folder)直下にないと、import error となる(python v3.3以下)
 # from Package2.Package2_2 import class2_2
 # # import Pacakge2
 import Package2.Package2_2.module2_2
