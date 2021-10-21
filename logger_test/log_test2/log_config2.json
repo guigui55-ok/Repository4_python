@@ -1,0 +1,10 @@
+{
+    
+    "$comment_version":"versionは必須の値、1のみ指定可能",
+    "version": 1,
+    "root":{
+        "$comment_level1":"ログ出力するレベルを指定する",
+        "$comment_level2":"CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET",
+        "level" : "DEBUG"
+    }
+}

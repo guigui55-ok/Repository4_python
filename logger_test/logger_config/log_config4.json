@@ -1,0 +1,18 @@
+{    
+    "version": 1,
+    "root":{
+        "$comment_level2":"CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET",
+        "level" : "INFO",
+        "handlers":["fileHandler"]
+    },
+    "$comment":"level:WARNING 以上がファイルに追記される",
+    "handlers": {
+        "fileHandler": {
+            "class": "logging.FileHandler",
+            "level": "WARNING",
+            "filename": "./logger_config/app4.log",
+            "mode": "a"
+        }
+    }
+
+}

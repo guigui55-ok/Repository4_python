@@ -6,3 +6,27 @@
 2021-10-19 07:32:05,107 __main__:47 log_test1 [WARNING]: warning
 2021-10-19 07:32:05,109 __main__:48 log_test1 [ERROR]: error
 2021-10-19 07:32:05,110 __main__:49 log_test1 [INFO]: Process End!
+2021-10-20 06:20:01,144 __main__:19 log_test2 [INFO]: message
+2021-10-20 06:20:01,151 __main__:27 log_test2 [INFO]: this messege is never displayed.
+2021-10-20 06:20:01,152 __main__:29 log_test2 [WARNING]: unauthorized.
+2021-10-20 06:20:01,153 __main__:33 log_test2 [INFO]: Process Start!
+2021-10-20 06:20:01,155 __main__:35 log_test2 [INFO]: info
+2021-10-20 06:20:01,156 __main__:36 log_test2 [WARNING]: warning
+2021-10-20 06:20:01,157 __main__:37 log_test2 [ERROR]: error
+2021-10-20 06:20:01,159 __main__:38 log_test2 [INFO]: Process End!
+2021-10-20 06:20:33,585 __main__:20 log_test2 [INFO]: message
+2021-10-20 06:20:33,585 __main__:28 log_test2 [INFO]: this messege is never displayed.
+2021-10-20 06:20:33,586 __main__:30 log_test2 [WARNING]: unauthorized.
+2021-10-20 06:20:33,587 __main__:34 log_test2 [INFO]: Process Start!
+2021-10-20 06:20:33,589 __main__:36 log_test2 [INFO]: info
+2021-10-20 06:20:33,591 __main__:37 log_test2 [WARNING]: warning
+2021-10-20 06:20:33,593 __main__:38 log_test2 [ERROR]: error
+2021-10-20 06:20:33,594 __main__:39 log_test2 [INFO]: Process End!
+2021-10-20 06:20:55,416 __main__:20 log_test2 [INFO]: message
+2021-10-20 06:20:55,418 __main__:28 log_test2 [INFO]: this messege is never displayed.
+2021-10-20 06:20:55,421 __main__:30 log_test2 [WARNING]: unauthorized.
+2021-10-20 06:20:55,422 __main__:34 log_test2 [INFO]: Process Start!
+2021-10-20 06:20:55,426 __main__:36 log_test2 [INFO]: info
+2021-10-20 06:20:55,429 __main__:37 log_test2 [WARNING]: warning
+2021-10-20 06:20:55,432 __main__:38 log_test2 [ERROR]: error
+2021-10-20 06:20:55,433 __main__:39 log_test2 [INFO]: Process End!
