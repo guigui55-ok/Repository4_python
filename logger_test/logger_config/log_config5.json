@@ -8,15 +8,15 @@
         "level" : "DEBUG",
         "handlers":["fileHandler"]
     },
+    "$comments":"20Byte以上になると新たにログファイルを作成して書き込む",
     "handlers": {
         "fileHandler": {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "INFO",
             "filename": "./logger_config/app5.log",
             "mode": "a",
-            "maxBytes":1024,
-            "backupCount":2,
-            "delay":true
+            "maxBytes":20,
+            "backupCount":2
         }
     }
 

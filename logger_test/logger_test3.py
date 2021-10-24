@@ -1,11 +1,15 @@
-
+"""logger_test.py - 
+logging.Logger クラス を使用するサンプル
+config.dictConfig を使用
+logger を委譲したクラスを使用★
+"""
 from logging import getLogger
 from logging import config
 import sys
 import os  
 import json
 
-from logger_test_common import log_test_main, logger_class,logger_init,set_logger_config
+from logger_test_common_1 import log_test_main, logger_class,logger_init,set_logger_config
 
 
 def log_test3_main():
