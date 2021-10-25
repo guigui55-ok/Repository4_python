@@ -1,12 +1,27 @@
 import os
+import file_io_util.file_io
+import logger_init
 
-file_name = 'test.txt'
-directory = os.getcwd()
-path = directory + '\\' + file_name
+def main():
+    logger = logger_init.initialize_logger()
+    file_name = 'test.txt'
+    directory = os.getcwd()
+    path = directory + '\\' + file_name    
+    logger.info('path = '+ path)
 
-if (os.isfile(path)):
-    print('file path is not found')
+    cio = file_io_util.file_io.file_io(
+        logger,path
+    )
+    data = ''
+    if (os.path.isfile(path)):
+        logger.info('file path is exists')
+        data = cio.read(path)
+        logger.info('read data:\n' + data)
+        logger.info('---------------------------------')
+    else:
+        logger.info('file path is not found')
+        data = 'test write_append'
+        cio.write_append(data,path)
 
-else:
-    pass
-
+if __name__ == '__main__':
+    main()

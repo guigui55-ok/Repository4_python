@@ -23,14 +23,13 @@ def initialize_logger() -> logging_util.logger_util:
     )
     return loggeru
 
-def main():
-    loggeru = initialize_logger()
-    loggeru.info('info main')
-    loggeru.debug('debug main')
-    loggeru.warning('warning main')
-    loggeru.error('error main')
-    loggeru.critical('critical main')
+# def main():
+#     loggeru = initialize_logger()
+#     loggeru.info('info main')
+#     loggeru.debug('debug main')
+#     loggeru.warning('warning main')
+#     loggeru.error('error main')
+#     loggeru.critical('critical main')
 
-
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

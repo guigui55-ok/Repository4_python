@@ -1,0 +1,4 @@
+numpy multiarray import error
+---
+RaspberryPiでNumpyをインポートした際のエラー ImportError: numpy.core.multiarray failed to import
+https://qiita.com/kai0706/items/8169d01a83f63fc4a0bd

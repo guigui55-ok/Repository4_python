@@ -1,0 +1,48 @@
+Repository2
+Update Solution
+
+
+ErrorManager
+// 3.2.0.0 - 2021/10/10
+// class ErrorManager - Add Meghod : void AddLogAlert(object argObject, Exception exception, string logValue, string messageToUser = "")
+
+ImageViewer
+// 0.2.1.0 - 21/10/08 - 機能修正：ファイス変更処理を修正
+
+FileListManagerSample.proj - IFiles - AddMethod : int Count();
+Add Class : FileListManagerConstants
+Add Class : FileListManagerErrorCodes
+Add Class : FileListManagerErrorMessages
+Add Class : FileListManagerConstConvert
+
+
+Repository3
+Update Solution
+
+
+--------------------
+SolutionName
+Date
+Version
+Summary/Description
+--------------------
+Update README.md
+
+Upload Binary In Zip
+
+ErrorManager
+// 5.3.0.0 - 2021/10/10
+// static public class Constants
+// Add Method IErrorMessenger
+// void ShowMessageAddToExistingStringToBehind(FontStyle style, Color color, string msg, string delimiter = "\n", string title = "");
+// Add Project ErrorManagerSampleForm
+
+// 4.2.0.0 - 2021/10/10
+ErrorManagerUtility.FileUility -> ErrorUtility.FileUtility
+Log.LogData -> ErrorUtility.LogUtility.LogData
+Log.LogManager -> ErrorUtility.LogUtility.LogManager
+ErrorManager.DebugData -> ErrorUtility.DebugData
+ErrorManager.ErrorManager ->  ErrorUtility.ErrorManager
+ErrorManager.IErrorMessenger -> ErrorUtility.IErrorMessenger
+
+2021/10/10 - Create Solution - OpenedFile 
