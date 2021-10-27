@@ -5,7 +5,7 @@
 """
  
 import logging
-from logging import config
+from logging import config, exception
 import sys
 import json
 from enum import IntEnum
@@ -161,15 +161,22 @@ class logger_util():
     def info(self,value): self.logger_info_main.logger.info(value)
     def warning(self,value): self.logger_info_main.logger.warning(value)
     def error(self,value): 
-        if self.logger_info_exp == None:
-            self.logger_info_main.logger.error(value)
-        else:
-            self.logger_info_exp.logger.error(value)
-    def critical(self,value): 
-        if self.logger_info_exp == None:
-            self.logger_info_main.logger.critical(value)
-        else:
-            self.logger_info_exp.logger.critical(value)
+        try:                
+            if self.logger_info_exp == None:
+                self.logger_info_main.logger.error(value)
+            else:
+                self.logger_info_exp.logger.error(value)
+        except Exception as e:
+            print(e) 
+
+    def critical(self,value):
+        try:
+            if self.logger_info_exp == None:
+                self.logger_info_main.logger.critical(value)
+            else:
+                self.logger_info_exp.logger.critical(value)
+        except Exception as e:
+            print(e)
 
 
     
