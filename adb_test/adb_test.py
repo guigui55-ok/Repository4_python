@@ -12,7 +12,7 @@ from types import ClassMethodDescriptorType
 import logger_init
 import subprocess
 logger = None
-import image_util.image_checker
+import image_checker
 import adb_util.adb_control
 
 def main():
@@ -31,7 +31,7 @@ def main():
     adb_util.adb_control.save_file_to_pc_from_android(
         '/sdcard/',get_image_path)
     # 画像を比較する
-    is_same = image_util.image_checker.is_same_image(
+    is_same = image_checker.is_same_image(
         logger,screen_off_image_path,get_image_path
     )
     if is_same:

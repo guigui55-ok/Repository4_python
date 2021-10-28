@@ -1,0 +1,294 @@
+>>> import sys
+>>> sys.exec_prefix
+'C:¥¥Users¥¥Ichiro¥¥AppData¥¥Local¥¥Programs¥¥Python¥¥Python37-32'
+>>> sys.executable
+'C:¥¥Users¥¥Ichiro¥¥AppData¥¥Local¥¥Programs¥¥Python¥¥Python37-32¥¥python.exe'
+
+
+>>> import sys
+>>> sys.exec_prefix
+'C:\\Program Files\\Python\\Python310'
+>>> sys.executable
+'C:\\Program Files\\Python\\Python310\\python.exe'
+C:\Program Files\Python\Python310
+-------------
+import sys
+print('***** sys.version')
+print(sys.version)
+print('***** sys.path')
+print(sys.path)
+print('***** sys.exec_prefix')
+print(sys.exec_prefix)
+print('***** sys.executable')
+print(sys.executable)
+------------
+
+C:¥Users¥Ichiro> py --list-paths
+
+Installed Pythons found by C:\WINDOWS\py.exe Launcher for Windows
+ -3.7-64        C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe *
+
+
+https://qiita.com/ophhdn/items/4d3ecc6354d92b7ac0ba
+import cv2
+cv2.__file__
+
+------------------------
+pip show matplotlib
+C:\WINDOWS\system32>py -m pip show matplotlib
+Name: matplotlib
+Version: 3.0.3
+Summary: Python plotting package
+Home-page: http://matplotlib.org
+Author: John D. Hunter, Michael Droettboom
+Author-email: matplotlib-users@python.org
+License: PSF
+Location: c:\users\ok\appdata\roaming\python\python37\site-packages
+Requires: cycler, kiwisolver, numpy, pyparsing, python-dateutil
+Required-by:
+
+C:\WINDOWS\system32>
+
+
+C:\Users\OK\AppData\Roaming\Python\Python37\site-packages
+C:\Program Files\Python\Python310\Lib\site-packages
+移動
+matplotlib
+
+
+
+
+C:\Program Files\Python\Python310\Scripts
+pip.exe
+
+C:\Program Files\Python\Python310\Scripts>pip3
+Fatal error in launcher: Unable to create process using '"C:\Users\OK\AppData\Local\Programs\Python\Python310\python.exe"  "C:\Program Files\Python\Python310\Scripts\pip3.exe" ': ??????????????????
+
+https://teratail.com/questions/280502
+
+複数バージョンのPythonにPATHが通っていないか確認しましょう。
+特に、Python3とかPython2とかAnacondaとか入れてる人は要注意。
+
+systempath
+C:\Users\OK\AppData\Local\Programs\Microsoft VS Code\bin
+C:\Program Files\Python\Python310
+
+---------------------
+使っていた　py　と　python　のパスが違う
+C:\Program Files\Python\Python310\Scripts>py pip
+C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe: can't open file 'pip': [Errno 2] No such file or directory
+
+C:\Program Files\Python\Python310\Scripts>python pip
+python: can't open file 'C:\\Program Files\\Python\\Python310\\Scripts\\pip': [Errno 2] No such file or directory
+
+
+---------------------
+vscode
+Python: Default Interpreter Path
+
+python
+
+C:\Program Files\Python\Python310\python.exe
+
+
+
+---------------------
+
+例外が発生しました: ImportError
+cannot import name '_path' from 'matplotlib' (C:\Program Files\Python\Python310\lib\site-packages\matplotlib\__init__.py)
+
+
+---------------------
+http://www.aoki.ecei.tohoku.ac.jp/~ito/python_windows.html
+matplotlib
+Python で図やグラフで結果を出力するときに必要となるパッケージをインストールする．
+
+matplotlibにアクセスし，matplotlib downloads page に進む．
+1.3.1 -- Latest stable version にある matplotlib-1.3.1.win32-py2.7.exe をダウンロードする．
+matplotlib-1.3.1.win32-py2.7.exe を使ってインストールする．
+このままでは，パッケージが足りないとエラーがでるため，pip を使って dateutil と pyparsing をインストールする．
+> pip install python-dateutil
+> pip install pyparsing
+
+---------------------
+
+
+
+
+Microsoft Windows [Version 10.0.19042.1288]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\WINDOWS\system32>py pip3
+C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe: can't open file 'pip3': [Errno 2] No such file or directory
+
+C:\WINDOWS\system32>py -m pip3
+C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe: No module named pip3
+
+C:\WINDOWS\system32>py -m pip install matplotlib
+Requirement already satisfied: matplotlib in c:\users\ok\appdata\roaming\python\python37\site-packages (3.0.3)
+Requirement already satisfied: cycler>=0.10 in c:\users\ok\appdata\roaming\python\python37\site-packages (from matplotlib) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in c:\users\ok\appdata\roaming\python\python37\site-packages (from matplotlib) (1.3.2)
+Requirement already satisfied: numpy>=1.10.0 in c:\users\ok\appdata\roaming\python\python37\site-packages (from matplotlib) (1.21.3)
+Requirement already satisfied: python-dateutil>=2.1 in c:\users\ok\appdata\roaming\python\python37\site-packages (from matplotlib) (2.8.2)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in c:\program files (x86)\microsoft visual studio\shared\python37_64\lib\site-packages (from matplotlib) (2.4.7)
+Requirement already satisfied: six in c:\users\ok\appdata\roaming\python\python37\site-packages (from cycler>=0.10->matplotlib) (1.16.0)
+
+C:\WINDOWS\system32>py -m pip show numpy
+Name: numpy
+Version: 1.21.3
+Summary: NumPy is the fundamental package for array computing with Python.
+Home-page: https://www.numpy.org
+Author: Travis E. Oliphant et al.
+Author-email:
+License: BSD
+Location: c:\users\ok\appdata\roaming\python\python37\site-packages
+Requires:
+Required-by: matplotlib, pandas
+
+C:\WINDOWS\system32>python
+Python 3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import sys
+>>> sys.exec_prefix
+'C:\\Program Files\\Python\\Python310'
+>>> sys.executable
+'C:\\Program Files\\Python\\Python310\\python.exe'
+>>> Installed Pythons found by C:\WINDOWS\py.exe Launcher for Windows
+  File "<stdin>", line 1
+    Installed Pythons found by C:\WINDOWS\py.exe Launcher for Windows
+                            ^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+>>>  -3.7-64        C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe *
+  File "<stdin>", line 1
+    -3.7-64        C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe *
+IndentationError: unexpected indent
+>>> exit()
+
+C:\WINDOWS\system32>py --list-paths
+Installed Pythons found by py Launcher for Windows
+ -3.7-64        C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe *
+
+
+C:\WINDOWS\system32>pip show matplotlib
+'pip' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+C:\WINDOWS\system32>py -m pip show matplotlib
+Name: matplotlib
+Version: 3.0.3
+Summary: Python plotting package
+Home-page: http://matplotlib.org
+Author: John D. Hunter, Michael Droettboom
+Author-email: matplotlib-users@python.org
+License: PSF
+Location: c:\users\ok\appdata\roaming\python\python37\site-packages
+Requires: cycler, kiwisolver, numpy, pyparsing, python-dateutil
+Required-by:
+
+C:\WINDOWS\system32>C:\Program Files\Python\Python310\Scripts
+'C:\Program' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+
+C:\WINDOWS\system32>cd C:\Program Files\Python\Python310\Scripts
+
+C:\Program Files\Python\Python310\Scripts>pip install matplotlib
+Fatal error in launcher: Unable to create process using '"C:\Users\OK\AppData\Local\Programs\Python\Python310\python.exe"  "C:\Program Files\Python\Python310\Scripts\pip.exe" install matplotlib': ??????????????????
+
+
+C:\Program Files\Python\Python310\Scripts>pip
+Fatal error in launcher: Unable to create process using '"C:\Users\OK\AppData\Local\Programs\Python\Python310\python.exe"  "C:\Program Files\Python\Python310\Scripts\pip.exe" ': ??????????????????
+
+
+C:\Program Files\Python\Python310\Scripts>pip3 install matplotlib
+Fatal error in launcher: Unable to create process using '"C:\Users\OK\AppData\Local\Programs\Python\Python310\python.exe"  "C:\Program Files\Python\Python310\Scripts\pip3.exe" install matplotlib': ??????????????????
+
+
+C:\Program Files\Python\Python310\Scripts>pip3
+Fatal error in launcher: Unable to create process using '"C:\Users\OK\AppData\Local\Programs\Python\Python310\python.exe"  "C:\Program Files\Python\Python310\Scripts\pip3.exe" ': ??????????????????
+
+
+C:\Program Files\Python\Python310\Scripts>pip
+Fatal error in launcher: Unable to create process using '"C:\Users\OK\AppData\Local\Programs\Python\Python310\python.exe"  "C:\Program Files\Python\Python310\Scripts\pip.exe" ': ??????????????????
+
+
+C:\Program Files\Python\Python310\Scripts>py pip
+C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe: can't open file 'pip': [Errno 2] No such file or directory
+
+C:\Program Files\Python\Python310\Scripts>python pip
+python: can't open file 'C:\\Program Files\\Python\\Python310\\Scripts\\pip': [Errno 2] No such file or directory
+
+C:\Program Files\Python\Python310\Scripts>python -m
+Argument expected for the -m option
+usage: python [option] ... [-c cmd | -m mod | file | -] [arg] ...
+Try `python -h' for more information.
+
+C:\Program Files\Python\Python310\Scripts>python -m pip install matplotlib
+Requirement already satisfied: matplotlib in c:\program files\python\python310\lib\site-packages (3.0.3)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.3.2-cp310-cp310-win_amd64.whl (52 kB)
+     |████████████████████████████████| 52 kB 3.8 MB/s
+Collecting cycler>=0.10
+  Using cached cycler-0.10.0-py2.py3-none-any.whl (6.5 kB)
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1
+  Downloading pyparsing-3.0.3-py3-none-any.whl (96 kB)
+     |████████████████████████████████| 96 kB 3.3 MB/s
+Requirement already satisfied: numpy>=1.10.0 in c:\program files\python\python310\lib\site-packages (from matplotlib) (1.21.3)
+Collecting python-dateutil>=2.1
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting six
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Installing collected packages: six, python-dateutil, pyparsing, kiwisolver, cycler
+Successfully installed cycler-0.10.0 kiwisolver-1.3.2 pyparsing-3.0.3 python-dateutil-2.8.2 six-1.16.0
+WARNING: You are using pip version 21.2.3; however, version 21.3.1 is available.
+You should consider upgrading via the 'C:\Program Files\Python\Python310\python.exe -m pip install --upgrade pip' command.
+
+C:\Program Files\Python\Python310\Scripts>python -m pip install pyparsing
+Requirement already satisfied: pyparsing in c:\program files\python\python310\lib\site-packages (3.0.3)
+WARNING: You are using pip version 21.2.3; however, version 21.3.1 is available.
+You should consider upgrading via the 'C:\Program Files\Python\Python310\python.exe -m pip install --upgrade pip' command.
+
+C:\Program Files\Python\Python310\Scripts>python -m pip install pyton-dateutil
+ERROR: Could not find a version that satisfies the requirement pyton-dateutil (from versions: none)
+ERROR: No matching distribution found for pyton-dateutil
+WARNING: You are using pip version 21.2.3; however, version 21.3.1 is available.
+You should consider upgrading via the 'C:\Program Files\Python\Python310\python.exe -m pip install --upgrade pip' command.
+
+C:\Program Files\Python\Python310\Scripts>python -m pip install python-dateutil
+Requirement already satisfied: python-dateutil in c:\program files\python\python310\lib\site-packages (2.8.2)
+Requirement already satisfied: six>=1.5 in c:\program files\python\python310\lib\site-packages (from python-dateutil) (1.16.0)
+WARNING: You are using pip version 21.2.3; however, version 21.3.1 is available.
+You should consider upgrading via the 'C:\Program Files\Python\Python310\python.exe -m pip install --upgrade pip' command.
+
+C:\Program Files\Python\Python310\Scripts>python -m pip uninstall matplotlib
+Found existing installation: matplotlib 3.0.3
+Uninstalling matplotlib-3.0.3:
+  Would remove:
+    c:\program files\python\python310\lib\site-packages\matplotlib-3.0.3.dist-info\*
+    c:\program files\python\python310\lib\site-packages\matplotlib\*
+Proceed (Y/n)? y
+  Successfully uninstalled matplotlib-3.0.3
+
+C:\Program Files\Python\Python310\Scripts>python -m pip install matplotlib
+Collecting matplotlib
+  Downloading matplotlib-3.4.3.tar.gz (37.9 MB)
+     |████████████████████████████████| 37.9 MB 287 kB/s
+Requirement already satisfied: cycler>=0.10 in c:\program files\python\python310\lib\site-packages (from matplotlib) (0.10.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in c:\program files\python\python310\lib\site-packages (from matplotlib) (1.3.2)
+Requirement already satisfied: numpy>=1.16 in c:\program files\python\python310\lib\site-packages (from matplotlib) (1.21.3)
+Collecting pillow>=6.2.0
+  Downloading Pillow-8.4.0-cp310-cp310-win_amd64.whl (3.2 MB)
+     |████████████████████████████████| 3.2 MB 345 kB/s
+Requirement already satisfied: pyparsing>=2.2.1 in c:\program files\python\python310\lib\site-packages (from matplotlib) (3.0.3)
+Requirement already satisfied: python-dateutil>=2.7 in c:\program files\python\python310\lib\site-packages (from matplotlib) (2.8.2)
+Requirement already satisfied: six in c:\program files\python\python310\lib\site-packages (from cycler>=0.10->matplotlib) (1.16.0)
+Using legacy 'setup.py install' for matplotlib, since package 'wheel' is not installed.
+Installing collected packages: pillow, matplotlib
+    Running setup.py install for matplotlib ... done
+Successfully installed matplotlib-3.4.3 pillow-8.4.0
+WARNING: You are using pip version 21.2.3; however, version 21.3.1 is available.
+You should consider upgrading via the 'C:\Program Files\Python\Python310\python.exe -m pip install --upgrade pip' command.
+
+C:\Program Files\Python\Python310\Scripts>
+C:\Program Files\Python\Python310\Scripts>
+C:\Program Files\Python\Python310\Scripts>
+C:\Program Files\Python\Python310\Scripts>
