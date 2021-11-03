@@ -1,3 +1,4 @@
+
 import subprocess
 logger = None
 
@@ -125,20 +126,27 @@ def is_connect_android():
     try:
         cmd = 'adb devices'
         print(cmd)
-        result = get_result_adb_shell(cmd)
+        # result = get_result_adb_shell(cmd)
+        result = adb_shell_with_show_result(cmd)
         return result
     except Exception as e:
         logger.exp.error(e)
         
 def is_success_adb_result(result,message)->bool:
     try:
-        if result != 0:            
-            # エラー時の処理
-            logger.info(message + ' false')
-            return False
-        # success
-        logger.info(message + ' success')
-        return True
+        flag = False
+        from subprocess import CompletedProcess
+        if isinstance(result,CompletedProcess):
+            if result.returncode != 0: flag = False
+            else: flag = True
+        else:
+            if result != 0: flag = False
+            else: flag = True
+
+        if not flag: logger.info(message + ' false')
+        else: logger.info(message + ' success')
+
+        return flag
     except Exception as e:
         logger.exp.error(e)
         return False

@@ -21,9 +21,7 @@ def main():
     )
     try:
         ret = android.state.is_connected_device()
-        if not ret: 
-            logger.debug('is_connected_device false')
-            return
+        if not ret: return
 
         ret = android.state.is_off_screen()
         if ret:
