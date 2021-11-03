@@ -5,19 +5,19 @@ class cv2_image():
     path = ''
     logger = None
     img = None
-    def __init__(self,logger,path:str = '') -> None:
-        self.path = path
-        self.logger = logger
-        if path == '' : 
-            return            
-        is_set = self.set_image_from_path(path)
+    def __init__(self,arg_logger,arg_path:str = '') -> None:
+        self.path = arg_path
+        self.logger = arg_logger
+        if arg_path == '' : 
+            return
+        is_set = self.set_image_from_path(arg_path)
         if not is_set:
-            self.logger.warning(__name__ +'.__init__ :set image ERROR')
+            self.logger.error(__name__ +'.__init__ :set image ERROR')
     
-    def set_image_from_path(self,path = path) -> bool:
+    def set_image_from_path(self,path:str) -> bool:
         fn = '.set_image_from_path'
         try:
-            if(path == '')|(path == None):
+            if (path == '')|(path == None):
                 self.logger.error(__name__ + fn +':path is nothing')
                 return False
             else:
@@ -26,11 +26,13 @@ class cv2_image():
                     self.logger.error(__name__ + fn +':path not exists. path=' + self.path)
                     return False
 
-            self.img = cv2.imread(path)
+            self.img = cv2.imread(self.path)
             self.logger.info(__name__ + fn +':set image. path='+self.path)
+            self.logger.info('img.shape='+ str(self.img.shape))
             return True
         except Exception as e:
-            self.logger(e)
+            self.logger.error(e)
+            return False
 
     def resize(self,width:int,height:int) -> bool:
         if self.is_image_none('resize'): return False

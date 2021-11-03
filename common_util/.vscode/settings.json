@@ -1,0 +1,6 @@
+{
+    "python.languageServer": "Pylance",
+    "python.analysis.extraPaths": [
+        "./adb_util/android_cv2",
+    ],
+}

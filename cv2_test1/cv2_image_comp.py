@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+
 def is_same_image(logger,path_base:str,path_check:str) -> bool:
     try:
         logger.info(__file__ + ':is_same_image')
@@ -22,5 +23,5 @@ def is_same_image(logger,path_base:str,path_check:str) -> bool:
         logger.info(np.array_equal(im_base, im_chk))
         return True
     except Exception as e:
-        logger.exp.error(e)
+        logger.ext.error(e)
         return False

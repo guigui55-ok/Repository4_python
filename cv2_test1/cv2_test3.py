@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import cv2_image_util
+import cv2_image_io
 import os
 
 # def rename_with_add_str(arg_path:str,add_str : str ='_') -> str:
@@ -22,12 +22,12 @@ path2 = 'image/power_on_screen_changed_size_500_1000.png'
 path2_resize = ''
 
 # image を読み込む
-cimg1 = cv2_image_util.cv2_image(logger,path1)
+cimg1 = cv2_image_io.cv2_image(logger,path1)
 print('img.shape='+ str(cimg1.img.shape))
 # (225, 400, 3) height,width,color(3)
 
 # image を読み込む
-cimg2 = cv2_image_util.cv2_image(logger,path2)
+cimg2 = cv2_image_io.cv2_image(logger,path2)
 print('img.shape='+ str(cimg2.img.shape))
 
 # resize

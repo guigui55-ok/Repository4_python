@@ -1,17 +1,19 @@
 import cv2
 import numpy as np
 import os
+
 def is_same_image(logger,path_base:str,path_check:str) -> bool:
+    selflogger = logger
     try:
         logger.info(__file__ + ':is_same_image')
         # check if path exists
         if not (os.path.exists(path_base)):
-            logger.error('path_base not exists')
-            logger.error('path = '+ path_base)
+            logger.exp.error('path_base not exists')
+            logger.exp.error('path = '+ path_base)
             return False
         if not (os.path.exists(path_check)):
-            logger.error('path_check not exists')
-            logger.error('path = '+ path_check)
+            logger.exp.error('path_check not exists')
+            logger.exp.error('path = '+ path_check)
             return False
         
         # image を読み込む

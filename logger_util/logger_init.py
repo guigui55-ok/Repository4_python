@@ -10,11 +10,29 @@ print('import_path:'+import_path)
 sys.path.append(import_path)
 import logging_util
 
+
+log_file_name = './app.log'
+config_file_path = ''
+basic_format = '%(asctime)s - %(message)s'
+exception_format = '%(asctime)s %(filename)s:%(lineno)d[%(process)d][%(thread)d][%(levelname)s] %(module)s.%(name)s : %(message)s'
+
+def initialize_logger_with_args(
+    arg_log_file_name:str,
+    arg_config_file_path:str,
+    arg_basic_format:str,
+    arg_exception_format:str
+):
+    log_file_name = arg_log_file_name
+    config_file_path = arg_config_file_path
+    basic_format = arg_basic_format
+    exception_format = arg_exception_format
+    initialize_logger()
+
 def initialize_logger() -> logging_util.logger_util:
-    log_file_name = './app.log'
-    config_file_path = ''
-    basic_format = '%(asctime)s - %(message)s'
-    exception_format = '%(asctime)s %(filename)s:%(lineno)d[%(process)d][%(thread)d][%(levelname)s] %(module)s.%(name)s : %(message)s'
+    # log_file_name = './app.log'
+    # config_file_path = ''
+    # basic_format = '%(asctime)s - %(message)s'
+    # exception_format = '%(asctime)s %(filename)s:%(lineno)d[%(process)d][%(thread)d][%(levelname)s] %(module)s.%(name)s : %(message)s'
     loggeru = logging_util.intialize_logger_util(
         log_file_name,
         config_file_path,

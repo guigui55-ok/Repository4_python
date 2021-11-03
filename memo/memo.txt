@@ -2,3 +2,16 @@ numpy multiarray import error
 ---
 RaspberryPiでNumpyをインポートした際のエラー ImportError: numpy.core.multiarray failed to import
 https://qiita.com/kai0706/items/8169d01a83f63fc4a0bd
+
+
+---------------
+pylance インポート エラー
+https://teratail.com/questions/343480
+
+{
+    "python.analysis.extraPaths": [
+        "section6_module_package"
+    ], 
+}
+
+C:\Users\OK\source\repos\Repository4_python\common_utiladb_test/android_wiko/screen_wiko\power_off.png

@@ -18,19 +18,19 @@ class cv2_image():
         fn = '.set_image_from_path'
         try:
             if(path == '')|(path == None):
-                self.logger.error(__name__ + fn +':path is nothing')
+                self.logger.exp.error(__name__ + fn +':path is nothing')
                 return False
             else:
                 self.path = path
                 if not os.path.exists(self.path):
-                    self.logger.error(__name__ + fn +':path not exists. path=' + self.path)
+                    self.logger.exp.error(__name__ + fn +':path not exists. path=' + self.path)
                     return False
 
             self.img = cv2.imread(path)
             self.logger.info(__name__ + fn +':set image. path='+self.path)
             return True
         except Exception as e:
-            self.logger(e)
+            self.logger.exp.error(e)
 
     def resize(self,width:int,height:int) -> bool:
         if self.is_image_none('resize'): return False
@@ -38,24 +38,24 @@ class cv2_image():
             self.img = cv2.resize(self.img,dsize=(width,height))
             self.logger.info('resized : w='+ str(self.img.shape[1]) + ' ,h=' + str(self.img.shape[0]))
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)
     
     def resize_by_image(self,arg_img):
         try:
             self.resize(arg_img.shape[1],arg_img.shape[0])
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)
 
     def is_image_none(self,func_name = '') -> bool:
         try:
             if self.img is None:
                 if func_name != '':
                     func_name = '.'+func_name
-                self.logger.error(__name__ + func_name + ':self.img is None')
+                self.logger.exp.error(__name__ + func_name + ':self.img is None')
                 return True
             return False
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)
             return True
     
     def save_img(self,save_path:str):
@@ -65,20 +65,20 @@ class cv2_image():
             cv2.imwrite(save_path,self.img)
             self.logger.info('save_img: save_path = ' + save_path)
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)
     
     def width(self) -> int:
         try:
             if self.is_image_none('width'): return 0
             return self.img.shape[1]
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)
     def height(self) -> int:
         try:
             if self.is_image_none('height'): return 0
             return self.img.shape[0]
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)
 
 
     def is_bif_self_image(self,arg_img):
@@ -95,4 +95,4 @@ class cv2_image():
             else:
                 return False
         except Exception as e:
-            self.logger.error(e)
+            self.logger.exp.error(e)

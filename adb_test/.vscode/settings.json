@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "section6_module_package"
+    ]
+}

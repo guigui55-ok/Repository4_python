@@ -9,7 +9,7 @@ print('import_path:'+import_path)
 import_path = os.path.join('..', package_name)
 print('import_path:'+import_path)
 sys.path.append(import_path)
-import cv2_image_util
+import cv2_image.cv2_image_util as image_util
 import path_util
 import numpy as np
 
@@ -20,12 +20,12 @@ def is_same_image(logger,img1_path,img2_path,is_write=True):
         path2_resize = ''
 
         # image を読み込む
-        cimg1 = cv2_image_util.cv2_image(logger,path1)
+        cimg1 = image_util.cv2_image(logger,path1)
         print('img.shape='+ str(cimg1.img.shape))
         # (225, 400, 3) height,width,color(3)
 
         # image を読み込む
-        cimg2 = cv2_image_util.cv2_image(logger,path2)
+        cimg2 = image_util.cv2_image(logger,path2)
         print('img.shape='+ str(cimg2.img.shape))
 
         # resize
@@ -48,4 +48,4 @@ def is_same_image(logger,img1_path,img2_path,is_write=True):
         print('np.array_equal(cimg1.img, cimg2.img)')
         print(np.array_equal(cimg1.img, cimg2.img))
     except Exception as e:
-        logger.error(e)
+        logger.exp.error(e)

@@ -10,7 +10,6 @@ import sys
 import json
 from enum import IntEnum
 from enum import Enum
-import logger_init
 
 class const_str(Enum):
     DEFAULT_FORMAT = '[%(levelname)s]%(name)s -> %(message)s'
