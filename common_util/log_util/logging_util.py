@@ -10,6 +10,7 @@ import sys
 import json
 from enum import IntEnum
 from enum import Enum
+from typing import Any
 
 class const_str(Enum):
     DEFAULT_FORMAT = '[%(levelname)s]%(name)s -> %(message)s'
@@ -164,7 +165,7 @@ class logger_util():
 
     # -------------------------------------------
     def debug(self,value): self.logger_info_main.logger.debug(value)
-    def info(self,value): self.logger_info_main.logger.info(value)
+    def info(self,value:Any): self.logger_info_main.logger.info(value)
     def warning(self,value): self.logger_info_main.logger.warning(value)
     def error(self,value): 
         try:                

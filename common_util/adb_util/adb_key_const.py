@@ -15,6 +15,15 @@ class const_command:
     RUN_SETTINGS_LANGUAGE = 'am start -n com.android.settings/.LanguageSettings'
     RUN_SETTINGS_DEVELOPMENT = 'am start -n com.android.settings/.DevelopmentSettings'
     RUN_SETTINGS_DATETIME = 'am start -n com.android.settings/.DateTimeSettingsSetupWizard'
+    GET_DEVICE_INFO = 'adb shell getprop ro.product.model'
+    GET_PRODUCT_MODEL = 'adb shell getprop ro.product.model'
+    GET_ANDROID_BUILD_VERSION = 'adb shell getprop ro.build.display.id'
+    GET_ANDROID_VERSION = 'adb shell getprop ro.build.version.release'
+    GET_PACKAGE_VERSION = 'adb shell dumpsys package'
+    GET_BASE_BAND_VERSION = 'adb shell getprop gsm.version.baseband'
+    GET_KERNEL_VERSION = 'adb shell cat /proc/version'
+    GET_API_LEVEL = 'adb shell getprop ro.product.first_api_level'
+
 """
 ※Keyevent 一例
 KEYCODE_HOME	ホーム キー
