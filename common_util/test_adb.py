@@ -29,6 +29,14 @@ def main():
         ret = android.state.is_connected_device()
         if not ret: return
 
+        read_path = './screenshot.png'
+        temp_path = r'C:\ZMyFolder\newDoc\0ProgramingAll\image_sample\button_login_ok.png'
+        temp_path = './image/button_login_ok.png'
+        # flag = android.control.tap_image(temp_path,read_path)
+        flag = android.control.tap_image(temp_path,'')
+        if flag : print('tap success')
+        else : print('tap failed')
+        return
         ret = android.state.is_off_screen()
         if ret:
             ret = android.control.power_on()
@@ -106,7 +114,7 @@ def run_adb_commands():
 if __name__ == '__main__':
     # get_screenshot()
     # get_screenrecord()
-    run_adb_command()
+    #run_adb_command()
     # run_adb_commands()
-    # main()
+    main()
                 

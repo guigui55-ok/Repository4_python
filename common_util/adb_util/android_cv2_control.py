@@ -14,7 +14,8 @@ from adb_util.android_const import const_state
 import adb_util.adb_common
 from adb_util.adb_common import save_file_to_pc_from_android
 import adb_util.adb_key as adb_key
-from adb_util.adb_key_const import keycoce_const 
+from adb_util.adb_key_const import keycoce_const
+from cv2_image.cv2_find_image_util import is_match_template_from_file2 
 
 class android_control():
     logger = None
@@ -96,6 +97,47 @@ class android_control():
         except Exception as e:
             self.logger.exp.error(e)
 
+    def tap_image(self,parts_path,screenshot_path='') -> bool:
+        try:
+            self.logger.info('tap_image')
+            if screenshot_path == '':
+                # ./screenshot.png
+                base_path = const.SAVE_PATH_ROOT_DIR.value + const.SCREEN_CAPTURE_FILE_NAME.value
+            else:
+                base_path = screenshot_path
+
+            from adb_util.adb_common import save_file_to_pc_from_android
+            # 現在の状態を screenshot として保存、PC へ移動
+            save_file_to_pc_from_android(
+                base_path,
+                const.SD_ROOT_DIR.value,
+                const.SCREEN_CAPTURE_FILE_NAME.value,
+            )
+            #image_path = self.image_dir + '\\' + const_images.POWER_OFF.value
+            image_path = parts_path
+            result_dir_path = './'
+            # base_path に対して
+            # image と合致するか判定する
+            from cv2_image.cv2_find_image_util import is_match_template_from_file2
+            match_rect = is_match_template_from_file2(
+                self.logger,
+                base_path,
+                image_path,
+                0.8,
+                result_dir_path
+            )
+            print('is_match =' + str(match_rect['result']))
+            # print(match_rect['start_w'],match_rect['start_h'])
+            # print(match_rect['end_w'],match_rect['end_h'])
+
+            tap_rect = match_rect['start_w'],match_rect['start_h'],\
+                match_rect['end_w'],match_rect['end_h']
+            from adb_util.adb_common import tap_center
+            is_taped = tap_center(tap_rect)
+            return is_taped
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
 
     def run_app(self,package_name):
         pass

@@ -4,6 +4,7 @@
 import cv2
 from IPython.display import Image, display,display_png
 import os
+import numpy
 
 def imshow(img,path):
     """ndarray 配列をインラインで Notebook 上に表示する。
@@ -20,32 +21,43 @@ def imshow(img,path):
         display(Image(encoded))
 
 
-path_base = 'image/power_on_screen2.png'
-path_temp = 'image/key_mark3.png'
-path_temp = 'image/key_mark2.png'
-# display(path_base)
+try:
+    path_base = 'image/power_on_screen2.png'
+    path_temp = 'image/key_mark3.png'
+    path_temp = 'image/key_mark2.png'
+    write_path = 'image/matchtemplate_test2_ret1.png'
+    # display(path_base)
 
-# 入力画像、テンプレート画像を読み込む。
-img_base = cv2.imread(path_base)  # 入力画像
-img_temp = cv2.imread(path_temp)  # テンプレート画像
+    # 入力画像、テンプレート画像を読み込む。
+    img_base = cv2.imread(path_base)  # 入力画像
+    img_temp = cv2.imread(path_temp)  # テンプレート画像
 
-# テンプレートマッチングを行う。
-result = cv2.matchTemplate(img_base, img_temp, cv2.TM_CCOEFF_NORMED)
+    # テンプレートマッチングを行う。
+    result = cv2.matchTemplate(img_base, img_temp, cv2.TM_CCOEFF_NORMED)
 
-print(result.shape,'./_.png')
-#imshow(result,'_.png')
-imshow(result,path_base)
+    print(result.shape)
+    #imshow(result,'_.png')
+    #imshow(result,path_base)
+    # cv2.imwrite(write_path)
 
 
-# 最も類似度が高い位置を取得する。
-minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(result)
-print(f"max value: {maxVal}, position: {maxLoc}")
-# max value: 0.9999998211860657, position: (392, 124)
+    # 最も類似度が高い位置を取得する。
+    #minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(result)
+    threshold = 0.8
+    minVal, maxVal, minLoc, maxLoc = numpy.where(result >= threshold)
+    print(f"max value: {maxVal}, position: {maxLoc}")
+    # max value: 0.9999998211860657, position: (392, 124)
 
-# 描画する。
-tl = maxLoc[0], maxLoc[1]
-br = maxLoc[0] + img_temp.shape[1], maxLoc[1] + img_temp.shape[0]
+    # 描画する。
+    tl = maxLoc[0], maxLoc[1]
+    br = maxLoc[0] + img_temp.shape[1], maxLoc[1] + img_temp.shape[0]
 
-dst = img_base.copy()
-cv2.rectangle(dst, tl, br, color=(0, 255, 0), thickness=2)
-imshow(dst,path_base)
+    dst = img_base.copy()
+    cv2.rectangle(dst, tl, br, color=(0, 255, 0), thickness=2)
+    #imshow(dst,path_base)
+    write_path = 'image/matchtemplate_test2_ret2.png'
+    cv2.imwrite(write_path,dst)
+    print(write_path)
+except:
+    import traceback
+    print(traceback.print_exc())

@@ -20,6 +20,7 @@ print(pathobj.resolve())
 read_path = 'image/power_on_screen.png'
 temp_path = 'image/key_mark2.png'
 temp_path = 'image/key_mark3.png'
+temp_path = 'image/key_mark4.png'
 
 img_rgb = cv2.imread(read_path)
 

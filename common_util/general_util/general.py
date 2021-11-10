@@ -17,3 +17,16 @@ def cnv_tuple_to_str(value,delimita=',') -> str:
     except Exception as e:
         logger.exp.error(e)
         return ''
+
+def cnv_int(value) -> int:
+    try:
+        if not isinstance(value, str):
+            return 0
+        else:
+            if value.isnumeric():
+                return int(value)
+            else:
+                return 0
+    except Exception as e:
+        logger.exp.error(e)
+        return 0

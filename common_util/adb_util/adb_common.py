@@ -59,13 +59,15 @@ def save_file_from_android(
 def save_file_to_pc_from_android(
     save_path = '',
     android_path = '/sdcard/',
-    file_name = 'screenshot.png'
+    file_name = 'screenshot.png',
+    is_logout_stdout= True
 ):
     """android からファイルを取得する
     """
     result = None
     try:
-        logger.info('save_file_to_pc_from_android')
+        func_name ='save_file_to_pc_from_android'
+        logger.info(func_name)
         import os
         if not os.path.isfile(save_path):
             if not os.path.isdir(save_path):
@@ -73,14 +75,20 @@ def save_file_to_pc_from_android(
         logger.info('save_path ='+save_path)
         command = (
             'adb', 'pull', android_path + file_name ,save_path)
-        result = adb_shell_with_show_result(command)
-        return result
+        result = adb_shell_with_show_result(command)        
+        ret = is_success_adb_result(result,func_name,is_logout_stdout)
+        if ret:
+            logger.info('get file success. path=' + save_path)
+            return True
+        else:
+            logger.info('get file failed. path=' + save_path)
+            return False
     except Exception as e:
         logger.exp.error(e)
-        return result
+        return False
 
 def adb_reboot():
-    """再起動させる"""
+    """Android デバイスを再起動させる"""
     result = 0
     try: 
         result = subprocess.call('adb reboot')
@@ -183,7 +191,70 @@ def input_text(value:str):
         logger.exp.error(e)
         return result
 
+def make_command_adb_shell(device_name):
+    default_cmd = 'adb shell '
+    try:
+        if device_name == '':
+            return default_cmd
+        else:
+            return 'adb -s '+ device_name + ' shell '
+    except Exception as e:
+        logger.exp.error(e)
+        return default_cmd
+
+def get_center_from_rect(point_rect):
+    """int か str 型の(left_top,right_top,left_bottom_right_bottom)tuple から
+        中央の値を取得する
+    """
+    try:
+        if(len(point_rect) < 4):
+            logger.exp.error('argument length < 4')
+        elif(len(point_rect) > 4):
+            logger.exp.error('argument length > 4')
+        elif(len(point_rect) == 4):
+            horizon = int(point_rect[0]) + int(point_rect[2])
+            horizon = int(horizon/2)
+            vertical = int(point_rect[1]) + int(point_rect[3])
+            vertical = int(vertical/2)
+            return (horizon,vertical)
+        else:
+            logger.exp.error('argument length case else -> unexpected case')
+            return (0,0)
+        return (0,0)
+    except Exception as e:
+        logger.exp.error(e)
+        return (0,0)
+
+def tap_center(point_rect:tuple,device_name:str='',is_logout_stdout:bool=True) -> bool:
+    point = get_center_from_rect(point_rect)
+    return touch_screen(point[0],point[1],device_name,is_logout_stdout)
+
+def tap(x:int,y:int,device_name:str='',is_logout_stdout:bool=True) -> bool:
+    return touch_screen(x,y,device_name,is_logout_stdout)
+
+def touch_screen(
+    x:int,y:int,
+    device_name:str='',
+    is_logout_stdout:bool=True
+) -> bool:
+    try:
+        cmd = make_command_adb_shell(device_name)
+        cmd += 'input touchscreen tap ' + str(x) + ' ' + str(y)
+        result = adb_shell_with_show_result(cmd,is_logout_stdout)
+        func_name = 'touch_screen'
+        ret = is_success_adb_result(result,func_name,is_logout_stdout)
+        if ret:
+            logger.info('tap success : ' + str(x) + ',' + str(y))
+        else:
+            logger.info('tap failed : ' + str(x) + ',' + str(y))
+        return ret
+    except Exception as e:
+        logger.exp.error(e)
+        return False
+
+
 def swipe(x1,y1,x2,y2,duration):
+    """スワイプする"""
     result = None
     try:
         # coordinate = (x1,y1,x2,y2,duration)
@@ -199,6 +270,7 @@ def swipe(x1,y1,x2,y2,duration):
         return result
 
 def is_connect_android():
+    """Android が USB 接続しているか"""
     try:
         cmd = 'adb devices'
         result = adb_shell_with_show_result(cmd)
@@ -207,6 +279,7 @@ def is_connect_android():
         logger.exp.error(e)
         
 def is_success_adb_result(result,message,is_logout=False)->bool:
+    """subprocess.run の実行結果が成功したか判定する"""
     try:
         flag = False
         from subprocess import CompletedProcess
@@ -231,29 +304,33 @@ def is_success_adb_result(result,message,is_logout=False)->bool:
         return False
 
 def get_android_version():
+    """Androidのバージョンを取得する"""
     cmd = 'adb shell getprop ro.build.version.release'
     return adb_shell_with_show_result(cmd,'get_android_version')
 
 def get_android_build_version(is_logout_stdout=True):
+    """Androidソフトウェア情報のビルドバージョンを取得する"""
     cmd = 'adb shell getprop ro.build.display.id'
     return get_result_adb_shell(cmd,'get_android_version',is_logout_stdout)
-
 
 def get_result_adb_shell(cmd,func_name='',is_logout_stdout=True) -> str:
     """adb shell コマンドを実行して結果を得る"""
     result = adb_shell_with_show_result(cmd,is_logout_stdout)
     if is_success_adb_result(result,func_name,is_logout_stdout):
         if (len(result.stdout) > 0):
+            # 最後の1文字は改行コードなので除外する
             return result.stdout[:-1]
         else:
             return ''
     else:
         if (len(result.stderr) > 0):
+            # 最後の1文字は改行コードなので除外する
             return result.stderr[:-1]
         else:
             return ''
 
 def get_package_version(package_name):
+    """デバイス内のパッケージのバージョンを取得する"""
     try:
         cmd = 'adb shell dumpsys package ' + package_name
         result = adb_shell_with_show_result(cmd)
@@ -279,6 +356,7 @@ def get_package_version(package_name):
         return 'get_package_version Error'
 
 def get_device_product_model(is_stdout_to_logout=True,replace_befor = '\n',replace_after =' / '):
+    """デバイスのプロダクトモデルを取得する"""
     try:
         #cmd = 'adb shell getprop ro.product.model'
         cmd = adb_key_const.const_command.GET_DEVICE_INFO
@@ -295,14 +373,21 @@ def get_device_product_model(is_stdout_to_logout=True,replace_befor = '\n',repla
         return 'get_device_product_model Error'
 
 def get_emei(is_logout=True):
+    """adb Shell dumpsys iphonesubinfo 13 の実行結果を取得する
+        デバイスの SIM Phone Number を取得する
+    """
     return get_servece_call_iphonesubinfo(1,is_logout)
 
 def get_phone_number(is_logout=True):
+    """adb Shell dumpsys iphonesubinfo 13 の実行結果を取得する
+        デバイスの IMEI を取得する
+    """
     return get_servece_call_iphonesubinfo(13,is_logout)
     # 13,14,17,18
-    
+
 
 def get_servece_call_iphonesubinfo(number,is_logout=True):
+    """adb Shell dumpsys iphonesubinfo [Number] の実行結果を取得する"""
     try:
         cmd = adb_key_const.const_command.GET_API_LEVEL
         func_name = 'get_servece_call_iphonesubinfo'

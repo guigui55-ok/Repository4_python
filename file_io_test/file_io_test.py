@@ -20,8 +20,9 @@ def main():
         logger.info('---------------------------------')
     else:
         logger.info('file path is not found')
-        data = 'test write_append'
+        data = 'test write_append\n\n'
         cio.write_append(data,path)
+    print(path)
 
 if __name__ == '__main__':
     main()

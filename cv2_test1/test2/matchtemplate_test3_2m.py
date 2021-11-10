@@ -10,7 +10,7 @@ def match_template(img_base,img_temp,
 
         res = cv.matchTemplate(img_gray,img_temp,cv.TM_CCOEFF_NORMED)
 
-        threshold = 0.8
+        threshold = 0.9
         loc = np.where( res >= threshold)
         for pt in zip(*loc[::-1]):
             cv.rectangle(img_base, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
@@ -39,14 +39,14 @@ def main():
 
     try:
         path_base = 'image/power_on_screen2.png'
-        path_temp = 'image/key_mark3.png'
         path_temp = 'image/key_mark2.png'
+        path_temp = 'image/key_mark3.png'
         img_base = cv.imread(path_base)
         img_temp = cv.imread(path_temp,0)
         result_file_path = './res.png'
         result = match_template(img_base,img_temp,result_file_path)
         print('result = ' + str(result))
-        print('result_file_path='+result_file_path)
+        print('result_file_path= '+result_file_path)
     except:
         import traceback
         traceback.print_exc()
