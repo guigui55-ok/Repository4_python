@@ -123,8 +123,7 @@ class android_state():
     def is_connected_device(self):
         try:
             result = adb_common.is_connect_android()
-            flag = self.is_success_adb_result(result,'is_connected_device')
-            return flag
+            return result
         except Exception as e:
             self.logger.exp.error(e)
             return False

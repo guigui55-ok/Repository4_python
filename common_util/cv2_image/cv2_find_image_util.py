@@ -1,4 +1,5 @@
 """画像検索　matchtemplate"""
+from typing import Any
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
@@ -44,12 +45,35 @@ def get_template_file_names(logger,file_list):
         logger.exp.error(e)
         return []
 
+def output_image_draw_point(logger,image_path,draw_point,color=None,output_file_path = '')-> str:
+    try:
+        img = cv2.imread(image_path)
+        if color == None:
+            color = (0,0,255)
+        cv2.circle(img, draw_point, 10, color, 
+            thickness=2, lineType=cv2.LINE_8, shift=0)
+        if output_file_path == '':
+            write_path = './result_output_image_draw_point.png'
+        cv2.imwrite(write_path, img)
+        return write_path
+    except Exception as e:
+        logger.exp.error(e)
+        return ''
+
+def get_result_false_is_match_template_from_file2():
+    return dict(result=False,start_w=0,start_h=0,end_w=0,end_h=0)
 
 def is_match_template_from_file2(logger,base_path,temp_path,
-        threshold = 0.8,result_file_dir_path:str = '') -> bool:
+        threshold = 0.8,result_file_dir_path:str = '') -> Any:
+    """base_path に temp_path が存在するか判定する
+        戻り値：
+        tuple:[result:bool, start_w:int, start_h:int, end_w:int, endh:int ]
+        失敗時は以下の値を返す
+        dict(result=False,start_w=0,start_h=0,end_w=0,end_h=0)
+    """
     try:
         #base_path = 'image/pad07_login.png'
-        temp_path = 'image/button_login_ok.png'
+        #temp_path = 'image/button_login_ok.png'
         # import pathlib
         # p = pathlib.path('./')
         # print('root dir = '+ str(p.resolve()) )
@@ -102,6 +126,7 @@ def is_match_template_from_file2(logger,base_path,temp_path,
             match_point_sum = {'result':True,'w':0,'h':0}
             for_count = 0
             for pt in zip(*loc[::-1]):
+                # print('pt[0] + w , pt[1] + h = ' + str(pt[0] + w) + ' , ' + str(pt[1] + h) )
                 match_point_sum['w'] += pt[0] + w
                 match_point_sum['h'] += pt[1] + h
                 for_count += 1
@@ -113,10 +138,10 @@ def is_match_template_from_file2(logger,base_path,temp_path,
             
             # calc point for return
             match_rect = {'result':True,'start_w':0,'start_h':0,'end_w':0,'end_h':0}
-            match_rect['start_w'] = match_point_avg['w']
-            match_rect['start_h'] = match_point_avg['h']
-            match_rect['end_w'] = match_point_avg['w'] + images[i].shape[0]
-            match_rect['end_h'] = match_point_avg['h'] + images[i].shape[1]
+            match_rect['end_w'] = match_point_avg['w']
+            match_rect['end_h'] = match_point_avg['h']
+            match_rect['start_w'] = match_point_avg['w'] - images[i].shape[1]
+            match_rect['start_h'] = match_point_avg['h'] - images[i].shape[0]
             img_temp = img
 
             if False:
@@ -135,13 +160,13 @@ def is_match_template_from_file2(logger,base_path,temp_path,
             if is_success:
                 file_name = result_file_dir_path + str(i) +'_' + TempValnames[i] + '.png'
                 cv2.imwrite(file_name,img_temp)
-                logger.info(file_name)
+                logger.info('cv2.imwrite  path = ' + file_name)
                 return match_rect
         ## end for
-        return dict(result=False,start_w=0,start_h=0,end_w=0,end_h=0)
+        return get_result_false_is_match_template_from_file2()
     except Exception as e:
         logger.exp.error(e)
-        return dict(result=False,start_w=0,start_h=0,end_w=0,end_h=0)
+        return get_result_false_is_match_template_from_file2()
 
 
 def is_match_template_from_file(logger,path_base,path_temp,

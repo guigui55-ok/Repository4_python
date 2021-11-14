@@ -1,0 +1,94 @@
+https://news.mynavi.jp/article/zeropython-46/
+
+Pythonでデスクトップアプリを作成するには、いくつかライブラリがある。
+Pythonに標準的に同梱されている『Tkinter』
+	『Anaconda』が必要
+クロスプラットフォーム対応で人気がある『Kivy』
+wxWidgetsというツールキットを利用した『wxPython』
+Qtというツールキットを利用した『PyQt』など
+
+https://www.simugrammer.com/python_gui_matome/
+【Python】GUIライブラリ１３個を比較【初心者へのオススメあり】
+Tkinter
+　　pythonの標準ライブラリのため追加のインストール不要
+　　Tcl/Tk のPythonバインディング
+　　参考書籍や多くの参考Webサイトがあり、勉強しやすい
+
+
+Flexx	Webアプリケーション作成可能
+pywebview	htmlでGUIを作成可能
+Pygame	ゲームに特化
+
+PyQt	Qt（キュート）のPythonバインディング　豊富なウィジェット等、機能が充実してる
+　　　　非商用ではライセンスが厳しい
+
+PyGTK	GTKのPythonバインディング
+PySimpleGUI	簡単にGUIが作成可能
+PyOpenGL	python用OpenGL
+PyGUI	簡単だが機能少なめ　MITライセンスのため使いやすい
+wxPython	wxWidgetsのPythonバインディング
+PySide	Qt（キュート）のPythonバインディング　PyQtと比較してライセンスが使いやすい
+2020
+
+
+https://www.tech-teacher.jp/blog/python-gui/
+Tkinter　Pythonに標準搭載されているライブラリ
+Kivy　Windows・Mac・iOS・Androidなど、
+　　　特にゲームに強みがあるライブラリ
+PyQt
+設計がモダンでデザイン面のメリットが豊富
+商用利用するにはロイヤリティが発生
+
+wxPython
+機能が充実している
+商用利用ができる
+
+PySide
+クロスプラットフォームに対応したアプリ開発可能
+Qtベース
+商用利用が可能
+
+----------
+Kivy 約 1,820,000 件 
+Pside 約 391,000 件
+----------
+
+Kivy
+https://algorithm.joho.info/programming/python/kivy-install/
+
+pip install --upgrade pip
+pip install pygame
+pip install cython
+
+pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew
+pip install kivy.deps.gstreamer --extra-index-url https://kivy.org/downloads/packages/simple/
+pip install kivy
+
+https://teratail.com/questions/278594
+
+https://pacple.net/kivy-install-error/
+
+pip install kivy
+pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew kivy.deps.angle kivy.deps.gstreamer
+
+https://niwakomablog.com/python-kivy-install/
+python -m pip install –upgrade wheel setuptools
+python -m pip install wheel setuptools
+python -m pip install docutils
+python -m pip install pygments
+python -m pip install pypiwin32
+python -m pip install kivy.deps.sdl2
+python -m pip install kivy.deps.glew
+python -m pip install kivy
+
+Kivy NG
+2021/11/13
+Windows 10 Version 20H2
+Python 3.10.0 64-bit(system)
+vsCode
+-----------------------
+
+
+
+
+

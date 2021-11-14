@@ -9,6 +9,7 @@ from adb_util.android_const import const_state as android_const_state
 
 import adb_util.android_cv2_control as control_cv2
 import adb_util.android_cv2_state as state_cv2
+import adb_util.android_main_info as android_main_info
 from enum import Enum
 
 class android_constants():
@@ -19,14 +20,19 @@ class android_constants():
     key : keycoce_const = keycoce_const
 
 class android_common_util():
+    # logger object member
     logger = None
+    # const object member
     constants : android_constants = None
     const_str : android_const_str= None
     const_images : const_images = None
     const_int : android_const_int = None
+    # sub object member 
     control : control_cv2.android_control = None
     state : state_cv2.android_state = None
+    info : android_main_info.android_info = None
     mode = None
+    # init
     def __init__(
         self,
         logger,
@@ -51,7 +57,7 @@ class android_common_util():
             self.logger.info('mode = '+ self.const_int.OPERATION_CV2_IMAGE.name)
         else:
             self.logger.warning('mode is unknown -> class object is None')
-    
+        self.info = android_main_info.android_info(self.logger)
 
     def transision_to_home_from_any_screen(self):
         try:

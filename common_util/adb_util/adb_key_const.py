@@ -23,6 +23,10 @@ class const_command:
     GET_BASE_BAND_VERSION = 'adb shell getprop gsm.version.baseband'
     GET_KERNEL_VERSION = 'adb shell cat /proc/version'
     GET_API_LEVEL = 'adb shell getprop ro.product.first_api_level'
+    GET_INFO_PACAGE_LIST = 'pm list package '
+    START_PACKAGE = 'am start '
+    GET_ACTIVITY_HISTORY = 'adb logcat -b events -d | find "am_create_activity"'
+    STOP_PACKAGE = 'am force-stop '
 
 """
 ※Keyevent 一例
