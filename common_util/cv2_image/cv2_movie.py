@@ -99,7 +99,7 @@ class movie_player_key():
 
 class video_capture_frames():
     logger =None
-    info : movie_info = None
+    info : cv2_movie_info = None
     window_title = ''
     play_ret = None
     frame_capture_now = None
@@ -109,11 +109,11 @@ class video_capture_frames():
     capture_file_name = const_play_str.CAPTURE_FILE_NAME_DEFAULT.value
 
     # =======================================
-    def __init__(self, logger_, movie_path_:str, movie_info_:movie_info=None) -> None:
+    def __init__(self, logger_, movie_path_:str, movie_info_:cv2_movie_info=None) -> None:
         try:
-            if movie_info == None:
+            if movie_info_ == None:
                 self.logger = logger_
-                self.info = movie_info(logger_,movie_path_)
+                self.info = cv2_movie_info(logger_,movie_path_)
                 self.logger.info('movie_manager.__init__ : by movie_path_')
                 self.logger.info('path = ' + movie_path_)
             else:
@@ -183,6 +183,21 @@ class video_capture_frames():
             self.logger.info('capture success. path= ' + write_path)
         except Exception as e:
             self.logger.exp.error(e)
+    
+    def get_video_capture_image(self,frame_pos=-1):
+        """指定した frame 位置のイメージを取得する
+        default の引数-1は現在のフレームを示す"""
+        try:
+            if frame_pos == -1:
+                #frame_pos = self.frame_int_now
+                return self.frame_capture_now
+            else:
+                self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_pos -1 )
+                ret,frame_now = self.video_capture.read()
+                return frame_now
+        except Exception as e:
+            self.logger.exp.error(e)
+            return None
 
     def show_next_frame_and_pause(self,move_frame_count=1):
         """次のフレームを表示する（実行時に一時停止となる）"""
@@ -238,7 +253,7 @@ class video_capture_frames():
             self.logger.exp.error(e)
 # /////////////////////////////////////////////////////////////////////////////
 # =============================================================================
-class movie_player():
+class cv2_movie_player():
     logger = None
     window_size = None
 
@@ -269,11 +284,11 @@ class movie_player():
             movie_path_:str,
             window_size,
             window_title='',
-            movie_info_:movie_info=None) -> None:
+            movie_info_:cv2_movie_info=None) -> None:
         try:
-            if movie_info == None:
+            if cv2_movie_info == None:
                 self.logger = logger_
-                self.info = movie_info(logger_,movie_path_)
+                self.info = cv2_movie_info(logger_,movie_path_)
             else:
                 self.info = movie_info_
                 self.logger = movie_info_.logger

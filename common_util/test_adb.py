@@ -50,7 +50,7 @@ def main():
         # import adb_util.adb_common
         # adb_util.adb_common.send_adb_command(cmd)
 
-        ret = player.reboot_package()
+        # ret = player.reboot_package()
         # ret = player.start_package()
         # ret = player.tap_ok_when_change_update() # 日付が変わりました
         # ret = player.tap_ok_when_error_google_play(True) # GooglePlayエラーOK
@@ -58,8 +58,12 @@ def main():
         # ret = player.tap_ok_mail_box(True) # メールBOX/フレンド承認
         # ret = player.tap_menu_dungeon(True)
 
-        
-        #get_screenshot()
+        # path = r'C:\ZMyFolder\newDoc\0ProgramingAll\image_sample\parts\pad_opening_start_logo.png'
+        # ret_rect = player.android.control.is_exists_image_in_screenrecord(path)
+        # if ret_rect != (-1,-1,-1,-1):
+        #     ret = player.android.control.tap_center(ret_rect)
+
+        get_screenshot()
         # get_screenrecord(30)
         # -------------------------------------
         # read_path の中に temp_path があったら、その場所をタップする

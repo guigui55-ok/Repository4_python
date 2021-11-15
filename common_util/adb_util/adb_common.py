@@ -122,8 +122,8 @@ def screen_record(
     bit_rate = '4000000',
 ):
     try:
-        cmd = 'adb shell' + device_name
-        save_path =save_dir + file_name
+        cmd = 'adb shell ' + str(device_name)
+        save_path = save_dir + file_name
         cmd += ' screenrecord'
         cmd += ' --time-limit ' + str(time_limit) 
         cmd += ' ' + save_path
@@ -131,7 +131,7 @@ def screen_record(
         return save_path
     except Exception as e:
         logger.exp.error(e)
-        return None
+        return ''
 
 
 def save_file_from_android(
@@ -262,7 +262,7 @@ def get_center_from_rect(point_rect):
         logger.exp.error(e)
         return (0,0)
 
-def tap_center(point_rect:tuple,device_name:str='',is_logout_stdout:bool=True) -> bool:
+def tap_center(point_rect:tuple,device_name:str='',times=1,is_logout_stdout:bool=True) -> bool:
     point = get_center_from_rect(point_rect)
     return touch_screen(point[0],point[1],device_name,is_logout_stdout)
 
@@ -272,6 +272,8 @@ def tap(x:int,y:int,device_name:str='',is_logout_stdout:bool=True) -> bool:
 def touch_screen(
     x:int,y:int,
     device_name:str='',
+    times = 1,
+    interval = 10,
     is_logout_stdout:bool=True
 ) -> bool:
     try:

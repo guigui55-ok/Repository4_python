@@ -60,8 +60,99 @@ def output_image_draw_point(logger,image_path,draw_point,color=None,output_file_
         logger.exp.error(e)
         return ''
 
+def get_image_from_path(logger,image_path,method=0):
+    try:        
+        # Input Image
+        img  = cv2.imread(image_path,method)
+        if len(img) <= 0:
+            logger.exp.error('img is None')
+        return img
+    except Exception as e:
+        logger.exp.error(e)
+        return None
+
 def get_result_false_is_match_template_from_file2():
     return dict(result=False,start_w=0,start_h=0,end_w=0,end_h=0)
+
+def is_match_template_image_file_in_image(
+    logger,base_image_object,temp_image_path,method=None,threshhold = 0.8,result_file_path:str = '') -> Any:
+    """ 画像比較 match_templateを行う\n
+    比較の元画像が image、マッチ検索する画像が file の場合"""
+    match_rect = {'result':False,'start_w':0,'start_h':0,'end_w':0,'end_h':0}
+    try:
+        temp_image = get_image_from_path(logger,temp_image_path,0)
+        if method == None:
+            method = cv2.TM_CCOEFF_NORMED
+        ret = is_match_template_from_image(
+            logger,base_image_object,temp_image,method,threshhold,result_file_path)
+        return ret
+    except Exception as e:
+        logger.exp.error(e)
+        return match_rect
+
+def is_match_template_from_image(
+    logger,base_image,temp_image,method=None,threshold = 0.8,result_file_path:str = '') -> Any:
+    """ 画像比較 match_templateを行う (match_template_main)\n
+    比較の元画像が image、マッチ検索する画像が image の場合
+    戻り値は、比較結果と一致した範囲 tuple(bool, int, int, int) を返す
+    失敗時は tuple(False,-1,-1,-1,-1) を返す
+    """
+    
+    match_rect = {'result':False,'start_w':-1,'start_h':-1,'end_w':-1,'end_h':-1}
+    try:
+        if method == None:
+            method = cv2.TM_CCOEFF_NORMED
+
+        is_success = False
+        res = cv2.matchTemplate(base_image, temp_image, method)
+
+        loc = np.where(res >= threshold)
+        #print('loc[::1] = ' + str(loc[::1]))
+        if len(loc[0]) > 0:
+            is_success = True
+        else:
+            return match_rect
+        ## is_match True
+        tmp_ary = temp_image.shape
+        h,w = (tmp_ary[0],tmp_ary[1])
+        #print(h,w)
+        is_first = False
+        # match_point_sum = {'w':0,'h':0}
+        # match_point_sum = dict(result=True,w=0,h=0)
+        match_point_sum = {'result':True,'w':0,'h':0}
+        for_count = 0
+        for pt in zip(*loc[::-1]):
+            # print('pt[0] + w , pt[1] + h = ' + str(pt[0] + w) + ' , ' + str(pt[1] + h) )
+            match_point_sum['w'] += pt[0] + w
+            match_point_sum['h'] += pt[1] + h
+            for_count += 1
+            cv2.rectangle(base_image,pt,(pt[0]+w,pt[1] + h),(0,0,255),2)
+        ### end for - pt in loc
+        # match_point_avg = dict(result=True,w=0,h=0)
+        match_point_avg = {'result':True,'w':0,'h':0}
+        match_point_avg['w'] = int(match_point_sum['w'] / for_count)
+        match_point_avg['h'] = int(match_point_sum['h'] / for_count)
+        
+        # calc point for return
+        match_rect = {'result':True,'start_w':0,'start_h':0,'end_w':0,'end_h':0}
+        match_rect['end_w'] = match_point_avg['w']
+        match_rect['end_h'] = match_point_avg['h']
+        match_rect['start_w'] = match_point_avg['w'] - temp_image.shape[1]
+        match_rect['start_h'] = match_point_avg['h'] - temp_image.shape[0]
+        img_temp = base_image
+        
+        if is_success:
+            if result_file_path=='':
+                result_file_path = './match_template_result.png'
+            cv2.imwrite(result_file_path,img_temp)
+            logger.info('cv2.imwrite  path = ' + result_file_path)
+            return match_rect
+        return match_rect
+    except Exception as e:
+        logger.exp.error(e)
+        return match_rect
+
+
 
 def is_match_template_from_file2(logger,base_path,temp_path,
         threshold = 0.8,result_file_dir_path:str = '') -> Any:
@@ -102,68 +193,18 @@ def is_match_template_from_file2(logger,base_path,temp_path,
             # Image read
             images.append(cv2.imread(TempFilenames[i],0))
             #print(len(images[i]))
-
         
         method = cv2.TM_CCOEFF_NORMED
         is_success = False
         # Template matching
         for i in range(max_count):
-
-            res = cv2.matchTemplate(img, images[i], method)
-
-            loc = np.where(res >= threshold)
-            #print('loc[::1] = ' + str(loc[::1]))
-            if len(loc[0]) > 0:
-                is_success = True
-            else:
-                continue
-            ## is_match True
-            h,w = images[i].shape
-            #print(h,w)
-            is_first = False
-            # match_point_sum = {'w':0,'h':0}
-            # match_point_sum = dict(result=True,w=0,h=0)
-            match_point_sum = {'result':True,'w':0,'h':0}
-            for_count = 0
-            for pt in zip(*loc[::-1]):
-                # print('pt[0] + w , pt[1] + h = ' + str(pt[0] + w) + ' , ' + str(pt[1] + h) )
-                match_point_sum['w'] += pt[0] + w
-                match_point_sum['h'] += pt[1] + h
-                for_count += 1
-                cv2.rectangle(img,pt,(pt[0]+w,pt[1] + h),(0,0,255),2)
-            # match_point_avg = dict(result=True,w=0,h=0)
-            match_point_avg = {'result':True,'w':0,'h':0}
-            match_point_avg['w'] = int(match_point_sum['w'] / for_count)
-            match_point_avg['h'] = int(match_point_sum['h'] / for_count)
-            
-            # calc point for return
-            match_rect = {'result':True,'start_w':0,'start_h':0,'end_w':0,'end_h':0}
-            match_rect['end_w'] = match_point_avg['w']
-            match_rect['end_h'] = match_point_avg['h']
-            match_rect['start_w'] = match_point_avg['w'] - images[i].shape[1]
-            match_rect['start_h'] = match_point_avg['h'] - images[i].shape[0]
-            img_temp = img
-
-            if False:
-                w, h = images[i].shape[::-1]   # Template image size
-                print(w,h)
-                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-                print(str(i) + ' -> max_val: ' + str('{:.3f}'.format(max_val)), ',  max_loc: ' + str(max_loc))
-        
-                # Result image
-                top_left = max_loc
-                btm_right = (top_left[0]+w, top_left[1]+h)
-                img_temp = img.copy()
-                cv2.rectangle(img_temp, top_left, btm_right, 0, 2)
-            ## end if
-            
-            if is_success:
-                file_name = result_file_dir_path + str(i) +'_' + TempValnames[i] + '.png'
-                cv2.imwrite(file_name,img_temp)
-                logger.info('cv2.imwrite  path = ' + file_name)
-                return match_rect
+            save_path = result_file_dir_path + TempValnames[i] + str(i)  + '.png'
+            ret = is_match_template_from_image(
+                logger,img,images[i],method,threshold,save_path)
+            if ret['result']:
+                return ret
         ## end for
-        return get_result_false_is_match_template_from_file2()
+        return ret
     except Exception as e:
         logger.exp.error(e)
         return get_result_false_is_match_template_from_file2()

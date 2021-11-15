@@ -22,6 +22,7 @@ class const_int(Enum):
 class const(Enum):
     ANDROID_CONST = 'android_const'
     SCREEN_CAPTURE_FILE_NAME = 'screenshot.png'
+    SCREEN_RECORD_FILE_NAME = 'screenrecord.mp4'
     SD_ROOT_DIR = '/sdcard/'
     SAVE_PATH_ROOT_DIR = './'
     DEFAULT_THRESHOLD = '0.8'
