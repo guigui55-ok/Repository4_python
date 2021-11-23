@@ -11,27 +11,31 @@ def initialize():
         print(e)
 
 def main():
-    logger = initialize()
-    dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
-    file_name = 'screen_sever.png'
-    img_path = dir_path + '\\' + file_name
-    out_path = dir_path + '\\' + 'ret_' + file_name
-    # tools : pyocr.TOOLS
-    tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)
-    ocr_results = ocr_tesseract_method.excute_ocr(logger,tools,img_path,out_path)
+    try:
+        logger = initialize()
+        dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
+        file_name = 'screen_sever.png'
+        img_path = dir_path + '\\' + file_name
+        out_path = dir_path + '\\' + 'ret_' + file_name
+        # tools : pyocr.TOOLS
+        tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)
+        ocr_results = ocr_tesseract_method.excute_ocr(logger,tools,img_path,out_path)
 
-    keyword = '自動的にON'
-    # list(OcrBoxes)
-    ocr_boxes = ocr_tesseract_method.get_rect_list_match_keyword_in_ocr_result(
-        logger,keyword,ocr_results,False,0.6)
-    rect_list = ocr_tesseract_method.get_rect_from_ocr_result_boxes_list(
-        logger,ocr_boxes)
-    flag = ocr_tesseract_method.write_result_image_for_ocr(
-        logger,img_path,rect_list)
-    
-    print('rect_list : ')
-    for rect in rect_list:
-        print(rect)
-    
+        keyword = '自動的にON'
+        keyword = 'バッテリーセー'
+        # list(OcrBoxes)
+        ocr_boxes = ocr_tesseract_method.get_rect_list_match_keyword_in_ocr_result(
+            logger,keyword,ocr_results,False,0.6)
+        rect_list = ocr_tesseract_method.get_rect_from_ocr_result_boxes_list(
+            logger,ocr_boxes)
+        flag = ocr_tesseract_method.write_result_image_for_ocr(
+            logger,img_path,rect_list)
+        
+        print('rect_list : ')
+        for i in range(len(rect_list)):
+            print('rect_list ' + str(i) + ' = ' + str(id(rect_list[i])))
+            print(rect_list[i])
+    except Exception as e:
+        logger.exp.error(e)    
 
 main()

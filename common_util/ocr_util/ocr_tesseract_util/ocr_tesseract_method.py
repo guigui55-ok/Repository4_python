@@ -47,14 +47,19 @@ class direction(IntEnum):
     HORIZON = 11
     VERTICAL = 12
 
-class point():
+class point:
     x = 0
     y = 0
     def __init__(self,x = 0 ,y = 0) -> None:
-        self.x = 0
-        self.y = 0
+        # print('point.__init__:', str(id(self)))
+        self.x = int(x)
+        self.y = int(y)
+    def to_tuple(self):
+        return (int(self.x),int(self.y))
+    def to_list(self):
+        return [int(self.x),int(self.y)]
 
-class pointF():
+class pointF:
     x : float = 0.0
     y : float = 0.0
     def __init__(self,x:float = 0.0, y:float = 0.0) -> None:
@@ -75,10 +80,10 @@ class OcrBox:
     str_value = ''
     width = 0
     height = 0
-    begin_point : point = point()
-    end_point : point = point()
+    begin_point : point
+    end_point : point
     # 1文字当たりの大きさ
-    char_point : point = point()
+    char_point : point
     # 次の文字との距離
     to_next_distance = 0
     # 縦読みか横読みか
@@ -94,9 +99,15 @@ class OcrBox:
         direction_:direction = direction.HORIZON,
         next_ocr_box:OcrBox = None) -> None:
         
+        self.begin_point = point()
+        self.end_point = point()
+        # 1文字当たりの大きさ
+        self.char_point = point()
         try:
             self.logger = logger
-            flag = self.set_ocr_result(ocr_result,direction_)
+            import copy
+            buf = copy.copy(ocr_result)
+            flag = self.set_ocr_result(buf,direction_)
             if not flag: 
                 self.logger.exp.error('set_ocr_result Failed -> return')
                 return
@@ -110,23 +121,38 @@ class OcrBox:
 
     def set_ocr_result(self,ocr_result:pyocr.builders.Box,direction_:direction)->bool:
         try:
-            self.result = ocr_result
-            self.str_value = ocr_result.content
-            self.begin_point.x = ocr_result.position[0][0]
-            self.begin_point.y = ocr_result.position[0][1]
-            self.end_point.x = ocr_result.position[1][0]
-            self.end_point.y = ocr_result.position[1][1]
+            buf_result = ocr_result
+            self.result = buf_result
+            buf_str = str(ocr_result.content)
+            self.str_value = str(buf_str)
+            buf_int:list[int,int,int,int] = [0,0,0,0]
+            buf_int[0] = int(ocr_result.position[0][0])
+            self.begin_point.x = buf_int[0]
+            buf_int[1] = int(ocr_result.position[0][1])
+            self.begin_point.y = buf_int[1]
+            buf_int[2] = int(ocr_result.position[1][1])
+            self.end_point.x = buf_int[2]
+            buf_int[3] = int(ocr_result.position[1][1])
+            self.end_point.y = buf_int[3]
             self.width = self.end_point.x - self.begin_point.x
             self.height = self.end_point.y - self.begin_point.y
 
             # 1文字当たりの幅
-            if direction_ | direction.HORIZON:
+            if direction_ == direction.HORIZON:
                 self.char_point.x = self.width / len(self.str_value)
                 self.char_point.y = self.height / 1
             
-            if direction_ | direction.VERTICAL:
+            if direction_ == direction.VERTICAL:
                 self.char_point.x = self.width / 1
                 self.char_point.y = self.height / len(self.str_value)
+
+            self.direction = direction_
+            # print('box : values')
+            # print(
+            #     self.str_value , 
+            #     [self.begin_point.x , self.begin_point.y] , 
+            #     [self.end_point.x , self.end_point.y],
+            #     self.width, self.height)
             return True
         except Exception as e:
             self.logger.exp.error(e)
@@ -135,11 +161,11 @@ class OcrBox:
 
     def calc_next_distance(self,next_ocr_box:OcrBox) -> bool:
         try:
-            if self.direction.HORIZON:
+            if self.direction == direction.HORIZON:
                 self.to_next_distance = next_ocr_box.begin_point.x - self.end_point.x
                 self.raito_next_distans_to_size_of_char = \
                     self.to_next_distance / self.char_point.x
-            if self.direction.VERTICAL:
+            if self.direction == direction.VERTICAL:
                 self.to_next_distance = next_ocr_box.begin_point.y - self.end_point.y
                 self.raito_next_distans_to_size_of_char = \
                     self.to_next_distance / self.char_point.y
@@ -160,16 +186,21 @@ class OcrBox:
 # /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
-class OcrBoxes:
+class OcrBoxes():
     logger = None
     box_list : list(OcrBox) = []
-
+    threshold_for_judging_separation = None
+    is_separation_box :bool = False
+    separation_positions : list(int,int) = [] 
     def __init__(
         self,
         logger,
-        ocr_result_list:list(pyocr.builders.Box)
+        ocr_result_list:list(pyocr.builders.Box),
+        threshold_for_judging_separation = 0.6
         ) -> None:
         try:
+            self.threshold_for_judging_separation = threshold_for_judging_separation
+            # print('OcrBoxes.__init__:', str(id(self)))
             self.logger = logger
             if ocr_result_list == None:
                 logger.exp.error('ocr_result_list == None , return')
@@ -177,22 +208,133 @@ class OcrBoxes:
             if len(ocr_result_list) < 1:
                 logger.exp.error('len(ocr_result_list) < 1 , return')
                 return
+            new_list:list(OcrBox) = list()
             for result in ocr_result_list:
-                box:OcrBox = OcrBox(logger,result)
-                self.box_list.append(box)
+                import copy
+                data = copy.copy(result)
+                box:OcrBox = OcrBox(logger,data)
+                new_list.append(box)
+            self.box_list = new_list
 
         except Exception as e:
             self.logger.exp.error(e)
+
+    def calc_next_distance_for_boxes(self):
+        try:
+            if len(self.box_list) < 1:
+                self.logger.exp.error('calc_next_distance_for_boxes len(self.box_list) < 1: retrun')
+                return False
+            
+            flag = False
+            now_positions = [0,len(self.boxlist)]
+            self.separation_positions = []
+            for i in range(len(self.box_list)-1):
+                box : OcrBox = self.box_list[i]
+                next_box = self.box_list[i+1]
+                box.calc_next_distance(next_box)
+                if box.calc_next_distance >= self.threshold_for_judging_separation:
+                    flag = True
+                    self.logger.info('box is separated')
+                    now_positions[1] = i
+                    self.separation_positions.append(now_positions)
+                    now_positions = [i+1,len(self.box_list)]
+            else:
+                self.is_separation_box = flag
+                self.separation_positions.append(now_positions)
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+    
+    def get_rect_list(self)->list[list[int,int,int,int]]:
+        rect = [0,0,0,0]
+        rect_list = []
+        try:
+            # ないときは作る
+            if len(self.separation_positions) < 1:
+                self.logger.exp.error('get_rect_list : len(self.separation_positions) < 1 , create positions')
+                self.separation_positions = [0,len(self.box_list)]
+            # separation True/False に関係なく以下で取得する
+            for i in range(len(self.separation_positions)):
+                begin_pos = self.separation_positions[0]
+                end_pos = self.separation_positions[1]
+                # BeginPoint
+                box : OcrBox = self.box_list[begin_pos]
+                begin_point = box.begin_point
+                # EndPoint
+                box : OcrBox = self.box_list[end_pos]
+                end_point = box.end_point
+                rect = [
+                    begin_point.x,end_point.y,
+                    end_point.x,end_point.y
+                ]
+                rect_list.append(rect)
+            return rect_list
+        except Exception as e:
+            self.logger.exp.error(e)
+            return rect_list
+        
+
+    def decide_separation_box_list(self):
+        try:
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+    def print_mbmber_object_id(self):
+        print('box_list id = ' + str(id(self.box_list)))
+        if len(self.box_list) < 1:
+            return
+        for i in range(len(self.box_list)):
+            print('OcrBox id ' + str(i) + ' = ' + str(id(self.box_list[i]))) 
+
+    def get_str_value(self)->str:
+        fn = 'get_str_value'
+        try:
+            if len(self.box_list) < 1:
+                self.logger.exp.error(fn + ' : len(self.box_list) < 1 , return')
+                return ''
+            ret = ''
+            for i in range(len(self.box_list)):
+                box : OcrBox = self.box_list[i]
+                ret += box.str_value
+            return ret
+        except Exception as e:
+            self.logger.exp.error(e)
+            return ''
     
     def get_begin_point(self):
-        ret_p = point()
         try:
-            p : point()
-            return p
+            if len(self.box_list) < 1:
+                self.logger.exp.error('get_begin_point : len(self.box_list) < 1')
+                return point(0,0)
+            else:
+                val :OcrBox = self.box_list[0]
+                return val.begin_point
         except Exception as e:
             self.logger.exp.error(e)
-            return ret_p
+            return point(0,0)
+    
+    def get_begin_point_tuple(self):
+        val:point = self.get_begin_point()
+        return val.to_tuple()
+    
+    def get_end_point(self):
+        try:
+            if len(self.box_list) < 1:
+                self.logger.exp.error('get_begin_point : len(self.box_list) < 1')
+                return point(0,0)
+            else:
+                val :OcrBox = self.box_list[-1]
+                return val.begin_point
+        except Exception as e:
+            self.logger.exp.error(e)
+            return point(0,0)
 
+    def get_end_point_tuple(self):
+        val:point = self.get_begin_point()
+        return val.to_tuple()
 # /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
@@ -270,7 +412,7 @@ def get_rect_list_match_keyword_in_ocr_result(
     # 戻り値用list
     # ret_rect_list = []
     ret_rect = (0,0,0,0)
-    match_box_list:list(OcrBoxes) = []
+    match_box_list:list(OcrBoxes) = list()
     # match_pos_list = []
     fn = 'get_rect_list_match_keyword_in_ocr_result'
     try:
@@ -280,6 +422,8 @@ def get_rect_list_match_keyword_in_ocr_result(
             return match_box_list
         
         pos_now_result_el = 0
+        element_count = 0
+        boxes = None
         # ocr_result の最後まで検索する
         while(pos_now_result_el <= len(ocr_result_list)):
             # ここから繰り返し
@@ -295,25 +439,35 @@ def get_rect_list_match_keyword_in_ocr_result(
             else:
                 # keyword がある場合
                 # keyword 一致する箇所が含む要素の位置を取得する
+                # result[pos_now_result_el:] から pos_match_keyword 文字数分カウントした要素番号を取得する
                 element_count = get_element_count_match_keyword(
-                    logger,ocr_result_list,pos_match_keyword)
+                    logger,ocr_result_list ,pos_now_result_el, pos_match_keyword)
+                # element_count = pos_match_keyword
                 # 最初に一致した場所(範囲)(ocr_result の range)を取得する
+                # pos_now_result_el + element_count 番目からが一致した keyword の場所
                 ret_results= get_ocr_result_range_match_keyword(
-                    logger,keyword,ocr_result_list,element_count)
+                    logger,keyword,ocr_result_list,pos_now_result_el,element_count)
                 # ここで OcrBoxex に格納する
-                boxes = OcrBoxes(logger,ret_results)
+                # ここでmatch_box_list の0番目が上書きされている
+                buf_ret = ret_results
+                import copy
+                boxes = copy.copy(OcrBoxes(logger,buf_ret))
+                logger.info('match_str = ' + boxes.get_str_value())
                 # 取得した値をチェックする
-                flag = box_is_far_apart(logger,boxes.box_list,threshold_for_judging_separation)
+                # flag = box_is_far_apart(logger,boxes.box_list,threshold_for_judging_separation)
+                flag = False
                 if remove_if_box_is_far_apart and flag:
                     logger.exp.error('not append list')
                 else:
                     # 複数一致する場合もあるのでリストに格納する
-                    match_box_list.append(boxes)
+                    buf = copy.copy(boxes)
+                    match_box_list.append(buf)
+                    # boxes = None
                     # ret_rect_list.append(ret_rect)
 
                 # 次の検索開始位置
-                element_count += int(len(ret_rect))
-                pos_now_result_el = element_count
+                pos_now_result_el += int(len(boxes.box_list)) + element_count
+                logger.info(fn + ': now_pos = ' + str(pos_now_result_el))
                 # log
                 logger.info( fn + ': match True by find. keyword = '+ keyword)
                 logger.info('match_count = ' + str(len(match_box_list)))
@@ -332,16 +486,20 @@ def get_rect_list_match_keyword_in_ocr_result(
 def get_element_count_match_keyword(
         logger,
         ocr_result:list(pyocr.builders.Box),
+        now_ocr_pos_begin:int,
         pos_match_keyword:int) -> int:
     try:
+        ocr_result_part = ocr_result[now_ocr_pos_begin:]
         element_count = 0
-        char_leave_count = pos_match_keyword 
+        char_leave_count = pos_match_keyword
+        str_count = 0
         # 一致した場所まで要素を進めて、keyword[0] と一致した場所が含む要素の位置を返す
-        for el in ocr_result:
+        for el in ocr_result_part:
             char_leave_count -= len(str(el.content))
+            str_count += len(str(el.content))
+            element_count += 1
             if char_leave_count <= 0:
                 break
-            element_count += 1
         return element_count
     except Exception as e:
         logger.exp.error(e)
@@ -360,7 +518,7 @@ def find_keyword_in_ocr_result_str(
     """
     try:
         # begin_element_pos 以降の ocr_result を抜き出す
-        ocr_result_edit = ocr_result[begin_element_pos:len(ocr_result)]
+        ocr_result_edit = ocr_result[begin_element_pos:]
         ### ocr_result に keyword が存在するかチェックする
         # keyword が存在しなければ NG
         ocr_result_str = ''
@@ -381,12 +539,14 @@ def get_ocr_result_range_match_keyword(
     logger,
     keyword:str,
     ocr_result:list(pyocr.builders.Box),
+    edit_begin_result_element_index:int,
     ocr_ret_pos_match_begin:int) -> list(pyocr.builders.Box):
 
-    ret_result_ocr_boxes:list(pyocr.builders.Box) = []
+    ret_result_ocr_boxes:list(pyocr.builders.Box) = list()
     try:
         # keyword と一致したところからの ocr_result を取得する
-        ocr_result_range_match = ocr_result[ocr_ret_pos_match_begin:len(ocr_result)]
+        cut_pos = edit_begin_result_element_index + ocr_ret_pos_match_begin
+        ocr_result_range_match = ocr_result[cut_pos:]
         # 取得する文字数
         get_leave_length = len(keyword)
         for el in ocr_result_range_match:
@@ -470,18 +630,26 @@ def box_is_far_apart(
 # 上記関数で取得された結果(ocr_box)から、座標範囲を得る
 # keyword に一致した結果 (ocr_boxes) の rect(x,y,x,y) を取得する
 # list(OcrBoxes)
-def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes)):
+def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes),is_remove_separation = True):
     fn = 'get_rect_from_ocr_result_boxes_list'
-    ret_rect_list = []
+    ret_rect_list:list[int,int,int,int] = list()
     try:
         if len(ocr_boxes_list) < 1:
             logger.exp.error(fn + ' : len(ocr_boxes_list) < 1 , return')
             return ret_rect_list
-        max = int(len(ocr_boxes_list))
+        get_rect_list :list[int,int,int,int] = list()
+        max = len(ocr_boxes_list)
         for i in range(max):
-            boxes = ocr_boxes_list[i]
-            ret_rect = get_rect_from_ocr_result_boxes(logger,boxes)
-            ret_rect_list.append(ret_rect)
+            buf_boxes:OcrBoxes = ocr_boxes_list[i]
+            # 分離を含まない True かつ Boxes が分離している場合は、次へ
+            if is_remove_separation and buf_boxes.is_separation_box:
+                continue
+            # buf_boxes.print_mbmber_object_id()
+            get_rect_list = buf_boxes.get_rect_list()
+            # 取得した Rect_List を Ret_rect_list へ格納する
+            for get_rect in get_rect_list:
+                ret_rect_list.append(get_rect)
+            #ret_rect_list.extend()
         return ret_rect_list
     except Exception as e:
         logger.exp.error(e)
@@ -492,7 +660,7 @@ def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes)):
 # OcrBoxes (list(OcrBox))
 def get_rect_from_ocr_result_boxes(logger,ocr_boxes:OcrBoxes):
     fn = 'get_rect_from_ocr_result_boxes'
-    ret_rect =[0,0,0,0]
+    ret_rect_ =[0,0,0,0]
     try:
         if len(ocr_boxes.box_list) < 1:
             logger.exp.error(fn + ' : len(ocr_boxes) < 1 , return')
@@ -501,23 +669,21 @@ def get_rect_from_ocr_result_boxes(logger,ocr_boxes:OcrBoxes):
         ocr_box_list:list(OcrBox) = ocr_boxes.box_list
         if len(ocr_box_list) < 1:
             logger.exp.error('len(ocr_box_list) < 1 -> return')
-            return ret_rect
+            return ret_rect_
 
         # 最初の要素の begin_point
-        tmp_box : OcrBox = ocr_box_list[0]
-        begin_point : point = tmp_box.begin_point
+        begin_point = ocr_boxes.get_begin_point()
         # 最後の要素の end_point
-        tmp_box = ocr_box_list[len(ocr_box_list)-1]
-        end_point : point = tmp_box.end_point
+        end_point = ocr_boxes.get_end_point()
 
-        ret_rect = [
+        ret_rect_ = [
             begin_point.x,begin_point.y,
             end_point.x,end_point.y
         ]
-        return ret_rect
+        return ret_rect_
     except Exception as e:
         logger.exp.error(e)
-        return ret_rect
+        return ret_rect_
 
 # OcrBox.ocr_result == pyocr.builder.box
 # get_rect_list_match_keyword_in_ocr_result の後に実行する
@@ -593,6 +759,7 @@ def write_result_image_for_ocr(
         return flag
     except Exception as e:
         logger.exp.error(e)
+        return False
 
 def add_number_to_path(logger,base_path,num)->str:
     ret = ''
