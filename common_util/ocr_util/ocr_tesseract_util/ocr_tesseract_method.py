@@ -15,6 +15,8 @@ from numpy import true_divide
 import pyocr
 import pyocr.builders
 
+from pad import const
+
 # 1.インストール済みのTesseractのパスを通す
 path_tesseract = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 if path_tesseract not in os.environ["PATH"].split(os.pathsep):
@@ -41,13 +43,16 @@ def get_tools_by_initialize_tresseract(logger) -> pyocr.TOOLS:
 # /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
 from enum import IntEnum
-class direction(IntEnum):
-    TOP = 1
-    RIGHT = 3
-    LEFT = 4
-    BOTTOM = 8
-    HORIZON = 11
-    VERTICAL = 12
+class const_ocr(IntEnum):
+    DIRECTION_TOP = 1
+    DIRECTION_RIGHT = 3
+    DIRECTION_LEFT = 4
+    DIRECTION_BOTTOM = 8
+    DIRECTION_HORIZON = 11
+    DIRECTION_VERTICAL = 12
+    DEFAULT_THRESHOLD = 1.1
+
+
 
 class point:
     x = 0
@@ -89,7 +94,7 @@ class OcrBox:
     # 次の文字との距離
     to_next_distance = 0
     # 縦読みか横読みか
-    direction = direction.HORIZON
+    direction = const_ocr.DIRECTION_HORIZON
     # 次の距離と1文字当たりの大きさの比率
     # The ratio of the next distance to the size of one character
     raito_next_distans_to_size_of_char = 0.0
@@ -98,7 +103,7 @@ class OcrBox:
         self,
         logger,
         ocr_result:pyocr.builders.Box,
-        direction_:direction = direction.HORIZON,
+        direction_:direction = const_ocr.DIRECTION_HORIZON,
         next_ocr_box:OcrBox = None) -> None:
         
         self.begin_point = point()
@@ -132,11 +137,11 @@ class OcrBox:
             self.width = (self.end_point.x - self.begin_point.x)
             self.height = (self.end_point.y - self.begin_point.y)
             # 1文字当たりの幅
-            if direction_ == direction.HORIZON:
+            if direction_ == const_ocr.DIRECTION_HORIZON:
                 self.char_point.x = self.width / len(self.str_value)
                 self.char_point.y = self.height / 1
             
-            if direction_ == direction.VERTICAL:
+            if direction_ == const_ocr.DIRECTION_VERTICAL:
                 self.char_point.x = self.width / 1
                 self.char_point.y = self.height / len(self.str_value)
 
@@ -155,7 +160,7 @@ class OcrBox:
     def logout_ocrbox_info(self):
         try:
             self.logger.info('str_value = '+ self.str_value)
-            self.logger.info('char_point = ' + str(self.char_point))
+            self.logger.info('char_point = ' + str(self.char_point.to_list()))
             self.logger.info('to_next_distance = ' + str(self.to_next_distance))
             self.logger.info('begin,end = ' + str(self.begin_point.to_list()) + ' , ' +  str(self.end_point.to_list()))
             self.logger.info('raito_next_distans_to_size_of_char = ' + str(self.raito_next_distans_to_size_of_char))
@@ -164,11 +169,11 @@ class OcrBox:
 
     def calc_next_distance(self,next_ocr_box:OcrBox) -> bool:
         try:
-            if self.direction == direction.HORIZON:
+            if self.direction == const_ocr.DIRECTION_HORIZON:
                 self.to_next_distance = next_ocr_box.begin_point.x - self.end_point.x
                 self.raito_next_distans_to_size_of_char = \
                     self.to_next_distance / self.char_point.x
-            if self.direction == direction.VERTICAL:
+            if self.direction == const_ocr.DIRECTION_VERTICAL:
                 self.to_next_distance = next_ocr_box.begin_point.y - self.end_point.y
                 self.raito_next_distans_to_size_of_char = \
                     self.to_next_distance / self.char_point.y
@@ -200,7 +205,7 @@ class OcrBoxes():
         self,
         logger,
         ocr_result_list:list(pyocr.builders.Box),
-        threshold_for_judging_separation = 0.7,
+        threshold_for_judging_separation = const_ocr.DEFAULT_THRESHOLD,
         ocr_direction_is_horizon = True,
         ) -> None:
         try:
@@ -217,9 +222,9 @@ class OcrBoxes():
             new_list:list(OcrBox) = list()
             for result in ocr_result_list:
                 if ocr_direction_is_horizon:
-                    direc = direction.HORIZON
+                    direc = const_ocr.DIRECTION_HORIZON
                 else:
-                    direc = direction.VERTICAL
+                    direc = const_ocr.DIRECTION_VERTICAL
                 box:OcrBox = OcrBox(logger,result,direction_=direc)
                 new_list.append(box)
             self.box_list = new_list
@@ -236,6 +241,14 @@ class OcrBoxes():
         try:
             box:OcrBox = self.box_list[index]
             box.logout_ocrbox_info()
+        except Exception as e:
+            self.logger.exp.error(e)
+
+    def logout_ocrbox_info_all(self):
+        try:
+            for i in range(len(self.box_list)):
+                box:OcrBox = self.box_list[i]
+                box.logout_ocrbox_info()
         except Exception as e:
             self.logger.exp.error(e)
 
@@ -339,7 +352,7 @@ class OcrBoxes():
                 box.calc_next_distance(next_box)
                 if abs(box.raito_next_distans_to_size_of_char) >= abs(self.threshold_for_judging_separation):
                     flag = True
-                    self.logger.info('box is separated')
+                    self.logger.info('box is separated. raito = ' + str(box.raito_next_distans_to_size_of_char))
                     now_positions[1] = i
                     self.separation_positions.append(now_positions)
                     now_positions = [i+1,len(self.box_list)-1]
@@ -506,7 +519,7 @@ def get_rect_list_match_keyword_in_ocr_result(
         keyword:str,
         ocr_result_list:list(pyocr.builders.Box),
         remove_if_box_is_far_apart = False,
-        threshold_for_judging_separation = 0.7,
+        threshold_for_judging_separation = const_ocr.DEFAULT_THRESHOLD,
         ocr_direction_is_horizon = True
         )->list(OcrBoxes):
     """ocr の結果データから、keyword が含まれている場合、その
@@ -697,7 +710,7 @@ def get_ocr_result_range_match_keyword(
 def box_is_far_apart(
     logger,
     ocr_box_list:list(OcrBox),
-    separation_border_value:float=0.7)->bool:
+    separation_border_value:float=const_ocr.DEFAULT_THRESHOLD)->bool:
     try:
         avg_separation_val = 0
         cl_box_list:list(OcrBox) = []
@@ -757,7 +770,7 @@ def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes),is_
             # 分離を含まない True かつ Boxes が分離している場合は、次へ
             if is_remove_separation and buf_boxes.is_separation_box:
                 logger.info('is_remove_separation = ' + str(is_remove_separation))
-                buf_boxes.logout_ocrbox_info(i)
+                buf_boxes.logout_ocrbox_info_all()
                 continue
             # buf_boxes.print_mbmber_object_id()
             get_rect_list = buf_boxes.get_rect_list()

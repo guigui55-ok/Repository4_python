@@ -27,7 +27,7 @@ def main():
         keyword = 'バッテリーセーバー'
         # list(OcrBoxes)
         ocr_boxes = ocr_tesseract_method.get_rect_list_match_keyword_in_ocr_result(
-            logger,keyword,ocr_results,False,0.7)
+            logger,keyword,ocr_results,False,1.0)
         rect_list = ocr_tesseract_method.get_rect_from_ocr_result_boxes_list(
             logger,ocr_boxes)
         flag = ocr_tesseract_method.write_result_image_for_ocr(
