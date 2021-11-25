@@ -123,22 +123,14 @@ class OcrBox:
 
     def set_ocr_result(self,ocr_result:pyocr.builders.Box,direction_:direction)->bool:
         try:
-            buf_result = ocr_result
-            self.result = buf_result
-            buf_str = str(ocr_result.content)
-            self.str_value = str(buf_str)
-            buf_int:list[int,int,int,int] = [0,0,0,0]
-            buf_int[0] = int(ocr_result.position[0][0])
-            self.begin_point.x = buf_int[0]
-            buf_int[1] = int(ocr_result.position[0][1])
-            self.begin_point.y = buf_int[1]
-            buf_int[2] = int(ocr_result.position[1][0])
-            self.end_point.x = buf_int[2]
-            buf_int[3] = int(ocr_result.position[1][1])
-            self.end_point.y = buf_int[3]
+            self.result = ocr_result
+            self.str_value = str(ocr_result.content)
+            self.begin_point.x = ocr_result.position[0][0]
+            self.begin_point.y = ocr_result.position[0][1]
+            self.end_point.x = ocr_result.position[1][0]
+            self.end_point.y = ocr_result.position[1][1]
             self.width = (self.end_point.x - self.begin_point.x)
             self.height = (self.end_point.y - self.begin_point.y)
-
             # 1文字当たりの幅
             if direction_ == direction.HORIZON:
                 self.char_point.x = self.width / len(self.str_value)
@@ -160,6 +152,15 @@ class OcrBox:
             self.logger.exp.error(e)
             return False
 
+    def logout_ocrbox_info(self):
+        try:
+            self.logger.info('str_value = '+ self.str_value)
+            self.logger.info('char_point = ' + str(self.char_point))
+            self.logger.info('to_next_distance = ' + str(self.to_next_distance))
+            self.logger.info('begin,end = ' + str(self.begin_point.to_list()) + ' , ' +  str(self.end_point.to_list()))
+            self.logger.info('raito_next_distans_to_size_of_char = ' + str(self.raito_next_distans_to_size_of_char))
+        except Exception as e:
+            self.logger.exp.error(e)
 
     def calc_next_distance(self,next_ocr_box:OcrBox) -> bool:
         try:
@@ -171,8 +172,6 @@ class OcrBox:
                 self.to_next_distance = next_ocr_box.begin_point.y - self.end_point.y
                 self.raito_next_distans_to_size_of_char = \
                     self.to_next_distance / self.char_point.y
-            print('self.to_next_distance = ' + str(self.to_next_distance))
-            print('self.raito_next_distans_to_size_of_char = ' + str(self.raito_next_distans_to_size_of_char))
             return True
         except Exception as e:
             self.logger.exp.error(e)
@@ -201,7 +200,7 @@ class OcrBoxes():
         self,
         logger,
         ocr_result_list:list(pyocr.builders.Box),
-        threshold_for_judging_separation = 0.6,
+        threshold_for_judging_separation = 0.7,
         ocr_direction_is_horizon = True,
         ) -> None:
         try:
@@ -225,47 +224,105 @@ class OcrBoxes():
                 new_list.append(box)
             self.box_list = new_list
 
-            flag = self.allign_points()
-            if not flag:
-                self.logger.exp.error('allign_points Failed')
+            # ここでは高さ、幅は揃えない
+            # 行が変わったときに大きくなってしまうため
+            # flag = self.allign_points()
+            # if not flag:
+            #     self.logger.exp.error('allign_points Failed')
         except Exception as e:
             self.logger.exp.error(e)
 
-    def allign_points(self):
+    def logout_ocrbox_info(self,index:int):
+        try:
+            box:OcrBox = self.box_list[index]
+            box.logout_ocrbox_info()
+        except Exception as e:
+            self.logger.exp.error(e)
+
+    # def allign_points(self):
+    #     """文字の高さ・幅がそれぞれのboxによって異なるので、max、min値でそろえる"""
+    #     try:
+    #         # max_point:point = point()
+    #         # min_point:point = point()
+    #         max_point:point = None
+    #         min_point:point = None
+    #         if len(self.box_list) < 1:
+    #             self.logger.exp.error('allign_points : len(self.box_list) < 1 : return')
+    #             return False
+            
+    #         for i in range(len(self.box_list)):
+    #             box:OcrBox = self.box_list[i]
+    #             if i == 0:
+    #                 max_point = point(box.end_point.x,box.end_point.y)
+    #                 min_point = point(box.end_point.x,box.end_point.y)
+    #             else:
+    #                 if min_point.x > box.begin_point.x: min_point.x = box.begin_point.x
+    #                 if min_point.y > box.begin_point.y: min_point.y = box.begin_point.y
+    #                 if max_point.x < box.end_point.x: max_point.x = box.end_point.x
+    #                 if max_point.y < box.end_point.y: max_point.y = box.end_point.y
+    #         for i in range(len(self.box_list)):
+    #             box:OcrBox = self.box_list[i]
+    #             if self.direction_is_horizon:
+    #                 # 横読みの場合は、y 高さをそろえる
+    #                 box.begin_point.y = min_point.y
+    #                 box.end_point.y = max_point.y
+    #             else:
+    #                 # 縦よみの場合は、x 幅をそろえる
+    #                 box.begin_point.x = min_point.x
+    #                 box.end_point.x = max_point.x
+    #             # self.box_list[i] = box
+
+    #         return True
+    #     except Exception as e:
+    #         self.logger.exp.error(e)
+    #         return False
+
+    def allign_points_in_separation_position(self):
         """文字の高さ・幅がそれぞれのboxによって異なるので、max、min値でそろえる"""
         try:
-            max_point = point()
-            min_point = point()
+            # max_point:point = point()
+            # min_point:point = point()
+            max_point:point = None
+            min_point:point = None
             if len(self.box_list) < 1:
-                self.logger.exp.error('allign_points : len(self.box_list) < 1 : return')
+                self.logger.exp.error('allign_points_in_separation_position : len(self.box_list) < 1 : return')
+                return False
+
+            if len(self.separation_positions) < 1:
+                self.logger.exp.error('allign_points_in_separation_position : len(self.separation_positions) < 1 : return')
                 return False
             
-            for i in range(len(self.box_list)-1):
-                box:OcrBox = self.box_list[i]
-                if i == 1:
-                    max_point = box.end_point
-                    min_point = box.begin_point
-                else:
-                    if min_point.x > box.begin_point.x: min_point.x = box.begin_point.x
-                    if min_point.y > box.begin_point.y: min_point.y = box.begin_point.y
-                    if max_point.x < box.end_point.x: max_point.x = box.end_point.x
-                    if max_point.y < box.end_point.y: max_point.y = box.end_point.y
-
-            for i in range(len(self.box_list)-1):
-                if self.direction_is_horizon:
-                    # 横読みの場合は、y 高さをそろえる
-                    self.box_list[i].begin_point.y = min_point.y
-                    self.box_list[i].end_point.y = max_point.y
-                else:
-                    # 縦よみの場合は、x 幅をそろえる
-                    self.box_list[i].begin_point.x = min_point.x
-                    self.box_list[i].end_point.x = max_point.x
+            for j in range(len(self.separation_positions)):
+                #最大値最小値を取得
+                min_index = self.separation_positions[j][0]
+                max_index = self.separation_positions[j][1]
+                for i in range(min_index,max_index):
+                    box:OcrBox = self.box_list[i]
+                    if i == 0:
+                        max_point = point(box.end_point.x,box.end_point.y)
+                        min_point = point(box.end_point.x,box.end_point.y)
+                    else:
+                        if min_point.x > box.begin_point.x: min_point.x = box.begin_point.x
+                        if min_point.y > box.begin_point.y: min_point.y = box.begin_point.y
+                        if max_point.x < box.end_point.x: max_point.x = box.end_point.x
+                        if max_point.y < box.end_point.y: max_point.y = box.end_point.y
+                # 高さ幅をそろえる
+                for i in range(len(self.box_list)):
+                    box:OcrBox = self.box_list[i]
+                    if self.direction_is_horizon:
+                        # 横読みの場合は、y 高さをそろえる
+                        box.begin_point.y = min_point.y
+                        box.end_point.y = max_point.y
+                    else:
+                        # 縦よみの場合は、x 幅をそろえる
+                        box.begin_point.x = min_point.x
+                        box.end_point.x = max_point.x
+                    # self.box_list[i] = box
 
             return True
         except Exception as e:
             self.logger.exp.error(e)
             return False
-
 
     def calc_next_distance_for_boxes(self):
         try:
@@ -280,7 +337,7 @@ class OcrBoxes():
                 box : OcrBox = self.box_list[i]
                 next_box = self.box_list[i+1]
                 box.calc_next_distance(next_box)
-                if box.raito_next_distans_to_size_of_char >= self.threshold_for_judging_separation:
+                if abs(box.raito_next_distans_to_size_of_char) >= abs(self.threshold_for_judging_separation):
                     flag = True
                     self.logger.info('box is separated')
                     now_positions[1] = i
@@ -449,7 +506,7 @@ def get_rect_list_match_keyword_in_ocr_result(
         keyword:str,
         ocr_result_list:list(pyocr.builders.Box),
         remove_if_box_is_far_apart = False,
-        threshold_for_judging_separation = 0.6,
+        threshold_for_judging_separation = 0.7,
         ocr_direction_is_horizon = True
         )->list(OcrBoxes):
     """ocr の結果データから、keyword が含まれている場合、その
@@ -640,7 +697,7 @@ def get_ocr_result_range_match_keyword(
 def box_is_far_apart(
     logger,
     ocr_box_list:list(OcrBox),
-    separation_border_value:float=0.6)->bool:
+    separation_border_value:float=0.7)->bool:
     try:
         avg_separation_val = 0
         cl_box_list:list(OcrBox) = []
@@ -693,8 +750,14 @@ def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes),is_
             flag = buf_boxes.calc_next_distance_for_boxes()
             if not flag:
                 logger.exp.error('calc_next_distance_for_boxes Failed. i = ' + str(i))
+            # 分離閾値を計算した後、高さ、幅をそろえる
+            flag = buf_boxes.allign_points_in_separation_position()
+            if not flag:
+                logger.exp.error('allign_points_in_separation_position Failed. i = ' + str(i))
             # 分離を含まない True かつ Boxes が分離している場合は、次へ
             if is_remove_separation and buf_boxes.is_separation_box:
+                logger.info('is_remove_separation = ' + str(is_remove_separation))
+                buf_boxes.logout_ocrbox_info(i)
                 continue
             # buf_boxes.print_mbmber_object_id()
             get_rect_list = buf_boxes.get_rect_list()
@@ -812,13 +875,14 @@ def write_result_image_for_ocr(
         if out_path == '':
             out_path = create_write_path(logger,img_path,add_str)
         else:
-            out_path = add_number_to_path(logger,img_path,i)
+            out_path = add_number_to_path(logger,img_path,0)
         
         img = cv2.imread(img_path)
-        for i in range(len(rect_list)-1):
+        for i in range(len(rect_list)):
             img = patint_rectangle(logger,img,rect_list[i])
             # flag = write_image_and_paint_rectangle(
             #     logger,img_path,rect_list[i],out_path,color,border_width)
+            #   The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
             # if img == None:
             #     #logger.exp.error('write_image failed , '+ str(i) +' path = ' + out_path)
             #     logger.exp.error('patint_rectangle failed , return False')

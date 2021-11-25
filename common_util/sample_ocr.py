@@ -24,10 +24,10 @@ def main():
         ocr_results = ocr_tesseract_method.excute_ocr(logger,tools,img_path,out_path,lang,ocr_direction_is_horizon)
 
         keyword = '自動的にON'
-        keyword = 'バッテリーセー'
+        keyword = 'バッテリーセーバー'
         # list(OcrBoxes)
         ocr_boxes = ocr_tesseract_method.get_rect_list_match_keyword_in_ocr_result(
-            logger,keyword,ocr_results,False,0.6)
+            logger,keyword,ocr_results,False,0.7)
         rect_list = ocr_tesseract_method.get_rect_from_ocr_result_boxes_list(
             logger,ocr_boxes)
         flag = ocr_tesseract_method.write_result_image_for_ocr(
