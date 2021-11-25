@@ -12,6 +12,10 @@ if __name__ == '__main__':
 else:
     from ocr_util.ocr_tesseract_util import ocr_tesseract_method
 
+class OcrConst():
+    DIRECTION_HORIZON = 11
+    DIRECTION_VERTICAL = 12
+
 class tesseract():
     loggger = None
     tool:list = None
@@ -20,6 +24,8 @@ class tesseract():
     is_output_result_image:bool = True
     ocr_result:pyocr.builders.Box = None
     rect_list_match_keyword_in_ocr_result:list = []
+    const = OcrConst()
+    direction = OcrConst.DIRECTION_HORIZON
     def __init__(self,logger,read_path='',ret_path='') -> None:
         try:
             self.logger = logger
@@ -43,9 +49,22 @@ class tesseract():
         except Exception as e:
             self.logger.exp.error(e)
             return False
-
-    def excute(self,lang)->bool:
+    
+    def excute_verticaal(self)->bool:
         try:
+            lang='eng+jpn_vert', #ここを日本語縦書き認識用に変更しています。
+            self.direction = self.const.DIRECTION_VERTICAL
+            self.ocr_result = ocr_tesseract_method.excute_ocr(
+                self.logger,self.tool,self.read_path,self.ret_path,lang,
+                self.is_output_result_image)
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+    def excute(self,lang='eng+jpn')->bool:
+        try:
+            self.direction = self.const.DIRECTION_HORIZON
             self.ocr_result = ocr_tesseract_method.excute_ocr(
                 self.logger,self.tool,self.read_path,self.ret_path,lang,
                 self.is_output_result_image)

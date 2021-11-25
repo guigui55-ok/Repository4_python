@@ -17,9 +17,11 @@ def main():
         file_name = 'screen_sever.png'
         img_path = dir_path + '\\' + file_name
         out_path = dir_path + '\\' + 'ret_' + file_name
+        lang = 'jpn'
+        ocr_direction_is_horizon = True
         # tools : pyocr.TOOLS
         tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)
-        ocr_results = ocr_tesseract_method.excute_ocr(logger,tools,img_path,out_path)
+        ocr_results = ocr_tesseract_method.excute_ocr(logger,tools,img_path,out_path,lang,ocr_direction_is_horizon)
 
         keyword = '自動的にON'
         keyword = 'バッテリーセー'

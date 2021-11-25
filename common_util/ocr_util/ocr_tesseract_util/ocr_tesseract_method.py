@@ -4,10 +4,12 @@ from __future__ import annotations
 
 # from operator import pos
 import os
+from typing import Any
 # import re
 # from typing import Any
 import cv2
 from PIL import Image
+from numpy import true_divide
 # from numpy import double, true_divide
 # from numpy.char import count
 import pyocr
@@ -130,12 +132,12 @@ class OcrBox:
             self.begin_point.x = buf_int[0]
             buf_int[1] = int(ocr_result.position[0][1])
             self.begin_point.y = buf_int[1]
-            buf_int[2] = int(ocr_result.position[1][1])
+            buf_int[2] = int(ocr_result.position[1][0])
             self.end_point.x = buf_int[2]
             buf_int[3] = int(ocr_result.position[1][1])
             self.end_point.y = buf_int[3]
-            self.width = self.end_point.x - self.begin_point.x
-            self.height = self.end_point.y - self.begin_point.y
+            self.width = (self.end_point.x - self.begin_point.x)
+            self.height = (self.end_point.y - self.begin_point.y)
 
             # 1文字当たりの幅
             if direction_ == direction.HORIZON:
@@ -169,6 +171,8 @@ class OcrBox:
                 self.to_next_distance = next_ocr_box.begin_point.y - self.end_point.y
                 self.raito_next_distans_to_size_of_char = \
                     self.to_next_distance / self.char_point.y
+            print('self.to_next_distance = ' + str(self.to_next_distance))
+            print('self.raito_next_distans_to_size_of_char = ' + str(self.raito_next_distans_to_size_of_char))
             return True
         except Exception as e:
             self.logger.exp.error(e)
@@ -192,13 +196,16 @@ class OcrBoxes():
     threshold_for_judging_separation = None
     is_separation_box :bool = False
     separation_positions : list(int,int) = [] 
+    direction_is_horizon = True
     def __init__(
         self,
         logger,
         ocr_result_list:list(pyocr.builders.Box),
-        threshold_for_judging_separation = 0.6
+        threshold_for_judging_separation = 0.6,
+        ocr_direction_is_horizon = True,
         ) -> None:
         try:
+            self.direction_is_horizon = ocr_direction_is_horizon
             self.threshold_for_judging_separation = threshold_for_judging_separation
             # print('OcrBoxes.__init__:', str(id(self)))
             self.logger = logger
@@ -210,14 +217,55 @@ class OcrBoxes():
                 return
             new_list:list(OcrBox) = list()
             for result in ocr_result_list:
-                import copy
-                data = copy.copy(result)
-                box:OcrBox = OcrBox(logger,data)
+                if ocr_direction_is_horizon:
+                    direc = direction.HORIZON
+                else:
+                    direc = direction.VERTICAL
+                box:OcrBox = OcrBox(logger,result,direction_=direc)
                 new_list.append(box)
             self.box_list = new_list
 
+            flag = self.allign_points()
+            if not flag:
+                self.logger.exp.error('allign_points Failed')
         except Exception as e:
             self.logger.exp.error(e)
+
+    def allign_points(self):
+        """文字の高さ・幅がそれぞれのboxによって異なるので、max、min値でそろえる"""
+        try:
+            max_point = point()
+            min_point = point()
+            if len(self.box_list) < 1:
+                self.logger.exp.error('allign_points : len(self.box_list) < 1 : return')
+                return False
+            
+            for i in range(len(self.box_list)-1):
+                box:OcrBox = self.box_list[i]
+                if i == 1:
+                    max_point = box.end_point
+                    min_point = box.begin_point
+                else:
+                    if min_point.x > box.begin_point.x: min_point.x = box.begin_point.x
+                    if min_point.y > box.begin_point.y: min_point.y = box.begin_point.y
+                    if max_point.x < box.end_point.x: max_point.x = box.end_point.x
+                    if max_point.y < box.end_point.y: max_point.y = box.end_point.y
+
+            for i in range(len(self.box_list)-1):
+                if self.direction_is_horizon:
+                    # 横読みの場合は、y 高さをそろえる
+                    self.box_list[i].begin_point.y = min_point.y
+                    self.box_list[i].end_point.y = max_point.y
+                else:
+                    # 縦よみの場合は、x 幅をそろえる
+                    self.box_list[i].begin_point.x = min_point.x
+                    self.box_list[i].end_point.x = max_point.x
+
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
 
     def calc_next_distance_for_boxes(self):
         try:
@@ -226,18 +274,18 @@ class OcrBoxes():
                 return False
             
             flag = False
-            now_positions = [0,len(self.boxlist)]
+            now_positions = [0,len(self.box_list)-1]
             self.separation_positions = []
             for i in range(len(self.box_list)-1):
                 box : OcrBox = self.box_list[i]
                 next_box = self.box_list[i+1]
                 box.calc_next_distance(next_box)
-                if box.calc_next_distance >= self.threshold_for_judging_separation:
+                if box.raito_next_distans_to_size_of_char >= self.threshold_for_judging_separation:
                     flag = True
                     self.logger.info('box is separated')
                     now_positions[1] = i
                     self.separation_positions.append(now_positions)
-                    now_positions = [i+1,len(self.box_list)]
+                    now_positions = [i+1,len(self.box_list)-1]
             else:
                 self.is_separation_box = flag
                 self.separation_positions.append(now_positions)
@@ -253,11 +301,11 @@ class OcrBoxes():
             # ないときは作る
             if len(self.separation_positions) < 1:
                 self.logger.exp.error('get_rect_list : len(self.separation_positions) < 1 , create positions')
-                self.separation_positions = [0,len(self.box_list)]
+                self.separation_positions = [0,len(self.box_list)-1]
             # separation True/False に関係なく以下で取得する
             for i in range(len(self.separation_positions)):
-                begin_pos = self.separation_positions[0]
-                end_pos = self.separation_positions[1]
+                begin_pos = self.separation_positions[i][0]
+                end_pos = self.separation_positions[i][1]
                 # BeginPoint
                 box : OcrBox = self.box_list[begin_pos]
                 begin_point = box.begin_point
@@ -265,7 +313,7 @@ class OcrBoxes():
                 box : OcrBox = self.box_list[end_pos]
                 end_point = box.end_point
                 rect = [
-                    begin_point.x,end_point.y,
+                    begin_point.x,begin_point.y,
                     end_point.x,end_point.y
                 ]
                 rect_list.append(rect)
@@ -349,6 +397,7 @@ def excute_ocr(
     img_path:str,
     out_path:str,
     lang:str ='jpn',
+    direction_is_horizon:bool = True,
     is_output_result_image = True,
     color=(0, 0, 255),
     border_width = 2) -> list(pyocr.builders.Box):
@@ -356,7 +405,8 @@ def excute_ocr(
     try:
         img = Image.open(img_path)
         
-        lang = 'jpn'
+        if not direction_is_horizon:
+            lang = lang.replace('jpn' , 'jpn_vert')
         word_boxes = tool.image_to_string(
             img,
             lang=lang,
@@ -399,7 +449,8 @@ def get_rect_list_match_keyword_in_ocr_result(
         keyword:str,
         ocr_result_list:list(pyocr.builders.Box),
         remove_if_box_is_far_apart = False,
-        threshold_for_judging_separation = 0.6
+        threshold_for_judging_separation = 0.6,
+        ocr_direction_is_horizon = True
         )->list(OcrBoxes):
     """ocr の結果データから、keyword が含まれている場合、その
     keyword が一致した範囲を1つの要素として、その要素の list 'list(OcrBoxes)' を返す
@@ -449,9 +500,7 @@ def get_rect_list_match_keyword_in_ocr_result(
                     logger,keyword,ocr_result_list,pos_now_result_el,element_count)
                 # ここで OcrBoxex に格納する
                 # ここでmatch_box_list の0番目が上書きされている
-                buf_ret = ret_results
-                import copy
-                boxes = copy.copy(OcrBoxes(logger,buf_ret))
+                boxes = OcrBoxes(logger,ret_results,threshold_for_judging_separation,ocr_direction_is_horizon)
                 logger.info('match_str = ' + boxes.get_str_value())
                 # 取得した値をチェックする
                 # flag = box_is_far_apart(logger,boxes.box_list,threshold_for_judging_separation)
@@ -460,8 +509,7 @@ def get_rect_list_match_keyword_in_ocr_result(
                     logger.exp.error('not append list')
                 else:
                     # 複数一致する場合もあるのでリストに格納する
-                    buf = copy.copy(boxes)
-                    match_box_list.append(buf)
+                    match_box_list.append(boxes)
                     # boxes = None
                     # ret_rect_list.append(ret_rect)
 
@@ -641,6 +689,10 @@ def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes),is_
         max = len(ocr_boxes_list)
         for i in range(max):
             buf_boxes:OcrBoxes = ocr_boxes_list[i]
+            # 分離しきい値を計算
+            flag = buf_boxes.calc_next_distance_for_boxes()
+            if not flag:
+                logger.exp.error('calc_next_distance_for_boxes Failed. i = ' + str(i))
             # 分離を含まない True かつ Boxes が分離している場合は、次へ
             if is_remove_separation and buf_boxes.is_separation_box:
                 continue
@@ -715,6 +767,21 @@ def get_rect_from_ocr_result_boxes(logger,ocr_boxes:OcrBoxes):
 #         logger.exp.error(e)
 #         return ret_point
 
+def patint_rectangle(
+    logger,
+    img,
+    rect:list[int,int,int,int],
+    color=(0, 0, 255),
+    border_width = 2):
+    try:
+        begin_pos = [rect[0],rect[1]]
+        end_pos = [rect[2],rect[3]]
+        img = cv2.rectangle(img, begin_pos ,end_pos, color, border_width)   
+        return img
+    except Exception as e:
+        logger.exp.error(e)
+        return img
+
 def write_image_and_paint_rectangle(
     logger,
     img_path:str,
@@ -741,22 +808,24 @@ def write_result_image_for_ocr(
     color=(0, 0, 255),
     border_width = 2) -> bool:
     try:
-        for i in range(len(rect_list)):
-            add_str = '_ocr_ret' + str(i)
-            if out_path == '':
-                out_path = create_write_path(logger,img_path,add_str)
-            else:
-                out_path = add_number_to_path(logger,img_path,i)
-            flag = write_image_and_paint_rectangle(
-                logger,img_path,rect_list[i],out_path,color,border_width)
-            if flag:
-                logger.info('result_path ' + str(i) + ' : ' + out_path)
-                print(out_path)
-            else:
-                logger.exp.error('write_image failed , '+ str(i) +' path = ' + out_path)
-                logger.exp.error('write_result_image_for_ocr failed , return')
-                return flag
-        return flag
+        add_str = '_ocr_ret'
+        if out_path == '':
+            out_path = create_write_path(logger,img_path,add_str)
+        else:
+            out_path = add_number_to_path(logger,img_path,i)
+        
+        img = cv2.imread(img_path)
+        for i in range(len(rect_list)-1):
+            img = patint_rectangle(logger,img,rect_list[i])
+            # flag = write_image_and_paint_rectangle(
+            #     logger,img_path,rect_list[i],out_path,color,border_width)
+            # if img == None:
+            #     #logger.exp.error('write_image failed , '+ str(i) +' path = ' + out_path)
+            #     logger.exp.error('patint_rectangle failed , return False')
+            #     return False         
+        cv2.imwrite(out_path, img)
+        print(out_path)
+        return True
     except Exception as e:
         logger.exp.error(e)
         return False
