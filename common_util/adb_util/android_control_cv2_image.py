@@ -3,112 +3,54 @@ from logging import exception
 from typing import Any
 
 if __name__ == '__main__':
+    import android_cv2.android_imort_init_cv2
+
     import adb_common
-    import adb_key as adb_key
-    from adb_util.adb_key_const import ConstKeycode
     from android_const import Constants
+    from device_info import DeviceInfo
+    from android_control_adb import AndroidControlAdb
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    import common_util.cv2_image as cv2_find_image_util
     import adb_util.adb_common as adb_common
-    import adb_util.adb_key as adb_key
-    from adb_util.adb_key_const import ConstKeycode
     from adb_util.android_const import Constants
+    from adb_util.device_info import DeviceInfo
+    from adb_util.android_control_adb import AndroidControlAdb
 
 
-class AndroidControl():
+if __name__ == '':
+    # Intellisence 機能動作させるため
+    import cv2_image as cv2_find_image_util
+
+class AndroidControlCv2Image():
     logger = None
     image_dir = None
-    adb_common.logger = logger
+    control_adb : AndroidControlAdb
+    device_info: DeviceInfo
 
     def __init__(
         self,
         logger,
+        control_adb :AndroidControlAdb ,
         image_dir : str
     ) -> None:
         self.logger = logger
         self.image_dir = image_dir
-        adb_key.logger = self.logger
-        adb_common.logger = self.logger
+        self.device_info = control_adb.device_info
+        self.control_adb = control_adb
 
     def initialize(self):
         pass
 
-    def power_on(self)->bool:
-        try:
-            keycode = ConstKeycode.POWER
-            result = adb_key.input_keyevent(ConstKeycode.POWER)
-            return self.__judge_adb_result(
-                result,
-                'input_keyevent : ' + keycode
-            )
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False            
-
-    def reboot(self)->bool:
-        try:
-            self.logger.info('reboot')
-            result = adb_common.adb_reboot()
-            return self.__judge_adb_result(
-                result,
-                'adb_reboot'
-            )
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
-
-    def judge_adb_result(self,result,message)->bool:
-        try:
-            if result != 0:            
-                # エラー時の処理
-                self.logger.info(message + ' false')
-                return False
-            # success
-            self.logger.info(message + ' success')
-            return True
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
-
-    def logout_result_adb_shell(self,command):
-        try:
-            adb_common.logout_adb_shell_result(command)
-        except Exception as e:
-            self.logger.exp.error(e)
-
-    def get_screenshot(self,save_path):
-        try:
-            self.logger.info('get_screenshot')
-            adb_common.screen_capture_for_android()
-            adb_common.save_file_to_pc_from_android(save_path)
-        except Exception as e:
-            self.logger.exp.error(e)
-
-    def reboot_package(self,package_name,class_name,wait_time = 0,devide_id = '',is_logout_stdout=True):
-        try:
-            ret = adb_common.reboot_package(
-                package_name,class_name,wait_time,devide_id,is_logout_stdout)
-            return ret
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
-
-    def unlock(self,mode):
-        """ mode : unlock_control_mode"""
-        try:
-            self.logger.info('unlock')
-            if mode == Constants.main.CONTROL_SWIPE.value:
-                adb_common.swipe(300,1000,300,200,200)
-            else:
-                self.logger.exp.error('unlock mode is invalid')
-        except Exception as e:
-            self.logger.exp.error(e)
+    def get_screenshot(
+        self,
+        save_path_pc='./',
+        save_dir_device='/sdcard/',
+        save_file_name='screenshot.png')->bool:
+        self.control_adb.get_screenshot(save_path_pc, save_dir_device, save_file_name)
 
     def get_screenshot_default_path(self) -> str:
         return Constants.main.SAVE_PATH_ROOT_DIR.value + Constants.main.SCREEN_CAPTURE_FILE_NAME.value
-
-    def get_screenrecord_defalt_path(self) -> str:
-        return Constants.main.SAVE_PATH_ROOT_DIR.value + Constants.main.SCREEN_RECORD_FILE_NAME.value
 
     def is_exists_image_in_movie(self,check_image_path,base_movie_path) -> Any:
         """動画の中に画像があるか判定する
@@ -172,7 +114,7 @@ class AndroidControl():
             self.logger.exp.error(e)
             # 失敗用データを返す
             from cv2_image.cv2_find_image_util import get_result_false_is_match_template_from_file2
-            return get_result_false_is_match_template_from_file2()
+            return cv2_find_image_util.get_result_false_is_match_template_from_file2()
 
     def is_exists_image_in_screenrecord(
         self,
@@ -218,11 +160,10 @@ class AndroidControl():
             
             base_rec_path = base_rec_dir + '\\' + base_rec_name
             # screenrecord を PC へ移動
-            from adb_util.adb_common import save_file_to_pc_from_android
-            ret = save_file_to_pc_from_android(
+            ret = adb_common.save_file_to_pc_from_android(
                 base_rec_path,
-                adb_common.main.SD_ROOT_DIR.value,
-                adb_common.main.SCREEN_RECORD_FILE_NAME.value,
+                Constants.main.SD_ROOT_DIR.value,
+                Constants.main.SCREEN_RECORD_FILE_NAME.value,
             )
             if not ret:
                 self.logger.exp.error('save_file_to_pc_from_android failed. return')
@@ -283,8 +224,7 @@ class AndroidControl():
         except Exception as e:
             self.logger.exp.error(e)
             # 失敗用データを返す
-            from cv2_image.cv2_find_image_util import get_result_false_is_match_template_from_file2
-            return get_result_false_is_match_template_from_file2()
+            return cv2_find_image_util.get_result_false_is_match_template_from_file2()
 
     def tap_image_is_match_image(self,tap_image_path,check_image_path,screenshot_path='',is_tap_point_confirm=False) -> bool:
         try:
@@ -301,16 +241,8 @@ class AndroidControl():
             self.logger.exp.error(e)
             return False
 
-    def tap_center(self,tap_rect)->bool:
-        try:
-            # 範囲の真ん中をタップする
-            is_taped = adb_common.tap_center(tap_rect)
-            return is_taped
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
-
     def tap_image(self,parts_path,screenshot_path='',is_tap_point_confirm=False) -> bool:
+        """is_tap_point_confirm = True : タップしたときの画像をキャプチャする"""
         try:
             self.logger.info('tap_image')
             # parts_path が screenshot 内に存在するか判定する
@@ -323,35 +255,18 @@ class AndroidControl():
                 match_rect['end_w'],match_rect['end_h']
             print('tap_rect =' + str(tap_rect))
             # 範囲の真ん中をタップする
-            from adb_util.adb_common import tap_center
-            is_taped = tap_center(tap_rect)
+            is_taped = self.control_adb.tap_center(tap_rect)
             #
             if is_tap_point_confirm:
                 # タップする画面の path を取得する
                 check_path = self.get_screenshot_default_path()
                 # 前処理で取得した範囲から、タップしたポイントを取得する
-                from adb_util.adb_common import get_center_from_rect
-                point = get_center_from_rect(tap_rect)
+                point = adb_common.get_center_from_rect(tap_rect)
                 # 描画して結果を出力する
-                from cv2_image.cv2_find_image_util import output_image_draw_point
-                result_path = output_image_draw_point(self.logger,check_path,point)
+                result_path = cv2_find_image_util.output_image_draw_point(
+                    self.logger,check_path,point)
                 self.logger.info('output_image_draw_point path = ' + result_path)
             return is_taped
         except Exception as e:
             self.logger.exp.error(e)
             return False
-
-    def start_package(self,package_name,class_name=''):
-        try:
-            from adb_util.adb_common import start_package
-            ret = start_package(package_name,class_name)
-            return ret
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
-
-    def close_app_all(self):
-        pass
-    
-    def transision_to_home(self):
-        pass

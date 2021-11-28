@@ -92,12 +92,12 @@ class OcrBox:
     # 1文字当たりの大きさ
     char_point : point
     # 次の文字との距離
-    to_next_distance = 0
+    to_next_distance_point:point
     # 縦読みか横読みか
     direction = const_ocr.DIRECTION_HORIZON
     # 次の距離と1文字当たりの大きさの比率
     # The ratio of the next distance to the size of one character
-    raito_next_distans_to_size_of_char = 0.0
+    raito_next_distans_to_size_of_char_pointf:pointF
         
     def __init__(
         self,
@@ -106,6 +106,8 @@ class OcrBox:
         direction_:direction = const_ocr.DIRECTION_HORIZON,
         next_ocr_box:OcrBox = None) -> None:
         
+        self.raito_next_distans_to_size_of_char_pointf = pointF()
+        self.to_next_distance_point = point()
         self.begin_point = point()
         self.end_point = point()
         # 1文字当たりの大きさ
@@ -161,22 +163,22 @@ class OcrBox:
         try:
             self.logger.info('str_value = '+ self.str_value)
             self.logger.info('char_point = ' + str(self.char_point.to_list()))
-            self.logger.info('to_next_distance = ' + str(self.to_next_distance))
+            p = self.to_next_distance_point
+            self.logger.info('to_next_distance = ' + str(p.x) + ' , ' + str(p.y))
             self.logger.info('begin,end = ' + str(self.begin_point.to_list()) + ' , ' +  str(self.end_point.to_list()))
-            self.logger.info('raito_next_distans_to_size_of_char = ' + str(self.raito_next_distans_to_size_of_char))
+            pf = self.raito_next_distans_to_size_of_char_pointf
+            self.logger.info('raito_next_distans_to_size_of_char = ' + str(pf.x) + ' , ' + str(pf.y))
         except Exception as e:
             self.logger.exp.error(e)
 
     def calc_next_distance(self,next_ocr_box:OcrBox) -> bool:
         try:
-            if self.direction == const_ocr.DIRECTION_HORIZON:
-                self.to_next_distance = next_ocr_box.begin_point.x - self.end_point.x
-                self.raito_next_distans_to_size_of_char = \
-                    self.to_next_distance / self.char_point.x
-            if self.direction == const_ocr.DIRECTION_VERTICAL:
-                self.to_next_distance = next_ocr_box.begin_point.y - self.end_point.y
-                self.raito_next_distans_to_size_of_char = \
-                    self.to_next_distance / self.char_point.y
+            self.to_next_distance_point.x = next_ocr_box.begin_point.x - self.end_point.x
+            self.raito_next_distans_to_size_of_char_pointf.x = \
+                self.to_next_distance_point.x / self.char_point.x
+            self.to_next_distance = next_ocr_box.begin_point.y - self.end_point.y
+            self.raito_next_distans_to_size_of_char_pointf.y = \
+                self.to_next_distance_point.y / self.char_point.y
             return True
         except Exception as e:
             self.logger.exp.error(e)
@@ -350,12 +352,17 @@ class OcrBoxes():
                 box : OcrBox = self.box_list[i]
                 next_box = self.box_list[i+1]
                 box.calc_next_distance(next_box)
-                if abs(box.raito_next_distans_to_size_of_char) >= abs(self.threshold_for_judging_separation):
+                if (
+                    # 縦横どちらかが離れていると true
+                    abs(box.raito_next_distans_to_size_of_char_pointf.x) >= abs(self.threshold_for_judging_separation) or
+                    abs(box.raito_next_distans_to_size_of_char_pointf.y) >= abs(self.threshold_for_judging_separation)):
                     flag = True
-                    self.logger.info('box is separated. raito = ' + str(box.raito_next_distans_to_size_of_char))
+                    self.logger.info('box is separated. raito = ' + str(box.raito_next_distans_to_size_of_char_pointf))
                     now_positions[1] = i
                     self.separation_positions.append(now_positions)
                     now_positions = [i+1,len(self.box_list)-1]
+                # pf = box.raito_next_distans_to_size_of_char_pointf
+                # print('box separeted raito = ' + str((pf.x,pf.y)))
             else:
                 self.is_separation_box = flag
                 self.separation_positions.append(now_positions)
@@ -477,6 +484,7 @@ def excute_ocr(
         
         if not direction_is_horizon:
             lang = lang.replace('jpn' , 'jpn_vert')
+        logger.info('ocr lang = ' + lang)
         word_boxes = tool.image_to_string(
             img,
             lang=lang,
@@ -748,6 +756,9 @@ def box_is_far_apart(
 # 上記関数で取得された結果(ocr_box)から、座標範囲を得る
 # keyword に一致した結果 (ocr_boxes) の rect(x,y,x,y) を取得する
 # list(OcrBoxes)
+# キーワードと一致したOcrBoxが改行などで分離しているか判定して
+# 離れ具合が閾値以上の物は省く
+# 閾値以下の範囲を取得する
 def get_rect_from_ocr_result_boxes_list(logger,ocr_boxes_list:list(OcrBoxes),is_remove_separation = True):
     fn = 'get_rect_from_ocr_result_boxes_list'
     ret_rect_list:list[int,int,int,int] = list()

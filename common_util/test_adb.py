@@ -1,12 +1,14 @@
 from logging import error, log
+import adb_util.android_cv2.android_imort_init_cv2
+
 import adb_util
 from adb_util import adb_key_const
 from adb_util.adb_common import screen_record
-from adb_util.android_common import android_common_util
+
+from adb_util.android_common import AndroidCommon
 from log_util import logger_init
-from adb_util.android_const import const_int as android_const_int
-from adb_util.android_const import const_screen_image_file_names
-from adb_util.android_common import android_constants
+from adb_util.android_const import Constants
+
 from pad import pad_player
 
 def initialize():
@@ -17,10 +19,11 @@ def initialize():
         image_path = str(Path('__file__').resolve().parent) + \
             'adb_test/android_wiko/screen_wiko'
         logger = logger_init.initialize_logger()
-        android = android_common_util(
+        adb_util.adb_common.logger = logger
+        android = AndroidCommon(
             logger,
             image_path,
-            android_const_int.OPERATION_CV2_IMAGE)
+            Constants.main.OPERATION_CV2_IMAGE)
         return logger,android
     except Exception as e:
         logger.exp.error(e)
@@ -41,21 +44,28 @@ def main():
     logger , android = initialize()
     player:pad_player = initialize_pad(logger,android)
     try:
-        ret = android.state.is_connected_device()
-        if not ret: return
-
         # ret = android.info.get_package_list('pad')
         # print(ret)
         # cmd = "adb shell dumpsys activity top | grep 'Added Fragments' -A 10"
         # import adb_util.adb_common
-        # adb_util.adb_common.send_adb_command(cmd)
+        # adb_util.adb_common.excute_command(cmd,True)
 
+        # ret = android.state.is_connected_device()
+        # if not ret: return
+
+        # ret = android.control.unlock()
+        # if not ret: return
+        # ret = android.control.transision_to_home()
+        # if not ret: return
+
+        #ret = android.transision_to_home_from_any_screen()
+        # ret = player.tap_start() # Opening画面でSTARTをタップ
         # ret = player.reboot_package()
         # ret = player.start_package()
         # ret = player.tap_ok_when_change_update() # 日付が変わりました
         # ret = player.tap_ok_when_error_google_play(True) # GooglePlayエラーOK
         # ret = player.tap_ok_login(True) # ログインボーナス
-        # ret = player.tap_ok_mail_box(True) # メールBOX/フレンド承認
+        ret = player.tap_ok_mail_box(True) # メールBOX/フレンド承認
         # ret = player.tap_menu_dungeon(True)
 
         # path = r'C:\ZMyFolder\newDoc\0ProgramingAll\image_sample\parts\pad_opening_start_logo.png'

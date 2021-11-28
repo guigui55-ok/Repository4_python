@@ -1,23 +1,38 @@
 
 
-import adb_util
-from adb_util import adb_key
-from adb_util.adb_key_const import keycoce_const
-from adb_util.android_const import const as android_const
-from adb_util.android_const import const_int as android_const_int
-from adb_util.android_const import const_screen_image_file_names as const_images
-from adb_util.android_const import const_state as const_state
-from adb_util import adb_common
+if __name__ == '__main__':
+    import adb_common
+    from  device_info import DeviceInfo
+    from android_const import Constants
+    from android_control_adb import AndroidControlAdb
+else:
+    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    import adb_util.adb_common as adb_common
+    from  adb_util.device_info import DeviceInfo
+    from adb_util.android_const import Constants
+    from adb_util.android_control_adb import AndroidControlAdb
 
-class android_info():
+
+class AndroidInfo():
     logger = None
-    const_android : android_const= None
-    const_screen_image_file_names : const_images= None
-    def __init__(self,logger) -> None:
+    constants : Constants
+    image_dir = None
+    device_info : DeviceInfo
+    control_adb : AndroidControlAdb
+
+    def __init__(
+        self,
+        logger,
+        control_adb :AndroidControlAdb,
+        image_dir : str
+    ) -> None:
         self.logger = logger
-        self.android_const = android_const
-        self.const_screen_image_file_names = const_images
-        adb_util.logger = self.logger
+        self.control_adb = control_adb
+        self.device_info = control_adb.device_info
+        self.image_dir = image_dir
+        self.constants = Constants
+    
+
     
     def get_package_list(
         self,
@@ -41,8 +56,7 @@ class android_info():
             adb shell pm list packages -f | sort / sort コマンドと組み合わせて使用すると見やすく\n
         """
         try:
-            from adb_util.adb_common import get_info_package_list
-            ret = get_info_package_list(package_name_filter,option,device_id,is_logout_stdout)
+            ret = adb_common.get_info_package_list(package_name_filter,option,device_id,is_logout_stdout)
             return ret
         except Exception as e:
             self.logger.exp.error(e)

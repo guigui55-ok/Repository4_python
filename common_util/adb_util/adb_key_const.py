@@ -1,11 +1,11 @@
 
 from enum import Enum
 
-class keycoce_const:
+class ConstKeycode:
     HOME = 'KEYCODE_HOME'
     POWER = 'KEYCODE_POWER'
 
-class const_command:
+class ConstCommand:
     GET_PACKAGE_LIST = 'adb shell pm list packages'
     SCREEN_CAPTURE_TO_SD = 'screencap -p /sdcard/capture.png'
     BLUETOOTH_OFF_ON = 'am start -a android.bluetooth.adapter.action.REQUEST_ENABLE'

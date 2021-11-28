@@ -1,8 +1,16 @@
 
 from logging import exception
 import subprocess
+from typing import Any
 
-from adb_util.adb_key_const import const_command
+
+if __name__ == '__main__':
+    from adb_key_const import ConstCommand
+    from adb_key_const import ConstKeycode
+else:
+    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    from adb_util.adb_key_const import ConstCommand
+    from adb_util.adb_key_const import ConstKeycode
 
 # from adb_util import adb_key_const
 if __name__ =='__main__':
@@ -101,33 +109,38 @@ def is_success_adb_result(result,message,is_logout=False)->bool:
 
 
 
-def screen_capture_for_android(file_name = 'screenshot.png',is_logout_stdout=True)->bool:
+def screen_capture_for_android(
+    file_name = 'screenshot.png',
+    save_dir = '/sdcard/',
+    device_id='',
+    is_logout_stdout=True)->str:
     """スクリーンキャプチャをAndroidのSDルートに作成する"""
     try:
-        func_name = 'screen_capture_for_android'
-        cmd = (
-            'adb', 'shell', 'screencap', '-p', 
-            '/sdcard/' + file_name)
-        result = adb_shell_with_show_result(cmd,is_logout_stdout)
-        return is_success_adb_result(result,func_name,is_logout_stdout)            
+        # cmd = ('adb', 'shell', 'screencap', '-p', '/sdcard/' + file_name)
+        save_path = save_dir + file_name
+        cmd = 'screencap -p ' + save_path
+        flag , result = excute_command_adb_shell(cmd,device_id,is_logout_stdout)
+        return save_path     
     except Exception as e:
         logger.exp.error(e)
+        return ''
 
 def screen_record(
     file_name = 'screenrecord.mp4',
     save_dir = '/sdcard/',
     time_limit = 10,
-    device_name = '',
+    device_id = '',
     size = '',
     bit_rate = '4000000',
-):
+    is_logout_stdout=True)->str:
     try:
-        cmd = 'adb shell ' + str(device_name)
+        if device_id != '' : device_id + ' '
+        cmd = 'adb shell ' + device_id
         save_path = save_dir + file_name
         cmd += ' screenrecord'
         cmd += ' --time-limit ' + str(time_limit) 
         cmd += ' ' + save_path
-        logout_adb_shell_result(cmd)
+        flag , ret = excute_command(cmd,is_logout_stdout)
         return save_path
     except Exception as e:
         logger.exp.error(e)
@@ -136,45 +149,37 @@ def screen_record(
 
 def save_file_from_android(
     get_path = '',
-    save_path = ''
-):
+    save_path = '',
+    device_id = '',    
+    is_logout_stdout=True)->bool:
     try:
-        logger.info('save_file_from_android')            
-        command = (
-            'adb', 'pull', get_path ,save_path)
-        result = adb_shell_with_show_result(command)
-        return result
+        logger.info('save_file_from_android')
+        cmd = 'pull ' + get_path + ' ' + save_path
+        flag , ret = excute_command(cmd,is_logout_stdout)
+        return flag
     except Exception as e:
         logger.exp.error(e)
-        return None
+        return False
 
 def save_file_to_pc_from_android(
     save_path = '',
     android_path = '/sdcard/',
     file_name = 'screenshot.png',
+    device_id = '',
     is_logout_stdout= True
-):
+)->bool:
     """android からファイルを取得する
     """
-    result = None
     try:
         func_name ='save_file_to_pc_from_android'
-        logger.info(func_name)
         import os
         if not os.path.isfile(save_path):
             if not os.path.isdir(save_path):
                 save_path = os.getcwd() + '\\' + file_name
         logger.info('save_path = '+save_path)
-        command = (
-            'adb', 'pull', android_path + file_name ,save_path)
-        result = adb_shell_with_show_result(command)        
-        ret = is_success_adb_result(result,func_name,is_logout_stdout)
-        if ret:
-            logger.info('get file success. path= ' + save_path)
-            return True
-        else:
-            logger.info('get file failed. path= ' + save_path)
-            return False
+        cmd = 'pull ' + android_path + file_name + ' ' + save_path
+        flag ,result = excute_command_adb(cmd,device_id, is_logout_stdout)
+        return flag
     except Exception as e:
         logger.exp.error(e)
         return False
@@ -226,13 +231,24 @@ def input_text(value:str):
         logger.exp.error(e)
         return result
 
-def make_command_adb_shell(device_name):
-    default_cmd = 'adb shell '
+def make_command_adb(device_name):
+    default_cmd = 'adb '
     try:
         if device_name == '':
             return default_cmd
         else:
-            return 'adb -s '+ device_name + ' shell '
+            return 'adb -s '+ device_name + ' '
+    except Exception as e:
+        logger.exp.error(e)
+        return default_cmd
+
+def make_command_adb_shell(device_id):
+    default_cmd = 'adb shell '
+    try:
+        if device_id == '':
+            return default_cmd
+        else:
+            return 'adb -s '+ device_id + ' shell '
     except Exception as e:
         logger.exp.error(e)
         return default_cmd
@@ -262,22 +278,23 @@ def get_center_from_rect(point_rect):
         logger.exp.error(e)
         return (0,0)
 
-def tap_center(point_rect:tuple,device_name:str='',times=1,is_logout_stdout:bool=True) -> bool:
+def tap_center(point_rect:tuple,device_id:str='',times=1,interval=3,is_logout_stdout:bool=True) -> bool:
     point = get_center_from_rect(point_rect)
-    return touch_screen(point[0],point[1],device_name,is_logout_stdout)
+    return touch_screen(point[0],point[1],device_id,is_logout_stdout)
 
-def tap(x:int,y:int,device_name:str='',is_logout_stdout:bool=True) -> bool:
-    return touch_screen(x,y,device_name,is_logout_stdout)
+def tap(x:int,y:int,device_id:str='',is_logout_stdout:bool=True) -> bool:
+    return touch_screen(x,y,device_id,is_logout_stdout)
 
 def touch_screen(
     x:int,y:int,
-    device_name:str='',
+    device_id:str='',
     times = 1,
     interval = 10,
     is_logout_stdout:bool=True
 ) -> bool:
     try:
-        cmd = make_command_adb_shell(device_name)
+        if times > 1: logger.exp.error('touch_screen multiple time : Unimplemented')
+        cmd = make_command_adb_shell(device_id)
         cmd += 'input touchscreen tap ' + str(x) + ' ' + str(y)
         result = adb_shell_with_show_result(cmd,is_logout_stdout)
         func_name = 'touch_screen'
@@ -292,8 +309,18 @@ def touch_screen(
         logger.exp.error(e)
         return False
 
+def swipe(x1,y1,x2,y2,duration,device_id='',is_logout_stdout=True)->bool:
+    """スワイプする"""
+    try:
+        cmd = 'input swipe ' \
+            + str(x1) + ' ' + str(y1) + ' ' + str(x2) + ' ' + str(y2) + ' ' + str(duration)
+        flag ,result = excute_command_adb_shell(cmd,device_id,is_logout_stdout)
+        return flag
+    except Exception as e:
+        logger.exp.error(e)
+        return False
 
-def swipe(x1,y1,x2,y2,duration):
+def swipe_(x1,y1,x2,y2,duration):
     """スワイプする"""
     result = None
     try:
@@ -309,7 +336,27 @@ def swipe(x1,y1,x2,y2,duration):
         logger.exp.error(e)
         return result
 
-def is_connect_android(is_logout_stdout:bool=True) -> bool:
+def is_connect_android(device_id = '' ,is_logout_stdout:bool=True) -> bool:
+    try:
+        dev_list = get_connect_adb_devices(is_logout_stdout)
+        if len(dev_list) < 0:
+            logger.exp.error('get_connect_adb_devices : len(dev_list) < 0 , False')
+            return False
+        # デバイス指定なしでつながっている場合は
+        if device_id == '':
+            return True
+        else:
+            # dev_list = ['device_id','status']
+            # statsus = device / offline
+            for i in range(len(dev_list)):
+                if device_id == dev_list[i][0]:
+                    return True
+        return False
+    except Exception as e:
+        logger.exp.error(e)
+        return False
+
+def get_connect_adb_devices(is_logout_stdout:bool=True) -> list([str,str]):
     """
     Android が USB 接続しているか
     """
@@ -320,20 +367,27 @@ def is_connect_android(is_logout_stdout:bool=True) -> bool:
     # 2889adb7        device
     try:
         func_name = 'is_connect_android'
-        cmd = 'adb devices'
-        # result = adb_shell_with_show_result(cmd)
-        
-        result = adb_shell_with_show_result(cmd,is_logout_stdout)
-        ret = is_success_adb_result(result,func_name,is_logout_stdout)
-        # if is_logout_stdout:
-        #     if ret:
-        #         logger.info(func_name + ' success')
-        #     else:
-        #         logger.info(func_name + ' failed')
-        return ret
+        cmd = 'devices'
+        # result = adb_shell_with_show_result(cmd)        
+        flag ,ret = excute_command_adb(cmd,'',is_logout_stdout)
+        buf:str = str(ret)
+        results = buf.split('\n')
+        ret_id_list:list(str) = []
+        # i=1 から実行する
+        for i in range(len(results))[1:]:
+            buf = results[i]
+            if len(buf)>0:
+                # device_id\tdevice
+                info = buf.split('\t')
+                if info[1] == 'device':
+                    ret_id = info[0]
+                    ret_status = info[1]
+                    ret_id_list.append([ret_id,ret_status])                    
+            
+        return ret_id_list
     except Exception as e:
         logger.exp.error(e)
-        return False
+        return []
 
 def get_android_version():
     """Androidのバージョンを取得する"""
@@ -348,18 +402,60 @@ def get_android_build_version(is_logout_stdout=True):
 def get_result_adb_shell(cmd,func_name='',is_logout_stdout=True) -> str:
     """adb shell コマンドを実行して結果を得る"""
     result = adb_shell_with_show_result(cmd,is_logout_stdout)
-    if is_success_adb_result(result,func_name,is_logout_stdout):
-        if (len(result.stdout) > 0):
-            # 最後の1文字は改行コードなので除外する
-            return result.stdout[:-1]
+    return cnv_completed_process_to_str(result,func_name,is_logout_stdout)
+
+def cnv_complete_process(self,result,func_name='',is_logout_stdout=True,ret_type=1):
+    try:
+        # 結果をboolで取得する
+        ret_bool = is_success_adb_result(result,func_name,is_logout_stdout,ret_type=1)
+        # ログに出力する
+        if is_logout_stdout:
+            if ret_bool:
+                self.logger.info('command success')
+            else:
+                self.logger.info('command failed')
+        # 引数によって戻り値の型を変更する
+        # 1:bool,2:str
+        if ret_type == 1:
+            return ret_bool
+        elif ret_type == 2:
+            ret_str = cnv_completed_process_to_str(result,func_name,is_logout_stdout)
+            return ret_str
         else:
+            self.logger.exp.error('cnv_complete_process : ret_type is invalid. return None')
+            return None
+    except Exception as e:
+        self.logger.exp.error(e)
+        # 引数によって戻り値の型を変更する
+        if ret_type == 1:
+            return False
+        elif ret_type == 2:
             return ''
-    else:
-        if (len(result.stderr) > 0):
-            # 最後の1文字は改行コードなので除外する
-            return result.stderr[:-1]
         else:
-            return ''
+            self.logger.exp.error('cnv_complete_process : ret_type is invalid. return None')
+            return None
+
+def cnv_completed_process_to_str(
+    result:subprocess.CompletedProcess,
+    func_name:str,
+    is_logout_stdout:bool)->str:
+    """CommandPrompt(Terminal)で得られた結果を文字列へ変換する"""
+    try:
+        if is_success_adb_result(result,func_name,is_logout_stdout):
+            if (len(result.stdout) > 0):
+                # 最後の1文字は改行コードなので除外する
+                return result.stdout[:-1]
+            else:
+                return ''
+        else:
+            if (len(result.stderr) > 0):
+                # 最後の1文字は改行コードなので除外する
+                return result.stderr[:-1]
+            else:
+                return ''
+    except Exception as e:
+        logger.exp.error(e)
+        return ''
 
 def get_package_version(package_name):
     """デバイス内のパッケージのバージョンを取得する"""
@@ -391,7 +487,7 @@ def get_device_product_model(is_stdout_to_logout=True,replace_befor = '\n',repla
     """デバイスのプロダクトモデルを取得する"""
     try:
         #cmd = 'adb shell getprop ro.product.model'
-        cmd = adb_key_const.const_command.GET_DEVICE_INFO
+        cmd = ConstCommand.GET_DEVICE_INFO
         result = adb_shell_with_show_result(cmd)
         #print(result)
         if is_success_adb_result(result,'get_package_version'):
@@ -421,7 +517,7 @@ def get_phone_number(is_logout=True):
 def get_servece_call_iphonesubinfo(number,is_logout=True):
     """adb Shell dumpsys iphonesubinfo [Number] の実行結果を取得する"""
     try:
-        cmd = adb_key_const.const_command.GET_API_LEVEL
+        cmd = ConstCommand.GET_API_LEVEL
         func_name = 'get_servece_call_iphonesubinfo'
         level = get_result_adb_shell(cmd,func_name,is_logout)
         if level.isnumeric():
@@ -452,20 +548,18 @@ def get_servece_call_iphonesubinfo(number,is_logout=True):
 def start_package(
     package_name : str,
     class_name : str,
-    device_name:str='',
+    device_id:str='',
     is_logout_stdout:bool=True
 ) -> bool:
     try:
         func_name = 'start_package'
-        cmd = make_command_adb_shell(device_name)
-        cmd += const_command.START_PACKAGE
+        cmd = ConstCommand.START_PACKAGE
         if class_name != '':
             cmd += '-n ' + package_name + '/' + class_name
         else:
             cmd += package_name
-        result = adb_shell_with_show_result(cmd,is_logout_stdout)
-        ret = is_success_adb_result(result,func_name,is_logout_stdout)
-        return ret
+        flag,result = excute_command_adb_shell(cmd,device_id,is_logout_stdout)
+        return flag
     except Exception as e:
         logger.exp.error(e)
         return False
@@ -478,34 +572,92 @@ def get_info_package_list(
 )-> str:
     try:
         func_name = 'get_info_package_list'
-        cmd = make_command_adb_shell(device_id)
-        cmd += const_command.GET_INFO_PACAGE_LIST + package_name_filter
+        cmd = ConstCommand.GET_INFO_PACAGE_LIST + package_name_filter
         if option != '':
             cmd += ' ' + option
-        result = adb_shell_with_show_result(cmd,is_logout_stdout)
-        ret = is_success_adb_result(result,func_name,is_logout_stdout)
-        if is_logout_stdout:
-            if ret:
-                logger.info('command success : ' + package_name_filter)
-            else:
-                logger.info('command failed : ' + package_name_filter)
-        if ret:
-            ret_val = result.stdout
-        else:
-            ret_val = ''
-        return ret_val
+        flag,ret = excute_command_adb_shell(cmd,device_id,is_logout_stdout)
+        # result = adb_shell_with_show_result(cmd,is_logout_stdout)
+        # ret = is_success_adb_result(result,func_name,is_logout_stdout)
+        # if is_logout_stdout:
+        #     if ret:
+        #         logger.info('command success : ' + package_name_filter)
+        #     else:
+        #         logger.info('command failed : ' + package_name_filter)
+        # if ret:
+        #     ret_val = result.stdout
+        # else:
+        #     ret_val = ''
+        return ret
     except Exception as e:
         logger.exp.error(e)
         return ''
-        
+
+def excute_command(
+    command : str = '',
+    is_logout_stdout : bool = True
+)-> Any:
+    """コマンドを実行し、結果を取得する
+    戻り値は(bool,str)が返る"""
+    try:
+        func_name = 'excute_command'
+        cmd = command
+        result = adb_shell_with_show_result(cmd,is_logout_stdout)
+        ret_bool = is_success_adb_result(result,func_name,is_logout_stdout)
+        if is_logout_stdout:
+            if ret_bool:
+                logger.info('command success')
+            else:
+                logger.info('command failed')
+        if ret_bool:
+            ret_val = result.stdout
+        else:
+            ret_val = ''
+        return ret_bool,ret_val
+    except Exception as e:
+        logger.exp.error(e)
+        return False,''
+
+def excute_command_adb_shell(
+    command : str = '',
+    device_id : str = '',
+    is_logout_stdout : bool = True)->Any:
+    """adb shell コマンドを実行し、結果を取得する
+    戻り値は(bool,str)が返る"""
+    try:
+        cmd = make_command_adb_shell(device_id)
+        cmd += command
+        return excute_command(cmd,is_logout_stdout)
+    except Exception as e:
+        logger.exp.error(e)
+
+def excute_command_adb(
+    command : str = '',
+    device_id : str = '',
+    is_logout_stdout : bool = True)->Any:
+    """adb コマンドを実行し、結果を取得する
+    戻り値は(bool,str)が返る"""
+    try:
+        cmd = make_command_adb(device_id)
+        cmd += command
+        return excute_command(cmd,is_logout_stdout)
+    except Exception as e:
+        logger.exp.error(e)
+    
+
 def excute_adb_command(
     adb_command : str = '',
     device_id : str = '',
-    is_logout_stdout : bool = True
-)-> str:
+    is_logout_stdout : bool = True,
+    is_not_adb_shell = False
+)-> Any:
+    """adbコマンドを実行し、結果を取得する
+    戻り値は(bool,str)が返る"""
     try:
         func_name = 'excute_adb_command'
-        cmd_start = 'adb shell'
+        if not is_not_adb_shell:
+            cmd_start = 'adb shell'
+        else:
+            cmd_start = ''
         pos = adb_command.find(cmd_start)
         if pos == 1:
             cmd_shell_after = adb_command[len(cmd_start):]
@@ -524,7 +676,7 @@ def excute_adb_command(
             ret_val = result.stdout
         else:
             ret_val = ''
-        return ret_val
+        return ret,ret_val
     except Exception as e:
         logger.exp.error(e)
         return ''
@@ -534,11 +686,12 @@ def stop_package(
         device_id : str = '',
         is_logout_stdout : bool = True) -> bool:
     try:
-        cmd = const_command.STOP_PACKAGE.value + ' ' + package_name
-        return excute_adb_command(cmd,device_id,is_logout_stdout)
+        cmd = ConstCommand.STOP_PACKAGE + ' ' + package_name
+        flag ,ret = excute_adb_command(cmd,device_id,is_logout_stdout)
+        return flag
     except Exception as e:
         logger.exp.error(e)
-        return ''
+        return False
 
 def reboot_package(
         package_name,
@@ -554,4 +707,14 @@ def reboot_package(
         return result
     except Exception as e:
         logger.exp.error(e)
-        return ''
+        return False
+
+def input_keyevent(keycode,device_id='',is_logout_stdout : bool = True) -> bool:
+    try:
+        cmd = 'input keyevent ' + keycode
+        flag ,ret = excute_adb_command(cmd,device_id,is_logout_stdout)
+        return flag
+    except Exception as e:
+        logger.exp.error(e)
+        return False
+

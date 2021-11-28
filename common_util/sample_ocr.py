@@ -11,13 +11,50 @@ def initialize():
         print(e)
 
 def main():
+    logger = initialize()
+    try:
+        excute_ocr(logger)
+    except Exception as e:
+        logger.exp.error(e)
+
+def excute_ocr(logger):
+    try:
+        dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
+        file_name = 'screen_sever.png'
+        img_path = dir_path + '\\' + file_name
+        out_path = dir_path + '\\' + 'ocr_ret_' + file_name
+        lang = 'jpn+eng'
+        ocr_direction_is_horizon = True
+        keyword = '自動的にON'
+        keyword = 'バッテリーセーバー'
+        
+        rect_list = excute_ocr_main(logger,img_path,out_path,keyword,lang,ocr_direction_is_horizon)
+        
+        for i in range(len(rect_list)):
+            print('rect_list ' + str(i) + ' = ' + str(id(rect_list[i])))
+            print(rect_list[i])
+    except Exception as e:
+        logger.exp.error(e)
+
+def excute_ocr_main(logger,img_path,output_path,keyword,lang,ocr_direction_is_horizon):
+    try:        
+        ocr_obj = ocr_tesseract_class.tesseract(logger,img_path,output_path)
+        flag = ocr_obj.excute(keyword,img_path,output_path,ocr_direction_is_horizon,lang)
+        if not flag:
+            logger.exp.error('ocr_obj.excute Failed')
+        return ocr_obj.rect_list
+    except Exception as e:
+        logger.exp.error(e)
+        return []
+
+def sub():
     try:
         logger = initialize()
         dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
         file_name = 'screen_sever.png'
         img_path = dir_path + '\\' + file_name
         out_path = dir_path + '\\' + 'ret_' + file_name
-        lang = 'jpn'
+        lang = 'jpn+eng'
         ocr_direction_is_horizon = True
         # tools : pyocr.TOOLS
         tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)

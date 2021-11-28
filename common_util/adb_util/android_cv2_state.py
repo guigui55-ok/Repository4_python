@@ -1,30 +1,34 @@
 
-# from adb_util  import androidcv android_cv2.android_imort_init_cv2
 
-from adb_util.android_const import const_int
-from adb_util.android_const import const
-from adb_util.android_const \
-    import const_screen_image_file_names as const_images
-from adb_util.android_const import const_state
-
-from adb_util import adb_common
-
+if __name__ == '__main__':
+    import adb_common
+    from  device_info import DeviceInfo
+    from android_const import Constants
+    from android_control_adb import AndroidControlAdb
+else:
+    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    import adb_util.adb_common
+    from  adb_util.device_info import DeviceInfo
+    from adb_util.android_const import Constants
+    from adb_util.android_control_adb import AndroidControlAdb
     
 
-class android_state():
+class AndroidState():
     logger = None
     image_dir = None
-    const = None
+    const:Constants = None
+    device_info : DeviceInfo
     __is_device_connected = False
-    adb_common.logger = logger
 
     def __init__(
         self,
         logger,
+        device_info,
         image_dir : str
     ) -> None:
         self.logger = logger
-        self.const = const
+        self.const = Constants
+        self.device_info = device_info
         self.image_dir = image_dir
 
     def initialize(self):
@@ -33,12 +37,11 @@ class android_state():
     def get_now_state_from_screen(self):
         try:
             img_path = self.image_dir + '\\' + \
-                self.image.POWER_OFF
+                Constants.image_file.POWER_OFF.value
             # スクリーンショットを Android の SD_ROOT に作成する
-            from adb_common import save_file_to_pc_from_android
-            save_file_to_pc_from_android(
-                const.SD_ROOT_DIR,
-                const.SCREEN_CAPTURE_FILE_NAME
+            adb_common.save_file_to_pc_from_android(
+                Constants.main.SD_ROOT_DIR.value,
+                Constants.main.SCREEN_CAPTURE_FILE_NAME.value
             )
         except Exception as e:
             self.logger.exp.error(e)
@@ -51,18 +54,17 @@ class android_state():
             self.logger.info('is_off_screen')
             if screenshot_path == '':
                 # ./screenshot.png
-                base_path = const.SAVE_PATH_ROOT_DIR.value + const.SCREEN_CAPTURE_FILE_NAME.value
+                base_path = Constants.main.SAVE_PATH_ROOT_DIR.value + Constants.main.SCREEN_CAPTURE_FILE_NAME.value
             else:
                 base_path = screenshot_path
 
-            from adb_util.adb_common import save_file_to_pc_from_android
             # 現在の状態を screenshot として保存、PC へ移動
-            save_file_to_pc_from_android(
+            adb_common.save_file_to_pc_from_android(
                 base_path,
-                const.SD_ROOT_DIR.value,
-                const.SCREEN_CAPTURE_FILE_NAME.value,
+                Constants.main.SD_ROOT_DIR.value,
+                Constants.main.SCREEN_CAPTURE_FILE_NAME.value,
             )
-            image_path = self.image_dir + '\\' + const_images.POWER_OFF.value
+            image_path = self.image_dir + '\\' + Constants.image_file.POWER_OFF.value
             # base_path に対して
             # image と合致するか判定する
             from cv2_image.cv2_image_comp import is_same_image
@@ -78,15 +80,14 @@ class android_state():
 
     def is_lock(self,screenshot_path,screen_mode) -> bool:
         try:
-            from adb_util.adb_common import save_file_to_pc_from_android
             # 現在の状態を screenshot として保存、PC (スクリプトルート) へ移動
             # ./screenshot.png
-            save_file_to_pc_from_android(
-                const.SD_ROOT_DIR,
-                const.SAVE_PATH_ROOT_DIR,
-                const.SCREEN_CAPTURE_FILE_NAME
+            adb_common.save_file_to_pc_from_android(
+                Constants.main.SD_ROOT_DIR.value,
+                Constants.main.SAVE_PATH_ROOT_DIR.value,
+                Constants.main.SCREEN_CAPTURE_FILE_NAME.value
             )
-            base_path = const.SAVE_PATH_ROOT_DIR + const.SCREEN_CAPTURE_FILE_NAME
+            base_path = Constants.main.SAVE_PATH_ROOT_DIR.value + Constants.main.SCREEN_CAPTURE_FILE_NAME.value
             #image_path = self.image_dir + '\\' + const_images.HOME_MAIN
             # base_path に対して
             # image_dir から HOME_INCLUDE を含むファイルリストの
@@ -96,8 +97,8 @@ class android_state():
                 self.logger,
                 base_path,
                 self.image_dir,
-                const_images.LOCK_INCLUDE,
-                float(const.DEFAULT_THRESHOLD),
+                Constants.image_file.LOCK_INCLUDED.value,
+                float(Constants.main.DEFAULT_THRESHOLD.value),
                 screenshot_path
             )
             return result
@@ -110,7 +111,7 @@ class android_state():
             pass
         except Exception as e:
             self.logger.exp.error(e)
-            return const_state.UNKNOWN
+            return Constants.state.UNKNOWN.value
 
     def is_success_adb_result(self,result,message):
         try :

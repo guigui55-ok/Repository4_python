@@ -1,65 +1,64 @@
-from adb_util.adb_common import is_success_adb_result
-from adb_util.android_const import const as const_str
-from adb_util.android_const import const_screen_image_file_names as const_images
-from adb_util.android_const import const_int
-from adb_util import adb_common
 
-class android_state():
+if __name__ == '__main__':
+    import adb_common
+    from  device_info import DeviceInfo
+    from android_const import Constants
+    from android_control_adb import AndroidControlAdb
+else:
+    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    from adb_util import adb_common
+    from adb_util.device_info import DeviceInfo
+    from adb_util.android_const import Constants
+    from adb_util.android_control_adb import AndroidControlAdb
+
+class AndroidState():
     logger = None
-    const_android : const_str = None
-    const_android_int : const_int = None
-    const_screen_image_file_names : const_images = None
+    constants : Constants
     image_dir = None
+    device_info : DeviceInfo
+    control_adb : AndroidControlAdb
 
     def __init__(
         self,
         logger,
+        control_adb :AndroidControlAdb,
         image_dir : str
     ) -> None:
         self.logger = logger
+        self.device_info = control_adb.device_info
         self.image_dir = image_dir
-        self.android_const = const_str
-        self.const_android_int = const_int
-        self.const_screen_image_file_names = const_images
-
+        self.control_adb = control_adb
+        self.constants = Constants
     def initialize(self):
-        self.logger.info(const_str.NOT_IMPLEMENTED.value)
+        self.logger.info(Constants.main.NOT_IMPLEMENTED.value)
     
     def get_now_state_from_screen(self):
         try:
             img_path = self.image_dir + '\\' + \
-                self.const_screen_image_file_names.POWER_OFF
-            self.logger.info(const_str.NOT_IMPLEMENTED.value)
+                Constants.image_file.POWER_OFF.value
+            self.logger.info(Constants.main.NOT_IMPLEMENTED.value)
         except Exception as e:
             self.logger.exp.error(e)
 
     def is_off(self):
         try:
-            img_path = self.image_dir + '\\' + \
-                self.const_screen_image_file_names.POWER_OFF
-            
-
+            chk_path = self.image_dir + '\\' + \
+                Constants.image_file.POWER_OFF.value
+            img_path = self.control_adb.get_screenshot()
             from cv2_image.cv2_image_comp import is_same_image
-            is_same_image()
-            
-        except Exception as e:
-            self.logger.exp.error(e)
-        
-    def is_success_adb_result(self,result,message):
-        try :
-            result = adb_common.is_success_adb_result(result,message)
-            return result
-        except Exception as e:
-            self.logger.exp.error(e)
-            return None
-
-    def is_connected_device(self):
-        try:
-            result = adb_common.is_connect_android()
-            flag = is_success_adb_result(result)
+            flag = is_same_image(self.logger,img_path,chk_path)
             return flag
         except Exception as e:
-            self.logger.exp.errro(e)
+            self.logger.exp.error(e)
+            return False
+        
+    def is_connected_device(self,device_id=''):
+        try:
+            ret = adb_common.is_connect_android(
+                device_id,self.device_info.is_output_shell_result)
+            return ret
+        except Exception as e:
+            self.logger.exp.error(e)
             return False
 
     def is_home(self):
