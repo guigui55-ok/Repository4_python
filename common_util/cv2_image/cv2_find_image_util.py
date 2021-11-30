@@ -272,6 +272,8 @@ def is_match_template(logger,img_base,img_temp,threshold,
         logger.exp.error(e)
         return False
 
+
+
 class match_template():
     logger = None
     img_base = ''

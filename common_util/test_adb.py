@@ -1,6 +1,7 @@
 from logging import error, log
 import adb_util.android_cv2.android_imort_init_cv2
 
+import adb_util.adb_common as adb_common
 import adb_util
 from adb_util import adb_key_const
 from adb_util.adb_common import screen_record
@@ -65,7 +66,7 @@ def main():
         # ret = player.tap_ok_when_change_update() # 日付が変わりました
         # ret = player.tap_ok_when_error_google_play(True) # GooglePlayエラーOK
         # ret = player.tap_ok_login(True) # ログインボーナス
-        ret = player.tap_ok_mail_box(True) # メールBOX/フレンド承認
+        # ret = player.tap_ok_mail_box(True) # メールBOX/フレンド承認
         # ret = player.tap_menu_dungeon(True)
 
         # path = r'C:\ZMyFolder\newDoc\0ProgramingAll\image_sample\parts\pad_opening_start_logo.png'
@@ -107,7 +108,6 @@ def get_screenshot():
         logger , android = initialize()
         android.control.get_screenshot('./image/')
         save_path = ''
-        import adb_util.adb_common as adb_common
         adb_common.save_file_to_pc_from_android(save_path)
     except Exception as e:
         logger.exp.error(e)

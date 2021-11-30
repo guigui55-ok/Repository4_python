@@ -111,3 +111,12 @@ class cv2_image():
                 return False
         except Exception as e:
             self.logger.exp.error(e)
+            return False
+
+    def resize_keep_raito(self,raito)->bool:
+        try:            
+            h , w = self.img.shape[:-1]
+            self.img = cv2.resize(self.img,(int(w * raito),int(h * raito)))
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
