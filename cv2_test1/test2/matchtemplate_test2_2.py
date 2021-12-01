@@ -21,6 +21,8 @@ path_base = 'image/power_on_screen2.png'
 path_temp = 'image/template_comp_sample.png'
 path_temp = 'image/key_mark3.png'
 path_temp = 'image/key_mark2.png'
+path_base = 'image/pad_kyu_yami_hikari_kon_kyu_dam.png'
+path_temp = 'image/pad_icon_kon.png'
 # display(path_base)
 print('path_base = ' + path_base)
 print('path_temp = ' + path_temp)
@@ -31,7 +33,7 @@ tw, th = img_temp.shape[:-1]
 print('img_temp.shape = ' + str(tw) + ',' + str(th))
 magni = 1
 if tw + th < 200:
-    magni = 5
+    magni = 8
     th , tw = img_temp.shape[:-1]
     img_temp = cv2.resize(img_temp,(int(tw*magni),int(th*magni)))
     th , tw = img_temp.shape[:-1]
