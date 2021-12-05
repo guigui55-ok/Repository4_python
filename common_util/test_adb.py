@@ -74,8 +74,8 @@ def main():
         # if ret_rect != (-1,-1,-1,-1):
         #     ret = player.android.control.tap_center(ret_rect)
 
-        get_screenshot()
-        # get_screenrecord(30)
+        #get_screenshot()
+        get_screenrecord(logger,5)
         # -------------------------------------
         # read_path の中に temp_path があったら、その場所をタップする
         # read_path = './screenshot.png'
@@ -112,11 +112,11 @@ def get_screenshot():
     except Exception as e:
         logger.exp.error(e)
 
-def get_screenrecord(time = 10):
+def get_screenrecord(logger,time = 10):
     try:
-        logger , android = initialize()
-        import adb_util.adb_common as adb_common
-        adb_common.logger = logger
+        # logger , android = initialize()
+        # import adb_util.adb_common as adb_common
+        # adb_common.logger = logger
         path = '/sdcard/screenrecord.mp4'
         path = adb_common.screen_record(time_limit=time)
         if path != None:
@@ -124,13 +124,13 @@ def get_screenrecord(time = 10):
     except Exception as e:
         logger.exp.error(e)
 
-def run_adb_command():
+def run_adb_command(logger):
     try:
-        logger , android = initialize()
+        # logger , android = initialize()
         from adb_util.adb_key_const import const_command
         cmd = const_command.GET_API_LEVEL
-        import adb_util.adb_common as adb_common
-        adb_common.logger = logger
+        # import adb_util.adb_common as adb_common
+        # adb_common.logger = logger
         # adb_common.logout_adb_shell_result(cmd)  
         # ret = adb_common.get_phone_number()
         ret = adb_common.get_servece_call_iphonesubinfo(21)
@@ -138,13 +138,13 @@ def run_adb_command():
     except Exception as e:
         logger.exp.error(e)
 
-def run_adb_commands():
+def run_adb_commands(logger):
     try:
         # initialize
-        logger , android = initialize()
+        # logger , android = initialize()
         import adb_util.adb_common as adb_common
         from adb_util.adb_key_const import const_command
-        adb_common.logger = logger
+        # adb_common.logger = logger
         # getApiLevel
         cmd = const_command.GET_API_LEVEL
         adb_common.logout_adb_shell_result(cmd)

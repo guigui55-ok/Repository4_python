@@ -2,6 +2,7 @@ import cv2
 import os
 
 class cv2_image():
+    """imag_util.py と同じ、削除予定"""
     path = ''
     logger = None
     img = None
@@ -59,6 +60,18 @@ class cv2_image():
         except Exception as e:
             self.logger.exp.error(e)
             return True
+    
+    def save_img_with_name_auto(self,add_name:str='',dir:str='./'):
+        try:
+            import datetime
+            name = add_name + '_'
+            name += datetime.strftime('%y%m_%H%M%S')
+            name += '.png'
+            path = dir + name
+            self.save_img(path)
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
     
     def save_img(self,save_path:str):
         try:

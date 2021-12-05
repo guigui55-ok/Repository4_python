@@ -30,3 +30,31 @@ def cnv_int(value) -> int:
     except Exception as e:
         logger.exp.error(e)
         return 0
+
+import sys
+from types import FunctionType, MethodType
+def get_method_name_now_process() -> str:
+    try:        
+        ret = sys._getframe().f_code.co_name
+        return ret
+    except Exception as e:
+        logger.exp.error(e)
+        return ''
+
+def print_now_method(function_):
+    #print(get_method_name_now_process())
+    try:
+        if str(type(function_)) == "<class 'function'>":
+            print(function_.__name__)
+        #elif type(function_) is function: #error name 'function' is not defined
+        #elif isinstance(function_, function): #error NameError: name 'function' is not defined
+            #print(function(function_).__name__)
+        else:
+            print(function_.__name__)
+            print(str(type(function_)))
+            # print(str(type(function_)))
+    except:
+        # import traceback
+        # print(traceback.print_exc())
+        print(str(type(function_)))
+

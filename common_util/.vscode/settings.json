@@ -1,6 +1,9 @@
 {
     "python.languageServer": "Pylance",
-    "python.analysis.extraPaths": [
-        "./adb_util/android_cv2",
+    "python.autoComplete.extraPaths":[
+        "C:\\Users\\OK\\source\\repos\\Repository4_python"
     ],
+    "python.analysis.extraPaths": [
+        "C:\\Users\\OK\\source\\repos\\Repository4_python"
+    ]
 }

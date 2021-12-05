@@ -1,10 +1,9 @@
 
-
+import os
 
 def get_file_list(logger, dir_path:str,include_file_name:str = ''):
     ret_list = list(range(0))
-    try:
-        import os
+    try:       
         if os.path.isdir(dir_path):
             condition = ''
             if include_file_name != '':
@@ -20,3 +19,14 @@ def get_file_list(logger, dir_path:str,include_file_name:str = ''):
         logger.exp.error(e)
         return ret_list
 
+def create_dir_if_nothing(logger,dir : str)->str:
+    try:
+        if os.path.exists(dir) and os.path.isdir(dir):
+            return dir
+        else:
+            os.mkdir(dir)
+            logger.info('create_dir_if_nothing : mkdir , dir = ' + dir)
+        return dir
+    except Exception as e:
+        logger.exp.error(e)
+        return ''

@@ -3,6 +3,8 @@ from logging import exception
 import subprocess
 from typing import Any
 
+from log_util.logging_util import logger_info
+
 
 if __name__ == '__main__':
     from adb_key_const import ConstCommand
@@ -19,8 +21,10 @@ if __name__ =='__main__':
     import adb_key_const
 else:
     from adb_util import adb_key_const
-logger = None
+logger : logger_info = None
 
+def set_logger_in_adb_common(arg_logger):
+    logger = arg_logger
 
 def logout_result_subprocess_run_text(result):
     """subprocess.run の実行結果をログに出力する"""
@@ -155,7 +159,7 @@ def save_file_from_android(
     try:
         logger.info('save_file_from_android')
         cmd = 'pull ' + get_path + ' ' + save_path
-        flag , ret = excute_command(cmd,is_logout_stdout)
+        flag , ret = excute_command_adb(cmd,is_logout_stdout)
         return flag
     except Exception as e:
         logger.exp.error(e)

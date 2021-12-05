@@ -18,7 +18,7 @@ else:
 class AndroidControl():
     logger = None
     image_dir = None
-    adb_common.logger = logger
+    adb_common.logger = None
 
     def __init__(
         self,

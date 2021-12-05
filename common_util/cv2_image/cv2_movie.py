@@ -1,4 +1,5 @@
 import cv2
+from numpy import true_divide
 
 # movie_info
 # movie_play > (movie_info ,video_capture_frames)
@@ -12,6 +13,8 @@ class cv2_movie_info():
     movie_fps = 0.0
     movie_frame_max_count = 0
     movie_time_sec = 0.0
+    # 1 frame あたりの秒数 spf
+    movie_spf = 0.0
 
     def __init__(self,logger_,movie_path_) -> None:
         self.logger = logger_
@@ -24,6 +27,7 @@ class cv2_movie_info():
             self.movie_fps = video_capture.get(cv2.CAP_PROP_FPS)
             self.movie_frame_max_count = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
             self.movie_time_sec = self.movie_frame_max_count / self.movie_fps
+            self.movie_spf = 1 / self.movie_fps
             return True
         except Exception as e:
             self.logger.exp.error(e)
@@ -44,6 +48,8 @@ class cv2_movie_info():
             self.logger.info('fps = ' + str(self.movie_fps))
             self.logger.info('frame_max_count = ' + str(self.movie_frame_max_count))
             self.logger.info('movie_time(sec) = ' + str(self.movie_time_sec))
+            self.logger.info('movie_spf = ' + str(self.movie_spf))
+            self.logger.info(' -------  -------  ------- ')
             return True
         except Exception as e:
             self.logger.exp.error(e)
@@ -141,27 +147,112 @@ class video_capture_frames():
             self.logger.exp.error(e)
             return False
     
-    def move_next(self):
+    def get_movie_info(self):
         try:
-            self.play_ret,self.frame_capture_now = self.video_capture.read()
-            self.set_frame_int_now()
+            if self.capture_movie == None:
+                msg = self.__class__
+                msg = '.get_movie_info: self.capture_movie == None , return'
+                self.logger.exp.error(msg)
+                return ''
+            ret = ''
+            self.info.show_movie_info
+        except Exception as e:
+            self.logger.exp.error(e)
+    
+    def move_mext_sec(self)->bool:
+        """1秒分フレームを進める"""
+        try:
+            change_frame = 0
+            while(change_frame>=1):
+                change_frame += self.info.movie_spf
+            return self.set_frame(change_frame)
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+    def move_sec(self,sec=1)->bool:
+        """指定した秒数分フレームを進める
+        1フレーム当たりの秒数の、加算を続け、sec 以上になったときの、フレームカウントを移動する
+        ※ 上記処理 (および、1フレーム当たりの秒数が決まっている) のため、sec と 移動する秒数が完全に一致しない場合が多い
+        """
+        try:
+            move_frame = self.get_frame_by_sec(sec)
+            return self.move_frame(move_frame)
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+    def get_frame_by_sec(self,sec) -> int:
+        """引数sec秒あたりのframe数を取得する"""
+        try:
+            if sec == 0 : return 0
+            is_minors = False
+            if sec < 0 : is_minors=True
+            buf_sec = abs(sec)
+            if buf_sec > self.info.movie_time_sec:
+                ret = self.info.movie_frame_max_count
+                if is_minors : ret *= -1
+                return ret
+            
+            count_sec = 0
+            count_frame = 0
+            while(count_sec <= buf_sec):
+                count_sec += self.info.movie_spf
+                count_frame += 1
+            ret = count_frame
+            if is_minors : ret *= -1
+            return ret
+        except Exception as e:
+            self.logger.exp.error(e)
+            return 0
+        
+
+
+    def move_next(self):
+        """img を video_capture.read で読み込みメンバへ格納、frame を次へ進める
+        その後、update_frame_int_now"""
+        try:
+            self.play_ret, self.frame_capture_now = self.video_capture.read()
+            self.update_frame_int_now()
         except Exception as e:
             self.logger.exp.error(e)
 
     def start_capture(self):
         try:
             self.video_capture:cv2.VideoCapture= cv2.VideoCapture(self.info.movie_path)
-            self.set_frame_int_now()
+            self.update_frame_int_now()
             return True
         except Exception as e:
             self.logger.exp.error(e)
             return False
-    
-    def set_frame_int_now(self):
-        try:            
-            self.frame_int_now = int(self.video_capture.get(cv2.CAP_PROP_POS_FRAMES))
+
+    def get_frame_int_now(self)->int:
+        """現在のフレームを取得するときはこの関数の使用を推奨
+        self.frame_int_now は move_frame などの後や、
+        self.frame_int_now を上書きしたときに、更新されていない可能性がある
+        """
+        try: 
+            self.update_frame_int_now()
+            return self.frame_int_now
         except Exception as e:
             self.logger.exp.error(e)
+            return -1
+    
+    def update_frame_int_now(self)->bool:
+        try:            
+            self.frame_int_now = int(self.video_capture.get(cv2.CAP_PROP_POS_FRAMES))
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+    def set_frame_int_now(self,set_frame_count)->bool:
+        try:            
+            self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, set_frame_count)
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
             
     def frame_is_over_max(self):
         frame = int(self.video_capture.get(cv2.CAP_PROP_POS_FRAMES))
@@ -183,18 +274,27 @@ class video_capture_frames():
             self.logger.info('capture success. path= ' + write_path)
         except Exception as e:
             self.logger.exp.error(e)
-    
-    def get_video_capture_image(self,frame_pos=-1):
-        """指定した frame 位置のイメージを取得する
-        default の引数-1は現在のフレームを示す"""
+
+    def get_video_capture_image_and_move_next(self,is_logout=True):
+        """現在のフレームの captureイメージを取得して次のフレームへ移動する"""
         try:
-            if frame_pos == -1:
-                #frame_pos = self.frame_int_now
-                return self.frame_capture_now
-            else:
-                self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_pos -1 )
-                ret,frame_now = self.video_capture.read()
-                return frame_now
+            return self.get_video_capture_image(1,is_logout)
+        except Exception as e:
+            self.logger.exp.error(e)
+            return None
+    
+    def get_video_capture_image(self,frame_pos=0,is_logout=True):
+        """指定した frame 位置のイメージを取得する
+        ※ 読み込んだ後 frame_pos は移動される
+        ※ 読み込んだ時は、自動的に次のフレームへ移動する"""
+        try:
+            frame_pos = self.frame_int_now + frame_pos -1
+            self.set_frame(frame_pos,is_logout)            
+            # self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_pos -1 )
+            # self.move_next()
+            # ret,frame_now = self.video_capture.read()
+            # self.update_frame_int_now()
+            return self.frame_capture_now
         except Exception as e:
             self.logger.exp.error(e)
             return None
@@ -207,27 +307,43 @@ class video_capture_frames():
         """前のフレームを表示する（実行時に一時停止となる）"""
         self.move_frame(move_frame_count)
         
-    def set_frame(self,set_frame_count=0):
+    def set_frame(self,set_frame_count=0,is_logout = True)->bool:
+        """set した後に self.move_next を実行している"""
         try:
-            # frame をセットして読み込み、表示する
-            self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, set_frame_count)
-            self.logger.info('frame_now = ' + str(self.frame_int_now) + ' / ' + str(self.frame_int_max))
+            # frame を capture へセットして読み込み、表示する
+            # self.video_capture.set(cv2.CAP_PROP_POS_FRAMES, set_frame_count)
+            self.set_frame_int_now(set_frame_count)
             #self.play_ret, self.frame_int_now = self.video_capture.read()
             # cv2.imshow(self.window_title, self.frame_int_now)
+            
             self.move_next()
-            self.frame_int_now = set_frame_count
+            self.frame_int_now = self.get_frame_int_now()
+            if is_logout:
+                self.logger.info(
+                    self.window_title + ' : frame_now = ' + str(self.frame_int_now) + ' / ' + str(self.frame_int_max))
             return True
         except Exception as e:
             self.logger.exp.error(e)
             return False
+    
+    def set_sec(self,set_sec:float=0) ->bool:
+        """秒数を指定して、フレームをセットする"""
+        try:
+            set_frame_count = set_sec * self.info.movie_spf
+            return self.set_frame(set_frame_count)
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
         
-    def move_frame(self,move_frame_count=0):
+    def move_frame(self,move_frame_count=0)->bool:
         """任意の位置のフレームを表示する（実行時に一時停止となる）
+        現在のフレームから move_frame_count 進める
         デフォルトは1フレーム進む
         """
         try:
             # 現在の再生位置（フレーム位置）の取得
-            self.frame_int_now = int(self.video_capture.get(cv2.CAP_PROP_POS_FRAMES))
+            #self.frame_int_now = int(self.video_capture.get(cv2.CAP_PROP_POS_FRAMES))
+            self.update_frame_int_now()
 
             # 以下 read 時に1フレーム進むので、-1 する
             self.frame_int_now += move_frame_count -1
@@ -248,9 +364,14 @@ class video_capture_frames():
             # print('frame_now = ' + str(self.frame_int_now) + ' / ' + str(self.frame_max))
             # self.play_ret, self.frame_int_now = self.video_capture.read()
             # cv2.imshow(self.window_title, self.frame_int_now)
-            
+            return True
         except Exception as e:
             self.logger.exp.error(e)
+            return False
+# /////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
 # =============================================================================
 class cv2_movie_player():
