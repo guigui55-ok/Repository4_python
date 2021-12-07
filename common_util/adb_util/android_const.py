@@ -2,11 +2,11 @@
 from enum import Enum
 from enum import IntEnum
 
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'android_const':
     from adb_key_const import ConstKeycode
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    from adb_util.adb_key_const import ConstKeycode
+    from common_util.adb_util.adb_key_const import ConstKeycode
 class Const(Enum):
     ANDROID_CONST = 'android_const'
     SCREEN_CAPTURE_FILE_NAME = 'screenshot.png'

@@ -15,7 +15,6 @@ from numpy import true_divide
 import pyocr
 import pyocr.builders
 
-from pad import const
 
 # 1.インストール済みのTesseractのパスを通す
 path_tesseract = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -470,7 +469,7 @@ class OcrBoxes():
 
 def excute_ocr(
     logger,
-    tool:list,
+    tool,
     img_path:str,
     out_path:str,
     lang:str ='jpn',

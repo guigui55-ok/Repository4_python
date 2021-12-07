@@ -10,11 +10,11 @@ if __name__ == '__main__':
     from device_info import DeviceInfo
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    import adb_util.adb_common as adb_common
-    from adb_util.android_control_cv2_image import AndroidControlCv2Image
-    from adb_util.android_control_adb import AndroidControlAdb
-    from adb_util.android_const import Constants
-    from adb_util.device_info import DeviceInfo
+    import common_util.adb_util.adb_common as adb_common
+    from common_util.adb_util.android_control_cv2_image import AndroidControlCv2Image
+    from common_util.adb_util.android_control_adb import AndroidControlAdb
+    from common_util.adb_util.android_const import Constants
+    from common_util.adb_util.device_info import DeviceInfo
 
     import common_util.cv2_image as cv2_find_image_util
     from common_util.cv2_image import cv2_find_image_util
@@ -23,10 +23,10 @@ else:
 
 if __name__ == '':
     # Intellisence 機能動作させるため
-    import cv2_image as cv2_find_image_util
-    from cv2_image import cv2_find_image_util
-    from cv2_image import cv2_image_util
-    from cv2_image import cv2_movie
+    import common_util.cv2_image as cv2_find_image_util
+    from common_util.cv2_image import cv2_find_image_util
+    from common_util.cv2_image import cv2_image_util
+    from common_util.cv2_image import cv2_movie
 
 
 class AndroidControlCv2Movie():

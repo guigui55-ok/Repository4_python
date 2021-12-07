@@ -1,10 +1,10 @@
 
 
-from adb_util import device_info
-from adb_util.adb_common import is_success_adb_result, screen_capture_for_android
+# from common_util.adb_util import device_info
+# from common_util.adb_util.adb_common import is_success_adb_result, screen_capture_for_android
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'android_main_control':
     import adb_key  
     from  device_info import DeviceInfo
     import adb_common
@@ -15,14 +15,14 @@ if __name__ == '__main__':
     from adb_common import logger as adb_comon_logger
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    import adb_util.adb_key  
-    from adb_util.device_info import DeviceInfo
-    import adb_util.adb_common as adb_common
-    from adb_util.android_const import Constants
-    from adb_util.android_control_cv2_image import AndroidControlCv2Image
-    from adb_util.android_control_cv2_movie import AndroidControlCv2Movie
-    from adb_util.android_control_adb import AndroidControlAdb
-    from adb_util.adb_common import logger as adb_comon_logger
+    import common_util.adb_util.adb_key  
+    from common_util.adb_util.device_info import DeviceInfo
+    import common_util.adb_util.adb_common as adb_common
+    from common_util.adb_util.android_const import Constants
+    from common_util.adb_util.android_control_cv2_image import AndroidControlCv2Image
+    from common_util.adb_util.android_control_cv2_movie import AndroidControlCv2Movie
+    from common_util.adb_util.android_control_adb import AndroidControlAdb
+    from common_util.adb_util.adb_common import logger as adb_comon_logger
 
 class AndroidControlMain():
     logger = None

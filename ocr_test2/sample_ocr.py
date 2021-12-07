@@ -1,7 +1,8 @@
+import import_init
 
-from log_util import logger_init
-from ocr_util.ocr_tesseract_util  import ocr_tesseract_class
-from ocr_util.ocr_tesseract_util  import ocr_tesseract_method
+from common_util.log_util import logger_init
+from common_util.ocr_util.ocr_tesseract_util  import ocr_tesseract_class
+from common_util.ocr_util.ocr_tesseract_util  import ocr_tesseract_method
 
 def initialize():
     try :
@@ -28,7 +29,9 @@ def excute_ocr(logger):
         keyword = '自動的にON'
         keyword = 'バッテリーセーバー'
         
-        rect_list = excute_ocr_main(logger,img_path,out_path,keyword,lang,ocr_direction_is_horizon)
+        rect_list = excute_ocr_main(
+            logger,img_path,out_path,keyword,
+            lang,ocr_direction_is_horizon)
         
         for i in range(len(rect_list)):
             print('rect_list ' + str(i) + ' = ' + str(id(rect_list[i])))
@@ -39,7 +42,8 @@ def excute_ocr(logger):
 def excute_ocr_main(logger,img_path,output_path,keyword,lang,ocr_direction_is_horizon):
     try:        
         ocr_obj = ocr_tesseract_class.tesseract(logger,img_path,output_path)
-        flag = ocr_obj.excute(keyword,img_path,output_path,ocr_direction_is_horizon,lang)
+        ocr_obj.lang = lang
+        flag = ocr_obj.excute(keyword,img_path,output_path,ocr_direction_is_horizon,ocr_obj.lang)
         if not flag:
             logger.exp.error('ocr_obj.excute Failed')
         return ocr_obj.rect_list
@@ -58,7 +62,8 @@ def sub():
         ocr_direction_is_horizon = True
         # tools : pyocr.TOOLS
         tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)
-        ocr_results = ocr_tesseract_method.excute_ocr(logger,tools,img_path,out_path,lang,ocr_direction_is_horizon)
+        ocr_results = ocr_tesseract_method.excute_ocr(
+            logger,tools,img_path,out_path,lang,ocr_direction_is_horizon)
 
         keyword = '自動的にON'
         keyword = 'バッテリーセーバー'

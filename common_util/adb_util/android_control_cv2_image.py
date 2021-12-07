@@ -2,7 +2,7 @@
 from logging import exception
 from typing import Any
 
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'android_control_cv2_image':
     import android_cv2.android_imort_init_cv2
 
     import adb_common
@@ -12,15 +12,15 @@ if __name__ == '__main__':
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
     import common_util.cv2_image as cv2_find_image_util
-    import adb_util.adb_common as adb_common
-    from adb_util.android_const import Constants
-    from adb_util.device_info import DeviceInfo
-    from adb_util.android_control_adb import AndroidControlAdb
+    import common_util.adb_util.adb_common as adb_common
+    from common_util.adb_util.android_const import Constants
+    from common_util.adb_util.device_info import DeviceInfo
+    from common_util.adb_util.android_control_adb import AndroidControlAdb
 
 
 if __name__ == '':
     # Intellisence 機能動作させるため
-    import cv2_image as cv2_find_image_util
+    import common_util.cv2_image as cv2_find_image_util
 
 class AndroidControlCv2Image():
     logger = None

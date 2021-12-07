@@ -6,10 +6,10 @@ if __name__ == '__main__':
     from android_control_adb import AndroidControlAdb
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    from adb_util import adb_common
-    from adb_util.device_info import DeviceInfo
-    from adb_util.android_const import Constants
-    from adb_util.android_control_adb import AndroidControlAdb
+    from common_util.adb_util import adb_common
+    from common_util.adb_util.device_info import DeviceInfo
+    from common_util.adb_util.android_const import Constants
+    from common_util.adb_util.android_control_adb import AndroidControlAdb
 
 class AndroidState():
     logger = None

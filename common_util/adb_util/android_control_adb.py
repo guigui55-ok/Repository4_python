@@ -10,11 +10,11 @@ if __name__ == '__main__':
     from device_info import DeviceInfo
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    import adb_util.adb_common as adb_common
-    from adb_util.adb_common import logger as adb_common_logger
-    from adb_util.adb_key import logger as adb_key_logger
-    from adb_util.android_const import Constants
-    from adb_util.device_info import DeviceInfo
+    import common_util.adb_util.adb_common as adb_common
+    from common_util.adb_util.adb_common import logger as adb_common_logger
+    from common_util.adb_util.adb_key import logger as adb_key_logger
+    from common_util.adb_util.android_const import Constants
+    from common_util.adb_util.device_info import DeviceInfo
 
 class AndroidControlAdb():
     logger = None

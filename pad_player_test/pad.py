@@ -1,8 +1,9 @@
+import import_init
 from cv2 import isContourConvex
 from numpy import False_
-from adb_util.android_cv2 import android_imort_init_cv2
-from adb_util import adb_common
-from adb_util import android_common
+from common_util.adb_util.android_cv2 import android_imort_init_cv2
+from common_util.adb_util import adb_common
+from common_util.adb_util import android_common
 
 from enum import Enum
 

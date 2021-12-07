@@ -44,7 +44,7 @@ def get_compareist_value(logger,img_a,img_b)->float:
     try:
         img_a_hist = cv2.calcHist([img_a], [0], None, [256], [0, 256])
         img_b_hist = cv2.calcHist([img_b], [0], None, [256], [0, 256])
-        ret = cv2.compareHist(img_a_hist,img_b_hist,0)
+        ret = cv2.compareHist(img_a_hist, img_b_hist, 0)
         return ret
     except Exception as e:
         logger.exp.error(e)

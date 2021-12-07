@@ -12,18 +12,18 @@ if __name__ == '__main__':
     import android_cv2_state as state_cv2
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    from adb_util.android_const import Constants
-    from adb_util.device_info import DeviceInfo
-    from adb_util.android_main_control import AndroidControlMain
-    from adb_util.android_main_state import AndroidState
-    from adb_util.android_main_info import AndroidInfo
+    from common_util.adb_util.android_const import Constants
+    from common_util.adb_util.device_info import DeviceInfo
+    from common_util.adb_util.android_main_control import AndroidControlMain
+    from common_util.adb_util.android_main_state import AndroidState
+    from common_util.adb_util.android_main_info import AndroidInfo
 
-    import adb_util.android_cv2_control as control_cv2
-    import adb_util.android_cv2_state as state_cv2
+    import common_util.adb_util.android_cv2_control as control_cv2
+    import common_util.adb_util.android_cv2_state as state_cv2
 from enum import Enum
 from os import device_encoding
 
-from adb_util import adb_common
+from common_util.adb_util import adb_common
 
 # class android_constants():
 #     int_val : android_const_int = android_const_int

@@ -13,3 +13,4 @@ def rename_with_add_str(arg_path:str,add_str : str ='_') -> str:
     except Exception as e:
         logger.error(e)
         return arg_path
+        

@@ -11,7 +11,7 @@ import cv2
 if __name__ == '__main__':
     import ocr_tesseract_method
 else:
-    from ocr_util.ocr_tesseract_util import ocr_tesseract_method
+    from common_util.ocr_util.ocr_tesseract_util import ocr_tesseract_method
 
 class OcrConst():
     DIRECTION_HORIZON = 11
@@ -35,7 +35,7 @@ class tesseract():
         try:
             self.logger = logger
             # 2.OCRエンジンの取得
-            self.tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)
+            self.tool = ocr_tesseract_method.get_tools_by_initialize_tresseract(logger)
             if read_path != '':
                 self.set_path(read_path,ret_path)
             self.threshold_for_judging_separation = ocr_tesseract_method.const_ocr.DEFAULT_THRESHOLD
@@ -78,13 +78,13 @@ class tesseract():
             self.direction_is_horizon = ocr_direction_is_horizon
             if self.direction_is_horizon: self.direction = OcrConst.DIRECTION_HORIZON
             else: self.direction = OcrConst.DIRECTION_VERTICAL
-            if lang == '' : self.lang ='jpn+eng'
+            if lang == '' : lang ='jpn+eng'
             # tools : pyocr.TOOLS
             # OCR を実行する
-            tools = ocr_tesseract_method.get_tools_by_initialize_tresseract(self.logger)
+            tool = ocr_tesseract_method.get_tools_by_initialize_tresseract(self.logger)
             ocr_results = ocr_tesseract_method.excute_ocr(
                 self.logger,
-                tools,
+                tool,
                 img_path,
                 out_path,
                 self.lang,

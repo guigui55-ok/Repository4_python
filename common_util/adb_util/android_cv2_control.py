@@ -9,10 +9,10 @@ if __name__ == '__main__':
     from android_const import Constants
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    import adb_util.adb_common as adb_common
-    import adb_util.adb_key as adb_key
-    from adb_util.adb_key_const import ConstKeycode
-    from adb_util.android_const import Constants
+    import common_util.adb_util.adb_common as adb_common
+    import common_util.adb_util.adb_key as adb_key
+    from common_util.adb_util.adb_key_const import ConstKeycode
+    from common_util.adb_util.android_const import Constants
 
 
 class AndroidControl():

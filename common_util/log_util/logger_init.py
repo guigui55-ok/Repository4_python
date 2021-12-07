@@ -6,8 +6,8 @@ import sys,os
 from pathlib import Path
 import_path = str(Path('__file__').resolve().parent.parent)+'\\logger_util'
 print('import_path:'+import_path)
-import_path = os.path.join('..', 'logger_util')
-print('import_path:'+import_path)
+# import_path = os.path.join('..', 'logger_util')
+# print('import_path:'+import_path)
 sys.path.append(import_path)
 import logger_util
 import logger_util.logging_util as logging_util

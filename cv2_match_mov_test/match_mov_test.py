@@ -1,6 +1,7 @@
 from enum import Flag
+import cv2
 
-from numpy import true_divide
+from numpy import result_type, true_divide
 import import_init
 
 
@@ -12,8 +13,9 @@ import common_util.cv2_image.cv2_image_comp as cv2_image_comp
 import common_util.general_util.general as general
 
 '''
+以下のような動画は正しく判定できない可能性がある
 ・毎フレーム画像が頻繁に変わるもの
-・約30fpsで約0.3秒(以下)毎に大幅にフレーム画像が変わるもの
+・約30fpsで約0.3秒(以下)毎[1フレーム以下]で大幅にフレームイメージが変わるもの
 '''
 
 def main():    
@@ -70,6 +72,13 @@ def is_exists_target_movie_in_movie(
             return False
         mov_base.info.show_movie_info()
         mov_temp.info.show_movie_info()
+
+        # 開始位置に別のイメージファイルを使用する場合は
+        # イメージファイルをcv2image で読み込み,start_imgへ
+        # get_frame_max_match_value_by_image_compメソッドを、
+        # start_img と mov_base,mov_temp へそれぞれ実行、スタート位置を渡す
+        # その後、is_exists_target_movie_in_movie_for_object でそれぞれの値を渡せばOK
+
         # mov_temp の最初のフレームと mov_base 各フレームを比較して、
         # 一致率が最大のフレーム一と、閾値を取得する
         exists_frame_count ,threshold_max = get_frame_if_exists_target_first_frame_in_movie(
@@ -115,8 +124,7 @@ def is_exists_target_movie_in_movie_for_object(
     try:
         fn = 'is_exists_target_movie_in_movie_for_object'
         general.print_now_method(is_exists_target_movie_in_movie_for_object)
-
-        temp_thresold = (threshold + min_border_threshold) /2
+        threshold_new = (threshold + min_border_threshold) /2
         # fps が異なるか最初にチェック
         is_difference_fps = False
         if mov_base.info.movie_fps != mov_temp.info.movie_fps:
@@ -135,6 +143,8 @@ def is_exists_target_movie_in_movie_for_object(
         sec_count:float = 0
         # 動画 frame が一致しないが、シーンが変更されたと判定された数
         scene_change_count = 0
+        # result_value_avg
+        result_value_avg = 0.0
         is_not_match = False
         # すべて合致するか比較する
         while(not mov_temp.frame_is_max_or_max_over()):
@@ -150,17 +160,8 @@ def is_exists_target_movie_in_movie_for_object(
                 img_base = mov_base.frame_capture_now
                 # print('mov_base.frame = ' + str(mov_base.frame_int_now))
                 # img_bae, img_temp が一致か判定する
-                # is_same = cv2_image_comp.is_same_image(logger,img_base,img_temp)                
-                value = cv2_image_comp.get_compareist_value(
-                    logger,img_base,img_temp)
-                # (threshold + min_border_threshold) /2 しいき値、調整
-                if value >= temp_thresold:
-                    is_same = True
-                
-                if value >= temp_thresold:
-                    logger.info('is_same_by_calcHist: True , '+str(temp_thresold) + ' <= ' + str(value))
-                else:
-                    logger.info('is_same_by_calcHist: False , '+str(temp_thresold) + ' <= ' + str(value))
+                # is_same = cv2_image_comp.is_same_image(logger,img_base,img_temp)  
+                is_same , result_value = is_same_image(logger,img_base,img_temp,threshold_new) 
                 # イメージを結果フォルダに保存する
                 filename = str(comp_count) + '_1_base_' + str(is_same)
                 save_image_for_mov_comp(logger,img_temp, filename,result_dir)
@@ -199,8 +200,7 @@ def is_exists_target_movie_in_movie_for_object(
                             mov_base.move_frame(retry_frame)
                                         
                         img_base = mov_base.frame_capture_now
-                        is_same = cv2_image_comp.is_same_by_calcHist(
-                            logger,img_base,img_temp,threshold)
+                        is_same , result_value = is_same_image(logger,img_base,img_temp,threshold_new)
                         # イメージを結果フォルダに保存する
                         filename = str(comp_count) + '_2_base_' + str(is_same)
                         save_image_for_mov_comp(logger,img_temp, filename,result_dir)
@@ -218,7 +218,7 @@ def is_exists_target_movie_in_movie_for_object(
                             # fps にずれがある場合、temp,base のシーン変更位置にずれがある可能性がある
                             # img_base * img_base[-1] , img_temp * img_temp[-1] を比較して
                             # 大幅に異なれば、シーン変更がされている可能性があるので、この場合カウントしておく
-                            if value < min_border_threshold:
+                            if result_value < min_border_threshold:
                                 # 大幅に違うときは、前のフレームと比較して、シーン変更されているか判定する
                                 frame_move_pos = -1
                                 # img_base
@@ -243,6 +243,8 @@ def is_exists_target_movie_in_movie_for_object(
                                 is_same = False
                             is_not_match = True
                     ### end if is_difference_fps
+                if is_same:
+                    result_value_avg += result_value
                 # step_sec 分移動する
                 sec_count += step_sec
                 mov_base.move_sec(step_sec)
@@ -253,7 +255,9 @@ def is_exists_target_movie_in_movie_for_object(
             
         ### end while
         # 比較した回数と一致した回数が同じならTrue
-        logger.info('count:same/comp = ' +str(same_count) + ' / ' + str(comp_count) + ' / ' + str(scene_change_count))
+        logger.info('count:same/comp/scean_change = ' +str(same_count) + ' / ' + str(comp_count) + ' / ' + str(scene_change_count))
+        result_value_avg = result_value_avg / same_count
+        logger.info('result_value_avg = ' + str(result_value_avg))
         if same_count == (comp_count - scene_change_count):
             return True
         else:
@@ -378,7 +382,7 @@ def get_frame_max_match_value_by_image_comp(
                 if now_max < value:
                     now_max = value
                     frame_max = mov_base.frame_int_now
-                    logger.info('frame,max_value =' , str(frame_max) + ' , ' + str(value))
+                    logger.info('frame,max_value =' + str(frame_max) + ' , ' + str(value))
             # if is_same:                
             #     cv2img = cv2_image(logger,img_base)
             #     cv2img.save_img_with_name_auto('base_match')
@@ -407,5 +411,22 @@ def save_image_for_mov_comp(logger,img,name='',result_dir=''):
         cv2img.save_img_with_name_auto(name,result_dir)
     except Exception as e:
         logger.exp.error(e)
+
+def is_same_image(logger,img_base,img_temp,threshold):
+    try:        
+        result_value = cv2_image_comp.get_compareist_value(logger,img_base,img_temp)
+        if result_value >= threshold:
+            is_same = True
+        else:
+            is_same = False
+        
+        if is_same:
+            logger.info('is_same_by_calcHist: True , '+str(threshold) + ' <= ' + str(result_value))
+        else:
+            logger.info('is_same_by_calcHist: False , '+str(threshold) + ' > ' + str(result_value))
+        return is_same,result_value
+    except Exception as e:
+        logger.exp.error(e)
+        return False,0.0
 
 main()

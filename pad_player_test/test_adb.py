@@ -1,14 +1,15 @@
+import import_init
 from logging import error, log
-import adb_util.android_cv2.android_imort_init_cv2
+import common_util.adb_util.android_cv2.android_imort_init_cv2
 
-import adb_util.adb_common as adb_common
-import adb_util
-from adb_util import adb_key_const
-from adb_util.adb_common import screen_record
+import common_util.adb_util.adb_common as adb_common
+import common_util.adb_util
+from common_util.adb_util import adb_key_const
+from common_util.adb_util.adb_common import screen_record
 
-from adb_util.android_common import AndroidCommon
-from log_util import logger_init
-from adb_util.android_const import Constants
+from common_util.adb_util.android_common import AndroidCommon
+from common_util.log_util import logger_init
+from common_util.adb_util.android_const import Constants
 
 from pad import pad_player
 
@@ -20,7 +21,7 @@ def initialize():
         image_path = str(Path('__file__').resolve().parent) + \
             'adb_test/android_wiko/screen_wiko'
         logger = logger_init.initialize_logger()
-        adb_util.adb_common.logger = logger
+        adb_common.logger = logger
         android = AndroidCommon(
             logger,
             image_path,
@@ -127,7 +128,7 @@ def get_screenrecord(logger,time = 10):
 def run_adb_command(logger):
     try:
         # logger , android = initialize()
-        from adb_util.adb_key_const import const_command
+        from common_util.adb_util.adb_key_const import const_command
         cmd = const_command.GET_API_LEVEL
         # import adb_util.adb_common as adb_common
         # adb_common.logger = logger
@@ -142,8 +143,8 @@ def run_adb_commands(logger):
     try:
         # initialize
         # logger , android = initialize()
-        import adb_util.adb_common as adb_common
-        from adb_util.adb_key_const import const_command
+        # import common_util.adb_util.adb_common as adb_common
+        from common_util.adb_util.adb_key_const import const_command
         # adb_common.logger = logger
         # getApiLevel
         cmd = const_command.GET_API_LEVEL

@@ -3,24 +3,28 @@ from logging import exception
 import subprocess
 from typing import Any
 
-from log_util.logging_util import logger_info
 
-
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'adb_common':
     from adb_key_const import ConstCommand
     from adb_key_const import ConstKeycode
+    import sys
+    from pathlib import Path
+    target_dir = str(Path(__file__).parent) # parent
+    target_dir = str(Path(target_dir).parent) # parent_parent
+    sys.path.append(target_dir)
+    from log_util.logging_util import logger_info
 else:
     # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
-    from adb_util.adb_key_const import ConstCommand
-    from adb_util.adb_key_const import ConstKeycode
+    from common_util.adb_util.adb_key_const import ConstCommand
+    from common_util.adb_util.adb_key_const import ConstKeycode
+    import common_util.general_util.general as general
+    from common_util.log_util.logging_util import logger_info
 
 # from adb_util import adb_key_const
 if __name__ =='__main__':
-    print(__name__)
-    print(__file__)
     import adb_key_const
 else:
-    from adb_util import adb_key_const
+    from common_util.adb_util import adb_key_const
 logger : logger_info = None
 
 def set_logger_in_adb_common(arg_logger):
@@ -58,10 +62,8 @@ def get_result_subprocess_run_command(command):
     try:
         logger.info('get_result_subprocess_run_command')
         # tuple の場合は連結してログを残す
-        import general_util.general
-        general_util.general.logger = logger
-        from general_util.general import cnv_tuple_to_str
-        buf = cnv_tuple_to_str(command, ' ')
+        general.logger = logger
+        buf = general.cnv_tuple_to_str(command, ' ')
         logger.info('command = ' + buf)
         # コマンドを実行する
         result = subprocess.run(buf, shell=True, capture_output=True,text=True)
