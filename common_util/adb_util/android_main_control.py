@@ -14,7 +14,7 @@ if __name__ == '__main__' or __name__ == 'android_main_control':
     from android_control_adb import AndroidControlAdb
     from adb_common import logger as adb_comon_logger
 else:
-    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    # 外部から参照時は、common_util を sys.path へ追加しておくこと
     import common_util.adb_util.adb_key  
     from common_util.adb_util.device_info import DeviceInfo
     import common_util.adb_util.adb_common as adb_common

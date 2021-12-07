@@ -5,26 +5,23 @@ from typing import Any
 
 
 if __name__ == '__main__' or __name__ == 'adb_common':
+    import adb_key_const
     from adb_key_const import ConstCommand
     from adb_key_const import ConstKeycode
     import sys
     from pathlib import Path
     target_dir = str(Path(__file__).parent) # parent
-    target_dir = str(Path(target_dir).parent) # parent_parent
+    target_dir = str(Path(target_dir).parent) # parent_parent == common_util
     sys.path.append(target_dir)
     from log_util.logging_util import logger_info
 else:
-    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    # 外部から参照時は、common_util を sys.path へ追加しておくこと
     from common_util.adb_util.adb_key_const import ConstCommand
     from common_util.adb_util.adb_key_const import ConstKeycode
     import common_util.general_util.general as general
     from common_util.log_util.logging_util import logger_info
-
-# from adb_util import adb_key_const
-if __name__ =='__main__':
-    import adb_key_const
-else:
     from common_util.adb_util import adb_key_const
+
 logger : logger_info = None
 
 def set_logger_in_adb_common(arg_logger):

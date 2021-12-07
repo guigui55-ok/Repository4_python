@@ -14,19 +14,23 @@ def initialize():
 def main():
     logger = initialize()
     try:
-        excute_ocr(logger)
+        img_path = './'
+        excute_ocr_with_path(logger,img_path)
     except Exception as e:
         logger.exp.error(e)
 
-def save_screenshot(logger):
+def save_screenshot(logger,img_dir,screenshot_file_name):
     try:
-
+        from common_util.adb_util.android_common import AndroidCommon
+        android = AndroidCommon(logger,img_dir)
+        android.control.get_screenshot(img_dir,save_android_path,screenshot_file_name)
     except Exception as e:
         logger.exp.error(e)
 
-def excute_ocr_with_path(logger,path_img):
+def excute_ocr_with_path(logger,img_path):
     try:
         dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
+        dir_path = img_path
         file_name = 'screen_sever.png'
         img_path = dir_path + '\\' + file_name
         out_path = dir_path + '\\' + 'ocr_ret_' + file_name

@@ -5,13 +5,14 @@ from enum import IntEnum
 if __name__ == '__main__' or __name__ == 'android_const':
     from adb_key_const import ConstKeycode
 else:
-    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    # 外部から参照時は、common_util を sys.path へ追加しておくこと
     from common_util.adb_util.adb_key_const import ConstKeycode
 class Const(Enum):
     ANDROID_CONST = 'android_const'
     SCREEN_CAPTURE_FILE_NAME = 'screenshot.png'
     SCREEN_RECORD_FILE_NAME = 'screenrecord.mp4'
     SD_ROOT_DIR = '/sdcard/'
+    ANDOID_STORAGE_ROOT = '/storage/'
     SAVE_PATH_ROOT_DIR = './'
     DEFAULT_THRESHOLD = '0.8'
     NOT_IMPLEMENTED = 'Not Implemented'

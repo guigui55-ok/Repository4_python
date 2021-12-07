@@ -8,7 +8,7 @@ if __name__ == '__main__':
     from adb_util.adb_key_const import ConstKeycode
     from android_const import Constants
 else:
-    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    # 外部から参照時は、common_util を sys.path へ追加しておくこと
     import common_util.adb_util.adb_common as adb_common
     import common_util.adb_util.adb_key as adb_key
     from common_util.adb_util.adb_key_const import ConstKeycode

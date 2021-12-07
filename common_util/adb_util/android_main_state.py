@@ -5,7 +5,7 @@ if __name__ == '__main__':
     from android_const import Constants
     from android_control_adb import AndroidControlAdb
 else:
-    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    # 外部から参照時は、common_util を sys.path へ追加しておくこと
     from common_util.adb_util import adb_common
     from common_util.adb_util.device_info import DeviceInfo
     from common_util.adb_util.android_const import Constants
@@ -33,6 +33,7 @@ class AndroidState():
         self.logger.info(Constants.main.NOT_IMPLEMENTED.value)
     
     def get_now_state_from_screen(self):
+        """非推奨"""
         try:
             img_path = self.image_dir + '\\' + \
                 Constants.image_file.POWER_OFF.value
@@ -41,6 +42,7 @@ class AndroidState():
             self.logger.exp.error(e)
 
     def is_off(self):
+        """非推奨"""
         try:
             chk_path = self.image_dir + '\\' + \
                 Constants.image_file.POWER_OFF.value
@@ -62,7 +64,9 @@ class AndroidState():
             return False
 
     def is_home(self):
+        """非推奨"""
         pass
 
     def state_is(self) -> str:
+        """非推奨"""
         pass

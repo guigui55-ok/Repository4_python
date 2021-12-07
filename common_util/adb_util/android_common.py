@@ -11,7 +11,7 @@ if __name__ == '__main__':
     import android_cv2_control as control_cv2
     import android_cv2_state as state_cv2
 else:
-    # 外部から参照時は、common_util,adb_util を sys.path へ追加しておく
+    # 外部から参照時は、common_util を sys.path へ追加しておくこと
     from common_util.adb_util.android_const import Constants
     from common_util.adb_util.device_info import DeviceInfo
     from common_util.adb_util.android_main_control import AndroidControlMain
