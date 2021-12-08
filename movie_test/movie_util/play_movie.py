@@ -1,7 +1,10 @@
 import cv2
-
 # movie_info
 # movie_play > (movie_info ,video_capture_frames)
+if __name__ == '__main__':
+    import form_for_cut_movie as form_for_cut_movie
+else:
+    import movie_util.form_for_cut_movie as form_for_cut_movie
 
 # =============================================================================
 class movie_info():
@@ -96,6 +99,7 @@ class movie_player_key():
     previeous_frame_one = '1'
     rewind = '7'
     forward = '9'
+    cut = 'e'
 
 class video_capture_frames():
     logger =None
@@ -191,6 +195,65 @@ class video_capture_frames():
     def show_previous_frame_and_pause(self,move_frame_count=-1):
         """前のフレームを表示する（実行時に一時停止となる）"""
         self.move_frame(move_frame_count)
+
+    def cut_frame_by_sec(self,cut_begin_sec=0,cut_end_sec=0,result_path='cut_result.mp4'):
+        """保持している動画から、秒数を指定して切り出す"""
+        try:
+            begin_frame = cut_begin_sec * self.info.movie_fps
+            end_frame = cut_end_sec * self.info.movie_fps
+            return self.cut_frame(begin_frame,end_frame,result_path)
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+    def cut_frame(self,cut_begin_frame=0,cut_end_frame=0,result_path='cut_result.mp4'):
+        """保持している動画から、フレームを指定して切り出す"""
+        mn = str(__class__) + '.cut_frame'
+        try:            
+            # 開始と終了が同じときは終了する
+            if cut_begin_frame == cut_end_frame:
+                self.logger.exp.error(mn +':cut_begin_frame == cut_end_frame , return False')
+                return False
+            # 開始より収量が小さいときは入れ替えて、処理は継続
+            if cut_begin_frame > cut_end_frame:
+                self.logger.exp.error(mn+':cut_begin_frame > cut_end_frame =>  changeValue[begin <==> end] , continue process')
+                temp = cut_begin_frame
+                cut_begin_frame = cut_end_frame
+                cut_end_frame = temp
+            # フレームが動画の範囲外なら終了する
+            if cut_begin_frame < 0 and \
+                cut_end_frame > self.info.movie_frame_max_count:
+                self.logger.exp.error(mn+' begin or end frame is invalid')
+                self.logger.exp.error('begin:end = [' + str(cut_begin_frame) + ' , ' + str(cut_end_frame) + '] , return False')
+                return False
+            # 書き込みのためのオブジェクトを生成する
+            fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
+            writer = cv2.VideoWriter(
+                result_path,
+                fourcc,
+                self.info.movie_fps, 
+                (int(self.info.movie_width), int(self.info.movie_height))
+                )
+
+            # 開始フレームへセットする
+            self.set_frame(cut_begin_frame-1)
+
+            # 開始から終了フレームまでファイルへ書き込み
+            for i in range(cut_end_frame-cut_begin_frame):
+                # ret, frame = self.video_capture.read()
+                self.move_next()
+                frame = self.frame_capture_now
+                if self.play_ret:
+                    writer.write(frame)
+            self.logger.info('cut_frame done.')
+            self.logger.info('cut path = ' + result_path)
+            writer.release()
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+        finally:        
+            pass    
         
     def set_frame(self,set_frame_count=0):
         try:
@@ -386,12 +449,12 @@ class movie_player():
                     self.process_end_frame_stop_when_end()
                 ## end if :self.capture_frames.play_ret==True
             ## end Loop
+            self.capture_frames.release()
             return True
         except Exception as e:
             self.logger.exp.error(e)
             return False
         finally:
-            self.video_capture.release()
             cv2.destroyAllWindows()
 
     def process_end_frame_stop_when_end(self):
@@ -424,6 +487,8 @@ class movie_player():
                 self.move_frame(-self.few_rew_speed)
             elif key_pushed == ord(self.control_keys.forward):
                 self.move_frame(self.few_rew_speed)
+            elif key_pushed == ord(self.control_keys.cut):
+                self.cut_frame()
             else:
                 if key_pushed != 255:
                     self.logger('push_key = ' + str(key_pushed))
@@ -433,7 +498,31 @@ class movie_player():
             self.logger.exp.error(e)
             return const_play.ERROR
 
+    def cut_frame(self):
+        try:
+            # self.play_pause_change()
+            self.is_pause = True
+            result_path = 'cut_result.mp4'
+            form = form_for_cut_movie.FormCutMovie(self.logger,self.capture_frames.cut_frame,result_path)
+            form.show_input_form()
+            return
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
 
+    def initialize_form(self):
+        try:
+
+            return
+        except Exception as e:
+            self.logger.exp.error(e)
+
+    def show_cut_frame(self):
+        try:
+            return 
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
 
     def show_next_frame_and_pause(self,move_frame_count=1):
         """次のフレームを表示する（実行時に一時停止となる）"""

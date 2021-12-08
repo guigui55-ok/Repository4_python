@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """logger_util.py - Logger Utility
 
-ログレベル「ERROR,CRITICAL」をログ出力を重複せずに、出力する内容(書式)を変更するためのクラス
+ログレベル「ERROR,CRITICAL」を他の「INFO,DEBUGなど」と重複せずに、出力する内容(書式、ログファイルなど)を区別するためのクラス
 """
  
 import logging

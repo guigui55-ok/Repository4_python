@@ -23,6 +23,8 @@ def save_screenshot(logger,img_dir,screenshot_file_name):
     try:
         from common_util.adb_util.android_common import AndroidCommon
         android = AndroidCommon(logger,img_dir)
+        from common_util.adb_util.android_const import Constants
+        save_android_path = Constants.main.ANDOID_STORAGE_ROOT.value
         android.control.get_screenshot(img_dir,save_android_path,screenshot_file_name)
     except Exception as e:
         logger.exp.error(e)
