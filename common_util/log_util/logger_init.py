@@ -9,10 +9,13 @@ print('import_path:'+import_path)
 # import_path = os.path.join('..', 'logger_util')
 # print('import_path:'+import_path)
 sys.path.append(import_path)
-import logger_util
-import logger_util.logging_util as logging_util
+import common_util.log_util
+import common_util.log_util as logging_util
+from common_util.log_util.logging_util import logger_info
+from common_util.log_util.logging_util import logger_util
+from common_util.log_util.logging_util import intialize_logger_util
 g_is_initialize_logger:bool = False
-g_loggeru : logging_util.logger_info = False
+g_loggeru : logger_info = False
 
 log_file_name = './app.log'
 config_file_path = ''
@@ -32,7 +35,7 @@ def initialize_logger_with_args(
     exception_format = arg_exception_format
     initialize_logger()
 
-def initialize_logger() -> logging_util.logger_util:
+def initialize_logger() -> logger_util:
     # print('initialize_logger')
     global g_is_initialize_logger
     global g_loggeru
@@ -43,19 +46,20 @@ def initialize_logger() -> logging_util.logger_util:
     # config_file_path = ''
     # basic_format = '%(asctime)s - %(message)s'
     # exception_format = '%(asctime)s %(filename)s:%(lineno)d[%(process)d][%(thread)d][%(levelname)s] %(module)s.%(name)s : %(message)s'
-    loggeru :logging_util.logger_util = logging_util.intialize_logger_util(
+    loggeru : logger_util = intialize_logger_util(
         log_file_name,
         config_file_path,
         basic_format,
         exception_format
     )
+    from logger_util.logging_util import const
     loggeru.initialize_logger_info_for_exception(
         __name__ + 'exp',
         log_file_name,
-        logging_util.const.LEVEL_ERROR,
+        const.LEVEL_ERROR,
         exception_format,
-        logging_util.const.FILE_HANDLER |
-        logging_util.const.STREAM_HANDLER
+        const.FILE_HANDLER |
+        const.STREAM_HANDLER
     )
     g_is_initialize_logger = True
     g_loggeru = loggeru

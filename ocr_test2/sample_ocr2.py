@@ -24,11 +24,16 @@ def main():
             return
         img_path = img_dir + screenshot_file_name
         result_path = img_dir + 'ocr_result.png'
-        keyword = 'パズドラ'
+        keyword = 'ニュース'
         rect = excute_ocr_with_path(logger,img_path,keyword,result_path)
         if len(rect) < 1:
-            logger.exp.error('ocr not match , return')
-            return
+            logger.exp.error('ocr not match , retry lang=jpn+eng')
+            rect = excute_ocr_with_path(
+                logger,img_path,keyword,result_path,lang='jpn+eng')
+            if len(rect) < 1:
+                logger.exp.error('ocr not match , return')
+                return
+
         import common_util.adb_util.adb_common as adb_common
         flag = adb_common.tap_center(rect)
         if flag:
@@ -44,14 +49,14 @@ def save_screenshot(logger,img_dir,screenshot_file_name):
         from common_util.adb_util.android_common import AndroidCommon
         android = AndroidCommon(logger,img_dir)
         from common_util.adb_util.android_const import Constants
-        save_android_path = Constants.main.ANDOID_STORAGE_ROOT.value
+        save_android_path = Constants.main.SD_ROOT_DIR.value
         android.control.get_screenshot(img_dir,save_android_path,screenshot_file_name)
         return True
     except Exception as e:
         logger.exp.error(e)
         return False
 
-def excute_ocr_with_path(logger,img_path,keyword,result_path):
+def excute_ocr_with_path(logger,img_path,keyword,result_path,lang='jpn'):
     try:
     #     dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
     #     dir_path = img_path
@@ -59,7 +64,7 @@ def excute_ocr_with_path(logger,img_path,keyword,result_path):
     #     img_path = dir_path + '\\' + file_name
     #     out_path = dir_path + '\\' + 'ocr_ret_' + file_name
         out_path = result_path
-        lang = 'jpn+eng'
+        if lang =='' :lang = 'jpn'
         ocr_direction_is_horizon = True
         # keyword = '自動的にON'
         # keyword = 'バッテリーセーバー'

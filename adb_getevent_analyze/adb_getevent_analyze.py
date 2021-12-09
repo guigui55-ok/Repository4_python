@@ -38,6 +38,7 @@ def adb_getevent(logger):
         # プロンプトで adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
         # その後以下を実行して操作する
         cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
+        cmd = 'adb shell getevent /dev/input/event2'
         flag , ret_str = adb_common.excute_command(cmd)
         print(ret_str)
         print('./' + file_name)
