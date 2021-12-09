@@ -27,6 +27,8 @@ class FormCutMovie():
     input_text2 :StringVar
     result_path = ''
 
+    main_win : tkinter.Tk
+
     def __init__(self,logger,excute_function,result_path) -> None:
         self.logger = logger
         self.called_function = excute_function
@@ -39,6 +41,7 @@ class FormCutMovie():
             self.called_function( int(_begin),int(_end),self.result_path)
             # print('excute_function')
             # print(value1,value2)
+            self.close_window()
             return True
         except Exception as e:
             import traceback
@@ -46,18 +49,27 @@ class FormCutMovie():
             self.logger.exp.error(e)
             return False
 
+    def close_window(self):
+        try:
+            self.main_win.destroy()
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
+
     def show_input_form(self):
         try:           
 
             # メインウィンドウ
-            main_win = tkinter.Tk()
-            main_win.title("cut_movie")
-            main_win.geometry("350x80")
+            self.main_win = tkinter.Tk()
+            self.main_win.title("cut_movie")
+            self.main_win.geometry("350x80")
             
             self.input_text1 :StringVar = tkinter.StringVar()
             self.input_text2 :StringVar = tkinter.StringVar()
             # メインフレーム
-            main_frm = ttk.Frame(main_win)
+            main_frm = ttk.Frame(self.main_win)
             # 位置揃えはstickyを用いて「N＝上、S＝下、E＝右、W＝左」で指定
             # sticky=tkinter.EWと左右両方を指定すると水平方向に引き延ばすことができます
             # 余白はpadxとpadyで指定します。padxは左右、padyは上下の余白になります。
@@ -78,12 +90,12 @@ class FormCutMovie():
             app_btn.grid(column=2, row=1)
 
             # 配置設定
-            main_win.columnconfigure(0, weight=1)
-            main_win.rowconfigure(0, weight=1)
+            self.main_win.columnconfigure(0, weight=1)
+            self.main_win.rowconfigure(0, weight=1)
             gridindex = 1
             main_frm.columnconfigure(1, weight=1)
             
-            main_win.mainloop()
+            self.main_win.mainloop()
             return True
             
         except Exception as e:
@@ -101,5 +113,5 @@ if __name__ == '__main__':
     sys.path.append(path)
     import logger_init
     logger = logger_init.initialize_logger()
-    form = FormCutMovie(logger,arg_excute_function)
+    form = FormCutMovie(logger,arg_excute_function,'./result.mp4')
     form.show_input_form()

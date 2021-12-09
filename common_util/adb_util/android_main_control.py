@@ -12,7 +12,7 @@ if __name__ == '__main__' or __name__ == 'android_main_control':
     from android_control_cv2_image import AndroidControlCv2Image
     from android_control_cv2_movie import AndroidControlCv2Movie
     from android_control_adb import AndroidControlAdb
-    from adb_common import logger as adb_comon_logger
+    from adb_common import logger as adb_common_logger
 else:
     # 外部から参照時は、common_util を sys.path へ追加しておくこと
     import common_util.adb_util.adb_key  
@@ -22,7 +22,7 @@ else:
     from common_util.adb_util.android_control_cv2_image import AndroidControlCv2Image
     from common_util.adb_util.android_control_cv2_movie import AndroidControlCv2Movie
     from common_util.adb_util.android_control_adb import AndroidControlAdb
-    from common_util.adb_util.adb_common import logger as adb_comon_logger
+    from common_util.adb_util.adb_common import logger as adb_common_logger
 
 class AndroidControlMain():
     logger = None
@@ -41,7 +41,8 @@ class AndroidControlMain():
         self.control_adb = AndroidControlAdb(logger,device_info)
         self.control_cv2_img = AndroidControlCv2Image(logger,self.control_adb,img_path)
         self.control_cv2_mov = AndroidControlCv2Movie(logger,self.control_adb,img_path)
-        adb_comon_logger = self.logger
+        if adb_common.logger == None:
+            adb_common.logger = self.logger
 
         self.const_screen_image_file_names = self.const.image_file
     

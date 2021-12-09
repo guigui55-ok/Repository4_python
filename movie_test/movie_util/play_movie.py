@@ -510,20 +510,6 @@ class movie_player():
             self.logger.exp.error(e)
             return False
 
-    def initialize_form(self):
-        try:
-
-            return
-        except Exception as e:
-            self.logger.exp.error(e)
-
-    def show_cut_frame(self):
-        try:
-            return 
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
-
     def show_next_frame_and_pause(self,move_frame_count=1):
         """次のフレームを表示する（実行時に一時停止となる）"""
         self.is_pause = True

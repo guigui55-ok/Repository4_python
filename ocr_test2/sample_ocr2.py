@@ -3,6 +3,7 @@ import import_init
 from common_util.log_util import logger_init
 from common_util.ocr_util.ocr_tesseract_util  import ocr_tesseract_class
 from common_util.ocr_util.ocr_tesseract_util  import ocr_tesseract_method
+from common_util.adb_util.adb_common import logger as adb_logger
 
 def initialize():
     try :
@@ -14,8 +15,27 @@ def initialize():
 def main():
     logger = initialize()
     try:
-        img_path = './'
-        excute_ocr_with_path(logger,img_path)
+        adb_logger = logger
+        img_dir = './'
+        screenshot_file_name = 'sceenshot_comp.png'
+        flag = save_screenshot(logger,img_dir,screenshot_file_name)
+        if not flag:
+            logger.exp.error('save screenshot failed , return')
+            return
+        img_path = img_dir + screenshot_file_name
+        result_path = img_dir + 'ocr_result.png'
+        keyword = 'パズドラ'
+        rect = excute_ocr_with_path(logger,img_path,keyword,result_path)
+        if len(rect) < 1:
+            logger.exp.error('ocr not match , return')
+            return
+        import common_util.adb_util.adb_common as adb_common
+        flag = adb_common.tap_center(rect)
+        if flag:
+            logger.info('tap success')
+        else:
+            logger.exp.error('tap failed')
+        
     except Exception as e:
         logger.exp.error(e)
 
@@ -26,20 +46,23 @@ def save_screenshot(logger,img_dir,screenshot_file_name):
         from common_util.adb_util.android_const import Constants
         save_android_path = Constants.main.ANDOID_STORAGE_ROOT.value
         android.control.get_screenshot(img_dir,save_android_path,screenshot_file_name)
+        return True
     except Exception as e:
         logger.exp.error(e)
+        return False
 
-def excute_ocr_with_path(logger,img_path):
+def excute_ocr_with_path(logger,img_path,keyword,result_path):
     try:
-        dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
-        dir_path = img_path
-        file_name = 'screen_sever.png'
-        img_path = dir_path + '\\' + file_name
-        out_path = dir_path + '\\' + 'ocr_ret_' + file_name
+    #     dir_path = r'C:\Users\OK\source\repos\Repository4_python\ocr_test\images'
+    #     dir_path = img_path
+    #     file_name = 'screen_sever.png'
+    #     img_path = dir_path + '\\' + file_name
+    #     out_path = dir_path + '\\' + 'ocr_ret_' + file_name
+        out_path = result_path
         lang = 'jpn+eng'
         ocr_direction_is_horizon = True
-        keyword = '自動的にON'
-        keyword = 'バッテリーセーバー'
+        # keyword = '自動的にON'
+        # keyword = 'バッテリーセーバー'
         
         rect_list = excute_ocr_main(
             logger,img_path,out_path,keyword,
@@ -48,8 +71,10 @@ def excute_ocr_with_path(logger,img_path):
         for i in range(len(rect_list)):
             print('rect_list ' + str(i) + ' = ' + str(id(rect_list[i])))
             print(rect_list[i])
+        return rect_list[0]
     except Exception as e:
         logger.exp.error(e)
+        return []
 
 def excute_ocr_main(logger,img_path,output_path,keyword,lang,ocr_direction_is_horizon):
     try:        
