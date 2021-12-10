@@ -35,7 +35,34 @@ def adb_getevent(logger):
         # flag , ret_str = adb_common.excute_command_adb_shell(cmd,device_id)
         cmd = 'getevent /dev/input/event0 > touch.txt'
         # https://qiita.com/techno-tanoC/items/b93723618a792c7096ee
-        # プロンプトで adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
+        # プロンプト（手動）で adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
+        # その後以下を実行して操作する
+        cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
+        cmd = 'adb shell getevent /dev/input/event2'
+        flag , ret_str = adb_common.excute_command(cmd)
+        print(ret_str)
+        print('./' + file_name)
+        return flag
+    except:
+        import traceback
+        print(traceback.print_exc())
+        return False
+
+def adb_getevent_poppen(logger):
+    try:
+        # ファイル名をセットする
+        file_name_base = 'getevent.txt'
+        file_name = create_file_name_if_exists(logger,file_name_base)
+        #   
+        cmd = 'getevent'
+        cmd = 'getevent /dev/input/event0 | ruby record.rb > touch.txt'
+        # 'ruby' は、内部コマンドまたは外部コマンド、操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+        cmd = 'getevent /dev/input/event0 > touch.txt'
+        device_id = '2889adb7'
+        # flag , ret_str = adb_common.excute_command_adb_shell(cmd,device_id)
+        cmd = 'getevent /dev/input/event0 > touch.txt'
+        # https://qiita.com/techno-tanoC/items/b93723618a792c7096ee
+        # プロンプト（手動）で adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
         # その後以下を実行して操作する
         cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
         cmd = 'adb shell getevent /dev/input/event2'

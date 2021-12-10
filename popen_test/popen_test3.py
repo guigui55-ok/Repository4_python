@@ -16,6 +16,7 @@ def popen_test():
         cmd = 'popen_test.py' # おわらない
         cmd = 'loop_test.py'
         cmd = 'dir'
+        cmd = 'adb shell getevent /dev/input/event2'
         # サブプロセスをスタート
         # proc = subprocess.Popen(cmd, shell=True, stdout=file, stderr=file, text=True)        
         proc = subprocess.Popen(path, shell=True, text=True)
