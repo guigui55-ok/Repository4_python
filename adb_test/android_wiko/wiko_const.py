@@ -8,3 +8,11 @@ class const:
 class const_screen_image_file_names:
     POWER_OFF = 'power_off.png'
     LOCK = 'lock.png'
+
+class ConstWikoMain(Enum):
+    SCREEN_CAPTURE_FILE_NAME = 'screenshot.png'
+
+class ConstantsWiko():
+    main : ConstWikoMain
+    image : const_screen_image_file_names
+

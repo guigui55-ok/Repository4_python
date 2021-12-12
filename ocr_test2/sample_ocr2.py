@@ -3,7 +3,6 @@ import import_init
 from common_util.log_util import logger_init
 from common_util.ocr_util.ocr_tesseract_util  import ocr_tesseract_class
 from common_util.ocr_util.ocr_tesseract_util  import ocr_tesseract_method
-from common_util.adb_util.adb_common import logger as adb_logger
 
 def initialize():
     try :
@@ -15,7 +14,6 @@ def initialize():
 def main():
     logger = initialize()
     try:
-        adb_logger = logger
         img_dir = './'
         screenshot_file_name = 'sceenshot_comp.png'
         flag = save_screenshot(logger,img_dir,screenshot_file_name)

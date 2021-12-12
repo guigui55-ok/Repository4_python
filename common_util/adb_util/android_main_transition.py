@@ -11,7 +11,7 @@ else:
     from common_util.adb_util.android_const import Constants
     from common_util.adb_util.android_control_adb import AndroidControlAdb
 
-class AndroidState():
+class AndroidTransition():
     logger = None
     constants : Constants
     image_dir = None
@@ -31,43 +31,20 @@ class AndroidState():
         self.constants = Constants
     def initialize(self):
         self.logger.info(Constants.main.NOT_IMPLEMENTED.value)
-    
-    def get_now_state_from_screen(self):
-        """非推奨"""
-        try:
-            img_path = self.image_dir + '\\' + \
-                Constants.image_file.POWER_OFF.value
-            self.logger.info(Constants.main.NOT_IMPLEMENTED.value)
-        except Exception as e:
-            self.logger.exp.error(e)
 
-    def is_off(self):
-        """非推奨"""
+    def to_home(self)->bool:
         try:
-            chk_path = self.image_dir + '\\' + \
-                Constants.image_file.POWER_OFF.value
-            img_path = self.control_adb.get_screenshot()
-            from cv2_image.cv2_image_comp import is_same_image
-            flag = is_same_image(self.logger,img_path,chk_path)
+            flag = self.control_adb.input_keyevent(Constants.key.HOME.value)
             return flag
         except Exception as e:
             self.logger.exp.error(e)
             return False
-        
-    def is_connected_device(self,device_id=''):
+
+    def to_settings(self)->bool:
         try:
-            ret = adb_common.is_connect_android(
-                self.logger,
-                device_id,self.device_info.is_output_shell_result)
-            return ret
+            cmd = Constants.command.RUN_SETTINGS_MAIN.value
+            flag ,ret_str = self.control_adb.excute_command_adb_shell(cmd)
+            return flag
         except Exception as e:
             self.logger.exp.error(e)
             return False
-
-    def is_home(self):
-        """非推奨"""
-        pass
-
-    def state_is(self) -> str:
-        """非推奨"""
-        pass

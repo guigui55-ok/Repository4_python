@@ -56,7 +56,7 @@ class AndroidInfo():
             adb shell pm list packages -f | sort / sort コマンドと組み合わせて使用すると見やすく\n
         """
         try:
-            ret = adb_common.get_info_package_list(package_name_filter,option,device_id,is_logout_stdout)
+            ret = adb_common.get_info_package_list(self.logger, package_name_filter,option,device_id,is_logout_stdout)
             return ret
         except Exception as e:
             self.logger.exp.error(e)

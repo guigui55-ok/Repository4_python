@@ -17,11 +17,11 @@ else:
     from common_util.adb_util.android_main_control import AndroidControlMain
     from common_util.adb_util.android_main_state import AndroidState
     from common_util.adb_util.android_main_info import AndroidInfo
+    from common_util.adb_util.android_main_transition import AndroidTransition
 
     import common_util.adb_util.android_cv2_control as control_cv2
     import common_util.adb_util.android_cv2_state as state_cv2
 from enum import Enum
-from os import device_encoding
 
 from common_util.adb_util import adb_common
 
@@ -42,6 +42,7 @@ class AndroidCommon():
     constants : Constants = Constants
     # sub object member 
     control : AndroidControlMain = None
+    transition : AndroidTransition = None
     state : AndroidState = None
     info : AndroidInfo = None
     device_info : DeviceInfo
@@ -61,6 +62,7 @@ class AndroidCommon():
             self.control = AndroidControlMain(logger,self.device_info,image_dir)
             self.state = AndroidState(logger,self.control.control_adb,image_dir)
             self.info = AndroidInfo(logger,self.control.control_adb,image_dir)
+            self.transition = AndroidTransition(logger,self.control.control_adb,image_dir)
             self.logger.info('mode = '+ self.constants.main.OPERATION_CV2_IMAGE.name)
         except Exception as e:
             self.logger.exp.error(e)
@@ -89,23 +91,23 @@ class AndroidCommon():
         except Exception as e:
             self.logger.exp.error(e)
 
-    def __judge_adb_result(self,result,message)->bool:
-        try:
-            if result != 0:            
-                # エラー時の処理
-                self.logger.info(message + ' false')
-                return False
-            # success
-            self.logger.info(message + ' success')
-            return True
-        except Exception as e:
-            self.logger.exp.error(e)
-            return False
+    # def __judge_adb_result(self,result,message)->bool:
+    #     try:
+    #         if result != 0:            
+    #             # エラー時の処理
+    #             self.logger.info(message + ' false')
+    #             return False
+    #         # success
+    #         self.logger.info(message + ' success')
+    #         return True
+    #     except Exception as e:
+    #         self.logger.exp.error(e)
+    #         return False
 
     def is_connect_device(self):
         try:
             from adb_common import is_connect_android
-            result= is_connect_android()
+            result= is_connect_android(self.device_info.device_id,self.device_info.is_output_shell_result)
             flag = self.__judge_adb_result('is_connect_device')
             return flag
         except Exception as e:

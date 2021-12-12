@@ -4,8 +4,9 @@ print('logger_init.py')
 """
 import sys,os
 from pathlib import Path
-import_path = str(Path('__file__').resolve().parent.parent)+'\\logger_util'
-print('import_path:'+import_path)
+import_path = str(Path('__file__').resolve().parent.parent)
+# import_path = os.path.join(import_path,'common_util')
+print('import_path:'+ import_path)
 # import_path = os.path.join('..', 'logger_util')
 # print('import_path:'+import_path)
 sys.path.append(import_path)

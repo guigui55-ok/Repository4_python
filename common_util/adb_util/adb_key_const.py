@@ -12,6 +12,7 @@ class ConstCommand:
     RUN_SETTINGS_WIFI = 'am start -n com.android.settings/.wifi.WifiSettings'
     GET_WIFI_INFO = 'am start -n com.android.settings/.wifi.WifiInfo'
     GET_WIFI_STATUS = 'am start -n com.android.settings/.wifi.WifiStatusTest'
+    RUN_SETTINGS_MAIN = 'am start -n com.android.settings'
     RUN_SETTINGS_LANGUAGE = 'am start -n com.android.settings/.LanguageSettings'
     RUN_SETTINGS_DEVELOPMENT = 'am start -n com.android.settings/.DevelopmentSettings'
     RUN_SETTINGS_DATETIME = 'am start -n com.android.settings/.DateTimeSettingsSetupWizard'

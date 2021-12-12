@@ -2,11 +2,13 @@
 from logging import exception
 from typing import Any
 
+
 if __name__ == '__main__':
     import adb_common
     import adb_key as adb_key
     from adb_util.adb_key_const import ConstKeycode
     from android_const import Constants
+    from adb_util.android_const import Const
 else:
     # 外部から参照時は、common_util を sys.path へ追加しておくこと
     import common_util.adb_util.adb_common as adb_common
@@ -18,7 +20,7 @@ else:
 class AndroidControl():
     logger = None
     image_dir = None
-    adb_common.logger = None
+    const : Constants
 
     def __init__(
         self,
@@ -28,7 +30,7 @@ class AndroidControl():
         self.logger = logger
         self.image_dir = image_dir
         adb_key.logger = self.logger
-        adb_common.logger = self.logger
+        self.const = Constants()
 
     def initialize(self):
         pass
@@ -48,7 +50,7 @@ class AndroidControl():
     def reboot(self)->bool:
         try:
             self.logger.info('reboot')
-            result = adb_common.adb_reboot()
+            result = adb_common.adb_reboot(self.logger)
             return self.__judge_adb_result(
                 result,
                 'adb_reboot'
@@ -79,14 +81,15 @@ class AndroidControl():
     def get_screenshot(self,save_path):
         try:
             self.logger.info('get_screenshot')
-            adb_common.screen_capture_for_android()
-            adb_common.save_file_to_pc_from_android(save_path)
+            adb_common.screen_capture_for_android(self.logger)
+            adb_common.save_file_to_pc_from_android(self.logger,save_path)
         except Exception as e:
             self.logger.exp.error(e)
 
     def reboot_package(self,package_name,class_name,wait_time = 0,devide_id = '',is_logout_stdout=True):
         try:
             ret = adb_common.reboot_package(
+                self.logger,
                 package_name,class_name,wait_time,devide_id,is_logout_stdout)
             return ret
         except Exception as e:
@@ -98,7 +101,7 @@ class AndroidControl():
         try:
             self.logger.info('unlock')
             if mode == Constants.main.CONTROL_SWIPE.value:
-                adb_common.swipe(300,1000,300,200,200)
+                adb_common.swipe(self.logger, 300,1000,300,200,200)
             else:
                 self.logger.exp.error('unlock mode is invalid')
         except Exception as e:
@@ -208,6 +211,7 @@ class AndroidControl():
                 # screenrecord を取得する AndroidのSDルートに
                 # 成功で save_path、失敗時 ’’が返る
                 ret = adb_common.screen_record(
+                    self.logger,
                     Constants.main.SCREEN_RECORD_FILE_NAME.value,
                     Constants.main.SD_ROOT_DIR.value,
                     time_limit,
@@ -218,11 +222,11 @@ class AndroidControl():
             
             base_rec_path = base_rec_dir + '\\' + base_rec_name
             # screenrecord を PC へ移動
-            from adb_util.adb_common import save_file_to_pc_from_android
-            ret = save_file_to_pc_from_android(
+            ret =adb_common.save_file_to_pc_from_android(
+                self.logger,
                 base_rec_path,
-                adb_common.main.SD_ROOT_DIR.value,
-                adb_common.main.SCREEN_RECORD_FILE_NAME.value,
+                Constants.main.SD_ROOT_DIR.value,
+                Constants.main.SCREEN_RECORD_FILE_NAME.value,
             )
             if not ret:
                 self.logger.exp.error('save_file_to_pc_from_android failed. return')
@@ -263,13 +267,14 @@ class AndroidControl():
 
             if is_save_screenshot_to_android_sd_root:
                 # screenshot を取得する AndroidのSDルートに
-                ret = adb_common.screen_capture_for_android()
+                ret = adb_common.screen_capture_for_android(self.logger)
                 if not ret:
                     self.logger.exp.error('screen_capture failed. return')
                     return False
 
             # screenshot を PC へ移動
             ret = adb_common.save_file_to_pc_from_android(
+                self.logger,
                 base_path,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SCREEN_CAPTURE_FILE_NAME.value,
@@ -304,7 +309,7 @@ class AndroidControl():
     def tap_center(self,tap_rect)->bool:
         try:
             # 範囲の真ん中をタップする
-            is_taped = adb_common.tap_center(tap_rect)
+            is_taped = adb_common.tap_center(self.logger, tap_rect)
             return is_taped
         except Exception as e:
             self.logger.exp.error(e)
@@ -323,15 +328,13 @@ class AndroidControl():
                 match_rect['end_w'],match_rect['end_h']
             print('tap_rect =' + str(tap_rect))
             # 範囲の真ん中をタップする
-            from adb_util.adb_common import tap_center
-            is_taped = tap_center(tap_rect)
+            is_taped = adb_common.tap_center(self.logger,tap_rect)
             #
             if is_tap_point_confirm:
                 # タップする画面の path を取得する
                 check_path = self.get_screenshot_default_path()
                 # 前処理で取得した範囲から、タップしたポイントを取得する
-                from adb_util.adb_common import get_center_from_rect
-                point = get_center_from_rect(tap_rect)
+                point = adb_common.get_center_from_rect(self.logger,tap_rect)
                 # 描画して結果を出力する
                 from cv2_image.cv2_find_image_util import output_image_draw_point
                 result_path = output_image_draw_point(self.logger,check_path,point)
@@ -343,8 +346,7 @@ class AndroidControl():
 
     def start_package(self,package_name,class_name=''):
         try:
-            from adb_util.adb_common import start_package
-            ret = start_package(package_name,class_name)
+            ret = adb_common.start_package(self.logger, package_name,class_name)
             return ret
         except Exception as e:
             self.logger.exp.error(e)

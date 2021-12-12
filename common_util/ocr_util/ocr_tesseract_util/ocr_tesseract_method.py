@@ -81,6 +81,7 @@ class pointF:
 # SyntaxError：from futureのインポートはファイルの先頭で行わなければなりません
 # from __future__ import annotations
 class OcrBox:
+    """OCR実行時のUtility"""
     logger = None
     result = None
     str_value = ''
@@ -196,6 +197,7 @@ class OcrBox:
 # /////////////////////////////////////////////////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
 class OcrBoxes():
+    """OCR実行時のUtility"""
     logger = None
     box_list : list(OcrBox) = []
     threshold_for_judging_separation = None

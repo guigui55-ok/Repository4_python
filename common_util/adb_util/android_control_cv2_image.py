@@ -150,6 +150,7 @@ class AndroidControlCv2Image():
                 # screenrecord を取得する AndroidのSDルートに
                 # 成功で save_path、失敗時 ’’が返る
                 ret = adb_common.screen_record(
+                    self.logger,
                     Constants.main.SCREEN_RECORD_FILE_NAME.value,
                     Constants.main.SD_ROOT_DIR.value,
                     time_limit,
@@ -161,6 +162,7 @@ class AndroidControlCv2Image():
             base_rec_path = base_rec_dir + '\\' + base_rec_name
             # screenrecord を PC へ移動
             ret = adb_common.save_file_to_pc_from_android(
+                self.logger,
                 base_rec_path,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SCREEN_RECORD_FILE_NAME.value,
@@ -204,13 +206,14 @@ class AndroidControlCv2Image():
 
             if is_save_screenshot_to_android_sd_root:
                 # screenshot を取得する AndroidのSDルートに
-                ret = adb_common.screen_capture_for_android()
+                ret = adb_common.screen_capture_for_android(self.logger)
                 if not ret:
                     self.logger.exp.error('screen_capture failed. return')
                     return False
 
             # screenshot を PC へ移動
             ret = adb_common.save_file_to_pc_from_android(
+                self.logger,
                 base_path,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SCREEN_CAPTURE_FILE_NAME.value,
@@ -261,7 +264,7 @@ class AndroidControlCv2Image():
                 # タップする画面の path を取得する
                 check_path = self.get_screenshot_default_path()
                 # 前処理で取得した範囲から、タップしたポイントを取得する
-                point = adb_common.get_center_from_rect(tap_rect)
+                point = adb_common.get_center_from_rect(self.logger,tap_rect)
                 # 描画して結果を出力する
                 result_path = cv2_find_image_util.output_image_draw_point(
                     self.logger,check_path,point)

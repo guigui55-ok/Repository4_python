@@ -4,6 +4,11 @@
 # from common_util.adb_util.adb_common import is_success_adb_result, screen_capture_for_android
 
 
+
+
+from adb_util import android_main_control_swipe_per
+
+
 if __name__ == '__main__' or __name__ == 'android_main_control':
     import adb_key  
     from  device_info import DeviceInfo
@@ -12,7 +17,8 @@ if __name__ == '__main__' or __name__ == 'android_main_control':
     from android_control_cv2_image import AndroidControlCv2Image
     from android_control_cv2_movie import AndroidControlCv2Movie
     from android_control_adb import AndroidControlAdb
-    from adb_common import logger as adb_common_logger
+    from android_main_control_swipe_per import AndroidControlSwipePer
+    from android_main_control_swipe import AndroidControlSwipe
 else:
     # 外部から参照時は、common_util を sys.path へ追加しておくこと
     import common_util.adb_util.adb_key  
@@ -22,7 +28,9 @@ else:
     from common_util.adb_util.android_control_cv2_image import AndroidControlCv2Image
     from common_util.adb_util.android_control_cv2_movie import AndroidControlCv2Movie
     from common_util.adb_util.android_control_adb import AndroidControlAdb
-    from common_util.adb_util.adb_common import logger as adb_common_logger
+    from common_util.adb_util.android_main_control_swipe import AndroidControlSwipe
+    from common_util.adb_util.android_main_control_swipe_per import AndroidControlSwipePer
+    from common_util.adb_util.android_control_ocr import AndroidControlOcr
 
 class AndroidControlMain():
     logger = None
@@ -30,22 +38,35 @@ class AndroidControlMain():
     control_cv2_img:AndroidControlCv2Image
     control_cv2_mov:AndroidControlCv2Movie
     control_adb:AndroidControlAdb
+    swipe:AndroidControlSwipe
+    swipe_p:android_main_control_swipe_per
+    control_ocr:AndroidControlOcr
     device_info : DeviceInfo
-    ocr_control = None
     control_mode = 1
-    def __init__(self,logger,device_info,img_path) -> None:
+    def __init__(self,logger,device_info,img_path,device_id='') -> None:
         self.logger = logger
         self.device_info = device_info
+        self.device_info.device_id = device_id
         self.const = Constants
         self.control_mode = self.const.main.CONTROL_MODE_IMG_CV2.value
         self.control_adb = AndroidControlAdb(logger,device_info)
         self.control_cv2_img = AndroidControlCv2Image(logger,self.control_adb,img_path)
         self.control_cv2_mov = AndroidControlCv2Movie(logger,self.control_adb,img_path)
-        if adb_common.logger == None:
-            adb_common.logger = self.logger
-
+        self.swipe = AndroidControlSwipe(logger,self.control_adb)
+        self.swipe_p = AndroidControlSwipePer(logger,self.control_adb)
+        self.control_ocr = AndroidControlOcr(logger,self.control_adb,img_path)
+        self.initialize()
         self.const_screen_image_file_names = self.const.image_file
     
+    def initialize(self)->bool:
+        try:
+            w ,h = self.control_adb.get_screen_size()
+            self.device_info.width = w
+            self.device_info.height = h
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+
     def power_on(self,mode=Constants.main.CONTROL_MODE_ADB):
         return self.control_adb.power_on()
 
@@ -58,7 +79,9 @@ class AndroidControlMain():
 
     def input_keycode(self,keycode)->bool:
         try:
-            return adb_common.input_keyevent(keycode, self.device_info.device_id, self.device_info.is_output_shell_result)
+            return adb_common.input_keyevent(
+                self.logger,
+                keycode, self.device_info.device_id, self.device_info.is_output_shell_result)
         except Exception as e:
             self.logger.exp.error(e)
             return False
@@ -77,29 +100,47 @@ class AndroidControlMain():
                 save_android_path = Constants.main.SD_ROOT_DIR.value
             if save_file_name == '':
                 save_file_name = Constants.main.SCREEN_CAPTURE_FILE_NAME.value
-            adb_common.screen_capture_for_android(
+            path = adb_common.screen_capture_for_android(
+                self.logger,
                 save_file_name, save_android_path, 
                 self.device_info.device_id,
                 self.device_info.is_output_shell_result)            
-            adb_common.save_file_to_pc_from_android(
+            if path == '':
+                self.logger.exp.error('get_screenshot failed , return')
+                return False
+            flag = adb_common.save_file_to_pc_from_android(
+                self.logger,
                 save_dir_path,save_android_path,save_file_name,
                 self.device_info.device_id,
                 self.device_info.is_output_shell_result)
+            return flag
         except Exception as e:
             self.logger.exp.error(e)
+            return False
             
     def get_screenshot_default_path(self) -> str:
         return Constants.main.SAVE_PATH_ROOT_DIR.value + Constants.main.SCREEN_CAPTURE_FILE_NAME.value
             
-    def unlock(self,mode=Constants.main.CONTROL_SWIPE):
+    def unlock(
+        self,
+        swipe_value=Constants.main.LOCK_OFF_DEFAULT_SWIPE_UP_VALUE.value,
+        mode=Constants.main.CONTROL_SWIPE)->bool:
         """ mode : unlock_control_mode"""
         try:
             if mode == self.const.main.CONTROL_SWIPE:
-                adb_common.swipe(300,1000,300,200,200)
+                x1 = swipe_value[0]
+                y1 = swipe_value[1]
+                x2 = swipe_value[2]
+                y2 = swipe_value[3]
+                duration = swipe_value[4]
+                return self.swipe.swipe(x1,y1,x2,y2,duration)
+                # adb_common.swipe(self.logger, x1,y1,x2,y2,duration)                
             else:
                 self.logger.exp.error('unlock mode is invalid')
+            return False
         except Exception as e:
             self.logger.exp.error(e)
+            return False
             
     def reboot_package(self,package_name,class_name,wait_time,
     mode=Constants.main.CONTROL_MODE_ADB)->bool:
@@ -115,9 +156,10 @@ class AndroidControlMain():
         flag,ret =self.control_adb.start_package(package_name,class_name)
         return flag
 
-    def swipe(self,x1,y1,x2,y2,duration)->bool:
+    def swipe_normal(self,x1,y1,x2,y2,duration)->bool:
         # CONTROL_MODE_ADB only
-        flag,ret =self.control_adb.swipe(x1,y1,x2,y2,duration)
+        # flag,ret =self.control_adb.swipe(x1,y1,x2,y2,duration)
+        flag = self.swipe.swipe(x1,y1,x2,y2,duration)
         return flag
 
     def tap_image(self,tap_image_path,screenshot_path=''):
@@ -142,8 +184,8 @@ class AndroidControlMain():
     def tap_image_match_image_in_movie(
     self,
     check_image_path,
-    screen_record_file_name,
-    screen_record_dir,
+    screen_record_file_name='',
+    screen_record_dir = '',
     record_time=3,
     is_tap_point_confirm=True
     )->bool:
@@ -152,9 +194,24 @@ class AndroidControlMain():
             check_image_path,
             record_time,
             self.device_info.device_id,
-            '',
-            '',
+            screen_record_file_name,
+            screen_record_dir,
             self.device_info.is_output_shell_result)
         flag = self.tap_center(rect)
         return flag
-        
+
+    def get_connected_adb_devices(self):
+        """[device_id,status]が返る"""
+        return self.control_adb.get_connected_adb_devices()
+    
+    def tap_rect_by_ocr(self,keyword,target_index=0)->bool:
+        try:
+            rect_list = self.control_ocr.get_rect_by_ocr(keyword,target_index)
+            if len(rect_list)>1:
+                self.logger.exp.error('len(rect_list)>1 , select index 0')
+            rect = rect_list[target_index]
+            flag = self.control_adb.tap_center(rect)
+            return flag
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False

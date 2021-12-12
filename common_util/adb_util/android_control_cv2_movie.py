@@ -121,6 +121,7 @@ class AndroidControlCv2Movie():
                 # screenrecord を取得する AndroidのSDルートに
                 # 成功で save_path、失敗時 ’’が返る
                 ret = adb_common.screen_record(
+                    self.logger,
                     Constants.main.SCREEN_RECORD_FILE_NAME.value,
                     Constants.main.SD_ROOT_DIR.value,
                     time_limit,
@@ -133,6 +134,7 @@ class AndroidControlCv2Movie():
             base_rec_path = base_rec_dir + '\\' + base_rec_name
             # screenrecord を PC へ移動
             ret = adb_common.save_file_to_pc_from_android(
+                self.logger,
                 base_rec_path,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SCREEN_RECORD_FILE_NAME.value,

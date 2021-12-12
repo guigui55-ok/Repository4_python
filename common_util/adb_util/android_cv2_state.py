@@ -40,6 +40,7 @@ class AndroidState():
                 Constants.image_file.POWER_OFF.value
             # スクリーンショットを Android の SD_ROOT に作成する
             adb_common.save_file_to_pc_from_android(
+                self.logger,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SCREEN_CAPTURE_FILE_NAME.value
             )
@@ -60,6 +61,7 @@ class AndroidState():
 
             # 現在の状態を screenshot として保存、PC へ移動
             adb_common.save_file_to_pc_from_android(
+                self.logger,
                 base_path,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SCREEN_CAPTURE_FILE_NAME.value,
@@ -83,6 +85,7 @@ class AndroidState():
             # 現在の状態を screenshot として保存、PC (スクリプトルート) へ移動
             # ./screenshot.png
             adb_common.save_file_to_pc_from_android(
+                self.logger,
                 Constants.main.SD_ROOT_DIR.value,
                 Constants.main.SAVE_PATH_ROOT_DIR.value,
                 Constants.main.SCREEN_CAPTURE_FILE_NAME.value
@@ -115,7 +118,7 @@ class AndroidState():
 
     def is_success_adb_result(self,result,message):
         try :
-            result = adb_common.is_success_adb_result(result,message)
+            result = adb_common.is_success_adb_result(self.logger,result,message)
             return result
         except Exception as e:
             self.logger.exp.error(e)

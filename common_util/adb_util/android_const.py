@@ -4,9 +4,11 @@ from enum import IntEnum
 
 if __name__ == '__main__' or __name__ == 'android_const':
     from adb_key_const import ConstKeycode
+    from adb_key_const import ConstCommand
 else:
     # 外部から参照時は、common_util を sys.path へ追加しておくこと
     from common_util.adb_util.adb_key_const import ConstKeycode
+    from common_util.adb_util.adb_key_const import ConstCommand
 class Const(Enum):
     ANDROID_CONST = 'android_const'
     SCREEN_CAPTURE_FILE_NAME = 'screenshot.png'
@@ -18,6 +20,7 @@ class Const(Enum):
     NOT_IMPLEMENTED = 'Not Implemented'
     OPERATION_CV2_IMAGE = 101
     OPERATION_APPIUM_ELEMENT = 102
+    LOCK_OFF_DEFAULT_SWIPE_UP_VALUE = [300,1000,300,200,200]
     WAIT_AFTER_REBOOT = 120
     CONTROL_SWIPE = 201
     CONTROL_TAP = 202
@@ -38,6 +41,11 @@ class Const(Enum):
     CONTROL_MODE_ADB = 305
     TYPE_STRING = 401
     TYPE_BOOL = 402
+    SWIPE_UP_FAST_DURATION = 250
+    SWIPE_FAST_DURATION = 250
+    SWIPE_NORMAL_SPEED = 1000
+    ORDER_ASCENDING = 0
+    ORDER_DEASCENDING = 1
 
 class ConstScreenImageFileNames(Enum):
     POWER_OFF = 'power_off.png'
@@ -56,3 +64,4 @@ class Constants():
     image_file:ConstScreenImageFileNames = ConstScreenImageFileNames
     state:ConstState = ConstState
     key:ConstKeycode = ConstKeycode
+    command:ConstCommand = ConstCommand
