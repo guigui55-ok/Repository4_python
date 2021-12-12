@@ -60,15 +60,16 @@ def logout_result_subprocess_run_text(logger,result):
     except Exception as e:
         logger.exp.error(e)
 
-def get_result_subprocess_run_command(logger,command):
+def get_result_subprocess_run_command(logger,command,is_logout_stdout=True):
     """subprocess.run でコマンドを実行する(main)"""
     result = None
     try:
-        logger.info('get_result_subprocess_run_command')
+        # logger.info('get_result_subprocess_run_command')
         # tuple の場合は連結してログを残す
         general.logger = logger
         buf = general.cnv_tuple_to_str(command, ' ')
-        logger.info('command = ' + buf)
+        if is_logout_stdout:
+            logger.info('command = ' + buf)
         # コマンドを実行する
         result = subprocess.run(buf, shell=True, capture_output=True,text=True)
         return result
@@ -83,7 +84,7 @@ def adb_shell_with_show_result(logger,command,is_logout_stdout=True):
     """
     result = None
     try:
-        result = get_result_subprocess_run_command(logger,command)
+        result = get_result_subprocess_run_command(logger,command,is_logout_stdout)
         if is_logout_stdout:
             logout_result_subprocess_run_text(logger,result)
         return result
@@ -1012,3 +1013,56 @@ def push(logger,push_file_path_in_pc,save_path_in_android = '/sdcard/',device_id
     except Exception as e:
         logger.exp.error(e)
         return False
+
+def sendevent(logger,device_type,event_type,event_code,event_value,device_id,is_logout_stdout=False):
+    try:
+        event_type_demical = int(event_type,16)
+        event_code_demical = int(event_code,16)
+        event_value_demical = int(event_value,16)
+        cmd = 'sendevent ' + device_type + ' ' + str(event_type_demical)
+        cmd += ' ' + str(event_code_demical)
+        cmd += ' ' + str(event_value_demical)
+        flag,ret = excute_command_adb_shell(logger,cmd,
+            device_id,is_logout_stdout)
+        return cmd
+    except Exception as e:
+        logger.exp.error(e + '\ncmd = ' + cmd)
+        return ''
+
+def sendevent_from_file(logger,file_path,device_type,device_id='',is_logout_stdout=False):
+    try:
+        lines = readlines(logger,file_path)
+        if len(lines)<1:
+            logger.exp.error('len(readlines.lines)<1 , return')
+            logger.exp.error('path = ' + file_path)
+            return False
+        n = 0
+        cmds = []
+        for line in lines:
+            data = line.split(' ')
+            data[2] = data[2].replace('\n','')
+            cmd = sendevent(logger,device_type,data[0],data[1],data[2],device_id,False)
+            if True:
+                if cmd != '':
+                    result = cmd
+                    # logger.info('cmd='+cmd)
+                else:
+                    result = 'sendevent failed(' + str(n) + ')'
+                    # logger.exp.error('sendevent failed(' + str(n) + ')')
+                cmds.append(result)
+            n+=1
+        if is_logout_stdout:
+            logger.info('sendevents commands = \n' + str(cmds))
+        return True
+    except Exception as e:
+        logger.exp.error(e)
+        return False            
+
+def readlines(logger,file_path,is_logout=False):
+    try:
+        with open(file_path) as f:
+            lines = f.readlines()
+        return lines
+    except Exception as e:
+        logger.exp.error(e)
+        return []

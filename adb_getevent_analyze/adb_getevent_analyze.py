@@ -26,6 +26,8 @@ def adb_getevent(logger):
         # ファイル名をセットする
         file_name_base = 'getevent.txt'
         file_name = create_file_name_if_exists(logger,file_name_base)
+        print('file_name:')
+        print(file_name_base)
         #   
         cmd = 'getevent'
         cmd = 'getevent /dev/input/event0 | ruby record.rb > touch.txt'
@@ -39,7 +41,7 @@ def adb_getevent(logger):
         # その後以下を実行して操作する
         cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
         cmd = 'adb shell getevent /dev/input/event2'
-        flag , ret_str = adb_common.excute_command(cmd)
+        flag , ret_str = adb_common.excute_command(logger,cmd)
         print(ret_str)
         print('./' + file_name)
         return flag
@@ -65,8 +67,8 @@ def adb_getevent_poppen(logger):
         # プロンプト（手動）で adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
         # その後以下を実行して操作する
         cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
-        cmd = 'adb shell getevent /dev/input/event2'
-        flag , ret_str = adb_common.excute_command(cmd)
+        # cmd = 'adb shell getevent /dev/input/event2'
+        flag , ret_str = adb_common.excute_command(logger,cmd)
         print(ret_str)
         print('./' + file_name)
         return flag
@@ -75,12 +77,25 @@ def adb_getevent_poppen(logger):
         print(traceback.print_exc())
         return False
 
+def sendevent(logger):
+    try:
+        import os,pathlib
+        file_name = 'getevent.txt'
+        path = os.path.join(str(pathlib.Path(__file__).parent),file_name)
+        print('** path = ' + path)
+        device_type = '/dev/input/event2'
+        flag = adb_common.sendevent_from_file(logger,path,device_type,'',True)
+        return flag
+    except:
+        import traceback
+        print(traceback.print_exc())
+        return False
 
 def main():
     try:
         logger:logging_util = logger_init.initialize_logger()
-        adb_common.logger = logger
-        adb_getevent(logger)
+        # adb_getevent(logger)
+        sendevent(logger)
         return
     except:
         import traceback

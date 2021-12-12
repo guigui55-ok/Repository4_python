@@ -296,7 +296,7 @@ class AndroidControlAdb():
 
     def push_file(self,push_path,save_path=Constants.main.SD_ROOT_DIR.value):
         try:
-            flag,ret = adb_common.push(self.logger,push_path,save_path,
+            flag = adb_common.push(self.logger,push_path,save_path,
             self.device_info.device_id,self.device_info.is_output_shell_result)
             return flag
         except Exception as e:

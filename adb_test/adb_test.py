@@ -110,15 +110,17 @@ def test(logger):
 
 
 from android_wiko.android_main_wiko import Wiko
-def screenshot(logger,wiko:Wiko):
+def screenshot():
     try:
+        wiko = initialize()
         wiko.control.get_screenshot()
     except:
         import traceback
         traceback.print_exc()
 
-def push_files(logger=None):
+def push_files():
     try:
+        wiko = initialize()
         import pathlib,os
         path = os.path.join(str(pathlib.Path(__file__).parent),'push_files')
         path_obj = pathlib.Path(path)
@@ -129,9 +131,17 @@ def push_files(logger=None):
         import traceback
         traceback.print_exc()
 
+def initialize():
+    try:
+        logger = log_init.initialize_logger_new()
+        img_dir = './android_wiko/screen_wiko'
+        wiko = Wiko(logger,img_dir)
+        return wiko
+    except:
+        import traceback
+        traceback.print_exc()
+
 if __name__ == '__main__':
-    logger = log_init.initialize_logger_new()
-    img_dir = './android_wiko/screen_wiko'
-    wiko = Wiko(logger,img_dir)
-    screenshot(logger,wiko)
+    screenshot()
+    # push_files()
     # main()
