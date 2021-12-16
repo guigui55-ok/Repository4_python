@@ -30,3 +30,13 @@ def create_dir_if_nothing(logger,dir : str)->str:
     except Exception as e:
         logger.exp.error(e)
         return ''
+
+def read_line_file(logger,file_path):
+    try:
+        lines = []
+        with open(file_path) as f:
+            lines = f.readlines()
+        return lines
+    except Exception as e:
+        logger.exp.error(e)
+        return []

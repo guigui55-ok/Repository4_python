@@ -1040,6 +1040,8 @@ def sendevent_from_file(logger,file_path,device_type,device_id='',is_logout_stdo
         cmds = []
         for line in lines:
             data = line.split(' ')
+            if len(data) < 3:
+                continue
             data[2] = data[2].replace('\n','')
             cmd = sendevent(logger,device_type,data[0],data[1],data[2],device_id,False)
             if True:
