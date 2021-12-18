@@ -631,6 +631,9 @@ def excute_command(
         else:
             ret_val = ''
         return ret_bool,ret_val
+    except KeyboardInterrupt:
+        logger.exp.error('raise KeyboardInterrupt')
+        return False,''
     except Exception as e:
         logger.exp.error(e)
         return False,''

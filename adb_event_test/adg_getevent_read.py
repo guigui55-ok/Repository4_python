@@ -2,6 +2,7 @@ from os import write
 import import_init
 import log_init
 from log_init import initialize_logger
+import binascii
 
 import common_util.file_util.file_general as file_general
 import common_util.adb_util.adb_common as adb_common

@@ -79,13 +79,14 @@ def is_number(value:str):
     except:
         return False
 
-def count_up_if_last_name_is_number(file_name,delimita='_'):
+def count_up_if_last_name_is_number(file_name,delimita='_',dir_path='./'):
     try:
         import os
-        if os.path.exists(file_name):
+        file_path = os.path.join(dir_path,file_name)
+        if os.path.exists(file_path):
             new_name = count_up_if_last_name_is_number_main(
                 file_name,delimita)
-            if os.path.exists(new_name):
+            if os.path.exists(os.path.join(dir_path,new_name)):
                     new_name = count_up_if_last_name_is_number(
                         new_name,delimita)
             
@@ -161,9 +162,13 @@ def adb_getevent(logger):
     try:
         # ファイル名をセットする
         file_name_base = 'getevent.txt'
-        file_name = count_up_if_last_name_is_number(file_name_base)
-        print('file_name:')
-        print(file_name_base)
+        import pathlib,os
+        dir_path = './'
+        dir_path = str(pathlib.Path(__file__).parent)
+        file_name = count_up_if_last_name_is_number(file_name_base,'_',dir_path)
+        print('file_path:')
+        file_path = str(pathlib.Path(os.path.join(dir_path,file_name)))
+        print(file_path)
         #   
         cmd = 'getevent'
         cmd = 'getevent /dev/input/event0 | ruby record.rb > touch.txt'
@@ -175,12 +180,13 @@ def adb_getevent(logger):
         # https://qiita.com/techno-tanoC/items/b93723618a792c7096ee
         # プロンプト（手動）で adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
         # その後以下を実行して操作する
-        cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
         cmd = 'adb shell getevent /dev/input/event2'
-        cmd = 'adb shell getevent -tl /dev/input/event2 > ' + file_name
+        cmd = 'adb shell getevent /dev/input/event2 > ' + file_path
+        cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
+        # cmd = 'adb shell getevent -tl /dev/input/event2 > ' + file_name
         flag , ret_str = adb_common.excute_command(logger,cmd)
         print(ret_str)
-        print('./' + file_name)
+        print(file_path)
         return flag
     except:
         import traceback
@@ -204,7 +210,7 @@ def adb_getevent_poppen(logger):
         # プロンプト（手動）で adb shell -> getevent 実行後、デバイスを操作して、デバイス番号をメモしておく
         # その後以下を実行して操作する
         cmd = 'adb shell getevent /dev/input/event2 > ' + file_name
-        cmd = 'adb shell getevent -tl /dev/input/event2 > ' + file_name
+        # cmd = 'adb shell getevent -tl /dev/input/event2 > ' + file_name
         # cmd = 'adb shell getevent /dev/input/event2'
         flag , ret_str = adb_common.excute_command(logger,cmd)
         print(ret_str)
