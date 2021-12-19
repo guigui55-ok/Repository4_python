@@ -34,10 +34,15 @@ class FormCutMovie():
         self.called_function = excute_function
         self.result_path = result_path
 
+    def get_text1(self):
+        return self.input_text1.get()
+    def get_text2(self):
+        return self.input_text2.get()
+
     def excute_function(self):
         try:
-            _begin = self.input_text1.get()
-            _end = self.input_text2.get()
+            _begin = self.get_text1()
+            _end = self.get_text2()
             self.called_function( int(_begin),int(_end),self.result_path)
             # print('excute_function')
             # print(value1,value2)
@@ -58,7 +63,7 @@ class FormCutMovie():
             return False
 
 
-    def show_input_form(self):
+    def show_input(self):
         try:           
 
             # メインウィンドウ

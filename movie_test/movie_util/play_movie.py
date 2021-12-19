@@ -5,6 +5,7 @@ if __name__ == '__main__':
     import form_for_cut_movie as form_for_cut_movie
 else:
     import movie_util.form_for_cut_movie as form_for_cut_movie
+    import movie_util.console_for_cut_movie as console_for_cut_movie
 
 # =============================================================================
 class movie_info():
@@ -503,8 +504,16 @@ class movie_player():
             # self.play_pause_change()
             self.is_pause = True
             result_path = 'cut_result.mp4'
-            form = form_for_cut_movie.FormCutMovie(self.logger,self.capture_frames.cut_frame,result_path)
-            form.show_input_form()
+            # form = form_for_cut_movie.FormCutMovie(self.logger,self.capture_frames.cut_frame,result_path)
+            cut_obj = console_for_cut_movie.ConsoleCutMovie(self.logger,self.capture_frames.cut_frame,result_path)
+            cut_obj.show_input()
+            flag = cut_obj.excute_function()
+            if not flag:
+                self.logger.exp.error('cut_frame.excute_function Failed')
+                return False
+            else:
+                self.logger.info('cut_frame.excute_function success')
+                self.logger.info('path='+result_path)
             return
         except Exception as e:
             self.logger.exp.error(e)

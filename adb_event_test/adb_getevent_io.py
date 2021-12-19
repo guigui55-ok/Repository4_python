@@ -1,6 +1,35 @@
 import binascii
 import traceback
 
+class AdbSendEventDuration():
+    time_lows:list
+    time_highs:list
+    base_time_high:int
+    base_time_low:int
+    interval:int
+    now_time_high:int
+    now_time_low:int
+    def __init__(self,interval=110000) -> None:
+        self.interval = interval
+        self.base_time_high = self.set_time_now()
+        self.base_time_low = 0
+        self.now_time_high = self.base_time_high
+        self.now_time_low = 0
+    def set_time_now(self):
+        import datetime
+        dt_now = datetime.datetime.now()
+        h = dt_now.hour
+        m = dt_now.minute
+        s = dt_now.second
+        h_s = 60*60*h
+        m_s = 60*h
+        self.base_time_high = h_s + m_s + s
+        return self.base_time_high
+    def add_interval(self):
+        self.now_time_low += self.interval
+
+
+
 class AdbEvent():
     """
     adb shell getevent で取得されたデータを取得する際のユーティリティ
