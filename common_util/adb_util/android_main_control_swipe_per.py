@@ -31,8 +31,8 @@ else:
     from common_util.general_util.rectangle import RectAngle
 
 class AndroidControlSwipePer(AndroidControlSwipe):
-    def __init__(self, logger, device_info, img_path='') -> None:
-        super().__init__(logger, device_info, img_path)
+    def __init__(self, logger, control:AndroidControlAdb, img_path='') -> None:
+        super().__init__(logger, control, img_path)
     
     def swipe(self, x1, y1, x2, y2, duration) -> bool:        
         x1,y1,x2,y2 = self.cnv_location_from_percent(x1,y1,x2,y2)

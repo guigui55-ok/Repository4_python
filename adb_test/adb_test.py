@@ -29,7 +29,8 @@ import common_util.adb_util.android_common as android_common
 def main():
     logger = log_init.initialize_logger_new()
     logger.info('*** ' + __file__)
-    test(logger)
+    screenrecord()
+    # test(logger)
 
 
 def test(logger):
@@ -110,6 +111,30 @@ def test(logger):
 
 
 from android_wiko.android_main_wiko import Wiko
+def screenrecord():    
+    try:
+        wiko = initialize()
+        format = 'raw-frames' # NG
+        format = '' # OK
+        format = 'mp4' # OK
+        format = '3gpp' # NG Unknown format '3gpp'
+        format = 'frames' # NG
+        format = 'h264' # NG Unknown format 'h264-'
+        format = '' # OK
+        ret = wiko.control.get_screenrecord(
+            '',
+            'screenrecord.avi',
+            wiko.constants.main.SD_ROOT_DIR.value,
+            5,
+            '360x720',
+            80000000,
+            format)
+        print('ret='+str(ret))
+    except:
+        import traceback
+        traceback.print_exc()
+
+
 def screenshot():
     try:
         wiko = initialize()
@@ -142,6 +167,8 @@ def initialize():
         traceback.print_exc()
 
 if __name__ == '__main__':
-    screenshot()
+    pass
+    # screenshot()
+    # screenrecord()
     # push_files()
-    # main()
+    main()

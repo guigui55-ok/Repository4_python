@@ -7,26 +7,29 @@
 #     while True:
 #         # 画面キャプチャ
 #         aapo.screencap()
+import import_init
 
 from types import ClassMethodDescriptorType
-import logger_init
+import common_util.log_util
+from common_util.log_util import logger_init
 import subprocess
 logger = None
 import image_checker
-import adb_util.adb_control
+import common_util.adb_util as adb_util
+import adb_util.adb_common as adb_common
 
 def main():
     logger = logger_init.initialize_logger()
     logger.info('*** ' + __file__)
     # adb_reboot()
-    adb_util.adb_control.logger = logger
+    # adb_util.adb_control.logger = logger
 
     get_image_path = 'screenshot.png'
     # 現在の画像を取得    
-    adb_util.adb_control.screen_capture_for_android(
+    adb_common.screen_capture_for_android(logger,
         get_image_path)
     # 取得した画像を currentDirectory にコピーする
-    adb_util.adb_control.save_file_to_pc_from_android(
+    adb_common.save_file_to_pc_from_android(logger,
         '/sdcard/',get_image_path)
     logger.info('get screenshot. path='+str(get_image_path))
 

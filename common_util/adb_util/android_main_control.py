@@ -6,6 +6,7 @@
 
 
 
+from adb_get_screenshot import main
 from adb_util import android_main_control_swipe_per
 
 
@@ -91,6 +92,41 @@ class AndroidControlMain():
     
     def transision_to_home(self,mode=Constants.main.CONTROL_MODE_ADB):
         self.input_keycode(Constants.key.HOME)
+
+    def get_screenrecord (
+            self,
+            save_dir_pc = '',
+            save_file_name='screenrecord.mp4',
+            save_dir_android='/sdcard/',
+            time_limit=10,
+            size='',
+            bit_rate=4000000,
+            output_format='mp4'
+            ):
+        try:
+            ret = adb_common.screen_record(
+                self.logger,
+                save_file_name,
+                save_dir_android,
+                time_limit,
+                self.device_info.device_id,
+                size,
+                bit_rate,
+                output_format,
+                self.device_info.is_output_shell_result)
+            path = ret
+            if path == '':
+                self.logger.exp.error('get_screenshot failed , return')
+                return False
+            flag = adb_common.save_file_to_pc_from_android(
+                self.logger,
+                save_dir_pc,save_dir_android,save_file_name,
+                self.device_info.device_id,
+                self.device_info.is_output_shell_result)
+            return flag     
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
 
     def get_screenshot(self,save_dir_path='',save_android_path='',save_file_name=''):
         try:

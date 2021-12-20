@@ -151,15 +151,19 @@ def screen_record(
     device_id = '',
     size = '',
     bit_rate = '4000000',
+    output_format='',
     is_logout_stdout=True)->str:
     try:
         if device_id != '' : device_id + ' '
-        cmd = 'adb shell ' + device_id
+        cmd = 'adb shell' + device_id
         save_path = save_dir + file_name
         cmd += ' screenrecord'
-        cmd += ' --time-limit ' + str(time_limit) 
+        if size != '' : cmd += ' --size ' + str(size)
+        cmd += ' --time-limit ' + str(time_limit)
+        cmd += ' --bit-rate ' + str(bit_rate)
+        if output_format != '': cmd+= ' --output-format=' + str(output_format) + ''
         cmd += ' ' + save_path
-        flag , ret = excute_command(cmd,is_logout_stdout)
+        flag , ret = excute_command(logger,cmd,is_logout_stdout)
         return save_path
     except Exception as e:
         logger.exp.error(e)
