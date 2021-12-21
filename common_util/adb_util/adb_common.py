@@ -625,11 +625,11 @@ def excute_command(
         cmd = command
         result = adb_shell_with_show_result(logger,cmd,is_logout_stdout)
         ret_bool = is_success_adb_result(logger,result,func_name,is_logout_stdout)
-        if is_logout_stdout:
-            if ret_bool:
-                logger.info('command success')
-            else:
-                logger.info('command failed')
+        # if is_logout_stdout:
+        #     if ret_bool:
+        #         logger.info('command success')
+        #     else:
+        #         logger.info('command failed')
         if ret_bool:
             ret_val = result.stdout
         else:

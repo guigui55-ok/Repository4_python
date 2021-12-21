@@ -212,6 +212,7 @@ class video_capture_frames():
         except Exception as e:
             self.logger.exp.error(e)
             return False
+    
 
     def cut_frame(
         self,
