@@ -1,3 +1,4 @@
+from typing import Any
 import cv2
 # movie_info
 # movie_play > (movie_info ,video_capture_frames)
@@ -24,7 +25,9 @@ class movie_info():
     def save_movie_info(self,video_capture:cv2.VideoCapture):
         try:
             self.movie_width = video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
+            self.movie_width = int(self.movie_width)
             self.movie_height = video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            self.movie_height = int(self.movie_height)
             self.movie_fps = video_capture.get(cv2.CAP_PROP_FPS)
             self.movie_frame_max_count = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
             self.movie_time_sec = self.movie_frame_max_count / self.movie_fps
@@ -120,9 +123,13 @@ class video_capture_frames():
     capture_file_name = const_play_str.CAPTURE_FILE_NAME_DEFAULT.value
 
     # =======================================
-    def __init__(self, logger_, movie_path_:str, movie_info_:movie_info=None) -> None:
+    def __init__(
+        self,
+        logger_,
+        movie_path_:str, 
+        movie_info_:movie_info=None) -> None:
         try:
-            if movie_info == None:
+            if movie_info_ == None:
                 self.logger = logger_
                 self.info = movie_info(logger_,movie_path_)
                 self.logger.info('movie_manager.__init__ : by movie_path_')
@@ -268,7 +275,139 @@ class video_capture_frames():
             self.logger.exp.error(e)
             return False
         finally:        
-            pass    
+            pass
+
+    def exact_frame(self,frame,exact_values):
+        exact_begin_point = [ exact_values[0],exact_values[1] ]
+        exact_end_point = [ exact_values[2],exact_values[3] ]
+        # 抽出する値をチェックする
+        begin_x,begin_y,end_x,end_y = self.is_valid_exact_point_value(exact_begin_point,exact_end_point)
+        if begin_x < 0:
+            self.logger.exp.error('exact_point is invalid ,return')
+            return frame        
+        edit_frame = frame[begin_y:end_y, begin_x:end_x]
+        return edit_frame
+
+    def edit_movie(
+        self,
+        edit_begin_frame=0,
+        edit_end_frame=0,
+        result_path='edit_movie_result.mp4',
+        edit_frame_method=None,
+        edit_values:Any=None,
+        edit_after_movie_width=-1,
+        edit_after_movie_height=-1
+    ):
+        mn = str(__class__) + '.cut_frame'
+        try:            
+            # 開始と終了が同じときは終了する
+            if edit_begin_frame == edit_end_frame:
+                self.logger.exp.error(mn +':cut_begin_frame == cut_end_frame , return False')
+                return False
+            # 開始より収量が小さいときは入れ替えて、処理は継続
+            if edit_begin_frame > edit_end_frame:
+                self.logger.exp.error(mn+':cut_begin_frame > cut_end_frame =>  changeValue[begin <==> end] , continue process')
+                temp = edit_begin_frame
+                edit_begin_frame = edit_end_frame
+                edit_end_frame = temp
+            # フレームが動画の範囲外なら終了する
+            if edit_begin_frame < 0 and \
+                edit_end_frame > self.info.movie_frame_max_count:
+                self.logger.exp.error(mn+' begin or end frame is invalid')
+                self.logger.exp.error('begin:end = [' + str(edit_begin_frame) + ' , ' + str(edit_end_frame) + '] , return False')
+                return False
+            # 編集との movie の幅高さを設定する
+            if edit_after_movie_width < 0:
+                edit_after_movie_width = int(self.info.movie_width)
+            if edit_after_movie_height < 0:
+                edit_after_movie_height = int(self.info.movie_height)
+            # 書き込みのためのオブジェクトを生成する
+            fourcc = cv2.VideoWriter_fourcc('m','p','4','v')
+            writer : cv2.VideoWriter = cv2.VideoWriter(
+                result_path,
+                fourcc,
+                self.info.movie_fps, 
+                (edit_after_movie_width, edit_after_movie_height)
+                )
+
+            # 開始フレームへセットする
+            self.set_frame(edit_begin_frame-1)
+
+            # 開始から終了フレームまでファイルへ書き込み
+            for i in range(edit_end_frame-edit_begin_frame):
+                # ret, frame = self.video_capture.read()
+                self.move_next()
+                frame = self.frame_capture_now
+                if edit_frame_method != None:
+                    edit_frame = edit_frame_method(frame,edit_values)
+                else:
+                    edit_frame = frame
+                if self.play_ret:
+                    writer.write(edit_frame)
+            self.logger.info('cut_frame done.')
+            self.logger.info('cut path = ' + result_path)
+            writer.release()
+            return True
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+        finally:        
+            pass
+
+
+    def exact_movie(
+        self,
+        cut_begin_frame=0,
+        cut_end_frame=0,
+        exact_begin_end_point:list = [0,0,0,0],
+        result_path='exact_result.mp4'
+    ):
+        """保持している動画から、フレームを指定して切り出す
+        フレーム切り出す際に、フレームイメージの範囲も指定できる
+        """
+        try:
+            mn = str(__class__) + '.exact_movie'
+            x1,y1,x2,y2 = self.is_valid_exact_point_value(
+                [exact_begin_end_point[0] , exact_begin_end_point[1]],
+                [exact_begin_end_point[2] , exact_begin_end_point[3]]
+            )
+            edit_after_width , edit_after_height = [int(x2 - x1), int(y2 - y1) ]
+            flag = self.edit_movie(
+                cut_begin_frame,
+                cut_end_frame,
+                result_path,
+                self.exact_frame,
+                exact_begin_end_point,
+                edit_after_width,
+                edit_after_height
+            )
+            return flag
+        except Exception as e:
+            self.logger.exp.error(e)
+            return False
+    
+    def is_valid_exact_point_value(self,exact_begin_point:list,exact_end_point):
+        ret = [-1,-1,-1,-1]
+        width = self.info.movie_width
+        height = self.info.movie_height
+        begin_x = exact_begin_point[0]
+        begin_y = exact_begin_point[1]
+        end_x = exact_end_point[0]
+        end_y = exact_end_point[1]
+        if begin_x >= end_x:
+            self.logger('begin_x >= end_x: return')
+            return ret
+        if begin_y >= end_y:
+            self.logger('begin_y >= end_y: return')
+            return ret
+        if begin_x < 0 or width < end_x:
+            self.logger('begin_x < 0 or width < end_x: return')
+            return ret
+        if begin_y < 0 or height < end_y:
+            self.logger('begin_y < 0 or height < end_y: return')
+            return ret
+        ret = [begin_x,begin_y,end_x,end_y]
+        return ret
         
     def set_frame(self,set_frame_count=0):
         try:

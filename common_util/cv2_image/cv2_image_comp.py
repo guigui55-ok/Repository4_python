@@ -6,7 +6,7 @@ from numpy.lib.type_check import imag
 def is_same_image_from_path(logger,path_base:str,path_check:str) -> bool:
     """イメージを比較し、完全一致か判定する(np.array_equal)"""
     try:
-        logger.info(__file__ + ':is_same_image')
+        # logger.info(__file__ + ':is_same_image')
         # check if path exists
         if not (os.path.exists(path_base)):
             logger.exp.error('path_base not exists')

@@ -1,5 +1,8 @@
 {
+    "python.autoComplete.extraPaths":[
+        "C:\\Users\\OK\\source\\repos\\Repository4_python"
+    ],
     "python.analysis.extraPaths": [
-        "DoNotTouchThisFolder"
+        "C:\\Users\\OK\\source\\repos\\Repository4_python"
     ]
 }

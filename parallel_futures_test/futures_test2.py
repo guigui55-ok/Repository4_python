@@ -28,7 +28,7 @@ def task2(v,logger):
     except:
         traceback.print_exc()
 
-def record(v,logger):
+def record(logger):
     try:
         filename = 'screenrecord.mp4'
         android_path = '/sdcard/'
@@ -50,13 +50,13 @@ def main():
     getLogger().info("main start")
     import time
     with ThreadPoolExecutor(max_workers=2, thread_name_prefix="thread") as executor:
-        executor.submit(record,10,logger)
+        executor.submit(record,logger)
         time.sleep(2)
         for i in range(5):
             if i == 1:
                 executor.submit(task, i,logger)
             else:
-                time.sleep(3)
+                time.sleep(1)
                 executor.submit(task2, i,logger)
         getLogger().info("submit end")
     getLogger().info("main end")

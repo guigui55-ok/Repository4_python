@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-
 import pathlib,os
 img_dir = str(pathlib.Path(__file__).parent.parent)
 img_dir = os.path.join(img_dir,'image/pickup_test')
