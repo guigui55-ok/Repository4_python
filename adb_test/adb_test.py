@@ -114,6 +114,7 @@ from android_wiko.android_main_wiko import Wiko
 def screenrecord():    
     try:
         wiko = initialize()
+        wiko.info.device_info.device_id = 'RF8R3202XMW'
         format = 'raw-frames' # NG
         format = '' # OK
         format = 'mp4' # OK
@@ -121,12 +122,14 @@ def screenrecord():
         format = 'frames' # NG
         format = 'h264' # NG Unknown format 'h264-'
         format = '' # OK
+        size = '360x720'
+        time_limit = 3
         ret = wiko.control.get_screenrecord(
             '',
-            'screenrecord.avi',
+            'screenrecord.mp4',
             wiko.constants.main.SD_ROOT_DIR.value,
-            5,
-            '360x720',
+            time_limit,
+            size,
             80000000,
             format)
         print('ret='+str(ret))
@@ -138,6 +141,7 @@ def screenrecord():
 def screenshot():
     try:
         wiko = initialize()
+        wiko.info.device_info.device_id = 'RF8R3202XMW'
         wiko.control.get_screenshot()
     except:
         import traceback
@@ -169,6 +173,6 @@ def initialize():
 if __name__ == '__main__':
     pass
     # screenshot()
-    # screenrecord()
+    screenrecord()
     # push_files()
-    main()
+    # main()

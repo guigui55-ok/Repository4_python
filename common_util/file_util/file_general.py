@@ -40,3 +40,8 @@ def read_line_file(logger,file_path):
     except Exception as e:
         logger.exp.error(e)
         return []
+
+def cnv_resolve_path(path:str):
+    import pathlib
+    ret = pathlib.Path(path).resolve
+    return ret

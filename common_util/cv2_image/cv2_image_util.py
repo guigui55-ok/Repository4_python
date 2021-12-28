@@ -2,6 +2,12 @@ from typing import Any
 import cv2
 import os
 
+
+class Cv2ImageObject():
+    main=None
+    def __init__(self) -> None:
+        pass
+
 class cv2_image():
     """イメージの読み書き、リサイズ、大きさ比較など基本的な機能を持つクラス"""
     path = ''
@@ -119,25 +125,31 @@ class cv2_image():
             name = add_name
             name += datetime.datetime.now().strftime('%y%m_%H%M%S')
             name += '.png'
-            path = dir + '\\' + name
+            import os
+            path = os.path.join(dir,name)
             return self.save_img(path)
         except Exception as e:
             self.logger.exp.error(e)
             return False
-    
-    def save_img(self,save_path:str)->bool:
+
+    def save_img_other(self,save_path:str,save_img,logout=True)->bool:
         """イメージを save_path に出力する"""
         try:
             if os.path.exists(save_path):
                 self.logger.exp.error(__name__ + '.save_img:save_path is already exists. path=' + save_path)
                 self.logger.exp.error('save_img Failed: not saved , return')
                 return False
-            cv2.imwrite(save_path,self.img)
-            self.logger.info('save_img: save_path = ' + save_path)
+            cv2.imwrite(save_path,save_img)
+            if logout:
+                self.logger.info('save_img: save_path = ' + save_path)
             return True
         except Exception as e:
             self.logger.exp.error(e)
             return False
+    
+    def save_img(self,save_path:str)->bool:
+        """イメージを save_path に出力する"""
+        self.save_img(save_path,self.img)
     
     def width(self) -> int:
         """イメージの幅を取得する"""
@@ -182,3 +194,14 @@ class cv2_image():
         except Exception as e:
             self.logger.exp.error(e)
             return False
+    
+    def triming(self,rect):
+        """画像をトリミング（切り抜き）する
+        rect = [ begin.x , begin.y , end.x , end.y ]
+        """
+        img_tri = self.img[rect[1] : rect[3], rect[0] : rect[2]]
+        return img_tri
+
+
+class Cv2Image(cv2_image):
+    pass

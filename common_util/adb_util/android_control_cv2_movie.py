@@ -17,7 +17,7 @@ else:
     from common_util.adb_util.device_info import DeviceInfo
 
     import common_util.cv2_image as cv2_find_image_util
-    from common_util.cv2_image import cv2_find_image_util
+    from common_util.cv2_image import cv2_find_image
     from common_util.cv2_image import cv2_image_util
     from common_util.cv2_image import cv2_movie
 

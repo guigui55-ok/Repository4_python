@@ -3,10 +3,11 @@ from logging import exception
 from typing import Any
 
 if __name__ == '__main__':
-    import adb_common   
-    from adb_key import logger as adb_key_logger
-    from android_const import Constants
-    from device_info import DeviceInfo
+    # import adb_common   
+    # from adb_key import logger as adb_key_logger
+    # from android_const import Constants
+    # from device_info import DeviceInfo
+    pass
 else:
     # 外部から参照時は、common_util を sys.path へ追加しておくこと
     import common_util.adb_util.adb_common as adb_common
@@ -119,7 +120,8 @@ class AndroidControlAdb():
                 pc_save_path,device_save_dir,save_file_name,
                 self.device_info.device_id,
                 self.device_info.is_output_shell_result)
-            if flag: return pc_save_path + '\\' + save_file_name
+            import os
+            if flag: return os.path.join(pc_save_path, save_file_name)
             else: return ''
         except Exception as e:
             self.logger.exp.error(e)
@@ -240,7 +242,7 @@ class AndroidControlAdb():
                 self.device_info.device_id,
                 self.device_info.is_output_shell_result
             )
-            flag , ret = adb_common.save_file_to_pc_from_android(
+            flag  = adb_common.save_file_to_pc_from_android(
                 self.logger,
                 save_path_pc, save_dir_device, save_file_name,
                 self.device_info.device_id,

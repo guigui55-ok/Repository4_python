@@ -154,14 +154,20 @@ def screen_record(
     output_format='',
     is_logout_stdout=True)->str:
     try:
-        if device_id != '' : device_id + ' '
-        cmd = 'adb shell' + device_id
-        save_path = save_dir + file_name
-        cmd += ' screenrecord'
-        if size != '' : cmd += ' --size ' + str(size)
+        cmd = 'adb '
+        if device_id == '':
+            cmd += 'shell '
+        else:
+            cmd += '-s ' + device_id + 'shell '
+        cmd += 'screenrecord'
+        if size != '' :
+            cmd += ' --size ' + str(size)
         cmd += ' --time-limit ' + str(time_limit)
-        cmd += ' --bit-rate ' + str(bit_rate)
-        if output_format != '': cmd+= ' --output-format=' + str(output_format) + ''
+        if bit_rate != '':
+            cmd += ' --bit-rate ' + str(bit_rate)
+        if output_format != '':
+            cmd+= ' --output-format=' + str(output_format) + ''
+        save_path = save_dir + file_name
         cmd += ' ' + save_path
         flag , ret = excute_command(logger,cmd,is_logout_stdout)
         return save_path
@@ -179,7 +185,7 @@ def save_file_from_android(
     try:
         logger.info('save_file_from_android')
         cmd = 'pull ' + get_path + ' ' + save_path
-        flag , ret = excute_command_adb(logger,cmd,is_logout_stdout)
+        flag , ret = excute_command_adb(logger,cmd,device_id,is_logout_stdout)
         return flag
     except Exception as e:
         logger.exp.error(e)

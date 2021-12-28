@@ -732,3 +732,6 @@ def resize_to_fit_when_lager_than_new_size(frame_size,new_size):
         import traceback
         print(traceback.print_exc())
         return frame_size
+
+class VideoCaptureFrames(video_capture_frames):
+    pass

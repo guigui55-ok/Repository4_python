@@ -1,5 +1,5 @@
 
-from ocr_util.ocr_tesseract_util.ocr_tesseract_class import OcrConst
+from common_util.ocr_util.ocr_tesseract_util.ocr_tesseract_class import OcrConst
 
 
 if __name__ == '__main__':

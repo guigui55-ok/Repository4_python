@@ -58,18 +58,18 @@ class AndroidControlCv2Image():
         失敗時は、tuple(false,-1,-1,-1,-1)が返る"""
         ret_rect=(False,-1,-1,-1,-1)
         try:
-            from cv2_image.cv2_movie import video_capture_frames
+            from common_util.cv2_image.cv2_movie import video_capture_frames
             cap = video_capture_frames(self.logger,base_movie_path)
             ret_bool = cap.initialize_value('check_image')
             if not ret_bool:
                 self.logger.exp.error('cv2_image.cv2_movie.video_capture_frames.initialize_value Failed')
                 return
 
-            from cv2_image import cv2_image_util
+            from common_util.cv2_image import cv2_image_util
             img_obj = cv2_image_util.cv2_image(self.logger,check_image_path)
             if len(img_obj.img) <= 0 :return
             
-            from cv2_image.cv2_find_image_util import is_match_template_from_image
+            from common_util.cv2_image.cv2_find_image import is_match_template_from_image
             while(not cap.frame_is_max_or_max_over()):
                 img = cap.get_video_capture_image()
                 ret_rect = is_match_template_from_image(
@@ -98,7 +98,7 @@ class AndroidControlCv2Image():
             #temp_path = 'image/button_login_ok.png'
             # base_path に対して
             # image と合致するか判定する
-            from cv2_image.cv2_find_image_util import is_match_template_from_file2
+            from common_util.cv2_image.cv2_find_image import is_match_template_from_file2
             match_rect = is_match_template_from_file2(
                 self.logger,
                 base_path,
@@ -113,7 +113,7 @@ class AndroidControlCv2Image():
         except Exception as e:
             self.logger.exp.error(e)
             # 失敗用データを返す
-            from cv2_image.cv2_find_image_util import get_result_false_is_match_template_from_file2
+            from common_util.cv2_image.cv2_find_image import get_result_false_is_match_template_from_file2
             return cv2_find_image_util.get_result_false_is_match_template_from_file2()
 
     def is_exists_image_in_screenrecord(

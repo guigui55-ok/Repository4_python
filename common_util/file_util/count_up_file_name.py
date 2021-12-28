@@ -89,6 +89,7 @@ def count_up_if_last_name_is_number_main(file_name,delimita='_'):
     """
     ファイル名が file_name_003.ext の時、file_name_004.ext にする
     ex) file_name_9.ext > file_name_10.ext
+    file_name.ext > file_name_1.ext
     拡張子がない場合はエラー
     """
     import os
@@ -108,6 +109,7 @@ def count_up_if_last_name_is_number_main(file_name,delimita='_'):
         # 最後が _1 形式ではないときは、数字を付加して終了
         ret_file_name = basename_without_ext + delimita + '1' + ext
         return ret_file_name
-    ret_num = get_count_up_number_str(after_delimita_str)
+    ret_num = get_count_up_number_str_keep_digit(after_delimita_str)
     ret_file_name = basename_without_ext[:pos+1] + ret_num + ext
     return ret_file_name
+

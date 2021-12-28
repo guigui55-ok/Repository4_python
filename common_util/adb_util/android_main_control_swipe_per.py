@@ -4,8 +4,9 @@
 # from common_util.adb_util.adb_common import is_success_adb_result, screen_capture_for_android
 
 
-from adb_util.adb_common import excute_command
-from adb_util.android_main_control_swipe import AndroidControlSwipe
+from common_util.adb_util.adb_common import excute_command
+from common_util.adb_util.android_main_control_swipe import AndroidControlSwipe
+
 
 
 if __name__ == '__main__' or __name__ == 'android_main_control':

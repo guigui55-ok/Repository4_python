@@ -1,27 +1,9 @@
 
+import traceback
+# from common_util.adb_util.adb_common.adb_get_screenshot import main
+from common_util.adb_util import android_main_control_swipe_per
 
-# from common_util.adb_util import device_info
-# from common_util.adb_util.adb_common import is_success_adb_result, screen_capture_for_android
-
-
-
-
-from adb_get_screenshot import main
-from adb_util import android_main_control_swipe_per
-
-
-if __name__ == '__main__' or __name__ == 'android_main_control':
-    import adb_key  
-    from  device_info import DeviceInfo
-    import adb_common
-    from android_const import Constants
-    from android_control_cv2_image import AndroidControlCv2Image
-    from android_control_cv2_movie import AndroidControlCv2Movie
-    from android_control_adb import AndroidControlAdb
-    from android_main_control_swipe_per import AndroidControlSwipePer
-    from android_main_control_swipe import AndroidControlSwipe
-else:
-    # 外部から参照時は、common_util を sys.path へ追加しておくこと
+try:
     import common_util.adb_util.adb_key  
     from common_util.adb_util.device_info import DeviceInfo
     import common_util.adb_util.adb_common as adb_common
@@ -32,6 +14,8 @@ else:
     from common_util.adb_util.android_main_control_swipe import AndroidControlSwipe
     from common_util.adb_util.android_main_control_swipe_per import AndroidControlSwipePer
     from common_util.adb_util.android_control_ocr import AndroidControlOcr
+except:
+    traceback.print_exc()
 
 class AndroidControlMain():
     logger = None
@@ -129,6 +113,13 @@ class AndroidControlMain():
             return False
 
     def get_screenshot(self,save_dir_path='',save_android_path='',save_file_name=''):
+        """
+        スクリーンショットを取りアンドロイド内に保存、
+        その後、そのファイルをPCへコピーする
+        戻り値：
+        [result:bool , saved_pc_path:str]
+        失敗時は [False,''] を返す
+        """
         try:
             if save_dir_path == '':
                 save_dir_path = Constants.main.SAVE_PATH_ROOT_DIR.value
@@ -143,16 +134,18 @@ class AndroidControlMain():
                 self.device_info.is_output_shell_result)            
             if path == '':
                 self.logger.exp.error('get_screenshot failed , return')
-                return False
+                return False,''
             flag = adb_common.save_file_to_pc_from_android(
                 self.logger,
                 save_dir_path,save_android_path,save_file_name,
                 self.device_info.device_id,
                 self.device_info.is_output_shell_result)
-            return flag
+            import os 
+            saved_pc_path = os.path.join(save_dir_path,save_file_name)
+            return flag,saved_pc_path
         except Exception as e:
             self.logger.exp.error(e)
-            return False
+            return False,''
             
     def get_screenshot_default_path(self) -> str:
         return Constants.main.SAVE_PATH_ROOT_DIR.value + Constants.main.SCREEN_CAPTURE_FILE_NAME.value
