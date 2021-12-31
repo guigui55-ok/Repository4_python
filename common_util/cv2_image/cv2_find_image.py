@@ -299,23 +299,6 @@ def is_match_template(logger,img_base,img_temp,threshold,
         logger.exp.error(e)
         return False
 
-class MatchTemplateResult():
-    min:float
-    max:float
-    minLoc:list
-    maxLoc:list
-    def __init__(self,result=None) -> None:
-        if len(result) > 0:
-            minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(result)
-            self.min = minVal
-            self.max = maxVal
-            self.minLoc = minLoc
-            self.maxLoc = maxLoc
-
-    def print_result(self):
-        print('cv2.minMaxLoc : minVal = {} , maxVal = {} , minLoc = {} , maxLoc = {}'.
-        format(self.min, self.max ,self.minLoc, self.maxLoc))
-
 
 # リサイズしながら画像がテンプレートと一致した結果を取得する
 # Get the result that the image matches the template while resizing
@@ -365,7 +348,12 @@ def get_result_match_template_while_resizing(
         return -1,-1,(0,0),(0,0)
 
 
-class match_template():
+
+from common_util.cv2_image.cv2_result import Cv2Result
+class MatchTemplateResult(Cv2Result):
+    pass
+
+class MatchTemplate():
     logger = None
     img_base = ''
     img_temp = ''

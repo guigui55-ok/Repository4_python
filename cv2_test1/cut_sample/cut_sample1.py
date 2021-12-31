@@ -24,7 +24,11 @@ def test_cut_grid():
         ret_dir = import_init.get_path_from_current_dir('images')
         import os 
         if not os.path.exists(ret_dir):
-            os.mkdir(ret_dir)
+            pass
+        else:
+            import shutil
+            shutil.rmtree(ret_dir)
+        os.mkdir(ret_dir)
         ret_path = ''
         img_obj = Cv2Image(logger,read_path) # 書き込むためのもの
     
@@ -34,14 +38,20 @@ def test_cut_grid():
         ext = '.png'
         base_file_name = basename_without_ext + ext
     
-        rect = [0, 922, 740, 1440-100 ]
+        rect = [4, 922, 716, 1516 ]
         from common_util.cv2_image.grid_data import GridTable
-        table = GridTable(rect,6,5)
+        table = GridTable(rect, row_max= 5, col_max= 6)
+
+        
+        buf_img = img_obj.triming(rect)
+        buf_ret_path = import_init.path_join(ret_dir,'base_image.png')
+        img_obj.save_img_other(buf_ret_path,buf_img)
+
         
         while(not table.is_over_max_index()):
             # 現在の範囲を取得
             buf_rectangle = table.get_current_rectangle()
-            buf_rectangle.print_Value()
+            buf_rectangle.print_value()
             # 取得した範囲を切り取る
             buf_img = img_obj.triming(buf_rectangle.get_value_as_list())
             # ファイル名、パスを設定する
@@ -50,6 +60,7 @@ def test_cut_grid():
             buf_ret_path = import_init.path_join(ret_dir,buf_ret_name)
             # イメージを保存する
             img_obj.save_img_other(buf_ret_path,buf_img)
+            table.image_list.append(buf_img)
             # 次の範囲へ
             # table.move_next()
             table.current_index += 1

@@ -200,6 +200,7 @@ class cv2_image():
         rect = [ begin.x , begin.y , end.x , end.y ]
         """
         img_tri = self.img[rect[1] : rect[3], rect[0] : rect[2]]
+        # img_tri = self.img[rect[0] : rect[2], rect[1] : rect[3]]
         return img_tri
 
 

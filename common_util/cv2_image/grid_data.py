@@ -30,10 +30,10 @@ class GridCell():
         self.row_step = row_step
         self.col_step = col_step
         temp_rect = [
-            int(self.row) * self.row_step,
             int(self.col) * self.col_step,
-            int(self.row+1) * self.row_step,
-            int(self.col+1) * self.col_step
+            int(self.row) * self.row_step,
+            int(self.col+1) * self.col_step,
+            int(self.row+1) * self.row_step
         ]
         temp_rect[0] += self.begin_point.x
         temp_rect[1] += self.begin_point.y
@@ -59,6 +59,7 @@ class GridTable():
     col_step : int = 0
     coordinate_list : list
     current_index : int = 0
+    image_list : list = []
     def __init__(self,rect,row_max,col_max) -> None:
         self.begin_point = Point(rect[0],rect[1])
         self.end = Point(rect[2],rect[3])
@@ -71,34 +72,37 @@ class GridTable():
                 self.init_value()
 
     def init_value(self):
+        # self.row_step = int(self.rect.height / self.row_max)
+        # self.col_step = int(self.rect.width / self.col_max)
         self.row_step = int(self.rect.height / self.row_max)
         self.col_step = int(self.rect.width / self.col_max)
 
         coordinate_list = []
         if self.direction == Direction.HORIZON:
             if self.order == Order.SCENDING:
-                for col in range(self.col_max):
-                    for row in range(self.row_max):
-                        coordinate_list.append([row,col])
-            else:
-                #self.order == Direction.DESCENDING
-                for col in reversed(range(self.col_max)):
-                    for row in reversed(range(self.row_max)):
-                        coordinate_list.append(row,col)
-        else:
-            # direction == Direction.VERTICAL
-            if self.order == Order.SCENDING:
                 for row in range(self.row_max):
                     for col in range(self.col_max):
-                        coordinate_list.append(row,col)
+                        coordinate_list.append([row,col])
             else:
                 #self.order == Direction.DESCENDING
                 for row in reversed(range(self.row_max)):
                     for col in reversed(range(self.col_max)):
                         coordinate_list.append(row,col)
+        else:
+            # direction == Direction.VERTICAL
+            if self.order == Order.SCENDING:
+                for col in range(self.col_max):
+                    for row in range(self.row_max):
+                        coordinate_list.append(row,col)
+            else:
+                #self.order == Direction.DESCENDING
+                for col in reversed(range(self.col_max)):
+                    for row in reversed(range(self.row_max)):
+                        coordinate_list.append(row,col)
         self.max_index = self.row_max * self.col_max
         self.current_index = 0
         self.coordinate_list = coordinate_list
+        print(self.coordinate_list)
     
     def move_next(self):
         if not self.is_over_max_index():
