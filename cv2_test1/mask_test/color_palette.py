@@ -41,9 +41,10 @@ for i, name in enumerate(sorted_names):
     ax.text(xi_text, y, name, fontsize=(h * 0.8),
             horizontalalignment='left',
             verticalalignment='center')
-
+    _color = colors[name]
+    _color = 'red'
     ax.hlines(y + h * 0.1, xi_line, xf_line,
-              color=colors[name], linewidth=(h * 0.6))
+              color=_color, linewidth=(h * 0.6))
     print('colors= {} , name={} , xi={},xf={}'.format(colors[name],name,xi_line,xf_line))
 
 ax.set_xlim(0, X)
