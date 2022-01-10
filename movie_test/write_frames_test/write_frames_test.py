@@ -1,4 +1,5 @@
 
+from cv2 import getDefaultNewCameraMatrix
 import numpy as np
 from PIL import Image
 import sys
@@ -21,9 +22,8 @@ def get_paths():
         traceback.print_exc()
 
 def get_datetime():
-    import datetime
-    val = datetime.datetime.now().strftime('%y%m_%H%M%S')
-    return val
+    from common_util.general_util.general import get_datetime
+    return get_datetime()
 
 def get_result_path():
     import pathlib,os

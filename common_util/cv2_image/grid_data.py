@@ -139,4 +139,141 @@ class GridTable():
         ret = grid_data.get_rectangle()
         return ret
 
+
+import common_util.cv2_image.cv2_image_util as image_util
+import common_util.general_util.general as general
+from common_util.file_util.file_class import MyFile
+def cut_image_as_grid_to_file_1(
+    logger,
+    base_image_path:str,
+    rect:list,
+    row_max:int,
+    col_max:int,
+    log_image_dir_path:str=''):
+    """
+    イメージファイルの指定範囲を、縦横均等に切り分け、ファイルへ出力する
+    """
     
+    table_obj = GridTable(rect, row_max= row_max, col_max= col_max)
+    import os
+    # set file path object
+    mf = MyFile(base_image_path)
+    basename_without_ext =  mf.get_basename_without_ext()
+    ext = mf.get_ext()
+    # ret_dir    
+    child_dir_name = '' + general.get_datetime() + '_' + basename_without_ext
+    if log_image_dir_path != '':
+        log_image_dir_path = mf.dir_path
+    log_image_dir_path = os.path.join(log_image_dir_path,child_dir_name)
+    # read image
+    img_obj = image_util.Cv2Image(logger,base_image_path) # 書き込むためのもの
+    if log_image_dir_path != '':
+        # 基本イメージをファイルへ保存する        
+        buf_img = img_obj.triming(rect)
+        buf_ret_path = os.path.join(log_image_dir_path,'zz_cut_grid_base_image.png')
+        img_obj.save_img_other(buf_ret_path,buf_img)
+    while(not table_obj.is_over_max_index()):
+        # 現在の範囲を取得
+        buf_rectangle = table_obj.get_current_rectangle()
+        buf_rectangle.print_value()
+        # 取得した範囲を切り取る
+        buf_img = img_obj.triming(buf_rectangle.get_value_as_list())
+        if log_image_dir_path != '':
+            # イメージを保存する
+            # ファイル名、パスを設定する
+            buf_addstr = '_' + table_obj.get_current_coordinate_str()
+            buf_ret_name = basename_without_ext + buf_addstr + ext
+            buf_ret_path = os.path.join(log_image_dir_path,buf_ret_name)
+            img_obj.save_img_other(buf_ret_path,buf_img)
+        table_obj.image_list.append(buf_img)
+        # 次の範囲へ
+        # table.move_next()
+        table_obj.current_index += 1
+    return log_image_dir_path
+
+
+def cut_image_as_grid_to_file(
+    logger,
+    base_image_path:str,
+    rect:list,
+    row_max:int,
+    col_max:int,
+    log_image_dir_path:str=''):
+    """
+    イメージファイルの指定範囲を、縦横均等に切り分け、ファイルへ出力する
+    """  
+    image_list,addstr_list = get_image_list_by_cut_as_grid(
+        logger,base_image_path,rect,row_max,col_max,log_image_dir_path)
+
+    import os
+    # set file path object
+    mf = MyFile(base_image_path)
+    basename_without_ext =  mf.get_basename_without_ext()
+    ext = mf.get_ext()
+    # ret_dir    
+    child_dir_name = '' + general.get_datetime() + '_' + basename_without_ext
+    if log_image_dir_path != '':
+        log_image_dir_path = mf.dir_path
+    log_image_dir_path = os.path.join(log_image_dir_path,child_dir_name)
+    # read image
+    img_obj = image_util.Cv2Image(logger,base_image_path) # 書き込むためのもの
+
+    for i in range(len(image_list)):
+        img = image_list[i]
+        addstr = addstr_list[i]
+        if log_image_dir_path != '':
+            # イメージを保存する
+            # ファイル名、パスを設定する
+            buf_ret_name = basename_without_ext + addstr + ext
+            buf_ret_path = os.path.join(log_image_dir_path,buf_ret_name)
+            img_obj.save_img_other(buf_ret_path,img)
+
+
+def get_image_list_by_cut_as_grid(
+    logger,
+    base_image_path:str,
+    rect:list,
+    row_max:int,
+    col_max:int,
+    log_image_dir_path:str=''):
+    """
+    イメージファイルの指定範囲を、縦横均等に切り分け、イメージリストを取得する
+    """
+    
+    table_obj = GridTable(rect, row_max= row_max, col_max= col_max)
+    import os
+    # set file path object
+    mf = MyFile(base_image_path)
+    basename_without_ext =  mf.get_basename_without_ext()
+    ext = mf.get_ext()
+    # ret_dir    
+    ret_file_name = '' + general.get_datetime() + '_' + basename_without_ext + ext
+    if log_image_dir_path != '':
+        log_image_dir_path = mf.dir_path
+        log_image_dir_path = os.path.join(log_image_dir_path,ret_file_name)
+    # read image
+    img_obj = image_util.Cv2Image(logger,base_image_path) # 書き込むためのもの
+    if log_image_dir_path != '':
+        # 基本イメージをファイルへ保存する        
+        buf_img = img_obj.triming(rect)
+        buf_ret_path = ret_file_name
+        img_obj.save_img_other(buf_ret_path,buf_img)
+    
+    images = []
+    coordinates_str = []
+    while(not table_obj.is_over_max_index()):
+        # 現在の範囲を取得
+        buf_rectangle = table_obj.get_current_rectangle()
+        buf_rectangle.print_value()
+        # 取得した範囲を切り取る
+        buf_img = img_obj.triming(buf_rectangle.get_value_as_list())
+        # 付与する文字列(座標)
+        buf_addstr = '_' + table_obj.get_current_coordinate_str()
+        coordinates_str.append(buf_addstr)
+        # イメージを変数へ格納する
+        images.append(buf_img)
+        table_obj.image_list.append(buf_img)
+        # 次の範囲へ
+        # table.move_next()
+        table_obj.current_index += 1
+    return images,coordinates_str

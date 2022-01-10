@@ -101,16 +101,18 @@ class AndroidControlMain():
             path = ret
             if path == '':
                 self.logger.exp.error('get_screenshot failed , return')
-                return False
+                return ''
             flag = adb_common.save_file_to_pc_from_android(
                 self.logger,
                 save_dir_pc,save_dir_android,save_file_name,
                 self.device_info.device_id,
                 self.device_info.is_output_shell_result)
-            return flag     
+            import os
+            ret_path = os.path.join(save_dir_pc,save_file_name)
+            return ret_path
         except Exception as e:
             self.logger.exp.error(e)
-            return False
+            return ''
 
     def get_screenshot(self,save_dir_path='',save_android_path='',save_file_name=''):
         """

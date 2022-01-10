@@ -59,8 +59,11 @@ def print_now_method(function_):
         print(str(type(function_)))
 
 def get_datetime():
+    """ datetime.now().strftime('%y%m%d_%H%M%S') を返す
+    """
     import datetime
-    datetime.datetime.now().strftime('%y%m_%H%M%S')
+    return datetime.datetime.now().strftime('%y%m%d_%H%M%S')
+
 
 def get_path_info(path):
     try:

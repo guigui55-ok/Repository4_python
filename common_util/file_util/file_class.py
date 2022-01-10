@@ -313,12 +313,12 @@ class MyFile(MyFile_):
         _path = self.get_path_if_arg_nothing(path)
         return super().is_root_(_path)
     
-    def get_list_file_(self, dir_path=''):
+    def get_list_file(self, dir_path=''):
         _path = self.get_path_if_arg_nothing(dir_path)
         _path = super()._get_dir_path(_path)
         return super()._get_list_file(_path)
     
-    def get_list_dir_(self, dir_path=''):
+    def get_list_dir(self, dir_path=''):
         _path = self.get_path_if_arg_nothing(dir_path)
         _path = self._get_dir_path(_path)
         return super()._get_list_dir(_path)
