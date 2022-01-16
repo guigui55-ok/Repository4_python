@@ -215,6 +215,9 @@ def cut_image_as_grid_to_file(
     if log_image_dir_path != '':
         log_image_dir_path = mf.dir_path
     log_image_dir_path = os.path.join(log_image_dir_path,child_dir_name)
+    # mkdir
+    if not os.path.exists(log_image_dir_path):
+        os.mkdir(log_image_dir_path)
     # read image
     img_obj = image_util.Cv2Image(logger,base_image_path) # 書き込むためのもの
 

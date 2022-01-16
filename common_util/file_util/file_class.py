@@ -55,7 +55,7 @@ class MyFile_():
     def _get_ext(self,path)->str:
         """拡張子を取得する"""
         ext = os.path.splitext(path)
-        return ext
+        return ext[1]
 
     def _get_basename_without_ext(self,path)->str:
         """拡張子なしのファイル名を取得する"""
