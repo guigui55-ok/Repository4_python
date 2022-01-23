@@ -1,0 +1,8 @@
+
+
+https://qiita.com/ts-3156/items/93af082d0479c0eb9646
+
+POST /create (リクエストボディにJSON)
+リクエストボディに送信するデータをJSONで入れる。APIを使ったデータのやり取りでよく使われる形式。
+
+
