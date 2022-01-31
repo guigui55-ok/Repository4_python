@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>{{ name }}</h3>
+
+<div id="main_contents">
+    <div class="result_frame">
+        <p>result = {{result}}</p>
+    </div>
+    <div class="result_frame">
+        <p>error_message = {{error_message}}</p>
+    </div>
+    <div class="result_frame">
+        <p>list = </p>
+        {{file_list_value}}
+    </div>
+
+</div><!--main_contents-->
+{% endblock %}
