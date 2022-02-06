@@ -79,3 +79,4 @@ def test_dict():
         return
 
 test_dict()
+main()

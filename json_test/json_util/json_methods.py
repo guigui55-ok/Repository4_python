@@ -16,6 +16,7 @@ def read_json(logger,read_path:str)-> OrderedDict:
     try:        
         with open(read_path) as f:
             buf_dict:OrderedDict = json.load(f, object_pairs_hook=OrderedDict)
+        return buf_dict
     except Exception as e:
         logger.exp.error(e)
         return []
