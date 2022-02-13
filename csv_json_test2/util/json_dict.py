@@ -17,6 +17,9 @@ class JsonDict():
         if os.path.exists(path):
             self.read_json(path)
 
+    def str_to_dict(self,value:str):
+        return json.loads(value)
+
     def read_json(self,read_path:str=''):
         if read_path == '': read_path = self.path
         try:

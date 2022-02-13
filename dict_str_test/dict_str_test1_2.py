@@ -28,6 +28,10 @@ def dict_str():
     print(re_conversion_data)
     print(type(re_conversion_data))
 
+def str_to_dict(value:str):
+    return json.loads(value)
+
+
 def main():
     try:
         dict_str()
