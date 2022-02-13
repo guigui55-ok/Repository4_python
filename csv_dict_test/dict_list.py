@@ -36,7 +36,7 @@ class DictList():
             return False
         return True
     
-    def update_dict(self,update_dict:dict,condition_dict:dict):
+    def update_dict_by_dict(self,update_dict:dict,condition_dict:dict):
         """only first comp(match)"""
         _condition_dict:dict = None
         if isinstance(condition_dict,dict):
@@ -118,4 +118,5 @@ def main():
         import traceback
         traceback.print_exc()
 
-main()
+if __name__ == '__main__':
+    main()

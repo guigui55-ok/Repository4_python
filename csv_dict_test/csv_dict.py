@@ -9,16 +9,16 @@ class CsvDict():
     path:str
 
     def __init__(self,path:str) -> None:
-        self.csv_dict = None
+        self.csv_dict:list[dict] = None
         self.set_path(path)
 
     def set_path(self,path:str):
         self.path = path
         import os
         if os.path.exists(path):
-            self.csv_dict = self.read_file_as_dict(path)
+            self.csv_dict = self.read_file_as_dict_list(path)
 
-    def read_file_as_dict(self,path:str='')->dict:
+    def read_file_as_dict_list(self,path:str='')->list[dict]:
         if path == '': path=self.path
         with open(path) as f:
             reader = csv.DictReader(f)
@@ -35,16 +35,11 @@ class CsvDict():
         #  OrderedDict([('a', '31'), ('b', '32'), ('c', '33'), ('d', '34')])]
         """
     
-    def write_file_for_dict(self,dict_data:dict=None,path:str=''):
-        if path == '': path=self.path
-        if dict_data == None: dict_data = self.csv_dict
-        self.write_file_for_dict_list(
-            self.csv_dict.keys(),
-            [self.csv_dict],
-            self.path
-        )
-    
-    def write_file_for_dict_list(self,dict_keys:list, dict_list:list, path:str=''):
+    def write_self_data_to_file(self):
+        keys = self.csv_dict[0].keys()
+        self.write_file_for_dict_list(keys,self.csv_dict,self.path)
+        
+    def write_file_for_dict_list(self,dict_keys:list, dict_list:list[dict], path:str=''):
         with open(path, 'w') as f:
             # Headerを書き込む
             writer = csv.DictWriter(f, dict_keys)
