@@ -71,6 +71,7 @@ def pathjoin(dir_path,file_name):
 def update_main():
     dir_path = get_dir_path()
     file_name = 'test0_1.txt'
+    file_name = 'test0_2.txt'
     file_list = get_file_list()
     lines = read_value(dir_path, file_name)
     line_blocks = sepalate_value(lines,file_list)
