@@ -39,24 +39,33 @@ def excute_sample():
         # ###
         ret_file_name = 'ret-301-create_png.jpg'
         ret_file_path = test_com.pathjoin(img_dir_path,ret_file_name)
-        width = 300
-        height = 400
-        color = (100,100,0)
-        flag = cv2_method.create_png(
-            ret_file_path,width,height,color)
-        print('create_png , flag = ' + str(flag))
-        print('    path = ' + ret_file_path)
-
-        import common_utility.cv2_image.cv2_image_cnv as cv2_cnv
+        flag = cl_base_img.set_image(cl_temp_img.img)
+        print('set_image , flag = ' + str(flag))
         
-        ret_file_name = 'ret-401-image_to_gray.jpg'
-        ret_file_path = test_com.pathjoin(img_dir_path,ret_file_name)
-        threshold = 100
-        ret,ret_img = cv2_cnv.image_to_gray(cl_base_img.img,threshold)
-        print('image_to_gray , flag = ' + str(flag))
-        print('    path = ' + ret_file_path)
+        flag = cl_base_img.is_image_none()
+        print('is_image_none , flag = ' + str(flag))
 
+        w = cl_base_img.width()
+        h = cl_base_img.height()
+        print('width height  = {} , {}'.format(w,h))
+        ratio = 1.5
+        #flag = cl_base_img.resize( w*ratio , h*ratio)
+        """    self.img = cv2.resize(self.img,dsize=(width,height))
+cv2.error: OpenCV(4.5.4-dev) :-1: error: (-5:Bad argument) in function 'resize'
+> Overload resolution failed:
+>  - Can't parse 'dsize'. Sequence item with index 0 has a wrong type
+        """
+        flag = cl_base_img.resize( int(w*ratio) , int(h*ratio*ratio))
+        print('resize , flag = ' + str(flag))
 
+        path = cl_base_img.save_img_with_name_auto()
+        print('save_img_with_name_auto , ret = ' + str(path))
+
+        cl_buf_img = cv2_util.Cv2Image(path)
+        flag = cl_buf_img.is_big_self_image(cl_temp_img.img)
+        print('is_big_self_image , flag = ' + str(flag))
+        flag = cl_temp_img.is_big_self_image(cl_buf_img.img)
+        print('is_big_self_image , flag = ' + str(flag))
 
         return
     except:

@@ -107,9 +107,10 @@ class Cv2Image():
         name += '.png'
         import os
         path = os.path.join(dir,name)
-        return self.save_img(path)
+        self.save_img_other(path,self.img)
+        return path
 
-    def save_img_other(self,save_path:str,save_img,logout=True)->bool:
+    def save_img_other(self,save_path:str,save_img,logout=False)->bool:
         """イメージを save_path に出力する"""
         if os.path.exists(save_path):
             log_error(__name__ + '.save_img:save_path is already exists. path=' + save_path)
