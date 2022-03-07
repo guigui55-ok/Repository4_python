@@ -15,6 +15,10 @@ class JsonUtil():
         self.indent:int = 4
         if os.path.exists(path):
             self.read_json(path)
+    
+    def cnv_str_to_dict(self,value:str)->dict:
+        ret = json.loads(value)
+        return ret
 
     def read_json(self,read_path:str=''):
         if read_path == '': read_path = self.path

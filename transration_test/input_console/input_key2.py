@@ -5,6 +5,12 @@ import time
 
 NEW_LINE = '\n'
 
+class KeyState():
+    key_down:dict
+    def read_key():
+        ch = keyboard.read_key()
+    def is_key_downs():
+        return 
 def input_recieve():
     try:
         ch = ''
