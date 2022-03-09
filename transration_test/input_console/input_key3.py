@@ -1,5 +1,5 @@
 # inputの代わりに、1文字ずつ入力を受け取る関数を用意。
-# try の中はWindows用、except 野中はLinux用
+# try の中はWindows用、except の中はLinux用
 try:
     from msvcrt import getch
 except ImportError:

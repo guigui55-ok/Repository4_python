@@ -1,3 +1,6 @@
+## Mac,Unix
+
+
 import sys, termios
     
 # 標準入力のファイルディスクリプタ取得

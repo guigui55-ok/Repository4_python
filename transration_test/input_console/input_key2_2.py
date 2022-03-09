@@ -6,11 +6,31 @@ import time
 NEW_LINE = '\n'
 
 class KeyState():
-    key_down:dict
-    def read_key():
-        ch = keyboard.read_key()
-    def is_key_downs():
-        return 
+    def __init__(self) -> None:
+        self.key_down:str = ''
+        self.down_state:dict = {}
+        self.now_ch:str = ''
+        self.input:str = ''
+    def read_key(self):
+        self.now = keyboard.read_key()
+    def check_value(self):
+        if len(self.now_ch)<2:
+            if self.is_key_down():
+                self.input += self.now_ch
+                self.key_down += self.now_ch
+                print(self.now_ch,end='')
+            else:
+                self.key_down = self.key_down.replace(self.now_ch,'')
+        else:
+            if self.now_ch == 'enter':
+                print()
+                self.input = ''
+            else:
+                pass
+    def is_key_down(self):
+        if self.key_down.find(self.now_ch)>=0:
+            return False
+        return True
 def input_recieve():
     try:
         ch = ''
