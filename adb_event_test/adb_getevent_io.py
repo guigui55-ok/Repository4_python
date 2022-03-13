@@ -68,6 +68,10 @@ class AdbEvent():
         if value[:2] == '0x':
             value = value[2:]
         return value
+    
+    def get_little_endian_from_int(self,val_int:int,size):
+        val_bytes = val_int.to_bytes(size, byteorder="little")
+        return val_bytes
 
     def get_little_endian(self,hex_str:str,size):        
         val_str = self.get_value_as_str(hex_str)

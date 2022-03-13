@@ -1,0 +1,16 @@
+{
+	"BTN_TOUCH":"14a",
+	"ABS_MT_TOUCH_MAJOR":"30",
+	"ABS_MT_WIDTH_MAJOR":"32",
+	"ABS_MT_WIDTH_MINOR":"33",
+	"ABS_MT_PRESSURE":"3a",
+	"ABS_MT_POSITION_X":"35",
+	"ABS_MT_POSITION_Y":"36",
+	"ABS_MT_TRACKING_ID":"39",
+	"SYN_REPORT":"0",
+	"EV_KEY":"1",
+	"EV_ABS":"3",
+	"EV_SYN":"0",
+	"DOWN":"1",
+	"UP":"0"
+}

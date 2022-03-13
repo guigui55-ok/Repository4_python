@@ -6,8 +6,6 @@ from collections import OrderedDict
 import pprint
 import os
 
-from numpy import isin
-
 class JsonUtil():
 
     def __init__(self,path) -> None:
@@ -19,24 +17,8 @@ class JsonUtil():
             self.read_json(path)
     
     def cnv_str_to_dict(self,value:str)->dict:
-        try:
-            ret = json.loads(value)
-            return ret
-        except json.decoder.JSONDecodeError as e:
-            msg = 'Json Format Is Invalid ({})'.format(str(e))
-            raise Exception(msg)
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            raise Exception()
-    
-    def value_is_json(self,value:str)->dict:
-        ret = self.cnv_str_to_dict(value)
-        if isinstance(ret,dict):
-            return True
-        else:
-            return False
-
+        ret = json.loads(value)
+        return ret
 
     def read_json(self,read_path:str=''):
         if read_path == '': read_path = self.path

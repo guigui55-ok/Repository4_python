@@ -203,11 +203,12 @@ def calc_str_to_hex(char:str,digit)->int:
 
 
 def cnv_adb_event_str_to_hex(value:str):
-    """0001 014a 00000001"""        
+    """0001 014a 00000001 をhex:strに変換する"""        
     try:
         ret:hex = 0
         values = value.split(' ')
         if len(values)<3: return hex(0),hex(0),hex(0)
+        #いったん10進数にしてから、hex関数で16進にしている
         e_type:int = cnv_hex_str_to_int(values[0])
         e_code:int = cnv_hex_str_to_int(values[1])
         e_value:int = cnv_hex_str_to_int(values[2])
@@ -218,6 +219,7 @@ def cnv_adb_event_str_to_hex(value:str):
 
 def cnv_hex_str_to_int(value:str):
     """
+    （以下のいずれのパターンもすべて）10進数に変換する
     0001
     014a
     00000001

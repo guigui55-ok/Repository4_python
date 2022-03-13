@@ -10,5 +10,7 @@
 	"SYN_REPORT":"0",
 	"EV_KEY":"1",
 	"EV_ABS":"3",
-	"EV_SYN":"0"
+	"EV_SYN":"0",
+	"DOWN":"1",
+	"UP":"0"
 }

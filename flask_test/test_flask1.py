@@ -77,6 +77,11 @@ def submit_result():
             file_list = os.listdir(save_file_path)
             # file_list_value = test_flask_sub_module.create_tag_li_ul(file_list,'')
             file_list_value = test_flask_sub_module.list_to_str(file_list)
+            print()
+            print('=======================')
+            print('save_file_path = {}'.format(save_file_path))
+            print('file_list_value = {}'.format(file_list_value))
+            print('=======================')
             copy_dist = ''
         except Exception as e:
             is_success = False

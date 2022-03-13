@@ -73,16 +73,6 @@ class DictList():
                 return False
                 # 異なるものが一つでもある場合終了する
         return True
-    
-    def get_key_list(self,key:str=''):
-        ret_list = []
-        if key=='':
-            ret_list = self.value
-    
-
-    def get_value(self,key:str):
-        pass
-
 
 
 def main():
