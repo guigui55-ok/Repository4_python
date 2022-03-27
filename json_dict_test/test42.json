@@ -1,4 +1,28 @@
 {
-    "key3": "value3",
-    "key4": "value4"
+    "key1": [
+        {
+            "key2": "value-abc"
+        },
+        {
+            "key3": "value-abc"
+        }
+    ],
+    "key1_2": "val_1_2",
+    "key3": {
+        "key3": "value-abc"
+    },
+    "key4": {
+        "key41": [
+            {
+                "key42": "value-abc"
+            },
+            {
+                "key43": "value-abc"
+            }
+        ],
+        "key41_2": "val_1_2",
+        "key43": {
+            "key3": "value-abc"
+        }
+    }
 }

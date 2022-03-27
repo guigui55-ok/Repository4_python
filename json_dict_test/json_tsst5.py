@@ -16,6 +16,9 @@ def dict_test():
         # dict_str = '{"kay1": {  {"key2":"value-abc"},{"key3":"value-abc"}  } }' #error
         dict_str = '{"key1": [  {"key2":"value-abc"}, {"key3":"value-abc"}  ] , "key1_2":"val_1_2"  ,"key3": {"key3":"value-abc"}  }' 
         dict_str2 = '{"key3": {"key3":"value-abc"} }'
+        update_dict_str="""
+        { "key1":[{"key2":"value-abcd"}] }
+        """
         dict_str = """
     {
         "key1": [
@@ -34,19 +37,42 @@ def dict_test():
         }
     }
         """
+        dict_str = """
+{
+    "key1":[
+        "key1_2":"value-abc1_2",
+        "key1_3":"value-abc1_3"
+    ],
+    "key2":"val_2",
+    "key3":{
+        {"key31":"value-abc31"}
+    },
+    "key4":{
+        "key41":[
+            "key41_2":"value-abc41_2",
+            "key41_3":"value-abc41_3"] 
+       },
+        {"key42":"va42"},
+            {"key43_1":"value-abc43_3"}
+}
+"""
         # かぎ括弧でくくっている
         # dict_str = '[{"key3": {"key3":"value-abc"} }]'#TypeError: list indices must be integers or slices, not dict
         # ダブルクォーテーションがない
         # dict_str = '{"key3": value3, "key3":value4 }'#Exception: Json Format Is Invalid (Expecting value: line 1 column 10 (char 9))
         # ダブルクォーテーションがない
-        # dict_str = '{"key3": value3, "key4":value4 }'
-        dict_str = '{"key3": "value3", "key4":"value4" }'
-        # dict_str = '{"key3": "value3", "key3":"value4" }'
+        # dict_str = '{"key3": value3, "key4":value4 }'#NG
+        # dict_str = '{"key3": "value3", "key4":"value4" }'#OK
+        # dict_str = '{"key3": "value3", "key3":"value4" }'#OK
         cl_json = JsonUtil(path2)
         cl_json.indent = 4
         
         dict_val = cl_json.cnv_str_to_dict(dict_str)
+
         cl_json.values = dict_val
+        # update_dict = cl_json.cnv_str_to_dict(update_dict_str)
+        # cl_json.update_value(update_dict)
+
         # cl_json.set_value_to_json('',dict_val)
         cl_json.write_json()
         print(dict_val)

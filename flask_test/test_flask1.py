@@ -10,6 +10,10 @@ UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = set([''])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route('/submit_top2')
+def submit_top2():
+    name = 'submit_top2.html'
+    return render_template('submit_top2.html', title='Submit top', name=name)
 
 @app.route('/submit_top')
 def submit_top():

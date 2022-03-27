@@ -1,7 +1,6 @@
 
 
 
-from cv2 import trace
 from json_util.json_class import JsonUtil
 path = './test.json'
 path2 = './test2.json'
@@ -31,6 +30,31 @@ def dict_test():
         dict_str = '{"key4": {"key41": [{"key41_2": "value-abc41_2"},{"key41_3": "value-abc41_3"}],"key42": "va42","key43":{"key43_1": "value-abc43_3"} }' #NG
         dict_str = '{ "key4": {"key41": [{"key41_2": "value-abc41_2"},{"key41_3": "value-abc41_3"}],"key42":"va42","key43":{"key43_1":"value-abc43_3"}  } }' #OK
         dict_str = '{ "key4": {"key41": [{"key41_2": "value-abc41_2"},{"key41_3": "value-abc41_3"}],{"key42":"va42"},"key43":{"key43_1":"value-abc43_3"}  } }' #NG
+        dict_str = """
+{
+    "key1":[
+        {"key1_2":"value-abc1_2"},
+        {"key1_3":"value-abc1_3"}
+    ],
+    "key2":"val_2",
+    "key3":{
+        "key31":"value-abc31"
+    },
+    "key4":{
+        "key41":[
+            {"key41_2":"value-abc41_2"},
+            {"key41_3":"value-abc41_3"}
+        ],
+        "key42":"va42",
+        "key43":{
+            "key43_1":"value-abc43_1"
+        }
+    }
+} 
+"""
+        print('#####')
+        num = 214
+        print(dict_str[num-4:num+4])
         #Exception: Json Format Is Invalid (Expecting property name enclosed in double quotes: line 1 column 81 (char 80))  
         # dict_str = '"{ key4": {"key41":"VALUE41","key42":"va42","key43":"Value43"  }' #NG
         #/\Exception: Json Format Is Invalid (Expecting ',' delimiter: line 1 column 134 (char 133))

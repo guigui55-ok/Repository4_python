@@ -1,23 +1,21 @@
 
+import pstats
+from typing import Dict
+from numpy import isin
 
 import enum
-from re import S
-from winreg import SetValue
 class DictListType(enum.Enum):
     #not has iterable
-    TERMINATE_VALUE=1
-    TERMINATE_DICT=2
-    TERMINATE_LIST=3
+    TERMINATE_VALUE=0
+    TERMINATE_DICT=1
+    TERMINATE_LIST=2
     #has iterable
-    HAS_ITERABLE_DICT=4
-    HAS_ITERABLE_LIST=5
-    VALUE=11
-    KEY=12
-    DICT=13
-    LIST=14
+    HAS_ITERABLE_DICT=3
+    HAS_ITERABLE_LIST=4
+    VALUE=10
+    KEY=11
+    DICT=12
 
-LIST_KEY_NAME = '[list]'
-IS_PRINT_WHEN_SET_VALUE = False
 
 
 def cnv_list_str(value:list):
@@ -108,8 +106,6 @@ def count_in_dict(arg_dict:dict, key:str,value=None)->int:
     return count
 
 
-    ################################################################################
-    ################################################################################
 class DictListElement():
     key:str=None
     value=None
@@ -118,16 +114,14 @@ class DictListElement():
     __is_terminate_dict:bool = False
     __is_terminate_list:bool = False
     hierarchy = 0
-    indent = 4
-    def __init__(self,value,hierarchy:int=0,key='',parent_key:str='',value_type:int=0) -> None:
-        self.new_line = '\n'
-        self.hierarchy = hierarchy
+    def __init__(self,value,hierarchy:int=0) -> None:
+        self.hierarchy = hierarchy + 1
         if isinstance(value,dict):
-            self.set_value(value,hierarchy,key,parent_key,value_type)
+            self.set_value(value)
         elif isinstance(value,list):
-            self.set_value(value,hierarchy,key,parent_key,value_type)
+            self.set_value(value)
         else:
-            self.set_value(value,hierarchy,key,parent_key,value_type)
+            self.set_value(value)
             
     @property
     def is_terminate(self):
@@ -157,349 +151,17 @@ class DictListElement():
             self.__is_terminate_dict = False
             self.__is_terminate = False
 
-    ################################################################################
-    def reset_self(self,hierarcy:int=0):
+    def reset_self(self):
         self.key = None
-        self.parent_key = None
         self.value = None
         self.dictlist_elements = None
         self.__is_terminate = False
         self.__is_terminate_dict = False
         self.__is_terminate_list = False
-        self.hierarchy = hierarcy
+        self.hierarchy = 0
         self.root_is_list = False
     
-    ################################################################################
-    def get_indent(self,indent=-1):
-        if indent < 0:
-            indent = self.indent
-        return indent
-    
-    ################################################################################
-    def get_indent_str(self,indent=-1):
-        indent = self.get_indent(indent)
-        indent_str = ''
-        for _ in range(self.hierarchy):
-            for _ in range(indent):
-                indent_str += ' '
-        return indent_str
-    
-    ################################################################################
-    class PrintJsonStateValueTypeConst(enum.Enum):
-        DICT = 1
-        LIST = 2  
-    class ValueTypeConst(enum.Enum):
-        DICT = 1
-        LIST = 2
-
-    class PrintJsonState():      
-        class JsonStateBlock():
-            def __init__(self,hierarchy,value_type,indent=4) -> None:
-                self.value_type = value_type
-                self.hierarchy = hierarchy
-                self.indent = indent
-            def get_indent_str(self):
-                sp = ''
-                for i in range(self.hierarchy):
-                    for j in range(self.indent):
-                        sp += ' '
-                return sp 
-            def get_edge_str(self,is_begin:bool)->str:
-                ret = self.get_edge(is_begin,self.value_type)
-                return  ret
-            def get_edge(self,is_begin:bool,value_type:int)->str:
-                if value_type == DictListElement.ValueTypeConst.DICT:
-                    if is_begin:
-                        return '{'
-                    else:
-                        return '}'
-                if value_type == DictListElement.ValueTypeConst.LIST:
-                    if is_begin:
-                        return '['
-                    else:
-                        return ']'
-                return ''
-        def __init__(self) -> None:
-            self.is_begin:bool = True
-            self.is_list:bool = False
-            self.hierarchy:int = 0
-            self.blocks:'list[self.JsonStateBlock]' = []
-
-        def begin_block(self,hierarchy:int,value_type:int):
-            block = self.JsonStateBlock(hierarchy,value_type)
-            self.blocks.append(block)
-            return block.get_edge_str(True)
-
-        def end_block(self):
-            block = None
-            if len(self.blocks)>1:
-                block:DictListElement.PrintJsonState.JsonStateBlock = self.blocks[-1]
-            if len(self.blocks)>1:
-                self.blocks = self.blocks[:-1]
-            if block == None:
-                print('[DictListElement]Alert:JsonStateBlock.end_block():block == None')
-                return ''
-            return block.get_edge_str(False)
-        
-        def blocks_len_is_one(self):
-            if len(self.blocks) == 1:
-                return True
-            return False
-        
-        def raise_error_if_blocks_len_not_one(self):
-            if not self.blocks_len_is_one():
-                raise Exception('not blocks_len_is_one')
-
-        # def get_edge_str(self,is_begin:bool,value_type:int)->str:
-            
-
-    ################################################################################
-    def add_str_double_quort(self,value):
-        return '"{}"'.format(value)
-    ################################################################################
-    def get_value_with_double_quort(self):
-        # def is_last_element(i):
-        #     if len(self.dictlist_elements) >= i:
-        #         return True
-        #     return False
-        if self.is_terminate:
-            return '"{}"'.format(self.value)
-        if self.is_terminate_dict:
-            item:dict = self.value
-            for k in item.keys():
-                key = k
-                value = item[k]
-            return '{{"{}":"{}"}}'.format(key,value)
-        if self.is_dict():
-            print('get_value_with_double_quort.is_dict')
-            item:dict = self.value
-            for k in item.keys():
-                key = k
-                value = item[k]
-            ret = '{{"{}":"{}"}}'.format(key,value)
-            return ret
-
-        else:
-            return '"{}"'.format(self.value)
-    
-    def key_is_list(self):
-        if self.key == '[list]':
-            return True
-        return False
-
-    ################################################################################
-    ################################################################################
-    # get_json_str
-    ################################################################################
-    ################################################################################
-    def get_json_str(self,now_value:str='',now_state:PrintJsonState=None,):
-        
-        def get_json_str_inner(now_value:str='',now_state:DictListElement.PrintJsonState=None,):
-            pass
-    
-        def add_key_value(el:DictListElement):
-            ret = ''
-            if not el.key_is_list():
-                ret = self.add_str_double_quort(el.key) + ':'
-            return ret
-
-        new_line = '\n'
-        if now_value=='':
-            now_value = '{'
-            now_state = self.PrintJsonState()
-            now_value = now_state.begin_block(0,self.ValueTypeConst.DICT)
-            now_value += new_line
-        else:
-            pass
-        #------------------
-        def is_last_element(i):
-            if len(self.dictlist_elements) >= i:
-                return True
-            return False
-        #------------------
-        begin_count = len(now_state.blocks)
-        is_change_hierarchy = False
-        for i in range(len(self.dictlist_elements)):
-            el = self.dictlist_elements[i]
-            indent_str = el.get_indent_str()
-            if el.is_terminate:
-                if isinstance(el.value ,dict):
-                    value = '{{"{}":"{}"}}'.format(el.key,el.value)
-                else:
-                    value = el.get_value_with_double_quort()
-                now_value += indent_str + value
-            elif el.is_terminate_dict:
-                value = el.get_value_with_double_quort()
-                now_value += indent_str + value
-            elif el.is_terminate_list:
-                now_value += el.get_indent_str()
-                now_value += add_key_value(el)
-                now_value += now_state.begin_block(el.hierarchy,self.ValueTypeConst.LIST) + new_line
-                for j in range(len(el.dictlist_elements)):
-                    el_in_el = el.dictlist_elements[j]
-                    # now_value += el_in_el.get_indent_str()
-                    # now_value += el_in_el.get_value_with_double_quort()
-                    now_value = el_in_el.get_json_str(now_value,now_state)
-                    if not is_last_element(j):
-                        now_value += ',' + new_line
-                now_value += now_state.end_block() + new_line
-            elif el.is_dict():
-                now_value += el.get_indent_str()
-                now_value += add_key_value(el)
-                now_value += now_state.begin_block(el.hierarchy,self.ValueTypeConst.DICT) + new_line
-                for j in range(len(el.dictlist_elements)):
-                    el_in_el = el.dictlist_elements[j]
-                    # now_value += el_in_el.get_indent_str()
-                    # now_value += el_in_el.get_value_with_double_quort()
-                    now_value = el_in_el.get_json_str(now_value,now_state)
-                    if not is_last_element(j):
-                        now_value += ',' + new_line
-                now_value += now_state.end_block() + new_line
-            elif el.is_list():
-                now_value += el.get_indent_str()
-                now_value += add_key_value(el)
-                now_value += now_state.begin_block(el.hierarchy,self.ValueTypeConst.LIST) + new_line
-                now_value = el.get_json_str(now_value,now_state)
-                is_change_hierarchy = True
-                now_value += now_state.end_block() + new_line
-            else:
-                print('***** else')
-            now_value += ',' + new_line
-        ### end for
-        # if len(now_state.blocks) != begin_count:
-        #     raise Exception('len(now_state.blocks) != begin_count')
-        #     # now_state.raise_error_if_blocks_len_not_one()
-        now_value += now_state.end_block()
-        return now_value
-
-            # if el.has_iterable_child
-
-            # if el.get_value_type() == DictListType.TERMINATE_VALUE:
-            #     if isinstance(el.value,str):
-            #         print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
-            #     else:
-            #         print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
-            # else:
-            #     ey_str = el.key
-            #     el.print_values()
-
-    ################################################################################
-    def print_values(self,is_show_parent=False,is_show_type=False):
-        for el in self.dictlist_elements:
-            indent_str = el.get_indent_str()
-            # key = '"{}":"{}'.format(el.parent_key,el.key)
-            if is_show_parent:
-                key_str = el.get_key_names()
-            else:
-                key_str = el.key
-            if is_show_type:
-                type_str = el.get_velu_type_str()
-                type_str = '('+type_str+')' 
-            else:
-                type_str = ''
-
-            if el.get_value_type() == DictListType.TERMINATE_VALUE:
-                if isinstance(el.value,str):
-                    print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
-                else:
-                    print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
-            else:
-                if is_show_parent:
-                    key_str = el.get_key_names()
-                else:
-                    key_str = el.key
-                    key_str = '"{}"'.format(key_str)
-                print(indent_str + '{} {}'.format(key_str,type_str))
-                # print(indent_str + '{}'.format(str(el.value)))
-                el.print_values(is_show_parent,is_show_type)
-
-
-    
-    ################################################################################
-    def print_value(self,indent:int=4):
-        """not_recommended"""
-        el:DictListElement
-        indent_str = ''
-        
-        #####
-        indent_str = self.get_indent_str()
-        if self.is_iterable():
-            key_str = self.get_key_names()
-            type_str = self.get_velu_type_str()
-            print(indent_str + '{} ({})'.format(key_str,type_str))
-        # print(indent_str + '{}'.format(key))
-        #####
-        # if self.parent_key == '[root]' and self.is_iterable():
-        #     print()
-
-        for el in self.dictlist_elements:
-            indent_str = el.get_indent_str()
-            key = '"{}":"{}'.format(el.parent_key,el.key)
-
-            if el.get_value_type() == DictListType.TERMINATE_VALUE:
-                if isinstance(el.value,str):
-                    print(indent_str + '"{}":"{}" (terminate_value)'.format(key,str(el.value)))
-                else:
-                    print(indent_str + '"{}":"{}"(terminate_value,str)'.format(key,str(el.value)))
-            elif el.get_value_type() == DictListType.TERMINATE_DICT:
-                if el.key == None:
-                    print(el.get_indent_str() + '"{}":"{}" (terminate_dict_)'.format(str(key),str(el.value)))
-                else:
-                    value = self.get_dict_value(el.value,el.key)
-                    print(indent_str + '"{}":"{}" (terminate_dict)'.format(key,value))
-            elif el.get_value_type() == DictListType.TERMINATE_LIST:
-                for el_in_el in el.dictlist_elements:
-                    el_in_el.print_value()
-            elif el.get_value_type() == DictListType.HAS_ITERABLE_DICT:
-                #####
-                if self.parent_key == '[root]':
-                    key_str = self.get_key_names()
-                    type_str = self.get_velu_type_str()
-                    print(indent_str + '{} ({})'.format(key_str,type_str))
-                #####
-                for el_in_el in el.dictlist_elements:
-                    el_in_el.print_value()
-            elif el.get_value_type() == DictListType.HAS_ITERABLE_LIST:
-                #####
-                if self.parent_key == '[root]':
-                    key_str = self.get_key_names()
-                    type_str = self.get_velu_type_str()
-                    print(indent_str + '{} ({})'.format(key_str,type_str))
-                #####
-                for el_in_el in el.dictlist_elements:
-                    el_in_el.print_value()
-            else:
-                    print(indent_str + '"{}":"{}" (else)'.format(key,el.value))
-
-
-    ################################################################################
-    def has_iterable_child(self)->bool:
-        elements:DictListElement = None
-        if elements in self.dictlist_elements:
-            if elements.has_iterable():
-                return True
-        return False
-            
-    ################################################################################
-    def has_iterable(self)->bool:
-        t = self.get_value_type()
-        if t == DictListType.HAS_ITERABLE_DICT or t == DictListType.HAS_ITERABLE_LIST:
-            return True
-        return False
-    
-    ################################################################################
-    def is_iterable(self)->bool:
-        t = self.get_value_type()
-        # not t == DictListType.TERMINATE.Value
-        if t == DictListType.HAS_ITERABLE_DICT or \
-            t == DictListType.HAS_ITERABLE_LIST or \
-            t == DictListType.TERMINATE_DICT or \
-            t == DictListType.TERMINATE_LIST:
-            return True
-        return False
-
-    ################################################################################
-    def get_value_type(self)->int:
+    def get_value_type(self):
         if self.is_terminate:
             return DictListType.TERMINATE_VALUE
         elif self.is_terminate_dict:
@@ -511,230 +173,42 @@ class DictListElement():
         elif self.is_list():
             return DictListType.HAS_ITERABLE_LIST
     
-    ################################################################################
-    def get_velu_type_str(self)->str:
-        if self.is_terminate:
-            return 'terminate_value'
-        elif self.is_terminate_dict:
-            return 'terminate_dict'
-        elif self.is_terminate_list:
-            return 'terminate_list'
-        elif self.is_dict():
-            return 'dict_has_iterable'
-        elif self.is_list():
-            return 'list_has_iterable'
-
-    ################################################################################
-    def get_key_names(self)->str:        
-        if self.key != self.parent_key:
-            if self.key == None:
-                self.key ='[None]'
-            key = '"{}":"{}"'.format(self.parent_key,self.key)
-        else:
-            # key = '"{}"'.format(self.key)
-            key = '"{}":"{}"'.format(self.parent_key,self.key)
-        return key
-
-    ################################################################################
-    def get_dict_value(self,dict_val:dict,key:str):
-        try:
-            if not key in dict_val.keys():
-                return '#KEY!'
-            return dict_val[key]
-        except:
-            return '#VALUE!'
-    
-    ################################################################################
-    def get_key(self):
-
-
-        if self.is_terminate_dict:
-            if isinstance(self.value,dict):
-                keys = self.value.keys()
-                for k in keys:
-                    key = str(k)
-                    break
-                # key = keys[0] #TypeError: 'odict_keys' object is not subscriptable
-            else:
-                key = '[None]'
-        else:
-            if self.__is_terminate:
-                if isinstance(self.value,dict):
-                    keys = self.value.keys()
-                    for k in keys:
-                        key = str(k)
-                        break
-            elif self.parent_key == '[list]':
-                keys = self.value.keys()
-                for k in keys:
-                    key = str(k)
-                    break
-            else:
-                key = self.key
-        return key
-    
-    ################################################################################
-    ################################################################################
-    def print_for_set(self,key,value,hierarchy,value_type):
-        if IS_PRINT_WHEN_SET_VALUE:
-            if value_type == DictListType.TERMINATE_VALUE:
-                add_val = '(terminate_value)'
-            elif value_type == DictListType.TERMINATE_DICT:
-                add_val = '(terminate_dict)'
-            elif value_type == DictListType.TERMINATE_LIST:
-                add_val = '(terminate_list)'
-            elif value_type == DictListType.HAS_ITERABLE_DICT:
-                add_val = '(iterable_dict)'
-            elif value_type == DictListType.HAS_ITERABLE_LIST:
-                add_val = '(iterable_list)'
-            else:
-                add_val = '(else)'
-            print('"{}":"{}" {}'.format(str(key),str(value),add_val))
-    
-    def get_value_type_from_value(self,value):
-        if isinstance(value,dict):
-            if self.dict_is_terminate_dict(value):
-                ret = DictListType.TERMINATE_DICT
-            else:
-                ret = DictListType.HAS_ITERABLE_DICT
-        elif isinstance(value,list):
-            if self.list_is_terminate_list(value):
-                ret = DictListType.TERMINATE_LIST
-            else:
-                ret = DictListType.HAS_ITERABLE_LIST
-        else:
-            ret = DictListType.TERMINATE_VALUE
-        return ret
-
-    def list_is_terminate_list(self,value:list):
-        for v in value:
-            if isinstance(v,list):
-                return False
-            elif isinstance(v,dict):
-                return False
-        return True
-
-    def dict_is_terminate_dict(self,value:dict):
-        if isinstance(value,dict):
-            count = len(value.keys())
-            if count > 1:
-                return False
-            return True
-        else:
-            return False
-    def not_dict_or_list(value):
-        if isinstance(value,dict):
-            return False
-        elif isinstance(value,list):
-            return False
-        else:
-            return True
-    ################################################################################
-    ################################################################################
-    # set value
-    ################################################################################
-    ################################################################################
-    def set_value(self,value,hierarchy:int,key,parent_key='',value_type=0):
+    def set_value(self,value):
         """受け取った値をセットする。
          valueはself.valueに格納し、その後、valueがdict,listである場合は、持っている要素を分割してself.dictlistに格納する。
         この場合、メモリ領域は2倍使うことになる。
          """
-        # if parent_key == 'key4':
-        #     print()
         # セットするときは値をリセットしておく
-        self.value_type = value_type
-        self.reset_self(hierarchy)
-        if parent_key == '':
-            parent_key ='[none]'
-            key = '[root]'
-        
-        self.key = key
-        self.parent_key = parent_key
-        
-        if key == 'key2':
-            print()
-
-        self.dictlist_elements = []
-        # if type_value == DictListType.TERMINATE_DICT:
-        #     self.key = key
-        #     self.value = {key:value}
-        #     child_type_value = DictListType.TERMINATE_VALUE
-        #     child_value = value
-        #     child_key = key
-        #     dl = DictListElement(target_value, self.hierarchy + 1, child_key , self.key, type_value)
-        
+        self.reset_self()
         if isinstance(value,dict):
-            ##### 受け取った値はvalueに格納、その子要素はdictlistに格納する
+            # 受け取った値はvalueに格納、その子要素はdictlistに格納する
             self.value:dict = value
-            for child_key in value.keys():
-                target_value = value[child_key]
-                dl = DictListElement(target_value, self.hierarchy + 1, child_key , self.key, 0)
-                # dl.key = key
-                self.dictlist_elements.append(dl)
-            #####
-                
-            # # 子がすべてterminateか
-            if self.is_iterable():
-                self.value_type = DictListType.HAS_ITERABLE_DICT
-                self.print_for_set(self.key,self.value,self.hierarchy,self.value_type)
+            self.dictlist_elements = []
+            for buf in value.keys():
+                self.dictlist_elements.append(DictListElement(value[buf],self.hierarchy))
             # self.dictlist_elements が実値の場合はis_terminate==Trueとなる。
             # さらに、len(dictlist_elements)==1の時、この階層(このクラス)は最下層から2つ目「{"key":value}」となる
-            elif len(self.dictlist_elements)==1 and self.dictlist_elements[0].is_terminate:
+            if len(self.dictlist_elements)==1 and self.dictlist_elements[0].is_terminate:
                 self.is_terminate_dict = True
-                # self.key = self.get_key() # terminate_dictのみkeyとparen_keyが異なる
-                if self.is_terminate_dict:
-                    # dl_value = self.get_dict_value(value,dl.key)
-                    # if dl.key != dl.parent_key:
-                    #     key = '"{}":"{}'.format(dl.parent_key,dl.key)
-                    # else:
-                    #     key = dl.key
-                    # print('"{}":"{}" (terminate_dict)'.format(key,dl_value))
-                    self.print_for_set(self.key,self.value,self.hierarchy,self.value_type)
-            else:
-                # self.value_type = DictListType.TERMINATE_DICT
-                #is_iterableがなかったため、変更
-                # self.key = self.parent_key # terminate_dictのみkeyとparen_keyが異なる
-                self.key = self.get_key()
-                # print('"{}":"{}" (iterable_dict)'.format(str(self.key),self.value))
-                self.print_for_set(self.key,self.value,self.hierarchy,self.value_type)
-            # for key in value.keys():
-            #     if key == 'key1':
-            #         print()
-            #         print(value.keys())
-            #         print('key1')
-            # print('value={} , self.len={} , el[0].is_terminate={}'.format(value,len(self.dictlist_elements),self.dictlist_elements[0].is_terminate))
+                self.key = value.keys()[0]
         elif isinstance(value,list):
             self.value:list = value
-            # self.key = self.parent_key # terminate_dictのみkeyとparen_keyが異なる
-            self.key = key
+            self.dictlist_elements = []
             is_iterable = True
-
-            # dl = DictListElement(value ,self.hierarchy + 1,self.key)
-            # self.dictlist_elements.append(dl)
-            child_key = LIST_KEY_NAME
-            for child_value in value:
-                value_type = self.get_value_type_from_value(child_value)
-                dl = DictListElement(child_value, self.hierarchy + 1, child_key, self.key, value_type)
-                self.dictlist_elements.append(dl)
+            for buf in value:
+                self.dictlist_elements.append(DictListElement(buf,self.hierarchy))
+                if (isinstance(buf,dict) or isinstance(buf,list)):
+                    # single value(not iterable)
+                    is_iterable = True
             # 要素にdict,listを含む場合は、末端のlistではない
-            # 要素にdict,listを含む場合は、末端のlistではない
-            if self.is_iterable() or self.has_iterable_child:
-                self.value_type = DictListType.HAS_ITERABLE_LIST
-            else:
-                self.value_type = DictListType.TERMINATE_LIST
-            self.print_for_set(self.key,self.value,self.hierarchy,self.value_type)
+            if not is_iterable:
+                self.is_terminate_list = True
+            # self.dictlist_elements が実値の場合はis_terminate==Trueとなる
+            # この時、この階層は最下層から2つ目となる
         else:
             # terminate value(str,int、boolなどの実値)
             self.value = value
-            self.parent_key = self.parent_key
-            self.key = key
             self.is_terminate = True
-            if self.key != LIST_KEY_NAME:
-                self.value_type = DictListType.TERMINATE_VALUE
-            else:
-                self.value_type = DictListType.TERMINATE_DICT
-            self.value_type = self.get_value_type_from_value(self.value)
-            self.print_for_set(self.key,self.value,self.hierarchy,self.value_type)
             ###
             # 再帰的に値を代入していって、最終的には
             # str,int,boolなどの実値が代入される。その時はis_terminateフラグをTrueにする。
@@ -755,7 +229,6 @@ class DictListElement():
             ###
             # 値を扱うときは、is_terminate、
 
-    ################################################################################
     def is_exists(self,key=None,value=None):
         """key,valueが存在するか判定する。
          keyを指定する場合は、dict型のみを対象とする。（key=key_name[str],value=[Any/None]）
@@ -809,22 +282,11 @@ class DictListElement():
             raise Exception('unexpected case')
         return False
     
-    ################################################################################
     def is_list(self):
-        if self.value_type == DictListType.HAS_ITERABLE_LIST \
-            or self.value_type == DictListType.TERMINATE_LIST:
-            return True
-        return False
-        # return isinstance(self.value,list)
+        return isinstance(self.value,list)
     def is_dict(self):
-        if self.value_type == DictListType.HAS_ITERABLE_DICT \
-            or self.value_type == DictListType.TERMINATE_DICT:
-            return True
-        return False
-        # return isinstance(self.value,dict)
+        return isinstance(self.value,dict)
 
-    ################################################################################
-    ################################################################################
     def count(self,key=None,value=None,internal_count:int=0)->int:
         """key,valueが存在する回数(個数)をカウントする。
          keyを指定する場合は、dict型のみを対象とする。（key=key_name[str],value=[Any/None]）
@@ -881,7 +343,6 @@ class DictListElement():
             raise Exception('unexpected case')
         return count
     
-    ################################################################################
     def update_target(self,target_values,value=None):
         """target_values(dict型)を指定して、その場所のvalueを更新する"""
         pass
@@ -889,8 +350,6 @@ class DictListElement():
     def update_value_core(self,self_value,update_value,count=0):
         pass
 
-    ################################################################################
-    ################################################################################
     def update_part(self,value,hierarchy=0):
         """
         単に値を更新する場合は、dict.updateを使用する
@@ -937,7 +396,7 @@ class DictListElement():
             raise Exception('cant add value. value is not dict')
 
         if not isinstance(value,DictListElement):
-            update_val:DictListElement = DictListElement(value,hierarchy,'',)
+            update_val:DictListElement = DictListElement(value)
         else:
             update_val = value
         
@@ -1106,7 +565,7 @@ class DictListElement():
         target = value
         if hierarchy < 0:
             hierarchy =0
-        self_el : DictListElement
+        self_el : DictListElement 
         ret_els : 'list[DictListElement]' = []
         for i in range(count):
             for i in range(len(self.dictlist_elements)):
@@ -1306,41 +765,40 @@ class DictList():
 
 def main():
     try:
-        print('*** __file__ = ' + __file__ )
-        # d = {'Alice': 5, 'Bob': 3, 'Charlie': 7}
-        # d2 = {'Alice': 5, 'Bob': 3}
-        # d3 = {'Bob': 3}
-        # n = len(d)
-        # print('n = ' + str(n))
-        # for val in d:
-        #     print(val)
-        #     print(val[1]) # l,o,h
+        d = {'Alice': 5, 'Bob': 3, 'Charlie': 7}
+        d2 = {'Alice': 5, 'Bob': 3}
+        d3 = {'Bob': 3}
+        n = len(d)
+        print('n = ' + str(n))
+        for val in d:
+            print(val)
+            print(val[1]) # l,o,h
         
-        # print('d.items')
-        # print(d.items())
-        # print('d2.items')
-        # print(d2.items())
-        # print('d3.items')
-        # print(d3.items())
-        # flag = d2 in d.items()
-        # print(flag)
-        # flag = d3 in d.items()
-        # print(flag)
-        # flag = d2.items() in d.items()
-        # print(flag)
-        # flag = d3.items() in d.items()
-        # print(flag)
+        print('d.items')
+        print(d.items())
+        print('d2.items')
+        print(d2.items())
+        print('d3.items')
+        print(d3.items())
+        flag = d2 in d.items()
+        print(flag)
+        flag = d3 in d.items()
+        print(flag)
+        flag = d2.items() in d.items()
+        print(flag)
+        flag = d3.items() in d.items()
+        print(flag)
 
-        # chk = (d3.keys(),d3.values())
-        # print('chk')
-        # print(chk)
-        # #chk = (d3.keys()[0],d3.values()[0]) #TypeError: 'dict_keys' object is not subscriptable
-        # val2:dict
-        # for val2 in d3:
-        #     # chk = (val2.keys(),val2.values())#AttributeError: 'str' object has no attribute 'keys'
-        #     chk = val2
-        #     print('chk')
-        #     print(chk)
+        chk = (d3.keys(),d3.values())
+        print('chk')
+        print(chk)
+        #chk = (d3.keys()[0],d3.values()[0]) #TypeError: 'dict_keys' object is not subscriptable
+        val2:dict
+        for val2 in d3:
+            # chk = (val2.keys(),val2.values())#AttributeError: 'str' object has no attribute 'keys'
+            chk = val2
+            print('chk')
+            print(chk)
 
         return
 

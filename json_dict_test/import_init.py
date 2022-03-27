@@ -27,4 +27,9 @@ except:
     import traceback
     traceback.print_exc()
 
+BAR = '###############################################################'
 
+def get_path_from_current(file_path,file_name):
+    import os,pathlib
+    path = str(pathlib.Path(file_path).parent.joinpath(file_name))
+    return path
