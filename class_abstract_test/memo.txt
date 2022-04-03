@@ -1,0 +1,13 @@
+python　で interfaceはない
+
+https://qiita.com/baikichiz/items/7c3fdb721bb72644f638
+抽象基底クラス（ABC: Abstract Base Class）がある
+ただし、あくまでpythonは動的型付け言語であり、
+派生クラスの定義時に厳密な型チェックやメソッドのシグネチャのチェックは行っていないことに注意しましょう。
+
+
+
+https://ohke.hateblo.jp/entry/2020/02/01/123000
+
+
+
