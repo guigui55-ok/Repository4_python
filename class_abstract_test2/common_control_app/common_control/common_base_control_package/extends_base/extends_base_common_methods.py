@@ -8,7 +8,8 @@ if __name__ == '__main__':
     import init_import
 else:
     # from . import init_import
-    from common_base_control_package.extends_base import init_import
+    import init_import
+    # from .extends_base import init_import
 
 from base_package.base_module import BaseClass as BaseClass
 

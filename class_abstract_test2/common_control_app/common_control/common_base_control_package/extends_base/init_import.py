@@ -1,6 +1,6 @@
 
 """
-    target_name_list =['base_package','common_general','class_abstract_test2']
+    target_name_list =['base_package','common_general']
 """
 is_excute = False
 print(is_excute)
@@ -11,8 +11,12 @@ print('* '+__file__)
 import sys,os,pathlib
 import traceback
 try:
-    target_name_list =['base_package','common_general','class_abstract_test2']
+    # target_name_list =['base_package','common_general','common_control','class_abstract_test2','common_base_control_package']
+    target_name_list =['base_package','common_general']
     path = str(pathlib.Path(__file__))
+    add_path = str(pathlib.Path(__file__).parent)
+    sys.path.append(add_path)
+    print('* sys.path.append = '+add_path)
     while True:
         path = str(pathlib.Path(path).parent)
         dir_name_list = os.listdir(path)

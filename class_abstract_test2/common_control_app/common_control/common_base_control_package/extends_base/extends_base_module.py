@@ -6,11 +6,11 @@ import 2
 
 
 if __name__ == '__main__':
-    from extends_base_common_methods import BaseClass
     import extends_base_common_methods
+    from extends_base_common_methods import BaseClass
 else:
-    from common_base_control_package.extends_base.extends_base_common_methods import BaseClass
-    import common_base_control_package.extends_base.extends_base_common_methods
+    from . import extends_base_common_methods
+    from .extends_base_common_methods import BaseClass
 
 
 class ExtendsBaseClass():
