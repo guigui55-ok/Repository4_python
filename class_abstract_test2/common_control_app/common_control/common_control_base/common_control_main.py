@@ -15,8 +15,8 @@ if __name__ == '__main__':
     import common_base_control_package
     from common_base_control_package.extends_base.extends_base_module import ExtendsBaseClass
 else:
-    from . import common_base_control_package
-    from .common_base_control_package.extends_base.extends_base_module import ExtendsBaseClass
+    import common_base_control_package
+    from common_base_control_package.extends_base.extends_base_module import ExtendsBaseClass
 # from . import common_base_control_package # attempted relative import with no known parent package
 # from . import common_base_control_package
 # import common_base_control_package.extends_base.extends_base_module
