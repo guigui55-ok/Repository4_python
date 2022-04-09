@@ -33,7 +33,7 @@ def get_object(mode:int):
         return None
         raise Exception()
     
-
+# Prottypeを継承した2つのクラスを使い分けるときに、vscodeでintellicenseが効くかどうかのテスト
 def main():
     # pro = Prototype()
     #TypeError: Can't instantiate abstract class Prototype with abstract method print_classname
