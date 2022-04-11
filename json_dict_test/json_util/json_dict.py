@@ -1160,20 +1160,20 @@ class JsonDict():
             ### end for
         return ret_els
 
-    def is_match_self(self,value,type):
-        if type == DictListType.KEY:
-            if self.key == value:
-                return True
-            else:
-                return False
-        elif type == DictListType.DICT:
-            value_dict:dict = value
-            key = value_dict.keys()[0]
-            value = value_dict.values()[0]
-            if self.key == key and self.value == value:
-                return True
-            else:
-                return False
+    # def is_match_self(self,value,type):
+    #     if type == DictListType.KEY:
+    #         if self.key == value:
+    #             return True
+    #         else:
+    #             return False
+    #     elif type == DictListType.DICT:
+    #         value_dict:dict = value
+    #         key = value_dict.keys()[0]
+    #         value = value_dict.values()[0]
+    #         if self.key == key and self.value == value:
+    #             return True
+    #         else:
+    #             return False
     ################################################################
     def get_value_dictlist(self,value,type:int=DictListType.KEY,hierarchy=0,count=1):
         """
