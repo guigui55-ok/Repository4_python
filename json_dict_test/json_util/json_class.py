@@ -50,7 +50,7 @@ class JsonUtil():
         if write_path == '': write_path = self.defalut_file_path
         if values == None : values = self.values
         # write
-        with open(write_path, 'w') as f:
+        with open(write_path, 'w',encoding='utf-8') as f:
             json.dump(values, f, indent=self.indent)
 
     def get_value_from_json(self,path,keys:list)->list[str]:

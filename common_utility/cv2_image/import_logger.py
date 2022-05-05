@@ -22,6 +22,6 @@ def log_error(e:Exception):
     if logger != None:
         log_error(e)
     else:
-        print(str(e))
+        print('ErrorMessage: '+str(e))
     import traceback
     traceback.print_exc()

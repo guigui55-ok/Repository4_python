@@ -67,8 +67,8 @@ def dict_test():
         cl_json = JsonUtil(path2)
         cl_json.indent = 4
         
+        # dict >> dict_str >> dict_val >> cl_json.values
         dict_val = cl_json.cnv_str_to_dict(dict_str)
-
         cl_json.values = dict_val
         # update_dict = cl_json.cnv_str_to_dict(update_dict_str)
         # cl_json.update_value(update_dict)

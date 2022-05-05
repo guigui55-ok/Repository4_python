@@ -1,4 +1,7 @@
 import enum
+from re import T
+
+from json_util.dict_list2 import DictListElement
 class DictListType(enum.Enum):
     #not has iterable
     TERMINATE_VALUE=1
@@ -17,6 +20,13 @@ KEY_NAME_ROOT = '[root]'
 KEY_NAME_LIST = '[list]'
 KEY_NAME_NONE = '[none]'
 IS_PRINT_WHEN_SET_VALUE = False
+
+import platform
+if platform.system() == 'Windows':
+    NEW_LINE = '\n'
+    NEW_LINE = '\n'
+else:
+    NEW_LINE = '\n'
 
 
 ################################################################################
@@ -122,7 +132,7 @@ class JsonDict():
     hierarchy = 0
     indent = 4
     def __init__(self,value,hierarchy:int=0,key='',parent_key:str='',value_type:int=0) -> None:
-        self.new_line = '\n'
+        self.new_line = NEW_LINE
         self.hierarchy = hierarchy
         if isinstance(value,dict):
             self.set_value(value,hierarchy,key,parent_key,value_type)
@@ -133,11 +143,18 @@ class JsonDict():
             
     @property
     def is_terminate(self):
-        if self.key != None:
-            return False
+        is_el_single = True
         if self.dictlist_elements == None or (len(self.dictlist_elements) < 1):
-            return True
-        return False
+            is_el_single = True
+        else:
+            is_el_single = False
+            return False
+        if self.key != None:
+            if self.key == KEY_NAME_LIST:
+                return True
+            else:
+                return False
+        return True
     @is_terminate.setter
     def is_terminate(self, value):
         self.__is_terminate = value
@@ -149,7 +166,11 @@ class JsonDict():
         if self.dictlist_elements == None or (len(self.dictlist_elements) < 1):
             #and
             if self.key != None:
-                return True
+                if self.key == LIST_KEY_NAME:
+                    return False
+                else:
+                    return True
+        # elif len(self.dictlist_elements) == 1:
         else:
             if (len(self.dictlist_elements) > 1):
                 return False
@@ -288,12 +309,14 @@ class JsonDict():
         #------------------
         # stop_key = KEY_NAME_LIST
         # if self.key==stop_key:
-        #     print()
+        #     print()        
 
-        new_line = '\n'
+        new_line = NEW_LINE
         if now_value=='':
             now_value = ''
             now_state = self.PrintJsonState()
+            if self.key == KEY_NAME_ROOT:
+                now_value = '{'+new_line
         is_used_block = False
         if self.is_terminate:
             indent_str = self.get_indent_str()
@@ -329,7 +352,7 @@ class JsonDict():
             else:
                 pass
             now_value += now_state.begin_block(self.hierarchy,self.ValueTypeConst.DICT) + new_line
-        
+
         for i in range(len(self.dictlist_elements)):
             el = self.dictlist_elements[i]
             # if el.key == stop_key:
@@ -412,6 +435,8 @@ class JsonDict():
 
     ################################################################################
     def print_values(self,is_show_parent=False,is_show_type=False):
+        if self.key == KEY_NAME_ROOT:
+            print('{')
         for el in self.dictlist_elements:
             indent_str = el.get_indent_str()
             if is_show_parent:
@@ -423,11 +448,13 @@ class JsonDict():
                 type_str = '('+type_str+')' 
             else:
                 type_str = ''
-
-            if el.get_value_type() == DictListType.TERMINATE_VALUE:
+            _type = el.get_value_type()
+            if _type == DictListType.TERMINATE_VALUE:
                 if isinstance(el.value,str):
                     print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
                 else:
+                    print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
+            elif _type == DictListType.TERMINATE_DICT:
                     print(indent_str + '"{}":"{}" {}'.format(key_str,str(el.value),type_str))
             else:
                 if is_show_parent:
@@ -437,6 +464,8 @@ class JsonDict():
                     key_str = '"{}"'.format(key_str)
                 print(indent_str + '{} {}'.format(key_str,type_str))
                 el.print_values(is_show_parent,is_show_type)
+        if self.key == KEY_NAME_ROOT:
+            print('}')
 
 
     
@@ -576,15 +605,22 @@ class JsonDict():
     ################################################################################
     def is_iterable(self)->bool:
         t = self.get_value_type()
+        if t == DictListType.TERMINATE_DICT:
+            return False
+        elif t == DictListType.TERMINATE_LIST:
+            return False
+        elif t == DictListType.TERMINATE_VALUE:
+            return False
+
+        for el in self.dictlist_elements:
+            if el.is_iterable():
+                return True
+        return False
         # not t == DictListType.TERMINATE.Value
         if t == DictListType.HAS_ITERABLE_DICT or \
             t == DictListType.HAS_ITERABLE_LIST or \
             t == DictListType.TERMINATE_LIST:
             return True
-        for el in self.dictlist_elements:
-            if el.is_iterable():
-                return True
-        return False
 
     ################################################################################
     def get_value_type(self)->int:
@@ -776,7 +812,7 @@ class JsonDict():
                 dl = JsonDict(child_value, self.hierarchy + 1, child_key, self.key, value_type)
                 self.dictlist_elements.append(dl)
             # 要素にdict,listを含む場合は、末端のlistではない
-            if self.is_iterable() or self.has_iterable_child:
+            if self.is_iterable() or self.has_iterable_child():
                 self.value_type = DictListType.HAS_ITERABLE_LIST
             else:
                 self.value_type = DictListType.TERMINATE_LIST
@@ -788,9 +824,9 @@ class JsonDict():
             self.key = key
             self.is_terminate = True
             if self.key != LIST_KEY_NAME:
-                self.value_type = DictListType.TERMINATE_VALUE
-            else:
                 self.value_type = DictListType.TERMINATE_DICT
+            else:
+                self.value_type = DictListType.TERMINATE_VALUE
             self.value_type = self.get_value_type_from_value(self.value)
             self.print_for_set(self.key,self.value,self.hierarchy,self.value_type)
             ###
@@ -1175,7 +1211,7 @@ class JsonDict():
     #         else:
     #             return False
     ################################################################
-    def get_value_dictlist(self,value,type:int=DictListType.KEY,hierarchy=0,count=1):
+    def get_value_dictlist(self,value,type:int=DictListType.KEY.value,hierarchy=0,count=1):
         """
         Keyかdict{key:value}が一致するJsonDictを取得する
 
@@ -1186,42 +1222,34 @@ class JsonDict():
             hierarchy =0
         self_el : JsonDict 
         ret_els : 'list[JsonDict]' = []
-        for i in range(count):
-            for i in range(len(self.dictlist_elements)):
-                self_el = self.dictlist_elements[i]
-
-                if self_el.is_terminate:
-                    if self.is_match_self(target,type):
-                        ret_els.append(self_el)
-                elif self_el.is_terminate_dict:
-                    if self.is_match_self(target,type):
-                        ret_els.append(self_el)
-                    else:
-                        #dict{key:value}1つのみの値、なければNoneを返す
-                        pass
-                elif self_el.is_terminate_list:
-                    pass
-                elif self_el.is_list():
+        ###
+        for j in range(len(self.dictlist_elements)):
+            self_el = self.dictlist_elements[j]
+            if self_el.is_match_self(value,type):
+                ret_els.append(self_el)
+            else:
+                if self_el.is_list():
                     #Keyがないので次の階層に
                     ret = self_el.get_value_dictlist(value,type,hierarchy+1)
-                    ret_els.append(ret)
+                    if len(ret) > 0:
+                        ret_els.append(ret)
                 elif self_el.is_dict():
                     #合うものがなければ次の階層に
-                    if self.is_match_self(target,type):
-                        ret_els.append(self_el)
-                    else:
-                        ret = self_el.get_value_dictlist(value,type,hierarchy+1)
+                    ret = self_el.get_value_dictlist(value,type,hierarchy+1)
+                    if len(ret) > 0:
                         ret_els.append(ret)
-            ### end for
+        ### end for
         return ret_els
+    
+    
 
     def is_match_self(self,value,type):
-        if type == DictListType.KEY:
+        if type == DictListType.KEY.value:
             if self.key == value:
                 return True
             else:
                 return False
-        elif type == DictListType.DICT:
+        elif type == DictListType.DICT.value:
             value_dict:dict = value
             key = value_dict.keys()[0]
             value = value_dict.values()[0]
@@ -1230,8 +1258,73 @@ class JsonDict():
             else:
                 return False
 
+    ################################################################
     # update _list
+    def update_value_dictlist(self,arg_dle_value:DictListElement):
+        for i in range(len(self.dictlist_elements)):
+            self_dle_el = self.dictlist_elements[i]
+            if arg_dle_value.key == KEY_NAME_ROOT:
+                for j in range(len(arg_dle_value.dictlist_elements)):
+                    update_dle = arg_dle_value.dictlist_elements[j]
+                    self.update_value_dictlist_child(update_dle)
+            elif self_dle_el.key == arg_dle_value.key:
+                self_dle_type = self_dle_el.get_value_type() 
+                arg_dle_type = arg_dle_value.get_value_type()
+                ###
+                if self_dle_type == DictListType.TERMINATE_VALUE:
+                    self_dle_el.dictlist_elements = arg_dle_value.dictlist_elements
+                elif self_dle_type == DictListType.TERMINATE_DICT:
+                    self_dle_el.dictlist_elements = arg_dle_value.dictlist_elements
+                else:
+                    ###
+                    if arg_dle_type == DictListType.TERMINATE_VALUE:
+                        self_dle_el.dictlist_elements = arg_dle_value.dictlist_elements
+                    elif arg_dle_type == DictListType.TERMINATE_DICT:
+                        self_dle_el.dictlist_elements = arg_dle_value.dictlist_elements
+                    else:
+                        # keyは一致したが self_dle_el,arg_dle_value がiterable
+                        self_dle_el.update_value_dictlist_child(arg_dle_value)
+                self.dictlist_elements[i] = self_dle_el
 
+    ################################################################
+    # update _list
+    def update_value_dictlist_child(
+        self,
+        update_dle_value:DictListElement,
+        is_child:bool=False):
+
+        for i in range(len(self.dictlist_elements)):
+            self_dle_el_child:DictListElement = self.dictlist_elements[i]
+            for j in range(len(update_dle_value.dictlist_elements)):
+                update_dle_el_child:DictListElement = update_dle_value.dictlist_elements[j]
+                if self_dle_el_child.key == update_dle_value.key:
+                    self_dle_child_type = self_dle_el_child.get_value_type() 
+                    update_dle_child_type = update_dle_el_child.get_value_type()
+                    ###
+                    if self_dle_child_type == DictListType.TERMINATE_VALUE:
+                        self_dle_el_child.dictlist_elements = update_dle_value.dictlist_elements
+                    elif self_dle_child_type == DictListType.TERMINATE_DICT:
+                        self_dle_el_child.dictlist_elements = update_dle_value.dictlist_elements
+                    else:
+                        ###
+                        if update_dle_child_type == DictListType.TERMINATE_VALUE:
+                            self_dle_el_child.dictlist_elements = update_dle_value.dictlist_elements
+                        elif update_dle_child_type == DictListType.TERMINATE_DICT:
+                            self_dle_el_child.dictlist_elements = update_dle_value.dictlist_elements
+                        else:
+                            # keyは一致したが self_dle_el,arg_dle_value がiterable
+                            self_dle_el_child.update_value_dictlist_child(update_dle_el_child)
+            self.dictlist_elements[i] = self_dle_el_child
+
+    ################################################################
+    # update _list
+    def update_value_dictlist_with_conditions(self,value:DictListElement,conditinos:DictListElement):
+        pass
+    ################################################################
+    # update _list
+    def replace_value_dictlist_with_conditions(self,value:DictListElement,conditinos:DictListElement):
+        pass
+    
 
                 
 

@@ -50,3 +50,11 @@ def is_same_by_calcHist(logger:LoggerUtility, img_a:Any, img_b:Any, threshold:fl
     else:
         log_info('is_same_by_calcHist:False , '+str(threshold) + ' <= ' + str(val))
         return False
+
+def is_same_by_calcHist_(img_a:Any, img_b:Any, threshold:float):
+    """画像を比較してしきい値以上か判定する"""
+    val = get_compareist_value(None,img_a,img_b)
+    if threshold <= val:
+        return True
+    else:
+        return False
