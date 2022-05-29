@@ -1,7 +1,6 @@
 from typing import Any
 import cv2
 import os
-
 import numpy
 
 from common_utility.cv2_image.import_logger import log_info,log_error,LoggerUtility
@@ -36,8 +35,11 @@ class Cv2Image():
             is_set = self.set_image(pathOrCv2Image)
         if not is_set:
             log_error(__name__ +'.__init__ :set image ERROR')
+            log_error('    path = {}'.format(self.path))
     
     def img_to_gray(self):
+        if self.is_image_none():
+            return
         img_gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)  # RGB2〜 でなく BGR2〜 を指定
         self.img = img_gray
 
@@ -242,6 +244,9 @@ class Cv2Image():
     def resize_keep_raito(self,raito)->bool:
         """縦横比を維持したまま、リサイズする
         raito : 倍率"""
+        if self.image_is_none():
+            print('Error:[Cv2Image.resize_keep_raito] image_is_none==True')
+            return
         if len(self.img.shape) >= 3:
             h , w = self.img.shape[:-1]
         else:

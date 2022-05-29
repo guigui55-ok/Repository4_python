@@ -31,7 +31,7 @@ class LoggerConstInt(IntEnum):
 class MyLogger(logging.Logger):
     logger : logging.Logger = None
     logger_name : str = ''
-    log_file_name : str = ''
+    log_file_path : str = ''
     log_format : str = ''
     log_level : int = ''
     config_file_path : str = ''
@@ -51,7 +51,7 @@ class LoggerUtility(MyLogger):
     def __init__(self,
                 logger_name : str,
                 config_file_path : str = '',
-                log_file_name : str = LoggerConst.DEFAULT_FILE_NAME.value,
+                log_file_path : str = LoggerConst.DEFAULT_FILE_NAME.value,
                 log_level : int = LoggerConstInt.DEFAULT_LEVEL,
                 log_format : str = LoggerConst.DEFAULT_FORMAT.value,
                 handler_mode : int = LoggerConstInt.DEFAULT_HANDLER)->None:
@@ -72,13 +72,13 @@ class LoggerUtility(MyLogger):
             
             # 変数をメイン logger_info に格納する
             self.logger_info_main.logger_name = logger_name
-            self.logger_info_main.log_file_name = log_file_name
+            self.logger_info_main.log_file_path = log_file_path
             self.logger_info_main.log_format = log_format
             self.logger_info_main.log_level = log_level
             # log_level より必要な handler リストを取得する
             handler_list = self.create_handler(
                 handler_mode,
-                self.logger_info_main.log_file_name
+                self.logger_info_main.log_file_path
             )
             # handler を logger に紐づけする
             for hdr in handler_list:
@@ -90,14 +90,14 @@ class LoggerUtility(MyLogger):
                 )       
         self.initialize_self(
             self.logger_info_main,
-            logger_name,log_file_name,log_format,log_level,config_file_path
+            logger_name,log_file_path,log_format,log_level,config_file_path
         )
     ################################################
     def initialize_self(
         self,
         logger:logging.Logger,
         logger_name:str,
-        log_file_name:str,
+        log_file_path:str,
         log_format:str,
         log_level:int,
         config_file_path:str
@@ -106,7 +106,7 @@ class LoggerUtility(MyLogger):
         """
         self.logger = logger
         self.logger_name = logger_name
-        self.log_file_name = log_file_name
+        self.log_file_path = log_file_path
         self.log_format = log_format
         self.log_level = log_level
         self.config_file_path = config_file_path
@@ -115,7 +115,7 @@ class LoggerUtility(MyLogger):
     def initialize_logger_info_for_exception(
         self,
         logger_name:str,
-        log_file_name:str,
+        log_file_path:str,
         log_level:int,
         log_format:str,
         handler_mode:int
@@ -124,7 +124,7 @@ class LoggerUtility(MyLogger):
         # 変数を logger_info_exp に格納する
         self.logger_info_exp = MyLogger()
         self.logger_info_exp.logger_name = logger_name
-        self.logger_info_exp.log_file_name = log_file_name
+        self.logger_info_exp.log_file_path = log_file_path
         self.logger_info_exp.log_format = log_format
         self.logger_info_exp.log_level = log_level
         self.logger_info_exp = self.initialize_logger_info(
@@ -147,7 +147,7 @@ class LoggerUtility(MyLogger):
         # handler リストを取得する
         handler_list = self.create_handler(
             handler_mode,
-            arg_logger_info.log_file_name
+            arg_logger_info.log_file_path
         )
         # handler と logger を紐づける。level、format もセットする
         for hdr in handler_list:
@@ -241,7 +241,7 @@ class LoggerUtility(MyLogger):
             if (log_file_name != '') & (log_file_name != None):
                 handler_list.append(logging.FileHandler(log_file_name,"a"))
             else:
-                print('log_file_name is nothing(length=0 or None)')
+                print('log_file_path is nothing(length=0 or None)')
                 pass
                 #handler_list.append(logging.FileHandler())
             
@@ -301,30 +301,31 @@ class LoggerUtility(MyLogger):
             config.dictConfig(json.load(f))
 
 def intialize_logger_util(
-    log_file_name : str,
+    log_file_path : str,
     config_file_path : str,
     basic_log_format : str,
     exception_log_format : str
 )-> LoggerUtility:
+    """  intialize_logger_util """
     format = basic_log_format
     loggeru = LoggerUtility(
         __name__,
         config_file_path,
-        log_file_name,        
-        LoggerConst.LEVEL_NOTSET,
+        log_file_path,        
+        LoggerConstInt.LEVEL_NOTSET,
         format,
-        LoggerConst.FILE_HANDLER |
-        LoggerConst.STREAM_HANDLER
+        LoggerConstInt.FILE_HANDLER |
+        LoggerConstInt.STREAM_HANDLER
     )
     
     format = exception_log_format
     loggeru.initialize_logger_info_for_exception(
         __name__ + 'exp',
-        log_file_name,
-        LoggerConst.LEVEL_ERROR,
+        log_file_path,
+        LoggerConstInt.LEVEL_ERROR,
         format,
-        LoggerConst.FILE_HANDLER |
-        LoggerConst.STREAM_HANDLER
+        LoggerConstInt.FILE_HANDLER |
+        LoggerConstInt.STREAM_HANDLER
     )
     return loggeru
 

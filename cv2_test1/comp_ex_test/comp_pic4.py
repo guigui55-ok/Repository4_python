@@ -141,7 +141,7 @@ def save_all_pics(path_list:'list[str]',sort_dir:str,logger_):
         ###
         cv2img = read_image(base_path)
         cv2img.img_to_gray()
-        cv2img.resize_keep_raito(0.5)
+        cv2img.resize_keep_raito(0.3)
 
         cv2img_list.append(cv2img)
         if count % 200 == 0:
@@ -171,6 +171,9 @@ def excute_comp_pic(path_list:'list[str]',sort_dir:str,logger_):
     mainのtarget_dirを複数指定可能に、サブフォルダ読み込み可能にした
     ******
     debug_pring 調整
+    ******
+    comp_pic4.py
+    第1比較、イメージサイズ、しきい値調整
 
     """
     debug_print()

@@ -1,0 +1,23 @@
+# coding: utf-8
+# 自分の得意な言語で
+# Let's チャレンジ！！
+
+
+D147:桶の水量
+def list_to_int(list_val):
+    """文字列のリストを数値のリストに変換する"""
+    ret = []
+    for val in list_val:
+        ret.append(int(val))
+    return ret
+
+
+row_area = int(input())
+height_list = list_to_int(input().split(' '))
+height = min(height_list)
+print(row_area * height)
+
+
+
+
+

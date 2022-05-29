@@ -1,0 +1,25 @@
+入力例1
+3 3 2
+###
+###
+...
+2 2
+1 1
+
+出力例1
+.
+#
+
+https://paiza.jp/works/mondai/a_rank_level_up_problems/a_rank_snake_map_step1/edit?language_uid=python3
+
+
+
+ 1 行目には盤面の行数を表す整数 H , 
+盤面の列数を表す整数 W , 
+与えられる座標の数を表す整数 N
+
+#1行目を読み込む
+#盤面の行数、列数を読み込み、盤面の情報を取得する
+#与えられる座標の数
+
+
