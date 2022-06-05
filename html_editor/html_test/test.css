@@ -1,0 +1,7 @@
+img {
+    width: 400px;
+    height: 200px;
+    padding: 2px 4px;       /*余白を設定*/
+    color: #FFF;            /*文字の色*/
+    border-radius: 3px;     /*角を丸める*/
+}

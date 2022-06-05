@@ -1,6 +1,9 @@
 
 BASIC_FILE_NAME = 'basic.html'
 DOCTYPE = '<!DOCTYPE html>'
+CSS_MARKER = '<!--link_css-->'
+CSS_BEGIN_TAG = '<link rel="stylesheet" href="'
+CSS_END_TAG = '">'
 NEW_LINE = '\n'
 # BODY_MAIN_CONTENTS_MARKER = '<!--main contents-->'
 # BODY_MAIN_CONTENTS_MARKER = '<body><!--main contents--></body>'
@@ -15,3 +18,4 @@ class HtmlTagName():
     H3 = 'h3'
     BODY = 'body'
     HTML = 'html'
+    IMG = 'img'

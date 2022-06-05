@@ -5,15 +5,15 @@
 """
  
 import logging
-from logging import config, exception
-import sys
+from logging import config
 import json
 from enum import IntEnum
 from enum import Enum
-from typing import Any
-
 class LoggerConst(Enum):
-    DEFAULT_FORMAT = '[%(levelname)s]%(name)s -> %(message)s'
+    # DEFAULT_FORMAT = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S') #2022-06-05 15:41:20 - INFO - test info
+    DEFAULT_FORMAT = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+    # DEFAULT_FORMAT = "[%(levelname)s] %(message)s"#[INFO] test info
+    LOG_FORMAT1 = '[%(levelname)s]%(name)s -> %(message)s'
     DEFAULT_FILE_NAME = 'app.log'
 
 class LoggerConstInt(IntEnum):
@@ -29,15 +29,15 @@ class LoggerConstInt(IntEnum):
     DEFAULT_HANDLER = STREAM_HANDLER | FILE_HANDLER
 
 class MyLogger(logging.Logger):
-    logger : logging.Logger = None
-    logger_name : str = ''
-    log_file_path : str = ''
-    log_format : str = ''
-    log_level : int = ''
-    config_file_path : str = ''
+    """logging.Logger をPackしたもの"""
     def __init__(self
         ) -> None:
-        pass
+        self.logger : logging.Logger = None
+        self.logger_name : str = ''
+        self.log_file_path : str = ''
+        self.log_format : str = ''
+        self.log_level : int = ''
+        self.config_file_path : str = ''
     def is_logger_none(self)-> bool:
         if self.logger == None:return True
         return False
@@ -169,7 +169,10 @@ class LoggerUtility(MyLogger):
         """
         
         handler.setLevel(self.cnv_level(log_level))
-        formatter = logging.Formatter(str(log_format))
+        if isinstance(log_format,logging.Formatter):
+            formatter = log_format
+        else:
+            formatter = logging.Formatter(str(log_format))
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         return logger
@@ -190,7 +193,7 @@ class LoggerUtility(MyLogger):
 
     # -------------------------------------------
     def debug(self,value): self.logger_info_main.logger.debug(value)
-    def info(self,value:Any): self.logger_info_main.logger.info(value)
+    def info(self,value): self.logger_info_main.logger.info(value)
     def warning(self,value): self.logger_info_main.logger.warning(value)
     def error(self,value): 
         try:                

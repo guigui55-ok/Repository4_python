@@ -1,9 +1,11 @@
 
-
+import pathlib
 class SeleniumLogger():
     def __init__(self,log_dir:str='') -> None:
-        if log_dir != '':
-            self.set_log_dir(log_dir)
+        if log_dir == '':
+            path = str(pathlib.Path(__file__).parent.parent.joinpath('log'))
+            log_dir = path
+        self.set_log_dir(log_dir)
     def set_log_dir(self,dir:str):
         import os
         if not os.path.exists(dir):

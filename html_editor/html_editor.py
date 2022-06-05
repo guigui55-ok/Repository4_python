@@ -1,10 +1,11 @@
 
-from lib2to3.pgen2.token import NEWLINE
-from urllib.error import ContentTooShortError
-from pyparsing import htmlComment
 
-import html_const
-from html_const import HtmlTagName
+if __name__ == '__main__':
+    import html_const
+    from html_const import HtmlTagName
+else:
+    import html_editor.html_const as html_const
+    from html_editor.html_const import HtmlTagName
 
 NEW_LINE = html_const.NEW_LINE
 INDENT = '    '
@@ -26,6 +27,59 @@ class HtmlElement():
         return self.attribute[attribute_name]
     def add_element(self,element:'HtmlElement'):
         self.child_elements.append(element)
+    def __get_indent_str(self,element:'HtmlElement'):
+        ret = ''
+        for _ in range(element.indent):
+            for _ in range(self.indent_space):
+                ret += ' '
+        return ret
+    def cnv_html_element_to_str(self,element:'HtmlElement'=None):
+        if element==None:
+            element=self
+        ret = ''
+        ret += self.__get_indent_str(element)
+        ret += '<'
+        ret += element.tag
+        ### add Attribute Front Tag
+        keys = element.attribute.keys()
+        attr = ''
+        for key in keys:
+            attr += key + '="' + element.get_attribute(key) + '" '
+        ret += self.__align_str_attr(attr) + '>'
+        ###
+        ### add Tag Text
+        if element.tag != HtmlTagName.IMG:
+            ret += element.text
+        ### add Child Element Tag
+        buf = ''
+        for child in element.child_elements:
+            buf += self.cnv_html_element_to_str(child)
+        if buf != '':
+            ret += NEW_LINE + buf
+        ###
+        ### add End Tag
+        if element.tag == HtmlTagName.BODY:
+            ret += self.__get_indent_str(element) 
+        if element.tag != HtmlTagName.IMG:
+            ret += '</' + element.tag + '>' + NEW_LINE
+        else:
+            ret += NEW_LINE
+        ###
+        return ret
+    
+    def __align_str_attr(self,value):
+        if len(value)<1:
+            return value
+        if value == ' ':
+            return ''
+        else:
+            if value[1]!=' ':
+                value = ' '+value
+            if value[-1]==' ':
+                return value[:-1]
+            else:
+                return value
+
     
 class HtmlEditor():
     def __init__(self,html_path:str='') -> None:
@@ -36,11 +90,17 @@ class HtmlEditor():
     def init_values(self,css_path:str=''):
         self.css_path = css_path
     
-    def create_html(self,html_path:str=''):
-        if html_path=='': html_path = self.html_path
-        import shutil
+    def get_default_basic_path(self,basic_html_file_path:str=''):
         import pathlib
-        src_path = str(pathlib.Path(__file__).parent.joinpath(html_const.BASIC_FILE_NAME))
+        if basic_html_file_path=='':
+            basic_html_file_path = str(pathlib.Path(__file__).parent.joinpath(html_const.BASIC_FILE_NAME))
+        return basic_html_file_path
+    
+    def create_html(self,html_path:str='',basic_html_file_path:str=''):
+        if html_path=='': html_path = self.html_path
+        else: self.html_path = html_path
+        import shutil
+        src_path = self.get_default_basic_path(basic_html_file_path)
         shutil.copy(src_path,html_path)
 
     def add_element_by_text(self,text:str='',tag_name:str=HtmlTagName.DIV,attribute:dict={},indent:int=-1):
@@ -61,12 +121,14 @@ class HtmlEditor():
             f.write(all_text)
 
     def __get_indent_str(self,element:HtmlElement):
+        return element.__get_indent_str(element)
         ret = ''
         for _ in range(element.indent):
             for _ in range(self.indent_space):
                 ret += ' '
         return ret
     def __cnv_html_element_to_str(self,element:HtmlElement):
+        return element.cnv_html_element_to_str(element)
         ret = ''
         ret += self.__get_indent_str(element)
         ret += '<'
@@ -92,6 +154,7 @@ class HtmlEditor():
         return ret
     
     def __align_str_attr(self,value):
+        return HtmlElement().__align_str_attr(value)
         if len(value)<1:
             return value
         if value == ' ':

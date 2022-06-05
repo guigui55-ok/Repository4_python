@@ -1,7 +1,6 @@
 {
     "python.autoComplete.extraPaths":[
-        "C:\\Users\\OK\\source\\repos\\Repository4_python",
-        "C:\\Users\\OK\\source\\repos\\Repository4_python\\html_editor"
+        "C:\\Users\\OK\\source\\repos\\Repository4_python"
     ],
     "python.analysis.extraPaths": [
         "C:\\Users\\OK\\source\\repos\\Repository4_python"
