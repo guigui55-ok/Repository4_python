@@ -58,7 +58,7 @@ class DonwloadSite():
 class YouTube(DonwloadSite):
     def __init__(self, chrome_driver_path: str = '') -> None:
         super().__init__(chrome_driver_path)
-        self.downloader_url = 'https://www.y2mate.com/jp/youtube/aBRbm6a9vs4'
+        self.downloader_url = 'https://www.y2mate.com/jp/youtube'
 
     def excute_download_movie(self,movie_url):
         """
