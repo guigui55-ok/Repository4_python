@@ -9,6 +9,7 @@ import time
 import os
 import glob
 import pathlib,sys
+
 path = str(pathlib.Path(__file__).parent.parent)
 sys.path.append(path)
 import import_init
@@ -137,7 +138,8 @@ class DownloadDirectoryObserver():
         return flag
 
 import shutil
-from movie_downloader_sub import YouTube,DonwloadSite
+from movie_downloader_sub import YouTube,DonwloadSite,VdSite
+from movie_downloader_sub import get_vd_site_url, get_vd_site_url2
 
 class MovieDownloader():
     def __init__(self) -> None:
@@ -149,6 +151,7 @@ class MovieDownloader():
         self.observer:DownloadDirectoryObserver = None
         self.end_dir_name = 'end'
         self.log_dir_path = log_dir
+        self.not_check_db = False
 
     def set_download_dir_observer(self,observer):
         self.observer = observer
@@ -175,14 +178,8 @@ class MovieDownloader():
 
     def url_is_valid(self,url:str):
         """URLが有効か確認する
-        （youtubeのものか）
-        https://www.youtube.com/watch?v=KXeFJlzO9Bw
         """
-        check = 'https://www.youtube.com/'
-        if url.startswith(check):
-            return True
-        print('url is invalid. > continue  url = {}'.format(url))
-        return False
+        return True
     
     def print_result(self,flag:int,value:str,url:str=''):
         print()
@@ -202,29 +199,67 @@ class MovieDownloader():
     def close_donwloader(self):
         self.downloader.close()
 
+    def path_is_donloaded(self,lnk_path:str):
+        import sql_test.sql_for_regist_url as sql_lib
+        is_exists_in_db = sql_lib.resist_data_to_mdf_from_url_file(lnk_path)
+        # sql_lib.update_times()
+        return is_exists_in_db
+    def is_exists_path_data_in_db(self,lnk_path:str):
+        import sql_test.sql_for_regist_url as sql_lib
+        is_exists = sql_lib.is_exists_data_in_db(lnk_path)
+        return is_exists
+    def regist_link_path_to_db(self,lnk_path:str):
+        import sql_test.sql_for_regist_url as sql_lib
+        is_registed = sql_lib.regist_url_when_success_download(lnk_path)
+        return is_registed
+
+
     def download_movie_main(self):
         """lnkが格納されているディレクトリのlnkからURLを読み取り、ダウンロードする。
         終わるまで待って、終わったらlnkを別ディレクトリに移動"""
         for path in self.lnk_list:
+            if not self.not_check_db:
+                if self.path_is_donloaded(path):
+                    print('**** path is donloaded.  lnk_path={}'.format(path))
+                    self.move_link_file_finished(path)
+                    continue
             url = self.get_url_from_link(path)
-            if not self.url_is_valid(url): continue
+            # if not self.url_is_valid(url): continue
             self.init_download_dir()
             #########
             # dounload main
             #########
             is_downloading = self.download_movie(url)
             #########
-            if is_downloading:
-                is_downloaded = self.wait_until_downloaded()
-                if is_downloaded:
+            if self.is_need_observer():
+                if is_downloading:
+                    is_downloaded = self.wait_until_downloaded()
+                    if is_downloaded:
+                        self.print_result(ConstResult.OK,'SUCCESS',url)
+                    else:
+                        self.print_result(ConstResult.NG,'NG',url)
+                else:
+                    is_downloaded = is_downloading
+            else:
+                is_downloaded = is_downloading
+                if self.download_result():
                     self.print_result(ConstResult.OK,'SUCCESS',url)
                 else:
                     self.print_result(ConstResult.NG,'NG',url)
-            else:
-                is_downloaded = is_downloading
+
             self.close_donwloader()
             if is_downloaded:
-                self.move_link_file_finished(path)
+                is_exists = self.is_exists_path_data_in_db(path)
+                if not is_exists:
+                    is_registed = self.regist_link_path_to_db(path)
+                else:
+                    is_registed = Tr
+                    ue
+                if is_registed:
+                    
+                    self.move_link_file_finished(path)
+            else:
+                print('is_downloaded = False, skip regist_to_db  , move_link')
 
     def move_link_file_finished(self,path):
         """ダウンロードが終わったら、終わった用ディレクトリに移動する"""
@@ -257,6 +292,7 @@ class MovieDownloader():
         buf = buf.replace(NEW_LINE,'')
         buf = buf.replace('[InternetShortcut]URL=','')
         return buf
+
     def wait_little(self,wait_time:float=DEFAULT_WAIT_TIME/3):
         self.wait(wait_time)
     def wait_short(self,wait_time:float=DEFAULT_WAIT_TIME/2):
@@ -276,16 +312,28 @@ class MovieDownloader():
         chrome_driver_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
         if url.startswith('https://www.youtube.com/'):
             downloader:YouTube = YouTube(chrome_driver_path)
+        elif url.startswith(get_vd_site_url()) or url.startswith(get_vd_site_url2()):
+            downloader:VdSite = VdSite(chrome_driver_path)
         else:
+            msg = '未実装のURL種類  url={}'.format(url)
+            raise Exception(msg)
             downloader:DonwloadSite(chrome_driver_path)
         
         if isinstance(downloader,YouTube) \
+        or isinstance(downloader,VdSite)\
         or isinstance(downloader,DonwloadSite):
             downloader.set_log_path(self.log_dir_path)
             is_downloded = downloader.excute_download_movie(url)
         self.downloader = downloader
         return is_downloded
     
+    def is_need_observer(self):
+        return self.downloader.is_need_observer
+    def download_result(self):
+        return self.downloader.download_result
+
+################################################################################
+################################################################################
 
 def main():
     downloader = MovieDownloader()
@@ -294,6 +342,8 @@ def main():
     log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
     downloader.set_dir(path,log_dir_path)
 
+    downloader.not_check_db = True
+    downloader.not_check_db = False
     observer = DownloadDirectoryObserver(donwload_dir)
     observer.set_conditions(TARGET_EXT)
     downloader.set_download_dir_observer(observer)
@@ -392,7 +442,8 @@ def check_dir_test(path = 'F:\ZDOWNLOAD', ext = TARGET_EXT):
 
 #####################################
 # check_dir_test()
-main()
+if __name__ == '__main__':
+    main()
 
 
 
