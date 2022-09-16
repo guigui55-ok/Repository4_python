@@ -1,6 +1,6 @@
 
 import glob,os,time
-
+from html_log.html_logger import BasicLogger
 
 class DirChecker():
     def __init__(self,dir_path:str) -> None:
@@ -36,9 +36,10 @@ class DirChecker():
 
 class DownloadDirectoryObserver():
     """.crdownload があったらダウンロードが終わるまで監視する、ダウンロードがストップしたら終了する"""
-    def __init__(self,observe_dir_path:str) -> None:
+    def __init__(self,observe_dir_path:str,logger:BasicLogger) -> None:
         self.dir_path = observe_dir_path
         self.ext = ''
+        self.logger = logger
     def set_conditions(self,value:str):
         self.target_type = value
         self.ext=value
@@ -49,13 +50,14 @@ class DownloadDirectoryObserver():
         for path in path_list:
             if path.endswith(self.ext):
                 os.remove(path)
-    
+    def add_log(self,value):
+        self.add_log(value)
     def is_exists_download_file(self,target_path:str):
         if os.path.exists(target_path):
             flag = True
         else:
             flag = False
-        print('is Exists = {} , path = "{}"'.format(flag,target_path))
+        self.add_log('is Exists = {} , path = "{}"'.format(flag,target_path))
         return flag
 
     def excute(self):
@@ -69,15 +71,15 @@ class DownloadDirectoryObserver():
         # begin_wait = 2
         check_limit_min = 10
         is_passed_loop = False
-        # print('check dir path.  path = {}'.format(path))
+        # self.add_log('check dir path.  path = {}'.format(path))
         target_list = checker.get_target_ext(self.ext)
         if len(target_list)<1:
-            print('target[{}] is len<1 , return'.format(self.ext))
+            self.add_log('target[{}] is len<1 , return'.format(self.ext))
             return False
         else:
             target = target_list[0]
 
-        print('Start to observe file.  path = {}'.format(target))
+        self.add_log('Start to observe file.  path = {}'.format(target))
         start = time.time()
         before_size = os.path.getsize(target)
         time_log_flag = False
@@ -86,11 +88,11 @@ class DownloadDirectoryObserver():
             passed_time = time.time() - start
             if passed_time > (check_limit_min*60):
                 print()
-                print('time passed to limit. passed_time = {}'.format(passed_time))
+                self.add_log('time passed to limit. passed_time = {}'.format(passed_time))
                 break
             if not time_log_flag:
                 if int(passed_time) % 5==0:
-                    print('downloading...[{} sec]'.format(count*5))
+                    self.add_log('downloading...[{} sec]'.format(count*5))
                     count +=1
                     time_log_flag = True
             else:
@@ -101,14 +103,14 @@ class DownloadDirectoryObserver():
             try:
                 now_size = os.path.getsize(target)
                 if before_size == now_size:
-                    print('download is stopped')
+                    self.add_log('download is stopped')
                     is_passed_loop = True
                     break
             except:
-                print('file size check error.  path = {}'.format(target))
+                self.add_log('file size check error.  path = {}'.format(target))
                 is_passed_loop = True
         print()
-        print('End to observe file.')
+        self.add_log('End to observe file.')
         time.sleep(3)
         flag = self.is_exists_download_file(os.path.splitext(target)[0])
         return flag

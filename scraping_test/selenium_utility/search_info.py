@@ -40,7 +40,7 @@ class TaargetDataInfo():
 
 from abc import ABCMeta, abstractmethod
 class AbstractSearchInfomations(metaclass=ABCMeta):
-    """多くのデータから何かを検索する仕組み"""
+    """多くのデータから何かを検索するクラス"""
 
     def __init__(self,target_data_info:TaargetDataInfo) -> None:
         self.target = target_data_info

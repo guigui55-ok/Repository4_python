@@ -21,6 +21,18 @@ class HtmlElement():
             self.indent = 0
         else:
             self.indent = indent
+    @classmethod
+    def create_html_element_img(
+        cls,src_image_path:str,alt:str='',add_attribute:dict={},indent:int=-1):
+        attr_dict = {
+                'src':src_image_path,
+                'alt':alt
+        }
+        attr_dict.update(add_attribute)
+        el = HtmlElement('', HtmlTagName.IMG,attr_dict)
+        return el
+
+
     def set_attribute(self,attribute_name:str,value:str):
         self.attribute[attribute_name] = value
     def get_attribute(self,attribute_name:str):
@@ -34,6 +46,11 @@ class HtmlElement():
                 ret += ' '
         return ret
     def cnv_html_element_to_str(self,element:'HtmlElement'=None):
+        """
+        HtmlElementをタグ文字列に変換する (htmlへ書き込むため)
+         HtmlElement [tag_name=HtmlTagName.P, text='test', {'class':'p_tag'}]
+          -> <p class="p_tag">test</p>
+        """
         if element==None:
             element=self
         ret = ''

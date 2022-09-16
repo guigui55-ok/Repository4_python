@@ -9,8 +9,6 @@ if __name__ == '__main__':
 #     from movie_downloader import MovieDownloader
 # else:
 #     from selenium_utility.movie_downloader import MovieDownloader
-from cv2 import Mat_CONTINUOUS_FLAG
-from sympy import false
 from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
 from selenium_webdriver.general import Waiter
 import selenium_webdriver.selenium_const
@@ -21,6 +19,9 @@ from selenium.webdriver.remote.webdriver import WebElement
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium_webdriver.webdriver_utility import WebDriverUtility,WebElementUtility
+
+from html_log.html_logger import HtmlLogger,BasicLogger
+
 
 def get_vd_site_url():
     path = r'C:\Users\OK\source\repos\Test\movie_data\vd_main_url.txt'
@@ -34,24 +35,10 @@ def get_vd_site_url2():
     return buf
 
 class DonwloadSite():
-    def print_result(self,flag:int,value:str,url:str=''):
-        print()
-        print(BAR)
-        if flag==ConstResult.OK:
-            print(value + '   OK')
-        if flag==ConstResult.NG:
-            print(value + '   NG')
-        if flag==ConstResult.ERROR:
-            print(value + '   ERR')
-        if flag==ConstResult.NOTHING:
-            print(value + '   NOTHING')
-        if url!='':
-            print('url = {}'.format(url))
-            
-    def __init__(self,chrome_driver_path:str) -> None:
+    def __init__(self,chrome_driver_path:str,html_logger:HtmlLogger) -> None:
         self.downloader_url = 'https://www.y2mate.com/jp/youtube/' #YouTubeDownloader
         self.downloader_url = ''
-        if chrome_driver_path == '':
+        if chrome_driver_path == '' or chrome_driver_path==None:
             self.chrome_driver_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
         else:
             self.chrome_driver_path = chrome_driver_path
@@ -60,15 +47,18 @@ class DonwloadSite():
         self.log_dir_path = ''
         self.is_need_observer = True
         self.download_result = False
+        self.logger = html_logger
     def set_log_path(self,dir_path:str):
         # self.chrome.selenium_log.set_log_dir(dir_path)
         self.log_dir_path = dir_path
+    def add_log(self,value:str):
+        self.logger.add_log(value)
     def open_web_site(self):
         is_downloded:bool = False
         chrome_driver_path = self.chrome_driver_path
         if self.chrome == None:
-            self.chrome = WebDriverUtility(chrome_driver_path)
-        self.chrome.selenium_log.log_dir = self.log_dir_path
+            self.chrome = WebDriverUtility(chrome_driver_path , self.logger)
+        self.chrome.selenium_log.log_dir = self.logger.logger_dir_path
         self.chrome.driver.set_window_size(800,800)
         downloader_url=self.downloader_url
         self.chrome.driver.get(downloader_url)
@@ -82,7 +72,7 @@ class DonwloadSite():
     def open_web_site_and_create_driver(self,new_url:str):
         chrome_driver_path = self.chrome_driver_path
         new_chrome = WebDriverUtility(chrome_driver_path)
-        new_chrome.selenium_log.log_dir = self.log_dir_path
+        new_chrome.selenium_log.log_dir = self.logger.logger_dir_path
         new_chrome.driver.set_window_size(800,800)
         downloader_url=new_url
         new_chrome.driver.get(downloader_url)
@@ -91,11 +81,23 @@ class DonwloadSite():
         return new_chrome
     def close(self):
         self.chrome.close()
-
+    def print_result(self,flag:int,value:str,url:str=''):
+        print()
+        self.add_log(BAR)
+        if flag==ConstResult.OK:
+            self.add_log(value + '   OK')
+        if flag==ConstResult.NG:
+            self.add_log(value + '   NG')
+        if flag==ConstResult.ERROR:
+            self.add_log(value + '   ERR')
+        if flag==ConstResult.NOTHING:
+            self.add_log(value + '   NOTHING')
+        if url!='':
+            self.add_log('url = {}'.format(url))
 
 class YouTube(DonwloadSite):
-    def __init__(self, chrome_driver_path: str = '') -> None:
-        super().__init__(chrome_driver_path)
+    def __init__(self, chrome_driver_path: str = '',logger:HtmlLogger=None) -> None:
+        super().__init__(chrome_driver_path, logger)
         self.downloader_url = 'https://www.y2mate.com/jp/youtube'
 
     def excute_download_movie(self,movie_url):
@@ -131,7 +133,7 @@ class YouTube(DonwloadSite):
         check = 'https://www.youtube.com/'
         if url.startswith(check):
             return True
-        print('url is invalid. > continue  url = {}'.format(url))
+        self.add_log('url is invalid. > continue  url = {}'.format(url))
         return False
 
     def input_movie_url(self,movie_url):
@@ -163,14 +165,14 @@ class YouTube(DonwloadSite):
         for _ in range(limit):
             if self.chrome.page_source_ex.is_exists_find_all(prepared_value_after_enter):
                 self.chrome.timer.wait()
-                print('waiting select movie(after send url).')
+                self.add_log('waiting select movie(after send url).')
             else:
-                print('prepared select movie(after send url).')
+                self.add_log('prepared select movie(after send url).')
                 return True
         else:
             msg = 'ERROR__prepared select movie(after send url)'
-            print('ERROR')
-            print(msg)
+            self.add_log('ERROR')
+            self.add_log(msg)
             self.chrome.save_page_source_and_screenshot(msg)
             self.print_result(ConstResult.ERROR,msg,self.movie_url)
             return False
@@ -198,7 +200,7 @@ class YouTube(DonwloadSite):
                 pass
             element.send_keys(Keys.TAB)
         else:
-            print('ダウンロードボタンがない。')
+            self.add_log('ダウンロードボタンがない。')
             return False
         self.chrome.timer.wait(0.2)
         # chrome.save_page_source_and_screenshot('waiting_save_button')
@@ -214,22 +216,22 @@ class YouTube(DonwloadSite):
         for i in range(limit):
             if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
                 msg = 'ERROR__shown error screen NOTHING'
-                print('ERROR')
-                print(msg)
+                self.add_log('ERROR')
+                self.add_log(msg)
                 self.chrome.save_page_source_and_screenshot(msg)
                 #ファイルを移動するためにTrueで返す
                 self.print_result(ConstResult.NOTHING,msg,self.movie_url)
                 return ConstResult.NOTHING
             if not self.chrome.page_source_ex.is_exists_find_all(prepared_value):
                 self.chrome.timer.wait()
-                print('waiting download button.[{}]'.format(i))
+                self.add_log('waiting download button.[{}]'.format(i))
             else:
-                print('prepared download button.')
+                self.add_log('prepared download button.')
                 return ConstResult.OK
         else:
             msg = 'ERROR__not prepared download button'
-            print('ERROR')
-            print(msg)
+            self.add_log('ERROR')
+            self.add_log(msg)
             self.chrome.save_page_source_and_screenshot(msg)
             self.print_result(ConstResult.ERROR,msg,self.movie_url)
             return ConstResult.ERROR
@@ -243,7 +245,7 @@ class YouTube(DonwloadSite):
             cls = WebElementUtility(element).get_attribute('class')
             if cls == 'btn btn-success btn-file':
                 href = WebElementUtility(element).get_attribute('href')
-                print(href)
+                self.add_log(href)
                 element.click()
                 self.chrome.timer.wait()
                 return True
@@ -254,7 +256,7 @@ class YouTube(DonwloadSite):
         ダウンロード債をを開いてURLを入力、STARTをクリックして、動画をWeb上で取得する。
         その後、画面が切り替わったらダウンロードをクリックして、
         ポップアップした要素の（前とは別の）ダウンロードをクリックする。"""
-        print(url)
+        self.add_log(url)
         # import time
         # from selenium.webdriver.remote.webdriver import WebElement
         # from selenium.webdriver.common.keys import Keys
@@ -404,8 +406,8 @@ class YouTube(DonwloadSite):
 
 
 class VdSite(DonwloadSite):
-    def __init__(self, chrome_driver_path: str = '') -> None:
-        super().__init__(chrome_driver_path)
+    def __init__(self, chrome_driver_path: str = '',logger:HtmlLogger=None) -> None:
+        super().__init__(chrome_driver_path,logger,logger)
         self.chrome_driver_path = chrome_driver_path
         self.downloader_url = self.read_url()
 
@@ -473,7 +475,7 @@ class VdSite(DonwloadSite):
         check = get_vd_site_url2()
         if url.startswith(check):
             return True
-        print('url is invalid. > continue  url = {}'.format(url))
+        self.add_log('url is invalid. > continue  url = {}'.format(url))
         return False
     
     def install_addon(self,path:str='',id:str=''):
@@ -509,7 +511,7 @@ class VdSite(DonwloadSite):
         movie_class = 'video-bg-pic'
         el = self.chrome.driver.find_element_by_class_name(movie_class)
         x,y = WebElementUtility(el).get_center_position()
-        print('tap ({} , {})'.format(x,y))
+        self.add_log('tap ({} , {})'.format(x,y))
         self.chrome.click_by_position(x ,y)
         ###
         self.chrome.save_page_source_and_screenshot('_after_play1')
@@ -613,7 +615,7 @@ class VdSite(DonwloadSite):
             else:
                 if self.download_progress_value > 0 and int(val)==0:
                     return True
-            print(' {}  /  {}'.format(val,max))
+            self.add_log(' {}  /  {}'.format(val,max))
             if val == max:
                 return True
             ###
@@ -661,11 +663,11 @@ class VdSite(DonwloadSite):
     def download_stream_recorder(self):
         el = self.chrome.driver.find_element_by_link_text('ストレコ')
         if el == None:
-            print('ストレコが起動していない。')
+            self.add_log('ストレコが起動していない。')
             return False
         el = self.chrome.driver.find_element_by_class_name('titleLabel')
         title = WebElementUtility(el).get_attribute('text')
-        print('title [{}]'.format(title))
+        self.add_log('title [{}]'.format(title))
         time_log_flag = False
         count = 0
         check_limit_min = 10            
@@ -675,11 +677,11 @@ class VdSite(DonwloadSite):
             passed_time = time.time() - start
             if passed_time > (check_limit_min*60):
                 print()
-                print('time passed to limit. passed_time = {}'.format(passed_time))
+                self.add_log('time passed to limit. passed_time = {}'.format(passed_time))
                 break
             if not time_log_flag:
                 if int(passed_time) % 5==0:
-                    print('downloading...[{} sec]'.format(count*5))
+                    self.add_log('downloading...[{} sec]'.format(count*5))
                     count +=1
                     time_log_flag = True
             else:
@@ -691,7 +693,7 @@ class VdSite(DonwloadSite):
                 # 例外
                 pass
             except:
-                # print('file size check error.  path = {}'.format(target))
+                # self.add_log('file size check error.  path = {}'.format(target))
                 is_passed_loop = True
         return True
 
@@ -730,7 +732,7 @@ class VdSite(DonwloadSite):
                 pass
             element.send_keys(Keys.TAB)
         else:
-            print('[{}({})]がない。'.format(find_value,attr_name))
+            self.add_log('[{}({})]がない。'.format(find_value,attr_name))
             return None
     
     def is_shown_implemented_error_screen(self):
@@ -771,14 +773,14 @@ class VdSite(DonwloadSite):
         for _ in range(limit):
             if self.chrome.page_source_ex.is_exists_find_all(prepared_value_after_enter):
                 self.chrome.timer.wait()
-                print('waiting select movie(after send url).')
+                self.add_log('waiting select movie(after send url).')
             else:
-                print('prepared select movie(after send url).')
+                self.add_log('prepared select movie(after send url).')
                 return True
         else:
             msg = 'ERROR__prepared select movie(after send url)'
-            print('ERROR')
-            print(msg)
+            self.add_log('ERROR')
+            self.add_log(msg)
             self.chrome.save_page_source_and_screenshot(msg)
             self.print_result(ConstResult.ERROR,msg,self.movie_url)
             return False
@@ -806,7 +808,7 @@ class VdSite(DonwloadSite):
                 pass
             element.send_keys(Keys.TAB)
         else:
-            print('ダウンロードボタンがない。')
+            self.add_log('ダウンロードボタンがない。')
             return False
         self.chrome.timer.wait(0.2)
         # chrome.save_page_source_and_screenshot('waiting_save_button')
@@ -822,22 +824,22 @@ class VdSite(DonwloadSite):
         for i in range(limit):
             if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
                 msg = 'ERROR__shown error screen NOTHING'
-                print('ERROR')
-                print(msg)
+                self.add_log('ERROR')
+                self.add_log(msg)
                 self.chrome.save_page_source_and_screenshot(msg)
                 #ファイルを移動するためにTrueで返す
                 self.print_result(ConstResult.NOTHING,msg,self.movie_url)
                 return ConstResult.NOTHING
             if not self.chrome.page_source_ex.is_exists_find_all(prepared_value):
                 self.chrome.timer.wait()
-                print('waiting download button.[{}]'.format(i))
+                self.add_log('waiting download button.[{}]'.format(i))
             else:
-                print('prepared download button.')
+                self.add_log('prepared download button.')
                 return ConstResult.OK
         else:
             msg = 'ERROR__not prepared download button'
-            print('ERROR')
-            print(msg)
+            self.add_log('ERROR')
+            self.add_log(msg)
             self.chrome.save_page_source_and_screenshot(msg)
             self.print_result(ConstResult.ERROR,msg,self.movie_url)
             return ConstResult.ERROR
@@ -851,7 +853,7 @@ class VdSite(DonwloadSite):
             cls = WebElementUtility(element).get_attribute('class')
             if cls == 'btn btn-success btn-file':
                 href = WebElementUtility(element).get_attribute('href')
-                print(href)
+                self.add_log(href)
                 element.click()
                 self.chrome.timer.wait()
                 return True
@@ -869,30 +871,32 @@ def main():
     # log_dir_path = str(pathlib.Path(__file__).parent.joinpath('log')) 
     selenium_log_dir = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
     log_dir_path = selenium_log_dir
+    logger = BasicLogger(log_dir_path)
     from movie_downloader import MovieDownloader
     url = MovieDownloader().get_url_from_link(path)
     print(url)
 
     from download_directoy_observer import DownloadDirectoryObserver,DEFAULT_DONLOAD_DIR
-    observer = DownloadDirectoryObserver(DEFAULT_DONLOAD_DIR)    
+    observer = DownloadDirectoryObserver(DEFAULT_DONLOAD_DIR,logger)
+    observer
     is_downloded:bool = False
     chrome_driver_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
     if url.startswith('https://www.youtube.com/'):
-        downloader:YouTube = YouTube(chrome_driver_path)
+        downloader:YouTube = YouTube(chrome_driver_path,logger)
     elif url.startswith(get_vd_site_url()):
-        downloader:VdSite = VdSite(chrome_driver_path) #VdMainSite
+        downloader:VdSite = VdSite(chrome_driver_path,logger) #VdMainSite
     elif url.startswith(get_vd_site_url2()):
-        downloader:VdSite = VdSite(chrome_driver_path)
+        downloader:VdSite = VdSite(chrome_driver_path,logger)
     else:
         msg = 'YouTube以外は未実装'
         raise Exception(msg)
         downloader:DonwloadSite(chrome_driver_path)
-    downloader.set_log_path(selenium_log_dir)
+    # downloader.set_log_path(selenium_log_dir)
     
     if isinstance(downloader,YouTube) \
     or isinstance(downloader,VdSite) \
     or isinstance(downloader,DonwloadSite):
-        downloader.set_log_path(log_dir_path)
+        # downloader.set_log_path(log_dir_path)
         is_downloded = downloader.excute_download_movie(url)
     flag = observer.excute()
     downloader.close()

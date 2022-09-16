@@ -197,8 +197,9 @@ def get_info_from_path(path):
     info = MovieLinkInfo()
     info.set_info_from_path(path)
 
-path = r'C:\ZMyFolder\newDoc\新しいfiles\0528 you\sumi\.url'
-get_info_from_path(path)
+if __name__ == '__main__':
+    path = r'C:\ZMyFolder\newDoc\新しいfiles\0528 you\sumi\.url'
+    get_info_from_path(path)
 
 # import glob
 # for path in glob.glob(r'C:\ZMyFolder\newDoc\新しいfiles\0528 you\sumi'+'\**'):

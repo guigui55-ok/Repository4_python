@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """logger_util.py - Logger Utility
 
-ログレベル「ERROR,CRITICAL」をログ出力を重複せずに、出力する内容(書式)を変更するためのクラス
+ログレベル「ERROR,CRITICAL」をログ出力を重複せずに、
+出力する内容(書式)を変更するためのクラス
 """
  
 import logging
@@ -16,16 +17,28 @@ class const_str(Enum):
     DEFAULT_FORMAT = '[%(levelname)s]%(name)s -> %(message)s'
     DEFAULT_FILE_NAME = 'app.log'
 
+class LogLevel(IntEnum):
+    CRITICAL = 101
+    ERROR = 102
+    WARNING = 103
+    DEBUG = 104
+    REPORT = 105
+    INFO = 106
+    TRACE = 107
+    NOTSET = 199
+
 class const(IntEnum):
     STREAM_HANDLER = 0b0001
     FILE_HANDLER = 0b0010
     LEVEL_CRITICAL = 101
     LEVEL_ERROR = 102
     LEVEL_WARNING = 103
-    LEVEL_INFO = 104
-    LEVEL_DEBUG = 105
-    LEVEL_NOTSET = 106
-    DEFAULT_LEVEL = logging.NOTSET
+    LEVEL_DEBUG = 104
+    LEVEL_REPORT = 105
+    LEVEL_INFO = 106
+    LEVEL_TRACE = 107
+    LEVEL_NOTSET = 199
+    DEFAULT_LEVEL = logging.INFO
     DEFAULT_HANDLER = STREAM_HANDLER | FILE_HANDLER
 
 class logger_info():
@@ -113,7 +126,8 @@ class logger_util():
             arg_logger_info:logger_info,
             handler_mode:int
         ) -> logger_info:
-        """ logger_info,handler_mode より logger_info を initialize する
+        """
+        logger_info,handler_mode より logger_info を initialize する
         """
         # logger を new する
         arg_logger_info.logger = \
@@ -140,7 +154,8 @@ class logger_util():
                             handler:logging.Handler,
                             log_level:int,
                             log_format:str) -> logging.Logger:
-        """logger を initialize する
+        """
+        logger を initialize する
         """
         
         handler.setLevel(self.cnv_level(log_level))
@@ -208,7 +223,9 @@ class logger_util():
     #     pass
 
     def create_handler(self,handler_mode:int,log_file_name:str):
-        """handler を取得する"""
+        """
+        handler を取得する
+        """
         handler_list:logging.Handler = []
         if self.is_nth_bit_set(handler_mode,int(const.STREAM_HANDLER)):
             handler_list.append(logging.StreamHandler())
@@ -223,7 +240,9 @@ class logger_util():
         return handler_list
 
     def cnv_level(self,level:int):
-        """ logger_const 定数から logging 定数へ変換する"""
+        """
+        logger_const 定数から logging 定数へ変換する
+        """
         if(level == const.LEVEL_CRITICAL): return logging.CRITICAL
         elif(level == const.LEVEL_ERROR): return logging.ERROR
         elif(level == const.LEVEL_WARNING): return logging.WARNING
@@ -275,6 +294,10 @@ class logger_util():
         with open(path, "r", encoding="utf-8") as f:
             config.dictConfig(json.load(f))
 
+#リネーム
+class LoggerUtility(logger_util):
+    pass
+
 def intialize_logger_util(
     log_file_name : str,
     config_file_path : str,
@@ -303,6 +326,102 @@ def intialize_logger_util(
     )
     return loggeru
 
+from abc import ABCMeta, abstractmethod
+import pathlib,os
+import datetime,shutil
+def get_dir_path_from_path(path:str):
+    """ファイルであればdir_pathを、ディレクトリならそのままのpathを返す"""
+    if os.path.isfile(path):
+        dir_path = os.path.dirname(path)
+    else:
+        dir_path = path
+    return dir_path
+
+class BasicLogger(metaclass=ABCMeta):
+    """
+    
+    log管理を、コンソールのみ、テキストのみ、htmlとテキスト
+    など使い分けるための基本クラス    
+    """
+    def __init__(
+        self,
+        log_dir:str,
+        log_dir_name:str='log',
+        log_file_name:str='log.txt',
+        log_image_dir_name:str='log_image',
+        log_level:int = LogLevel.INFO
+        ) -> None:
+        """
+        デフォルトを「log_dir/log/log.txt」としている
+         log_dir には 実行先の __file__ を渡す想定をしている。
+        """
+        log_dir = get_dir_path_from_path(log_dir)
+        if log_dir == '':
+            path = os.path.join(log_dir,log_dir_name)
+            log_dir = path
+        self.set_log_dir(log_dir,log_image_dir_name)
+        self.log_file_path = os.path(self.log_dir,log_file_name)
+        self.image_dir = log_image_dir_name
+        self.log_level = log_level
+        self.log_level_console = LogLevel.NOTSET.value
+    def set_log_dir(self,dir:str,image_dir):
+        """
+        ログのディレクトリを設定する
+         引数dirが既に存在するファイルの場合は削除して、ディレクトリとして作成する。
+        """
+        import os
+        if not os.path.exists(dir):
+            os.mkdir(dir)
+        else:
+            if os.path.isfile(dir):
+                os.remove(dir)
+                os.mkdir(dir)
+        self.log_dir = dir
+        self.image_dir = os.path.join(self.log_dir,image_dir)
+    def __get_time(self):
+        """時間を取得する（Log出力用）"""
+        return datetime.datetime.now().strftime('%Y/%M/%D %h:%m:%d:%s.%f') + '  '
+    def __write_file(self,value):
+        """Logファイルに追記する"""
+        with open(self.log_file_path,'a',encoding='utf-8')as f:
+            f.write(value)
+    def add_log(self,value:str,log_level:int=LogLevel.INFO.value):
+        """Logに内容を追記する"""
+        value = self.__get_time + value
+        self.print_log(value,log_level)
+        if self.log_level <= log_level:
+            self.__write_file(value + '\n')
+    def print_log(self,value,log_level:int=LogLevel.TRACE.value):
+        """Logをコンソールに出力する"""
+        if self.log_level_console <= log_level:
+            print(value)
+    def add_log_sepalater(self):
+        """Logファイルに区切り線を追記する"""
+        """"""
+        bar = '============================================='
+        self.__write_file(bar + '\n')
+    def save_image_copy(self,value:str,image_path:str):
+        """imageファイルをLogのimageにコピーして、内容をLogに追記する"""
+        self.add_log(value)
+        img_path = self._copy(image_path,self.image_dir)
+        self.add_log('image path = ' + img_path)
+    def save_image_move(self,value:str,image_path:str):
+        """imageファイルをLogのimageに移動して、内容をLogに追記する"""
+        self.add_log(value)
+        img_path = self._move(image_path,self.image_dir)
+        self.add_log('image path = ' + img_path)
+    def _copy(self,src_path:str,dist_dir:str):
+        """ファイルをコピーする（ファイル名はそのまま）"""
+        basename = os.path.basename(src_path)
+        dist_path = os.path.join(dist_dir,basename)
+        shutil.copy(src_path,dist_path)
+        return dist_path
+    def _move(self,src_path:str,dist_dir:str):
+        """ファイルを移動する（ファイル名はそのまま）"""
+        basename = os.path.basename(src_path)
+        dist_path = os.path.join(dist_dir,basename)
+        shutil.move(src_path,dist_path)
+        return dist_path
 # def logger_init_before(name):
 #     """not recommended"""
 #     logger = getLogger(name)

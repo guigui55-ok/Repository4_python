@@ -1,0 +1,82 @@
+2022-06-18 21:00:44  create log
+2022-06-18 21:01:44  create log
+2022-06-18 21:02:23  create log
+2022-06-18 21:49:48  create log
+2022-06-18 21:53:56  create log
+2022-06-18 21:53:58      https://www.youtube.com/watch?v=sR7iduWgB6M
+2022-06-18 21:54:18  create log
+2022-06-18 21:54:20      https://www.youtube.com/watch?v=sR7iduWgB6M
+2022-06-18 21:59:01  create log
+2022-06-18 21:59:03      https://www.youtube.com/watch?v=sR7iduWgB6M
+2022-06-18 21:59:17      prepared select movie(after send url).
+2022-06-18 21:59:19      waiting download button.[0]
+2022-06-18 21:59:19      prepared download button.
+2022-06-18 21:59:20      https://dl232.dlmate48.xyz/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ0lzZnNkNGlJS0pPQi9nN1VXbk8ydWFQcDdGNHNxaHErU1FJOXJwRzZBSWNERlBSL2Q4SjR2VG5hKzU5Y3BzV0tLb2FnNVZ0eGxReFQ5M3JTRm15RWl6RlhUSzUyZk02dGtPbjUvdG5kazhYQys4NkNFNFVYby9YQzk4d3VFYVN0WG1BdE5PTzNBK0kxTndXREdhcXExaGNWUStIRFB0Yzhlbk9PVXJnU3JtK3BuNFkwbURSWXlZSVlBM1ppa2p3PT0%3D
+2022-06-18 21:59:23      Start to observe file.  path = C:\Users\OK\Downloads\y2mate.com - LINGERIE SEXY in STYLE EP11_1080p.mp4.crdownload
+2022-06-18 21:59:23      downloading...[0 sec]
+2022-06-18 21:59:31      file size check error.  path = C:\Users\OK\Downloads\y2mate.com - LINGERIE SEXY in STYLE EP11_1080p.mp4.crdownload
+2022-06-18 21:59:31      End to observe file.
+2022-06-18 21:59:34      is Exists = True , path = "C:\Users\OK\Downloads\y2mate.com - LINGERIE SEXY in STYLE EP11_1080p.mp4"
+2022-06-18 21:59:34      ########################################
+2022-06-18 21:59:34      SUCCESS   OK
+2022-06-18 21:59:34      url = https://www.youtube.com/watch?v=sR7iduWgB6M
+2022-06-18 21:59:37      https://www.youtube.com/watch?v=mDwnG5HWFZA
+2022-06-18 21:59:50      prepared select movie(after send url).
+2022-06-18 21:59:53      waiting download button.[0]
+2022-06-18 21:59:53      prepared download button.
+2022-06-18 21:59:54      https://dl30.dlmate10.xyz/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ0tzZlJ4NnlrTkwrQjhwNTh1M3ZldmFQcFlKNm9ZeUl1d1dvd0VwMnlUWE5tS1BRYkMvYXN4UzM2Vzh0Y3Y4blQ2L1lvbFM5NTBWd1RIeXJiN3hpRTRoQmVoT043RUdiMXBmWFp2cXgwbWdRQ0t3K1RBckJmOTlpK0xxbDNYS1hZc3MzNVpHL2owNXBGdmdFSDhTYzNGN01GVjlYYVBySmRaanJhYXNRNnI2WUo0dmNSbFYxWnhaNWxRM01la2lhV1o4QkZKMThCTm5GNnRzK2Y3Vk14c1R2ekpLV01vZURFZnRPdnRCQT09
+2022-06-18 21:59:57      Start to observe file.  path = C:\Users\OK\Downloads\y2mate.com - NIA LYNN Paraiso Swimwear 2022 Miami  Swimwear  Underwear_1080p.mp4.crdownload
+2022-06-18 21:59:57      downloading...[0 sec]
+2022-06-18 22:00:07      downloading...[5 sec]
+2022-06-18 22:00:17      downloading...[10 sec]
+2022-06-18 22:00:19      file size check error.  path = C:\Users\OK\Downloads\y2mate.com - NIA LYNN Paraiso Swimwear 2022 Miami  Swimwear  Underwear_1080p.mp4.crdownload
+2022-06-18 22:00:19      End to observe file.
+2022-06-18 22:00:22      is Exists = True , path = "C:\Users\OK\Downloads\y2mate.com - NIA LYNN Paraiso Swimwear 2022 Miami  Swimwear  Underwear_1080p.mp4"
+2022-06-18 22:00:22      ########################################
+2022-06-18 22:00:22      SUCCESS   OK
+2022-06-18 22:00:22      url = https://www.youtube.com/watch?v=mDwnG5HWFZA
+2022-06-18 22:00:25      https://www.youtube.com/watch?v=xxGXZcfT0l4
+2022-06-18 22:00:38      prepared select movie(after send url).
+2022-06-18 22:00:41      waiting download button.[0]
+2022-06-18 22:00:43      waiting download button.[1]
+2022-06-18 22:00:45      waiting download button.[2]
+2022-06-18 22:00:45      prepared download button.
+2022-06-18 22:00:46      https://dl253.fecfeecddafedd.xyz/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ1VxWjV4OVJVd0RybFk3ZDkvaGJicmFPOWFJcXRFL29LdEJ1RUZwV2FJWVo2R0lGdlBzSkVxUjB5UjlzSTE1SHFkMVpjdlROMWtWQk85eWNDdWhtVXoyeUdsTzRyckRhQnhWVTE0cFhRejMzS3NuYUdNNlFXMnZtMzU0VXFHWTNrZ2duME9KZVhaNDVwYzNHVE9NcWF5aHNWUSszYkh0c2tQeWZtSHNWeWdtdUpwNm8wbUJnSm5aYzFaMjh1aw%3D%3D
+2022-06-18 22:00:49      Start to observe file.  path = C:\Users\OK\Downloads\y2mate.com - PQ  Resort 2022  Full Show_1080p.mp4.crdownload
+2022-06-18 22:00:49      downloading...[0 sec]
+2022-06-18 22:00:57      file size check error.  path = C:\Users\OK\Downloads\y2mate.com - PQ  Resort 2022  Full Show_1080p.mp4.crdownload
+2022-06-18 22:00:57      End to observe file.
+2022-06-18 22:01:00      is Exists = True , path = "C:\Users\OK\Downloads\y2mate.com - PQ  Resort 2022  Full Show_1080p.mp4"
+2022-06-18 22:01:00      ########################################
+2022-06-18 22:01:00      SUCCESS   OK
+2022-06-18 22:01:00      url = https://www.youtube.com/watch?v=xxGXZcfT0l4
+2022-06-18 22:01:02      https://dl-x.com/video53196591/tiny_japanese_teen_spreads_her_tight_pussy_on_cam_homemade_
+2022-06-18 22:01:16      tap (350 , 489)
+2022-06-19 03:17:30  create log
+2022-06-19 03:20:43      https://dl-x.com/video53196591/tiny_japanese_teen_spreads_her_tight_pussy_on_cam_homemade_
+2022-06-19 03:21:16      tap (350 , 489)
+2022-06-19 03:21:27      title [None]
+2022-06-19 03:21:27       0  /  100
+2022-06-19 03:21:27      downloading...[0 sec]
+2022-06-19 03:21:29       28  /  78
+2022-06-19 03:21:32       59  /  78
+2022-06-19 03:21:35      ########################################
+2022-06-19 03:21:35      SUCCESS   OK
+2022-06-19 03:21:35      url = https://dl-x.com/video53196591/tiny_japanese_teen_spreads_her_tight_pussy_on_cam_homemade_
+2022-06-19 03:21:38      **** path is donloaded.  lnk_path=C:\ZMyFolder\newDoc\新しいfiles\_test_movie\あなたは美しい、美しい三つ編みです - XVIDEOS.COM.url
+2022-06-19 03:21:42      https://www.youtube.com/watch?v=CABsdpwjckw
+2022-06-19 03:21:56      prepared select movie(after send url).
+2022-06-19 03:21:59      waiting download button.[0]
+2022-06-19 03:21:59      prepared download button.
+2022-06-19 03:21:59      https://dl209.becfaedfeafeefc.xyz/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyaGh2WUIvNWtWbUkvZ0pnOWhxOXNEbGVwa0tDL1JLbGRublNQc1IwRzJkS1lMT0VWdk1rOHRqR2lERTF2UjRuR3lLcTkxbGVPZzBjMFc5dzdYbXR4SXpyRlN3Sm91SU41c1RTQ00rZ1dFbWkzN1c2YWlSNFVTOWtTWG9naGpHTkhGUGsyTlllTkNIdEwwZGtER2ZLdEszbHNoVjZIN1BwNzhRbjZuTDhTQ2tocGRtL2YwZ0cyWlNOclVPbk1Lbm10R1k0R0pLeGNGUG4yLzM3TWYxUThabldZUzhQQklqZTNwYXJNN01Ea3RNblc1THN6N3B5ZjUxdGpBWlA2MWx2Q1N5OFA3c1dTK1phc3FyQ3NPaU0rZW9zdEQ3NTd3em1VelI4cWFWdXBnRnhDNkVhZXJzUXNFZnUwd290cHpTdFpSbTBoaTB5bHRjaGVVR21XSE1NVWtsWHA1WkptTUdLc2xLVm5oTi9waTZ1ZmR0cTlsZloxYm12dTluSWExdi9NcWRsUHdJMFhPRzhvcz0%3D
+2022-06-19 03:22:02      Start to observe file.  path = C:\Users\OK\Downloads\y2mate.com - 女子マイルリレー予選全3組　関西インカレ2022 5 27_1080p.mp4.crdownload
+2022-06-19 03:22:02      downloading...[0 sec]
+2022-06-19 03:22:12      downloading...[5 sec]
+2022-06-19 03:22:23      downloading...[10 sec]
+2022-06-19 03:22:33      downloading...[15 sec]
+2022-06-19 03:22:39      file size check error.  path = C:\Users\OK\Downloads\y2mate.com - 女子マイルリレー予選全3組　関西インカレ2022 5 27_1080p.mp4.crdownload
+2022-06-19 03:22:39      End to observe file.
+2022-06-19 03:22:42      is Exists = True , path = "C:\Users\OK\Downloads\y2mate.com - 女子マイルリレー予選全3組　関西インカレ2022 5 27_1080p.mp4"
+2022-06-19 03:22:42      ########################################
+2022-06-19 03:22:42      SUCCESS   OK
+2022-06-19 03:22:42      url = https://www.youtube.com/watch?v=CABsdpwjckw

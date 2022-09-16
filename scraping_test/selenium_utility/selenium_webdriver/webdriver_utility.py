@@ -29,9 +29,9 @@ from sympy import cxxcode
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
 if __name__ == '__main__':
-    from selenium_log import SeleniumLogger
+    from selenium_log import SeleniumLogger,get_selenium_logger
 else:
-    from selenium_webdriver.selenium_log import SeleniumLogger
+    from selenium_webdriver.selenium_log import SeleniumLogger,get_selenium_logger
     from selenium_webdriver.general import Waiter
     import selenium_webdriver.selenium_const as selenium_const
 
@@ -66,6 +66,9 @@ class WebElementUtility():
         self.by = by
     
     def print_attributes_for_analyze(self):
+        """
+        ['text','class','id','value']
+        """
         attr_names = ['text','class','id','value']
         self.print_attributes(attr_names)
         
@@ -163,7 +166,7 @@ class PageSourceUtility():
         return result
 
 class WebDriverUtility():
-    def __init__(self,webdriver_path:str='') -> None:
+    def __init__(self,webdriver_path:str,logger) -> None:
         if webdriver_path != '':
             if not os.path.exists:
                 raise Exception('path not exists. [path={}]'.format(webdriver_path))
@@ -173,10 +176,12 @@ class WebDriverUtility():
             self.driver:webdriver.Chrome=None
             self.page_source_ex  = None
         self.webdriver_path = webdriver_path
-        self.selenium_log = SeleniumLogger()
+        # self.selenium_log = SeleniumLogger()
+        self.selenium_log = get_selenium_logger(logger)
         self.timer:Waiter = Waiter(selenium_const.DEFAULT_WAIT_TIME)
         self.options:webdriver.ChromeOptions = None
     
+        # self.selenium_log.add_log('')
     def set_driver(self,webdriver_path:str):
         self.driver:webdriver.Chrome=None
         self.page_source_ex  = None
@@ -241,8 +246,8 @@ class WebDriverUtility():
     def install_addon(self,extension_path:str):
         self.options = webdriver.ChromeOptions()
         self.options.add_argument(f'load-extension={extension_path}')
-    
-    def save_page_source_and_screenshot(self,add_str:str='',dir_path:str=''):
+        
+    def save_page_source_and_screenshot_with_log(self,add_str:str='',dir_path:str='',log_level:int=199):
         ext='_chrome_image.png'
         image_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
         self.screenshot(image_path)
@@ -252,10 +257,31 @@ class WebDriverUtility():
         print()
         print()
         print('*****')
-        print('save_page_source_and_screenshot')
-        print('source = {}'.format(source_path))
-        print('image = {}'.format(image_path))
+        if log_level < 199:
+            self.selenium_log.add_log('save_page_source_and_screenshot',log_level=log_level)
+            self.selenium_log.add_log('source = {}'.format(source_path),log_level=log_level)
+            self.selenium_log.add_log_screenshot(image_path,'save_page_source_and_screenshot',log_level=log_level)
+        else:
+            print('save_page_source_and_screenshot')
+            print('source = {}'.format(source_path))
+            print('image = {}'.format(image_path))
         print()
+    
+    def save_page_source_and_screenshot(self,add_str:str='',dir_path:str='',):
+        self.save_page_source_and_screenshot_with_log(add_str,dir_path, self.selenium_log.log_level)
+        # ext='_chrome_image.png'
+        # image_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
+        # self.screenshot(image_path)
+        # ext='_chrome_source.html.txt'
+        # source_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
+        # self.write_page_source(source_path)
+        # print()
+        # print()
+        # print('*****')
+        # print('save_page_source_and_screenshot')
+        # print('source = {}'.format(source_path))
+        # print('image = {}'.format(image_path))
+        # print()
     
     def get_save_file_name(self,base_name:str='',add_str:str='',ext:str=''):
         if ext=='': ext='.txt'
@@ -298,7 +324,7 @@ class WebDriverUtility():
     def screenshot(self,image_file_path:str=''):
         driver = self.driver
         if image_file_path=='':
-            image_file_path = self.get_save_path('_chrome.png')
+            image_file_path = self.get_save_path('','_chrome','.png')
         print('screenshot = {}'.format(image_file_path))
         # get width and height of the page
         # w = driver.execute_script("return document.body.scrollWidth;")

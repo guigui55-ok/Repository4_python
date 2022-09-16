@@ -9,6 +9,11 @@ else:
     from html_editor.html_const import NEW_LINE, HtmlTagName
     from html_editor.html_editor import HtmlElement
 
+BODY_BEFORE_STR = '<body><!--main contents--></body>'
+BODY_AFTER_LEFT_STR = '<body>\n<div class="main-contents">\n'
+BODY_AFTER_RIGHT_STR = '\n</div>\n</body>'
+
+
 class HtmlWriter():
     def __init__(self,html_path:str='') -> None:
         self.html_path = html_path
@@ -19,7 +24,46 @@ class HtmlWriter():
     def init_values(self,css_path:str=''):
         self.css_path = css_path
     
+    def add_outline_body_with_div(self,html_basic_path:str=''):
+        """
+        bodyタグの前後を追記する
+         メインコンテンツ部も追記している
+          <body><div class="main-contents"></div></body> 
+        """
+        html_basic_path = self.get_default_basic_path(html_basic_path)
+        with open(html_basic_path, 'r',encoding='utf-8')as f:
+            html_buf = f.read()
+        with open(self.html_path,'r',encoding='utf-8')as f:
+            contents_buf = f.read()
+        before_str = BODY_BEFORE_STR
+        after_str = '{}{}{}'.format(
+            BODY_AFTER_LEFT_STR, NEW_LINE+contents_buf , BODY_AFTER_RIGHT_STR)
+        w_data = html_buf.replace(before_str,after_str)
+        with open(self.html_path,'w',encoding='utf-8')as f:
+            f.write(w_data)
+    
+    def remover_html_source_outer_main_contents(self):
+        """
+        bodyタグの前後があれば削除する
+         メインコンテンツ部も追記している
+          <body><div class="main-contents"></div></body> 
+        """
+        import os
+        if not os.path.exists(self.html_path): return
+        with open(self.html_path, 'r',)as f:
+            buf = f.read()
+        left_pos = buf.find(BODY_AFTER_LEFT_STR)
+        if left_pos < 0: return
+        right_pos = buf.find(BODY_AFTER_RIGHT_STR)
+        if right_pos < 0: return
+        w_buf = buf[left_pos + len(BODY_AFTER_LEFT_STR)+1 : right_pos]
+        with open(self.html_path, 'w',encoding='utf-8')as f:
+            f.write(w_buf)
+
     def add_outline_body(self,html_basic_path:str=''):
+        """
+        bodyタグの前後を追記する
+        """
         html_basic_path = self.get_default_basic_path(html_basic_path)
         with open(html_basic_path, 'r',encoding='utf-8')as f:
             html_buf = f.read()
@@ -80,6 +124,7 @@ class HtmlWriter():
             f.write('')
 
     def add_to_file(self,element:HtmlElement):
+        """ html ファイルに追記する"""
         buf = element.cnv_html_element_to_str()
         with open(self.html_path,'a',encoding='utf-8')as f:
             f.write(buf)

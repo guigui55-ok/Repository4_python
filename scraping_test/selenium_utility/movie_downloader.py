@@ -13,7 +13,7 @@ import pathlib,sys
 path = str(pathlib.Path(__file__).parent.parent)
 sys.path.append(path)
 import import_init
-from html_log.html_logger import HtmlLogger
+from html_log.html_logger import HtmlLogger,BasicLogger
 
 class ConstResult():
     OK = 1
@@ -60,9 +60,10 @@ class ObserberType():
 
 class DownloadDirectoryObserver():
     """.crdownload があったらダウンロードが終わるまで監視する、ダウンロードがストップしたら終了する"""
-    def __init__(self,observe_dir_path:str) -> None:
+    def __init__(self,observe_dir_path:str,logger:BasicLogger) -> None:
         self.dir_path = observe_dir_path
         self.ext = ''
+        self.logger:BasicLogger = logger
     def set_conditions(self,value:str):
         self.target_type = value
         self.ext=value
@@ -79,7 +80,7 @@ class DownloadDirectoryObserver():
             flag = True
         else:
             flag = False
-        print('is Exists = {} , path = "{}"'.format(flag,target_path))
+        self.logger.add_log('is Exists = {} , path = "{}"'.format(flag,target_path))
         return flag
 
     def excute(self):
@@ -96,12 +97,12 @@ class DownloadDirectoryObserver():
         # print('check dir path.  path = {}'.format(path))
         target_list = checker.get_target_ext(self.ext)
         if len(target_list)<1:
-            print('target[{}] is len<1 , return'.format(self.ext))
+            self.logger.add_log('target[{}] is len<1 , return'.format(self.ext))
             return False
         else:
             target = target_list[0]
 
-        print('Start to observe file.  path = {}'.format(target))
+        self.logger.add_log('Start to observe file.  path = {}'.format(target))
         start = time.time()
         before_size = os.path.getsize(target)
         time_log_flag = False
@@ -110,11 +111,11 @@ class DownloadDirectoryObserver():
             passed_time = time.time() - start
             if passed_time > (check_limit_min*60):
                 print()
-                print('time passed to limit. passed_time = {}'.format(passed_time))
+                self.logger.add_log('time passed to limit. passed_time = {}'.format(passed_time))
                 break
             if not time_log_flag:
                 if int(passed_time) % 5==0:
-                    print('downloading...[{} sec]'.format(count*5))
+                    self.logger.add_log('downloading...[{} sec]'.format(count*5))
                     count +=1
                     time_log_flag = True
             else:
@@ -125,14 +126,14 @@ class DownloadDirectoryObserver():
             try:
                 now_size = os.path.getsize(target)
                 if before_size == now_size:
-                    print('download is stopped')
+                    self.logger.add_log('download is stopped')
                     is_passed_loop = True
                     break
             except:
-                print('file size check error.  path = {}'.format(target))
+                self.logger.add_log('file size check error.  path = {}'.format(target))
                 is_passed_loop = True
         print()
-        print('End to observe file.')
+        self.logger.add_log('End to observe file.')
         time.sleep(3)
         flag = self.is_exists_download_file(os.path.splitext(target)[0])
         return flag
@@ -152,6 +153,8 @@ class MovieDownloader():
         self.end_dir_name = 'end'
         self.log_dir_path = log_dir
         self.not_check_db = False
+
+
 
     def set_download_dir_observer(self,observer):
         self.observer = observer
@@ -181,19 +184,22 @@ class MovieDownloader():
         """
         return True
     
+    def add_log(self,value:str):
+        self.logger.add_log(value)
+    
     def print_result(self,flag:int,value:str,url:str=''):
         print()
-        print(BAR)
+        self.add_log(BAR)
         if flag==ConstResult.OK:
-            print(value + '   OK')
+            self.add_log(value + '   OK')
         if flag==ConstResult.NG:
-            print(value + '   NG')
+            self.add_log(value + '   NG')
         if flag==ConstResult.ERROR:
-            print(value + '   ERR')
+            self.add_log(value + '   ERR')
         if flag==ConstResult.NOTHING:
-            print(value + '   NOTHING')
+            self.add_log(value + '   NOTHING')
         if url!='':
-            print('url = {}'.format(url))
+            self.add_log('url = {}'.format(url))
         print()
     
     def close_donwloader(self):
@@ -220,7 +226,7 @@ class MovieDownloader():
         for path in self.lnk_list:
             if not self.not_check_db:
                 if self.path_is_donloaded(path):
-                    print('**** path is donloaded.  lnk_path={}'.format(path))
+                    self.add_log('**** path is donloaded.  lnk_path={}'.format(path))
                     self.move_link_file_finished(path)
                     continue
             url = self.get_url_from_link(path)
@@ -253,13 +259,12 @@ class MovieDownloader():
                 if not is_exists:
                     is_registed = self.regist_link_path_to_db(path)
                 else:
-                    is_registed = Tr
-                    ue
+                    is_registed = True
                 if is_registed:
                     
                     self.move_link_file_finished(path)
             else:
-                print('is_downloaded = False, skip regist_to_db  , move_link')
+                self.add_log('is_downloaded = False, skip regist_to_db  , move_link')
 
     def move_link_file_finished(self,path):
         """ダウンロードが終わったら、終わった用ディレクトリに移動する"""
@@ -307,15 +312,16 @@ class MovieDownloader():
         ダウンロード債をを開いてURLを入力、STARTをクリックして、動画をWeb上で取得する。
         その後、画面が切り替わったらダウンロードをクリックして、
         ポップアップした要素の（前とは別の）ダウンロードをクリックする。"""
-        print(url)
+        self.add_log(url)
         is_downloded:bool = False
         chrome_driver_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
         if url.startswith('https://www.youtube.com/'):
-            downloader:YouTube = YouTube(chrome_driver_path)
+            downloader:YouTube = YouTube(chrome_driver_path, self.logger)
         elif url.startswith(get_vd_site_url()) or url.startswith(get_vd_site_url2()):
-            downloader:VdSite = VdSite(chrome_driver_path)
+            downloader:VdSite = VdSite(chrome_driver_path, self.logger)
         else:
-            msg = '未実装のURL種類  url={}'.format(url)
+            msg = 'ERROR: 未実装のURL種類  url={}'.format(url)
+            self.add_log(msg)
             raise Exception(msg)
             downloader:DonwloadSite(chrome_driver_path)
         
@@ -336,19 +342,27 @@ class MovieDownloader():
 ################################################################################
 
 def main():
-    downloader = MovieDownloader()
+    
     path = r'C:\ZMyFolder\newDoc\新しいfiles\_test_movie'
+    path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
+    path = r'C:\Users\OK\Desktop\0704 you'
+    path = r'C:\Users\OK\Desktop\fas'
     donwload_dir = r'C:\Users\OK\Downloads'
     log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
+    from html_log.html_logger import HtmlLogger
+    html_logger = HtmlLogger('MovieDownloader',log_dir_path)
+    downloader = MovieDownloader()
+    downloader.logger = html_logger
     downloader.set_dir(path,log_dir_path)
 
     downloader.not_check_db = True
     downloader.not_check_db = False
-    observer = DownloadDirectoryObserver(donwload_dir)
+    observer = DownloadDirectoryObserver(donwload_dir,html_logger)
     observer.set_conditions(TARGET_EXT)
     downloader.set_download_dir_observer(observer)
     downloader.make_file_list_from_dir()
     downloader.download_movie_main()
+    html_logger.finish_to_create_html()
 
 
 
