@@ -128,5 +128,6 @@ def temp():
 if __name__ == "__main__":
     # Flaskのマッピング情報を表示
     print(app.url_map)
-    app.run(debug=True,host='0.0.0.0',port=5000)
+    # app.run(debug=True,host='0.0.0.0',port=5000)
+    app.run(debug=False)
     # 外部からアクセスしたい場合は '0.0.0.0'を指定無ければ、アクセスエラーとなる（flaskはエラーを出さない）

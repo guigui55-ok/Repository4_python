@@ -1,0 +1,35 @@
+{    
+    "version": 1,
+    "disable_existing_loggers ":"False",
+    "root":{
+        "$comment_level":"CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET",
+        "level" : "INFO",
+        "handlers":["basicFileHandler","basicConsoleHandler"],
+        "format":"%(asctime)s %(filename)s:%(lineno)d %(message)s"
+    },
+    "$comment":"level 以上がファイルに追記される",
+    "handlers": {
+        "basicConsoleHandler": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "basicFormatter",
+            "stream": "ext://sys.stdout"
+        },
+        "basicFileHandler": {
+            "class": "logging.FileHandler",
+            "level": "INFO",
+            "filename": "./sample2_app.log",
+            "mode": "a",
+            "formatter":"basicFormatter"
+        }
+    },
+    "formatters":{
+        "basicFormatter": {
+          "format": "%(asctime)s [%(process)d] [%(thread)d] [%(levelname)s] %(message)s"
+        },
+        "expFormatter": {
+          "format": "%(asctime)s %(filename)s:%(lineno)d [%(process)d] [%(thread)d] [%(levelname)s] %(module)s.%(name)s : %(message)s"
+        }
+    }
+
+}

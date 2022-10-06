@@ -5,6 +5,7 @@ if __name__ == '__main__':
 else:
     from common_utility.log_util.logging_util import LoggerUtility,LogLevel,BasicLogger
 
+from genericpath import isdir
 from html_editor.html_writer import HtmlWriter
 from html_editor.html_editor import HtmlElement
 from html_editor.html_const import HtmlTagName
@@ -38,37 +39,40 @@ class HtmlLogger():
         log_html_file_name: str = 'log.html',
         log_html_css_path: str = 'log.css',
         log_image_dir_name: str = 'image',
+        create_log:bool = False,
         log_level:int = LogLevel.REPORT.value
         ) -> None:
-        if log_dir_path=='':
-            self.logger_dir_path= str(pathlib.Path(__file__).parent.parent.joinpath(log_dir_name))
-        else:
-            self.logger_dir_path= os.path.join(log_dir_path,log_dir_name)
-        self.log_dir_name = log_dir_name
-        self.logger_dir_path = BasicLogger.get_dir_path_from_path(self.logger_dir_path)
-        self.logger_dir_path = BasicLogger.mkdir_if_not_exists(self.logger_dir_path)
-        
         import logging
         # log_format = logging.Formatter('%(asctime)s [%(levelname)s]  %(message)s', '%Y-%m-%d %H:%M:%S')
         log_format = logging.Formatter('%(asctime)s  %(message)s', '%Y-%m-%d %H:%M:%S')
+        self.log_dir_name = log_dir_name
+        self.log_image_dir_name = log_image_dir_name
+        self.init_log_dir_path(log_dir_path)
+        
+        # HtmlWriter
+        self.log_html_file_name = log_html_file_name
+        log_html_path = os.path.join(self.logger_dir_path,log_html_file_name)
+        self.html_writer:HtmlWriter = HtmlWriter(log_html_path)
+        self.html_writer.css_path = log_html_css_path
+        if create_log:
+            self.create_log()
+            self.html_writer.add_css_file_path(log_html_css_path)
 
-        self.log_txt_file_name = log_txt_file_name
+        # TextLog
+        self.log_txt_file_name = log_txt_file_name        
         log_text_path = os.path.join(self.logger_dir_path,log_txt_file_name)
         self.log_txt_path = BasicLogger.mkfile_if_not_exists(log_text_path)
         self.txt_logger:LoggerUtility = LoggerUtility(
-            logger_name, log_file_name=log_text_path, log_format=log_format)
-        log_html_path = os.path.join(self.logger_dir_path,log_html_file_name)
-        self.log_html_file_name = log_html_file_name
-        self.html_logger:HtmlWriter = HtmlWriter(log_html_path)
-        self.html_logger.create_html_content()
-        self.log_image_dir_path = os.path.join(self.logger_dir_path, log_image_dir_name)
-        self.log_image_dir_name = log_image_dir_name
-        self.add_log_image('')
+            logger_name, 
+            log_file_name=log_text_path,
+             log_format=log_format)
+
+        # self.add_log_image('')
         self.log_level = log_level
         self.log_level_console = LogLevel.TRACE.value
         self.log_level_txt = LogLevel.INFO.value
-        self.add_log_txt('create log')
-        self.html_logger.add_css_file_path(log_html_css_path)
+        # self.add_log_txt('create log')
+        # 
     # def __init__(self,
     #     logger_name: str,
     #     config_file_path: str = '', 
@@ -82,8 +86,35 @@ class HtmlLogger():
     # label procedure section 
     # heading confirmation details
     # subtitle
+
+    def init_log_dir_path(
+        self,
+        log_dir_path:str,
+        with_reset_image_dir:bool=True,
+        log_image_dir_name:str=''):
+        log_dir_name = self.log_dir_name
+        if log_dir_path=='':
+            self.logger_dir_path= str(pathlib.Path(__file__).parent.parent.joinpath(log_dir_name))
+        else:
+            self.logger_dir_path= os.path.join(log_dir_path, log_dir_name)
+        self.log_dir_name = log_dir_name
+        self.logger_dir_path = BasicLogger.get_dir_path_from_path(self.logger_dir_path)
+        self.logger_dir_path = BasicLogger.mkdir_if_not_exists(self.logger_dir_path)
+        if with_reset_image_dir:
+            if log_image_dir_name!='':
+                self.log_image_dir_name = log_image_dir_name
+            self.log_image_dir_path = os.path.join(
+                self.logger_dir_path, self.log_image_dir_name)
+        
+
+    def create_log(self):
+        self.html_writer.create_html_content()
+        self.html_writer.add_css_file_path('')
+        self.add_log_txt('create log')
+        
+
     def remover_html_source_outer_main_contents(self):
-        if not os.path.exists(self.html_logger.html_path):return
+        if not os.path.exists(self.html_writer.html_path):return
         
     ########## HTML
     def __add_log_txt_align_format(self,el:HtmlElement):
@@ -103,7 +134,7 @@ class HtmlLogger():
     def __add_log_html(self,el:HtmlElement,log_level:int = LogLevel.INFO.value):
         """HtmlElement から HTML log に追記する"""
         if self.log_level <= log_level:
-            self.html_logger.add_to_file(el)
+            self.html_writer.add_to_file(el)
     ########## Text
     def add_log_txt(self,value:str,log_level:int = LogLevel.INFO.value):
         """テキストlogのみに追記する base"""
@@ -116,7 +147,7 @@ class HtmlLogger():
             print(value)
     
     def reset_log_file(self):
-        self.html_logger.create_html_content()
+        self.html_writer.create_html_content()
         self.add_log_txt('reset html')
     def add_main_title(self,value:str):
         """
@@ -145,7 +176,11 @@ class HtmlLogger():
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG})
         self.__add_log_main(el)
-    def add_log_image(self,image_path:str, image_description:str='log-image',log_level:int=LogLevel.INFO.value):
+    def add_log_image(
+        self,image_path:str,
+         image_description:str='log-image',
+         css_add_class_name:str='',
+         log_level:int=LogLevel.INFO.value):
         """
         ログを出力する（画像）
          HtmlTagName.IMG,{'class':'log-image'}
@@ -159,6 +194,7 @@ class HtmlLogger():
         box_el = HtmlElement(
             '',HtmlTagName.DIV,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_BOX})
+        box_el.add_class_name(css_add_class_name)
         
         img_el = HtmlElement.create_html_element_img(image_path,image_description)
         box_el.add_element(img_el)
@@ -173,11 +209,13 @@ class HtmlLogger():
         #txtログには説明とイメージパスを追記
         self.__add_log_txt(span_el)
         self.add_log_txt(image_path,self.log_level_txt)
+    
+
     def add_log_element(self,element:HtmlElement):
         """
         ログにHTML要素を追記する
         """
-        self.html_logger.add_to_file(element)
+        self.html_writer.add_to_file(element)
         self.txt_logger.info(element.text)
         
     def info(self,value:str):
@@ -211,13 +249,13 @@ class HtmlLogger():
     #     """
     #     ログにHTML要素を追記する
     #     """
-    #     self.html_logger.add_to_file(element=element)
+    #     self.html_writer.add_to_file(element=element)
     ##########
     def create_html_from_contents(self):
         """
         空のテキストファイルを作成する
         """
-        self.html_logger.create_html_content()
+        self.html_writer.create_html_content()
     def finish_to_create_html(self):
         """
         htmlファイルとして完成させる
@@ -225,10 +263,19 @@ class HtmlLogger():
           本メソッド実行後にhtmlヘッダー部を書き込み、
           <body><div class="main-contents"></div></body>で囲み、ファイルを完成させる。
         """
-        self.html_logger.add_outline_body_with_div()
-        self.html_logger.add_css_file_path(self.html_logger.css_path)
-    def set_css_path(self,css_path):
+        self.html_writer.add_outline_body_with_div()
+        self.html_writer.add_css_file_path(self.html_writer.css_path)
+
+    def set_css_path(self, css_path):
         """
         cssファイルを設定する
+         stylesheetタグに入力する、ルートからの相対パス
         """
-        self.html_logger.css_path = css_path
+        self.html_writer.css_path = css_path
+
+
+
+def _mkdir(dir_path:str):
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+        

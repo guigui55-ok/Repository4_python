@@ -16,15 +16,13 @@ ChromeDriver 102.0.5005.61
 
 pip install chromedriver-binary==102.0.5005.61
 """
-from cgitb import html
-from string import hexdigits
-from turtle import width
+
 from webbrowser import Chrome
 from selenium import webdriver
 import os
 import traceback
 
-from sympy import cxxcode
+
 
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
@@ -176,12 +174,16 @@ class WebDriverUtility():
             self.driver:webdriver.Chrome=None
             self.page_source_ex  = None
         self.webdriver_path = webdriver_path
+        self.set_logger(logger)
         # self.selenium_log = SeleniumLogger()
-        self.selenium_log = get_selenium_logger(logger)
         self.timer:Waiter = Waiter(selenium_const.DEFAULT_WAIT_TIME)
         self.options:webdriver.ChromeOptions = None
     
         # self.selenium_log.add_log('')
+
+    def set_logger(self,any_logger):
+        self.selenium_log = get_selenium_logger(any_logger)
+
     def set_driver(self,webdriver_path:str):
         self.driver:webdriver.Chrome=None
         self.page_source_ex  = None
@@ -287,7 +289,7 @@ class WebDriverUtility():
         if ext=='': ext='.txt'
         if base_name=='':
             import datetime
-            file_name = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + add_str + ext
+            file_name = datetime.datetime.now().strftime('%Y%m%d_%H%M%S_%f') + add_str + ext
         else:
             file_name = base_name + add_str + ext
         return file_name
@@ -296,13 +298,14 @@ class WebDriverUtility():
         """
         空ならlog_dirにyymmdd_hhmmss_chrome_source.htmlとして保存する
          log_dirが設定されているが、ない場合、
-         　　ファイルであれば削除してdirを作成
-         　　dirがなければ作成
+            ファイルであれば削除してdirを作成
+             dirがなければ作成
+              base_name=='' の時日付を付与する => YYMMDD_HHMMSS_add_str.ext
 
         """
-        import os
         if dir_path=='':
-            dir_path = self.selenium_log.log_dir
+            # dir_path = self.selenium_log.log_dir
+            dir_path = self.selenium_log.get_image_dir_path()
         if os.path.exists(dir_path) and os.path.isfile(dir_path):
             os.remove(dir_path)
             os.mkdir(dir_path)
@@ -316,12 +319,16 @@ class WebDriverUtility():
     def write_page_source(self,file_path:str=''):
         driver = self.driver
         if file_path=='':
-            file_path = self.get_save_path('_chrome_source.html')
+            file_path = self.get_save_path('','_chrome_source.html')
         data = driver.page_source
         with open(file_path,'w',encoding='utf-8')as f:
             f.write(data)
 
     def screenshot(self,image_file_path:str=''):
+        """
+        chrome画面のスクリーンショットを保存する
+         戻り値はスクリーンショットのファイルパス
+        """
         driver = self.driver
         if image_file_path=='':
             image_file_path = self.get_save_path('','_chrome','.png')
@@ -334,7 +341,7 @@ class WebDriverUtility():
         h = html_el.size['height']
         print('screenshot w,h ={},{}'.format(w,h))
         # set window size
-        driver.set_window_size(w,h)
+        # driver.set_window_size(w,h)
         # Get Screen Shot
         driver.save_screenshot(image_file_path)
         return image_file_path

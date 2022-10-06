@@ -11,7 +11,15 @@ NEW_LINE = html_const.NEW_LINE
 INDENT = '    '
 
 class HtmlElement():
-    def __init__(self,text:str='',tag_name:str=HtmlTagName.DIV,attribute:dict={},indent:int=-1) -> None:
+    def __init__(
+        self,
+        text:str='',
+        tag_name:str=HtmlTagName.DIV,
+        attribute:dict={},
+        indent:int=-1) -> None:
+        """
+        
+        """
         self.text = text
         self.tag = tag_name
         self.attribute = attribute
@@ -32,6 +40,16 @@ class HtmlElement():
         el = HtmlElement('', HtmlTagName.IMG,attr_dict)
         return el
 
+    def add_class_name(self, class_name:str):
+        if len(self.attribute)<1:
+            self.attribute = {'class':class_name}
+        else:
+            for k in self.attribute.keys():
+                if k=='class':
+                    buf = self.attribute['class'] 
+                    buf  += ' ' + class_name
+                    self.attribute['class'] = buf
+                    break
 
     def set_attribute(self,attribute_name:str,value:str):
         self.attribute[attribute_name] = value

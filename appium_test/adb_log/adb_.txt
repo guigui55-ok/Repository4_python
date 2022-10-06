@@ -1,0 +1,8 @@
+
+adb shell pm list package
+
+
+adb shell dumpsys activity activities
+
+
+adb shell pm dump package:com.kirito.app.wallpaper.rezero

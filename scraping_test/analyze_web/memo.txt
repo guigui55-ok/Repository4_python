@@ -1,0 +1,345 @@
+
+1:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 68, 'x': 422, 'y': 299}
+    class=ytp-large-play-button ytp-button
+    value=
+    id=
+
+2:
+*******
+    tag_name=div
+    innerHTML[10]=<div class
+    rect={'height': 5, 'width': 840, 'x': 36, 'y': 514}
+    class=ytp-progress-bar
+    value=None
+    id=
+
+3:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 46, 'x': 36, 'y': 518}
+    class=ytp-play-button ytp-button
+    value=
+    id=
+
+4:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 130, 'y': 518}
+    class=ytp-mute-button ytp-button
+    value=
+    id=
+[908:2680:0920/193141.492:ERROR:device_event_log_impl.cc(214)] [19:31:41.492] Bluetooth: bluetooth_adapter_winrt.cc:1074 Getting Default Adapter failed.
+
+5:
+*******
+    tag_name=div
+    innerHTML[10]=<div class
+    rect={'height': 48, 'width': 52, 'x': 178, 'y': 518}
+    class=ytp-volume-panel
+    value=None
+    id=
+
+6:
+*******
+    tag_name=button
+    innerHTML[10]=<svg class
+    rect={'height': 48, 'width': 48, 'x': 636, 'y': 518}
+    class=ytp-subtitles-button ytp-button
+    value=
+    id=
+
+7:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 684, 'y': 518}
+    class=ytp-button ytp-settings-button
+    value=
+    id=
+
+8:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 732, 'y': 518}
+    class=ytp-miniplayer-button ytp-button
+    value=
+    id=
+
+9:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 780, 'y': 518}
+    class=ytp-size-button ytp-button
+    value=
+    id=
+
+10:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 828, 'y': 518}
+    class=ytp-fullscreen-button ytp-button
+    value=
+    id=
+PS C:\Users\OK\source\repos\Repository4_python\scraping_test> 
+
+
+###############
+
+
+0:
+*******
+    tag_name=body
+    innerHTML[10]=<div id="w
+    rect={'height': 0, 'width': 912, 'x': 0, 'y': 0}
+    class=
+    value=None
+    id=
+
+1:
+*******
+    tag_name=div
+    innerHTML[10]=<div class
+    rect={'height': 5, 'width': 840, 'x': 36, 'y': 514}
+    class=ytp-progress-bar
+    value=None
+    id=
+
+2:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 46, 'x': 36, 'y': 518}
+    class=ytp-play-button ytp-button
+    value=
+    id=
+
+3:
+*******
+    tag_name=a
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 82, 'y': 518}
+    class=ytp-next-button ytp-button
+    value=None
+    id=
+
+4:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 130, 'y': 518}
+    class=ytp-mute-button ytp-button
+    value=
+    id=
+
+5:
+*******
+    tag_name=div
+    innerHTML[10]=<div class
+    rect={'height': 48, 'width': 52, 'x': 178, 'y': 518}
+    class=ytp-volume-panel
+    value=None
+    id=
+
+6:
+*******
+    tag_name=button
+    innerHTML[10]=<span clas
+    rect={'height': 48, 'width': 333, 'x': 250.203125, 'y': 518}
+    class=ytp-chapter-title ytp-button
+    value=
+    id=
+
+7:
+*******
+    tag_name=button
+    innerHTML[10]=<div class
+    rect={'height': 48, 'width': 48, 'x': 588, 'y': 518}
+    class=ytp-button
+    value=
+    id=
+
+8:
+*******
+    tag_name=button
+    innerHTML[10]=<svg class
+    rect={'height': 48, 'width': 48, 'x': 636, 'y': 518}
+    class=ytp-subtitles-button ytp-button
+    value=
+    id=
+
+9:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 684, 'y': 518}
+    class=ytp-button ytp-settings-button
+    value=
+    id=
+
+10:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 732, 'y': 518}
+    class=ytp-miniplayer-button ytp-button
+    value=
+    id=
+
+11:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 780, 'y': 518}
+    class=ytp-size-button ytp-button
+    value=
+    id=
+
+12:
+*******
+    tag_name=button
+    innerHTML[10]=<svg heigh
+    rect={'height': 48, 'width': 48, 'x': 828, 'y': 518}
+    class=ytp-fullscreen-button ytp-button
+    value=
+    id=
+
+13:
+*******
+    tag_name=button
+    innerHTML[10]=<yt-icon c
+    rect={'height': 24, 'width': 24, 'x': 535.578125, 'y': 622}
+    class=style-scope yt-icon-button
+    value=
+    id=button
+
+14:
+*******
+    tag_name=button
+    innerHTML[10]=<yt-icon c
+    rect={'height': 24, 'width': 24, 'x': 602.5, 'y': 622}
+    class=style-scope yt-icon-button
+    value=
+    id=button
+
+15:
+*******
+    tag_name=button
+    innerHTML[10]=<yt-icon c
+    rect={'height': 24, 'width': 24, 'x': 696, 'y': 622}
+    class=style-scope yt-icon-button
+    value=
+    id=button
+
+16:
+*******
+    tag_name=button
+    innerHTML[10]=<yt-icon c
+    rect={'height': 24, 'width': 24, 'x': 775, 'y': 622}
+    class=style-scope yt-icon-button
+    value=
+    id=button
+
+17:
+*******
+    tag_name=button
+    innerHTML[10]=<yt-icon c
+    rect={'height': 40, 'width': 40, 'x': 848, 'y': 616}
+    class=style-scope yt-icon-button
+    value=
+    id=button
+
+18:
+*******
+    tag_name=a
+    innerHTML[10]=Lucky me !
+    rect={'height': 20, 'width': 214, 'x': 88, 'y': 683.5}
+    class=yt-simple-endpoint style-scope yt-formatted-string
+    value=None
+    id=
+
+19:
+*******
+    tag_name=tp-yt-paper-button
+    innerHTML[10]=<!--css-bu
+    rect={'height': 41, 'width': 134, 'x': 754.5, 'y': 682}
+    class=style-scope ytd-button-renderer style-destructive size-default 
+keyboard-focus
+    value=None
+    id=button
+
+20:
+*******
+    tag_name=a
+    innerHTML[10]=https://bi
+    rect={'height': 20, 'width': 139, 'x': 88, 'y': 760}
+    class=yt-simple-endpoint style-scope yt-formatted-string
+    value=None
+    id=
+
+21:
+*******
+    tag_name=a
+    innerHTML[10]=https://yo
+    rect={'height': 20, 'width': 183, 'x': 88, 'y': 760}
+    class=yt-simple-endpoint style-scope yt-formatted-string
+    value=None
+    id=
+
+22:
+*******
+    tag_name=a
+    innerHTML[10]=https://uk
+    rect={'height': 20, 'width': 248, 'x': 88, 'y': 760}
+    class=yt-simple-endpoint style-scope yt-formatted-string
+    value=None
+    id=
+PS C:\Users\OK\source\repos\Repository4_python\scraping_test> 
+
+
+###########
+
+12:
+*******
+    tag_name=tp-yt-paper-button
+    innerHTML[10]=<!--css-bu
+    rect={'height': 36, 'width': 122, 'x': 774, 'y': 10}
+    class=style-scope ytd-button-renderer style-suggestive size-small 
+keyboard-focus
+    value=None
+    id=button
+
+13:
+*******
+    tag_name=button
+    innerHTML[10]=<span clas
+    rect={'height': 28, 'width': 13, 'x': 190.625, 'y': 476}
+    class=ytp-ad-button ytp-ad-button-link ytp-ad-clickable
+    value=
+    id=button:c
+
+14:
+*******
+    tag_name=button
+    innerHTML[10]=<span clas
+    rect={'height': 20, 'width': 97, 'x': 213.625, 'y': 481.90625}
+    class=ytp-ad-button ytp-ad-visit-advertiser-button ytp-ad-button-link
+    value=
+    id=visit-advertiser:d
+
+15:
+*******
+    tag_name=button
+    innerHTML[10]=<div class
+    rect={'height': 47, 'width': 169, 'x': 719, 'y': 433}
+    class=ytp-ad-skip-button ytp-button
+    value=
+    id=

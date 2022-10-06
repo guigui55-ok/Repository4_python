@@ -1,6 +1,5 @@
 import csv
-from fileinput import filename
-import pprint
+import traceback
 
 def write_appnd_csv():
     try:
@@ -12,23 +11,22 @@ def write_appnd_csv():
             writer = csv.writer(f)
             writer.writerow(data1)
             writer.writerow(data2)
+            writer.writerows([data1,data2])
 
         print('path = ' + path)
-
         return
     except:
-        import traceback
         traceback.print_exc()
 
-
-
-def get_path()->str:
-    import pathlib,os
+def get_path() -> str:
+    import pathlib
     file_name = 'test.csv'
     sub_dir = 'test_data'
-    path = os.path.join(pathlib.Path(__file__).parent,sub_dir,file_name)
+    path = str(pathlib.Path(__file__).parent.joinpath(sub_dir,file_name))
     return path
 
 def main():
     write_appnd_csv()
-main()
+
+if __name__ == '__main__':
+    main()

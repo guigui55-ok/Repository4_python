@@ -9,6 +9,8 @@ else:
     from html_editor.html_const import NEW_LINE, HtmlTagName
     from html_editor.html_editor import HtmlElement
 
+import os
+
 BODY_BEFORE_STR = '<body><!--main contents--></body>'
 BODY_AFTER_LEFT_STR = '<body>\n<div class="main-contents">\n'
 BODY_AFTER_RIGHT_STR = '\n</div>\n</body>'
@@ -73,10 +75,15 @@ class HtmlWriter():
         with open(self.html_path,'w',encoding='utf-8')as f:
             f.write(w_data)
     
-    def add_css_file_path(self,css_path):
-        self.css_path = css_path
+    def add_css_file_path(self,css_path:str):
+        """
+        CSS パスはタグ内に記載されるもの（htmlルートからの相対パス）をセットする
+         （cssが格納されているファイルパスではない）
+        """
+        if css_path=='':
+            css_path = self.css_path
         path = self.html_path
-        value = html_const.CSS_BEGIN_TAG + self.css_path + html_const.CSS_END_TAG
+        value = html_const.CSS_BEGIN_TAG + css_path + html_const.CSS_END_TAG
         if self._is_exists_str_in_file(path,html_const.CSS_BEGIN_TAG):
             self._replace_line_to_file(path,html_const.CSS_BEGIN_TAG,value)
             return
@@ -120,10 +127,14 @@ class HtmlWriter():
         """空のテキストファイルを作る"""
         if html_path=='': html_path = self.html_path
         else: self.html_path = html_path
+        #mkdir
+        dir_path = os.path.dirname(self.html_path)
+        if not os.path.exists(dir_path):
+            os.mkdir(dir_path)
         with open(html_path,'w',encoding='utf-8')as f:
             f.write('')
 
-    def add_to_file(self,element:HtmlElement):
+    def add_to_file(self,element:'HtmlElement'):
         """ html ファイルに追記する"""
         buf = element.cnv_html_element_to_str()
         with open(self.html_path,'a',encoding='utf-8')as f:
