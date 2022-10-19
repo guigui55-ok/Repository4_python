@@ -16,6 +16,8 @@ BODY_AFTER_LEFT_STR = '<body>\n<div class="main-contents">\n'
 BODY_AFTER_RIGHT_STR = '\n</div>\n</body>'
 
 
+
+
 class HtmlWriter():
     def __init__(self,html_path:str='') -> None:
         self.html_path = html_path

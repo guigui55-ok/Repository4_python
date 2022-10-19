@@ -176,6 +176,7 @@ class HtmlLogger():
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG})
         self.__add_log_main(el)
+        
     def add_log_image(
         self,image_path:str,
          image_description:str='log-image',
@@ -251,6 +252,7 @@ class HtmlLogger():
     #     """
     #     self.html_writer.add_to_file(element=element)
     ##########
+
     def create_html_from_contents(self):
         """
         空のテキストファイルを作成する

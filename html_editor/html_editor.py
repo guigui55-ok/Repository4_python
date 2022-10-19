@@ -1,11 +1,13 @@
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'html_editor':
     import html_const
     from html_const import HtmlTagName
+    from html_const import tag_is_closing_type
 else:
-    import html_editor.html_const as html_const
+    import html_editor as html_const
     from html_editor.html_const import HtmlTagName
+    from html_editor.html_const import tag_is_closing_type
 
 NEW_LINE = html_const.NEW_LINE
 INDENT = '    '
@@ -83,7 +85,7 @@ class HtmlElement():
         ret += self.__align_str_attr(attr) + '>'
         ###
         ### add Tag Text
-        if element.tag != HtmlTagName.IMG:
+        if not tag_is_closing_type(element.tag):
             ret += element.text
         ### add Child Element Tag
         buf = ''
@@ -95,7 +97,7 @@ class HtmlElement():
         ### add End Tag
         if element.tag == HtmlTagName.BODY:
             ret += self.__get_indent_str(element) 
-        if element.tag != HtmlTagName.IMG:
+        if not tag_is_closing_type(element.tag):
             ret += '</' + element.tag + '>' + NEW_LINE
         else:
             ret += NEW_LINE
@@ -138,8 +140,13 @@ class HtmlEditor():
         src_path = self.get_default_basic_path(basic_html_file_path)
         shutil.copy(src_path,html_path)
 
-    def add_element_by_text(self,text:str='',tag_name:str=HtmlTagName.DIV,attribute:dict={},indent:int=-1):
+    def add_element_by_text(
+        self,text:str='',
+        tag_name:str=HtmlTagName.DIV,
+        attribute:dict={},
+        indent:int=-1):
         self.body.add_element(HtmlElement(text,tag_name,attribute,1))
+
     def add_element(self,element:HtmlElement):
         element.indent = self.body.indent + 1
         self.body.add_element(element)

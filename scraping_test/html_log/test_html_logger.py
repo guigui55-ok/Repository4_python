@@ -3,9 +3,14 @@ import pathlib,sys
 path = str(pathlib.Path(__file__).parent.parent)
 sys.path.append(path)
 import import_init
+import traceback
+try:
+    from html_logger import HtmlLogger
+    from common_utility.log_util.logging_util import LoggerUtility
+except Exception as e:
+    traceback.print_exc()
+    raise Exception(e)
 
-from html_logger import HtmlLogger
-from common_utility.log_util.logging_util import MyLogger,LoggerUtility
 
 def html_log_test():
     import pathlib,os
@@ -28,6 +33,18 @@ def html_log_test():
     logger.info('内容2')
     logger.set_css_path(css_path)
     logger.finish_to_create_html()
+    # is check tag
+    #add tag
+    #add tag in tag
+        # get tag (class tag id (selector))
+    #add log last tag
+    #analyze,not analyze
+    #add log last line
+
+    # image float left
+    # 展開、閉じる
+    # vue.js 
+    print('path = {}'.format(log_dir))
     return
 
 if __name__ == '__main__':

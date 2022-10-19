@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Python のクロージャと nonlocal ってなに？ | 民主主義に乾杯</title>
+    <meta name="generator" content="VuePress 1.5.4">
+    <script src="https://platform.twitter.com/widgets.js" charset="utf-8" async="true"></script>
+    <script src="https://static.codepen.io/assets/embed/ei.js" async="true"></script>
+    <meta name="description" content="クロージャとは自分が定義されたスコープを覚えている関数です。nonlocal 文を使えば、自分が定義されたスコープを参照できます。">
+    <meta og:image="./imgs/cover.jpg">
+    <meta og:title="Python のクロージャと nonlocal ってなに？">
+    <meta og:description="クロージャとは自分が定義されたスコープを覚えている関数です。nonlocal 文を使えば、自分が定義されたスコープを参照できます。">
+    <link rel="preload" href="/assets/css/0.styles.770d2762.css" as="style"><link rel="preload" href="/assets/js/app.e1863f3d.js" as="script"><link rel="preload" href="/assets/js/7.176c125c.js" as="script"><link rel="preload" href="/assets/js/105.d7af7abe.js" as="script"><link rel="preload" href="/assets/js/64.41c3bab0.js" as="script"><link rel="preload" href="/assets/js/177.e80e463a.js" as="script"><link rel="preload" href="/assets/js/50.29c4a8e5.js" as="script"><link rel="preload" href="/assets/js/175.ee68e9ad.js" as="script"><link rel="preload" href="/assets/js/171.c1ea9432.js" as="script"><link rel="preload" href="/assets/js/173.75cb3529.js" as="script"><link rel="prefetch" href="/assets/js/1.1de877ce.js"><link rel="prefetch" href="/assets/js/10.f2717857.js"><link rel="prefetch" href="/assets/js/100.38721484.js"><link rel="prefetch" href="/assets/js/101.e656e22a.js"><link rel="prefetch" href="/assets/js/102.8e451781.js"><link rel="prefetch" href="/assets/js/103.d9a80a16.js"><link rel="prefetch" href="/assets/js/104.5424f032.js"><link rel="prefetch" href="/assets/js/106.f710d277.js"><link rel="prefetch" href="/assets/js/107.8529db73.js"><link rel="prefetch" href="/assets/js/108.764f71af.js"><link rel="prefetch" href="/assets/js/109.9a55e5cb.js"><link rel="prefetch" href="/assets/js/11.0aa51420.js"><link rel="prefetch" href="/assets/js/110.2f5774cb.js"><link rel="prefetch" href="/assets/js/111.e1eb0eff.js"><link rel="prefetch" href="/assets/js/112.3b6bb6b2.js"><link rel="prefetch" href="/assets/js/113.4b138f43.js"><link rel="prefetch" href="/assets/js/114.32ee86a0.js"><link rel="prefetch" href="/assets/js/115.8c4c42b9.js"><link rel="prefetch" href="/assets/js/116.3c6d3bea.js"><link rel="prefetch" href="/assets/js/117.48584374.js"><link rel="prefetch" href="/assets/js/118.db196d5b.js"><link rel="prefetch" href="/assets/js/119.53998359.js"><link rel="prefetch" href="/assets/js/12.526aeeef.js"><link rel="prefetch" href="/assets/js/120.ad4770c3.js"><link rel="prefetch" href="/assets/js/121.7ac5d72e.js"><link rel="prefetch" href="/assets/js/122.1234e9d2.js"><link rel="prefetch" href="/assets/js/123.ca0d2c72.js"><link rel="prefetch" href="/assets/js/124.e6794f91.js"><link rel="prefetch" href="/assets/js/125.0d1a2343.js"><link rel="prefetch" href="/assets/js/126.98295be7.js"><link rel="prefetch" href="/assets/js/127.1faeca18.js"><link rel="prefetch" href="/assets/js/128.a35b6038.js"><link rel="prefetch" href="/assets/js/129.e5666a21.js"><link rel="prefetch" href="/assets/js/13.4cea0c56.js"><link rel="prefetch" href="/assets/js/130.829475e7.js"><link rel="prefetch" href="/assets/js/131.ab7bc398.js"><link rel="prefetch" href="/assets/js/132.291e8d3b.js"><link rel="prefetch" href="/assets/js/133.073bf6a8.js"><link rel="prefetch" href="/assets/js/134.b940513c.js"><link rel="prefetch" href="/assets/js/135.72fd4df4.js"><link rel="prefetch" href="/assets/js/136.eb5f3412.js"><link rel="prefetch" href="/assets/js/137.67bd95dd.js"><link rel="prefetch" href="/assets/js/138.b2fdac1a.js"><link rel="prefetch" href="/assets/js/139.45da2ad4.js"><link rel="prefetch" href="/assets/js/14.1185cf79.js"><link rel="prefetch" href="/assets/js/140.fcea440f.js"><link rel="prefetch" href="/assets/js/141.d8d4ecdf.js"><link rel="prefetch" href="/assets/js/142.0dd34aac.js"><link rel="prefetch" href="/assets/js/143.bfc81eb5.js"><link rel="prefetch" href="/assets/js/144.1271a6e3.js"><link rel="prefetch" href="/assets/js/145.45cc82ea.js"><link rel="prefetch" href="/assets/js/146.906249fe.js"><link rel="prefetch" href="/assets/js/147.ef354193.js"><link rel="prefetch" href="/assets/js/148.af30bce8.js"><link rel="prefetch" href="/assets/js/149.6a085772.js"><link rel="prefetch" href="/assets/js/15.d99cf169.js"><link rel="prefetch" href="/assets/js/150.1f8fda88.js"><link rel="prefetch" href="/assets/js/151.bfbb4d72.js"><link rel="prefetch" href="/assets/js/152.6343ea06.js"><link rel="prefetch" href="/assets/js/153.96b4fd4a.js"><link rel="prefetch" href="/assets/js/154.46cbd08f.js"><link rel="prefetch" href="/assets/js/155.9d2b04f2.js"><link rel="prefetch" href="/assets/js/156.d82d04d2.js"><link rel="prefetch" href="/assets/js/157.6c2367c7.js"><link rel="prefetch" href="/assets/js/158.7bfdc865.js"><link rel="prefetch" href="/assets/js/159.61acf14c.js"><link rel="prefetch" href="/assets/js/16.2013d3d4.js"><link rel="prefetch" href="/assets/js/160.7566063c.js"><link rel="prefetch" href="/assets/js/161.e057e37e.js"><link rel="prefetch" href="/assets/js/162.4d85666b.js"><link rel="prefetch" href="/assets/js/163.3790b6cc.js"><link rel="prefetch" href="/assets/js/164.b7886539.js"><link rel="prefetch" href="/assets/js/165.38c23cd0.js"><link rel="prefetch" href="/assets/js/166.cea0f94f.js"><link rel="prefetch" href="/assets/js/167.3bf2667b.js"><link rel="prefetch" href="/assets/js/168.6931f20a.js"><link rel="prefetch" href="/assets/js/169.f69c9c7f.js"><link rel="prefetch" href="/assets/js/17.4ff8a3b0.js"><link rel="prefetch" href="/assets/js/170.dd60abe2.js"><link rel="prefetch" href="/assets/js/172.a509c5b3.js"><link rel="prefetch" href="/assets/js/174.cc41c33c.js"><link rel="prefetch" href="/assets/js/176.0d93ae11.js"><link rel="prefetch" href="/assets/js/178.53d1f04d.js"><link rel="prefetch" href="/assets/js/179.f1133127.js"><link rel="prefetch" href="/assets/js/18.11297b42.js"><link rel="prefetch" href="/assets/js/180.fb52fd89.js"><link rel="prefetch" href="/assets/js/181.41ba3281.js"><link rel="prefetch" href="/assets/js/182.dd5077f4.js"><link rel="prefetch" href="/assets/js/183.5f1c33a0.js"><link rel="prefetch" href="/assets/js/184.3687fb79.js"><link rel="prefetch" href="/assets/js/185.74325e1c.js"><link rel="prefetch" href="/assets/js/186.d24a58dd.js"><link rel="prefetch" href="/assets/js/187.052684f6.js"><link rel="prefetch" href="/assets/js/188.0f3302e7.js"><link rel="prefetch" href="/assets/js/189.b06ad8ee.js"><link rel="prefetch" href="/assets/js/19.608b67f1.js"><link rel="prefetch" href="/assets/js/190.57ea1384.js"><link rel="prefetch" href="/assets/js/191.2f8324a4.js"><link rel="prefetch" href="/assets/js/192.2c093acc.js"><link rel="prefetch" href="/assets/js/193.1af4ef50.js"><link rel="prefetch" href="/assets/js/194.4897dc1c.js"><link rel="prefetch" href="/assets/js/195.b86ce8a8.js"><link rel="prefetch" href="/assets/js/196.1acde3b5.js"><link rel="prefetch" href="/assets/js/197.b6729e20.js"><link rel="prefetch" href="/assets/js/198.a18dceb0.js"><link rel="prefetch" href="/assets/js/199.090b6aec.js"><link rel="prefetch" href="/assets/js/2.021fe241.js"><link rel="prefetch" href="/assets/js/20.0b30b2ec.js"><link rel="prefetch" href="/assets/js/200.d0895769.js"><link rel="prefetch" href="/assets/js/201.ea809008.js"><link rel="prefetch" href="/assets/js/202.baaa85da.js"><link rel="prefetch" href="/assets/js/203.3dbec1b6.js"><link rel="prefetch" href="/assets/js/204.b50ed7c3.js"><link rel="prefetch" href="/assets/js/205.28300e8d.js"><link rel="prefetch" href="/assets/js/206.d7e4f745.js"><link rel="prefetch" href="/assets/js/207.9385097d.js"><link rel="prefetch" href="/assets/js/208.47f8ada9.js"><link rel="prefetch" href="/assets/js/209.a1876eb6.js"><link rel="prefetch" href="/assets/js/21.86365a3f.js"><link rel="prefetch" href="/assets/js/210.64bc181e.js"><link rel="prefetch" href="/assets/js/211.e3797e03.js"><link rel="prefetch" href="/assets/js/212.6fa6923d.js"><link rel="prefetch" href="/assets/js/213.72280dd9.js"><link rel="prefetch" href="/assets/js/214.19b24cb5.js"><link rel="prefetch" href="/assets/js/215.2f1e3893.js"><link rel="prefetch" href="/assets/js/216.5e5c09c7.js"><link rel="prefetch" href="/assets/js/217.8dd7d2c9.js"><link rel="prefetch" href="/assets/js/218.31228f43.js"><link rel="prefetch" href="/assets/js/219.d464cea1.js"><link rel="prefetch" href="/assets/js/22.6c1d1c7d.js"><link rel="prefetch" href="/assets/js/220.80193c9e.js"><link rel="prefetch" href="/assets/js/221.5e240345.js"><link rel="prefetch" href="/assets/js/222.a1cbfcf9.js"><link rel="prefetch" href="/assets/js/223.bdf9543a.js"><link rel="prefetch" href="/assets/js/224.9a495f8e.js"><link rel="prefetch" href="/assets/js/225.b6a714bd.js"><link rel="prefetch" href="/assets/js/226.8071cbba.js"><link rel="prefetch" href="/assets/js/227.06d359ea.js"><link rel="prefetch" href="/assets/js/228.1de48339.js"><link rel="prefetch" href="/assets/js/229.46544abf.js"><link rel="prefetch" href="/assets/js/23.dac106b4.js"><link rel="prefetch" href="/assets/js/230.c2a18a79.js"><link rel="prefetch" href="/assets/js/231.e77cf256.js"><link rel="prefetch" href="/assets/js/232.b76d052c.js"><link rel="prefetch" href="/assets/js/233.7bcc95f6.js"><link rel="prefetch" href="/assets/js/234.53ffdac3.js"><link rel="prefetch" href="/assets/js/235.f8b48d7d.js"><link rel="prefetch" href="/assets/js/236.744bf7e8.js"><link rel="prefetch" href="/assets/js/237.02521d90.js"><link rel="prefetch" href="/assets/js/238.3bed0a31.js"><link rel="prefetch" href="/assets/js/239.ebf0d7de.js"><link rel="prefetch" href="/assets/js/24.b0161fc1.js"><link rel="prefetch" href="/assets/js/240.98701ec8.js"><link rel="prefetch" href="/assets/js/241.4b24c254.js"><link rel="prefetch" href="/assets/js/242.c06841da.js"><link rel="prefetch" href="/assets/js/243.b5485776.js"><link rel="prefetch" href="/assets/js/244.877296c3.js"><link rel="prefetch" href="/assets/js/245.34e81292.js"><link rel="prefetch" href="/assets/js/246.6e955ba6.js"><link rel="prefetch" href="/assets/js/247.d7196568.js"><link rel="prefetch" href="/assets/js/248.0ae6eb53.js"><link rel="prefetch" href="/assets/js/249.115ae804.js"><link rel="prefetch" href="/assets/js/25.0c770351.js"><link rel="prefetch" href="/assets/js/250.e55efe87.js"><link rel="prefetch" href="/assets/js/251.6638b3ba.js"><link rel="prefetch" href="/assets/js/252.9b806d91.js"><link rel="prefetch" href="/assets/js/253.acdd8f37.js"><link rel="prefetch" href="/assets/js/254.6dd9f64b.js"><link rel="prefetch" href="/assets/js/255.d4fb370d.js"><link rel="prefetch" href="/assets/js/256.111cd90c.js"><link rel="prefetch" href="/assets/js/257.713ff3e5.js"><link rel="prefetch" href="/assets/js/258.1e6dde75.js"><link rel="prefetch" href="/assets/js/259.e90fa3a8.js"><link rel="prefetch" href="/assets/js/26.7d95b717.js"><link rel="prefetch" href="/assets/js/260.8ab4b3ff.js"><link rel="prefetch" href="/assets/js/261.efb20784.js"><link rel="prefetch" href="/assets/js/262.28da8bf4.js"><link rel="prefetch" href="/assets/js/263.35baccb9.js"><link rel="prefetch" href="/assets/js/264.684ed2b7.js"><link rel="prefetch" href="/assets/js/265.bfc7adab.js"><link rel="prefetch" href="/assets/js/266.c1d11301.js"><link rel="prefetch" href="/assets/js/267.92dcfe34.js"><link rel="prefetch" href="/assets/js/268.3e2a6314.js"><link rel="prefetch" href="/assets/js/269.ccf36385.js"><link rel="prefetch" href="/assets/js/27.e184cb4e.js"><link rel="prefetch" href="/assets/js/270.be2180fd.js"><link rel="prefetch" href="/assets/js/271.29c1a2d9.js"><link rel="prefetch" href="/assets/js/272.db7142b0.js"><link rel="prefetch" href="/assets/js/273.f81f1d2a.js"><link rel="prefetch" href="/assets/js/274.5da7edad.js"><link rel="prefetch" href="/assets/js/275.9e8bd88c.js"><link rel="prefetch" href="/assets/js/276.3682f1f4.js"><link rel="prefetch" href="/assets/js/277.e5eccc95.js"><link rel="prefetch" href="/assets/js/278.7f1b2a2f.js"><link rel="prefetch" href="/assets/js/279.0935c216.js"><link rel="prefetch" href="/assets/js/28.8c9fc447.js"><link rel="prefetch" href="/assets/js/280.049fdd73.js"><link rel="prefetch" href="/assets/js/281.1cafb415.js"><link rel="prefetch" href="/assets/js/282.6e19d5f1.js"><link rel="prefetch" href="/assets/js/283.42145c35.js"><link rel="prefetch" href="/assets/js/284.d49e317b.js"><link rel="prefetch" href="/assets/js/285.d99c5bc0.js"><link rel="prefetch" href="/assets/js/286.5318466a.js"><link rel="prefetch" href="/assets/js/287.7f17a9b4.js"><link rel="prefetch" href="/assets/js/288.8c482112.js"><link rel="prefetch" href="/assets/js/289.88dda16f.js"><link rel="prefetch" href="/assets/js/29.ffedc605.js"><link rel="prefetch" href="/assets/js/290.54eec8ad.js"><link rel="prefetch" href="/assets/js/291.1a43a52b.js"><link rel="prefetch" href="/assets/js/292.8f60d156.js"><link rel="prefetch" href="/assets/js/293.53246614.js"><link rel="prefetch" href="/assets/js/294.02e773d4.js"><link rel="prefetch" href="/assets/js/295.db69a4bd.js"><link rel="prefetch" href="/assets/js/296.ff77e9e7.js"><link rel="prefetch" href="/assets/js/297.7980acff.js"><link rel="prefetch" href="/assets/js/298.5f454454.js"><link rel="prefetch" href="/assets/js/299.ff1641c1.js"><link rel="prefetch" href="/assets/js/30.79216f3f.js"><link rel="prefetch" href="/assets/js/300.cc9e910d.js"><link rel="prefetch" href="/assets/js/301.4b753eb2.js"><link rel="prefetch" href="/assets/js/302.7b64b5ce.js"><link rel="prefetch" href="/assets/js/303.90170e2c.js"><link rel="prefetch" href="/assets/js/304.61973cb6.js"><link rel="prefetch" href="/assets/js/305.90d24ca7.js"><link rel="prefetch" href="/assets/js/306.c21926ea.js"><link rel="prefetch" href="/assets/js/307.817075ef.js"><link rel="prefetch" href="/assets/js/308.10f0c609.js"><link rel="prefetch" href="/assets/js/309.cede24af.js"><link rel="prefetch" href="/assets/js/31.71c477a6.js"><link rel="prefetch" href="/assets/js/310.96cd9e10.js"><link rel="prefetch" href="/assets/js/311.e17b04e1.js"><link rel="prefetch" href="/assets/js/32.574cefc0.js"><link rel="prefetch" href="/assets/js/33.1163e8f7.js"><link rel="prefetch" href="/assets/js/34.81456fe0.js"><link rel="prefetch" href="/assets/js/35.2898cc7b.js"><link rel="prefetch" href="/assets/js/36.8de089d8.js"><link rel="prefetch" href="/assets/js/37.7110a91e.js"><link rel="prefetch" href="/assets/js/38.4e21f86c.js"><link rel="prefetch" href="/assets/js/39.d23408d8.js"><link rel="prefetch" href="/assets/js/4.c5320a64.js"><link rel="prefetch" href="/assets/js/40.369d4d0a.js"><link rel="prefetch" href="/assets/js/41.e423bfdc.js"><link rel="prefetch" href="/assets/js/42.e064b285.js"><link rel="prefetch" href="/assets/js/43.05526296.js"><link rel="prefetch" href="/assets/js/44.e15dc91e.js"><link rel="prefetch" href="/assets/js/45.55115191.js"><link rel="prefetch" href="/assets/js/46.d38b3f59.js"><link rel="prefetch" href="/assets/js/47.7e8d2155.js"><link rel="prefetch" href="/assets/js/48.7f3e6e5f.js"><link rel="prefetch" href="/assets/js/49.62e32d50.js"><link rel="prefetch" href="/assets/js/5.3622728d.js"><link rel="prefetch" href="/assets/js/51.2176243d.js"><link rel="prefetch" href="/assets/js/52.b0c898b1.js"><link rel="prefetch" href="/assets/js/53.4eaf9e9c.js"><link rel="prefetch" href="/assets/js/54.745d7785.js"><link rel="prefetch" href="/assets/js/55.62861398.js"><link rel="prefetch" href="/assets/js/56.035ab35a.js"><link rel="prefetch" href="/assets/js/57.28ec5909.js"><link rel="prefetch" href="/assets/js/58.0f8ed516.js"><link rel="prefetch" href="/assets/js/59.71df8435.js"><link rel="prefetch" href="/assets/js/6.f53a59b2.js"><link rel="prefetch" href="/assets/js/60.258c535e.js"><link rel="prefetch" href="/assets/js/61.acc4ccef.js"><link rel="prefetch" href="/assets/js/62.c1ea36e5.js"><link rel="prefetch" href="/assets/js/63.d13422aa.js"><link rel="prefetch" href="/assets/js/65.9e36b5c3.js"><link rel="prefetch" href="/assets/js/66.b2a90d86.js"><link rel="prefetch" href="/assets/js/67.9a54c3f5.js"><link rel="prefetch" href="/assets/js/68.b1b57a0a.js"><link rel="prefetch" href="/assets/js/69.ece3995c.js"><link rel="prefetch" href="/assets/js/70.c248e064.js"><link rel="prefetch" href="/assets/js/71.77ff27c1.js"><link rel="prefetch" href="/assets/js/72.c0ecaec5.js"><link rel="prefetch" href="/assets/js/73.407a20d6.js"><link rel="prefetch" href="/assets/js/74.57afbdff.js"><link rel="prefetch" href="/assets/js/75.e14c69e6.js"><link rel="prefetch" href="/assets/js/76.558b59a1.js"><link rel="prefetch" href="/assets/js/77.8fd6a7a1.js"><link rel="prefetch" href="/assets/js/78.0cb03edf.js"><link rel="prefetch" href="/assets/js/79.d539db12.js"><link rel="prefetch" href="/assets/js/8.31ac1cde.js"><link rel="prefetch" href="/assets/js/80.d35c0599.js"><link rel="prefetch" href="/assets/js/81.2e28386e.js"><link rel="prefetch" href="/assets/js/82.9a7cf8d0.js"><link rel="prefetch" href="/assets/js/83.95ab3276.js"><link rel="prefetch" href="/assets/js/84.4a1e6be5.js"><link rel="prefetch" href="/assets/js/85.ff97f876.js"><link rel="prefetch" href="/assets/js/86.4245317d.js"><link rel="prefetch" href="/assets/js/87.a47d731f.js"><link rel="prefetch" href="/assets/js/88.f770ba7c.js"><link rel="prefetch" href="/assets/js/89.746bfad6.js"><link rel="prefetch" href="/assets/js/9.a4b31a9f.js"><link rel="prefetch" href="/assets/js/90.9a1eb0cf.js"><link rel="prefetch" href="/assets/js/91.a9f409cb.js"><link rel="prefetch" href="/assets/js/92.ab47c556.js"><link rel="prefetch" href="/assets/js/93.d9068c04.js"><link rel="prefetch" href="/assets/js/94.9c26078b.js"><link rel="prefetch" href="/assets/js/95.26468028.js"><link rel="prefetch" href="/assets/js/96.cb3a553e.js"><link rel="prefetch" href="/assets/js/97.74c9c5b4.js"><link rel="prefetch" href="/assets/js/98.42493b69.js"><link rel="prefetch" href="/assets/js/99.92f3d1d3.js"><link rel="prefetch" href="/editor.worker.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.770d2762.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container" data-v-7dc41b4c><main class="page" data-v-04310c16 data-v-7dc41b4c><div class="page-edit page-edit" data-v-a7643680 data-v-04310c16><!----> <div class="last-updated" data-v-a7643680><span class="prefix" data-v-a7643680>Last Updated:</span> <span class="time" data-v-a7643680>9/7/2020, 7:08:57 AM</span></div></div><slot name="top" data-v-04310c16></slot><div class="page__text" data-v-04310c16><div class="page-left-sidebar" data-v-04310c16></div><div id="my-theme-default-content" class="theme-default-content" data-v-04310c16><div class="content__default" data-v-04310c16><div class="eye-catch" data-v-1f344e1e><img src="/assets/img/cover.e19cef54.jpg" data-v-1f344e1e> <a href="https://unsplash.com/photos/2Wa88Py0h0A" target="_blank" rel="noopener noreferrer" data-v-1f344e1e>
+    Maria Teneva, Istanbul Museum of Modern Art, Istanbul, Turkey
+  </a></div> <h1 id="クロージャと-nonlocal"><a href="#クロージャと-nonlocal" class="header-anchor">#</a> クロージャと nonlocal</h1> <div class="conclusion">
+  自分が定義された時の<br class="sp">
+  スコープを覚えている<br class="sp">
+  関数です。
+</div> <p>ここで見ていくクロージャは、主にデコレータで使う機能です。
+デコレータが使えれば十分なので、
+細かい仕様は気にせず、気楽にざっくり流していただければと思います。</p> <p>また PEP 227 と PEP 3104 の関係については、
+<a href="http://nhiro.org/langbook/" target="_blank" rel="noopener noreferrer">コーディングを支える技術<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> の
+「第７章 名前とスコープ」から知ることができました。ありがとうございます。</p> <h2 id="_0-関数の中で定義する関数"><a href="#_0-関数の中で定義する関数" class="header-anchor">#</a> 0. 関数の中で定義する関数</h2> <p>関数の中で関数を定義することができます。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">double</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> x <span class="token operator">+</span> y
+    
+    <span class="token keyword">return</span> <span class="token number">2</span> <span class="token operator">*</span> add<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+
+double<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; double(1, 2)
+6
+&gt;&gt;&gt; 
+</code></pre></div><p>関数の中で関数を定義して、一体何に使うのでしょうか？
+長くて読みにくい処理に名前をつけて、短く表現したい時に、関数を使います。</p> <blockquote><p>関数の最も基本的な機能は、複数の命令をひとつにまとめて、名前をつけることです。<br> <a href="https://sbfl.net/blog/2016/12/26/javascript-function-revisited/" target="_blank" rel="noopener noreferrer">JavaScript の関数で何ができるのか、もう一度考える - Subterranean Flower Blog<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <p>もし上のコードの <code>add</code> が長かったら、
+もう少しメリットがわかりやすくなると思うのですが。
+役に立ち、かつ短い、良いコードが思いつきませんでした... orz</p> <p>で、ここで疑問なのが、処理に名前をつけたいだけなら、
+外側で定義すればいいんじゃないの？という話です。
+しかし、外側で定義されると「あー、ほか関数でも使われるのか」と、
+誤解される可能性があります。
+double の中でしか使わないのなら double の中で定義した方が良さそうですね。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">double</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token number">2</span> <span class="token operator">*</span> add<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y
+
+double<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre></div><blockquote><p>内側の関数名が外から見えず、他から使われないことが保証できるので読むとき楽<br> <a href="https://teratail.com/questions/188056" target="_blank" rel="noopener noreferrer">関数内関数を積極的に使うシチュエーションがわからない・意義がいまいち理解できない - teratail<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h2 id="_1-クロージャ"><a href="#_1-クロージャ" class="header-anchor">#</a> 1. クロージャ</h2> <p>自分は長いこと「関数の中で定義する関数をクロージャだ」と思っていました。
+が、どうもそうではないようです。
+「自由変数を持った関数が、クロージャだ」そうです。</p> <p>ただ Python には明確な言語仕様が存在しないので、
+こうだ！とは言いにくいところがあるので、
+読み流していただけると嬉しいです。</p> <h3 id="_1-1-普通の関数"><a href="#_1-1-普通の関数" class="header-anchor">#</a> 1.1. 普通の関数</h3> <p>例えば、関数 f は自身が定義されたグローバルスコープを覚えています。
+x を参照しても 0 を返してくれます。</p> <div class="language-python extra-class"><pre class="language-python"><code>x <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token comment"># 関数 f は自由変数 x を持つ</span>
+<span class="token comment"># クロージャです。</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>       
+    <span class="token keyword">return</span> x   
+
+f<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; f()
+0
+&gt;&gt;&gt;
+</code></pre></div><blockquote><p>関数または関数の中で定義された関数に自由変数がある場合、
+実行される各 def 文または lambda 式は <span style="background:linear-gradient(#F3F781, #F3F781);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   クロージャ 
+</span> を作成します
+<span style="color:#ddd;">(訳注: ここで言う &quot;実行&quot; とは、定義した関数を実行する時ではなく、
+関数を定義する時のことを指しています)</span>。<br>
+Each def or lambda expression that is executed will create a closure if the body of the function or any contained function has free variables.<br> <a href="https://www.python.org/dev/peps/pep-0227/" target="_blank" rel="noopener noreferrer">PEP 227 -- Statically Nested Scopes<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <blockquote><p>プログラミングにおいては、<span style="background:linear-gradient(#F3F781, #F3F781);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   自由変数 
+</span>
+とは関数の中で参照される局所変数や引数以外の変数を意味する
+<span style="color:#ddd;">(訳注: ローカルスコープ以外から来た変数だと思えばいいかなと思います。上の関数 f の例で言えば、変数 x が該当します)</span>。<br> <a href="https://ja.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%A4%89%E6%95%B0%E3%81%A8%E6%9D%9F%E7%B8%9B%E5%A4%89%E6%95%B0" target="_blank" rel="noopener noreferrer">自由変数と束縛変数 - Wikipedia<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <div class="box26" style="margin-bottom:100px;"><span class="box-title">ポイント</span> <p>関数の中で定義された関数だけでなく、</p> <p>普通の関数もクロージャらしい。</p></div> <h3 id="_1-2-関数の中で定義された関数"><a href="#_1-2-関数の中で定義された関数" class="header-anchor">#</a> 1.2. 関数の中で定義された関数</h3> <p>関数の中で関数を定義しました。
+このとき関数 g は自分が定義されたスコープを覚えています。
+関数 f のローカルスコープです。</p> <div class="language-python extra-class"><pre class="language-python"><code>y <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    y <span class="token operator">=</span> <span class="token number">1</span>
+    
+    <span class="token comment"># 関数 g は自由変数 y を持つ</span>
+    <span class="token comment"># クロージャです。</span>
+    <span class="token keyword">def</span> <span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>      
+        <span class="token keyword">return</span> y  
+    <span class="token keyword">return</span> g
+
+h <span class="token operator">=</span> f<span class="token punctuation">(</span><span class="token punctuation">)</span>
+h<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; h()
+1
+&gt;&gt;&gt; 
+</code></pre></div><p>用語集には nested scope は、機能と書かれています。
+いまいるスコープの外側のスコープを nested スコープと呼んで差し支えないかなと思っています。
+以後 nested スコープと呼称していきます。</p> <blockquote><p><a href="https://docs.python.org/ja/3/glossary.html#term-nested-scope" target="_blank" rel="noopener noreferrer">nested scope - 用語集<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a><br>
+(ネストされたスコープ) 外側で定義されている変数を参照する機能です。
+<span style="color:#D8D8D8;">例えば、ある関数が別の関数の中で定義されている場合、内側の関数は外側の関数中の変数を参照できます。ネストされたスコープはデフォルトでは変数の参照だけができ、変数の代入はできないので注意してください。ローカル変数は、最も内側のスコープで変数を読み書きします。同様に、グローバル変数を使うとグローバル名前空間の値を読み書きします。 nonlocal で外側の変数に書き込めます。</span></p></blockquote> <p>PEP 227 によって Python 2.2 から nested スコープが導入されました。
+より正確には Python 2.1  でも <code>from __future__ import nested_scopes</code> を宣言することで使えたようです。</p> <ul><li><a href="https://www.python.org/dev/peps/pep-0227/" target="_blank" rel="noopener noreferrer">PEP 227 -- Statically Nested Scopes<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <p>PEP 227 で nested スコープが導入されたというのは、
+Python 2.1 以前では local スコープに変数がなければ、
+直接 global スコープが参照されていました。
+上記のコードの実行結果は <code>1</code> ではなく <code>0</code> が返されていたということです。</p> <div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; # Python 2.1 以前では...
+&gt;&gt;&gt; h()
+0
+&gt;&gt;&gt; 
+</code></pre></div><div class="box26" style="margin-bottom:100px;"><span class="box-title">ポイント</span> <p>関数の中で定義された関数の中に、</p> <p>変数がなかった場合、</p> <p>外側の変数が参照される。</p></div> <h2 id="_2-クロージャの使いどき"><a href="#_2-クロージャの使いどき" class="header-anchor">#</a> 2. クロージャの使いどき</h2> <p>さてこんな機能、どこで使うのでしょうか？
+ここでは関数の中で定義された関数が nested スコープを使う例について２つ思いついたのですが、
+いいサンプルコードが思い浮かびませんでした... orz</p> <h3 id="_2-1-デコレータ"><a href="#_2-1-デコレータ" class="header-anchor">#</a> 2.1. デコレータ</h3> <p>引数を取るデコレータを定義したい時は、nested スコープが欲しいです。
+例えば、実行時間を計測するデコレータを書きました。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token comment">#</span>
+<span class="token comment"># 対話モード &gt;&gt;&gt; に</span>
+<span class="token comment"># コピペで動きます。</span>
+<span class="token comment">#</span>
+<span class="token keyword">import</span> time
+
+
+<span class="token keyword">def</span> <span class="token function">measure</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 関数 wrapper は自由変数 func を持つ</span>
+    <span class="token comment"># クロージャです。</span>
+    <span class="token keyword">def</span> <span class="token function">wrapper</span><span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kargs<span class="token punctuation">)</span><span class="token punctuation">:</span>  
+        <span class="token comment"># 開始時間</span>
+        start_time <span class="token operator">=</span> time<span class="token punctuation">.</span>perf_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+        result <span class="token operator">=</span> func<span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kargs<span class="token punctuation">)</span>
+        
+        <span class="token comment"># 終了時間</span>
+        end_time <span class="token operator">=</span> time<span class="token punctuation">.</span>perf_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+        <span class="token comment"># 実行時間 = 終了時間 - 開始時間</span>
+        execution_time <span class="token operator">=</span> end_time <span class="token operator">-</span> start_time
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">{</span>func<span class="token punctuation">.</span>__name__<span class="token punctuation">}</span></span><span class="token string">: </span><span class="token interpolation"><span class="token punctuation">{</span>execution_time<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> result
+    
+    <span class="token keyword">return</span> wrapper
+
+
+<span class="token comment"># 素因数分解</span>
+<span class="token decorator annotation punctuation">@measure</span>
+<span class="token keyword">def</span> <span class="token function">factorize</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    b <span class="token operator">=</span> <span class="token number">2</span>
+    fct <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">while</span> b <span class="token operator">*</span> b <span class="token operator">&lt;=</span> n<span class="token punctuation">:</span>
+        <span class="token keyword">while</span> n <span class="token operator">%</span> b <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            n <span class="token operator">//=</span> b
+            fct<span class="token punctuation">.</span>append<span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+        b <span class="token operator">=</span> b <span class="token operator">+</span> <span class="token number">1</span>
+    <span class="token keyword">if</span> n <span class="token operator">&gt;</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        fct<span class="token punctuation">.</span>append<span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> fct
+
+
+factorize<span class="token punctuation">(</span><span class="token number">6700417</span> <span class="token operator">*</span> <span class="token number">2147483647</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; factorize(6700417 * 2147483647)
+factorize: 1.5311630189999998
+[6700417, 2147483647]
+&gt;&gt;&gt;
+</code></pre></div><blockquote><p>私はPythonを関数型言語として見ていないが、クロージャの導入は価値があったと考えている。クロージャは他の多くのプログラミング機能の拡張の開発の役に立っているからである。例えば、新スタイルクラスや、デコレータなど、いくつかの新しい機能はクロージャを利用している。<br> <span style="color:#ddd;">(訳注: クロージャはもともと関数型言語を参考にして導入された機能だそうです。次に見る、カリー化と部分適用も関数型言語でのテクニックだと聞いています。)</span><br> <a href="https://python-history-jp.blogspot.com/2009/05/python.html" target="_blank" rel="noopener noreferrer">Pythonの&quot;関数型&quot;の機能の起源 - The History of Python.js<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h3 id="_2-2-カリー化と部分適用"><a href="#_2-2-カリー化と部分適用" class="header-anchor">#</a> 2.2. カリー化と部分適用</h3> <p>カリー化、部分適用をしたい時は、nested スコープが欲しいです。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token comment">#</span>
+<span class="token comment"># 対話モード &gt;&gt;&gt; に</span>
+<span class="token comment"># コピペで動きます。</span>
+<span class="token comment">#</span>
+
+<span class="token comment"># 通常</span>
+<span class="token comment"># def floordiv(a, b):</span>
+<span class="token comment">#     return a // b</span>
+
+<span class="token comment"># Step 1. カリー化</span>
+<span class="token keyword">def</span> <span class="token function">splitter</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 関数 split は自由変数 b を持つ</span>
+    <span class="token comment"># クロージャです。</span>
+    <span class="token keyword">def</span> <span class="token function">split</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> a <span class="token operator">//</span> b
+    <span class="token keyword">return</span> split
+
+<span class="token comment"># Step 2. 部分適用</span>
+half <span class="token operator">=</span> splitter<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+half<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; half(4)
+2
+&gt;&gt;&gt; 
+</code></pre></div><p>正直、カリー化するメリットは、よくわかっていません。
+カリー化, 部分適用については Google 先生にお尋ねください。</p> <ul><li><a href="https://teratail.com/questions/19786" target="_blank" rel="noopener noreferrer">カリー化ってどんな時に便利なのですか？ - teratail<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://www.google.com/search?q=%E3%82%AB%E3%83%AA%E3%83%BC%E5%8C%96%E3%81%A8%E9%83%A8%E5%88%86%E9%81%A9%E7%94%A8" target="_blank" rel="noopener noreferrer">カリー化, 部分適用 - Google 検索結果<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <p>ちなみにカリー化したり部分適用することが面倒だなと思ったら、
+標準ライブラリ functools の中にある partial 関数を使うと、
+既にある関数を元にカリー化することなく部分適用ができるそうです。</p> <ul><li><a href="https://qiita.com/Yz_4230/items/f49d6e4c2611a4dd6013#functoolspartial" target="_blank" rel="noopener noreferrer">functools.partial - マイナーだけど便利なPythonの小技5つ<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://blog.amedama.jp/entry/2015/11/28/000432" target="_blank" rel="noopener noreferrer">functools.partial() で関数やメソッドを部分適用する - CUBE SUGAR CONTAINER<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <h3 id="◯-wikipedia-の説明"><a href="#◯-wikipedia-の説明" class="header-anchor">#</a> ◯ Wikipedia の説明</h3> <p>Wikipedia に詳しく記述されています。自分は、理解できていません笑</p> <ul><li><a href="https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B8%E3%83%A3#%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B8%E3%83%A3%E3%81%AE%E7%94%A8%E9%80%94" target="_blank" rel="noopener noreferrer">クロージャの用途 - クロージャ - Wikipedia<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <div class="box26" style="margin-top:100px;"><span class="box-title">まとめ</span> <p>引数を取るデコレータ</p> <p>カリー化と部分適用</p></div> <h2 id="_3-nonlocal-文"><a href="#_3-nonlocal-文" class="header-anchor">#</a> 3. nonlocal 文</h2> <p>クロージャが導入されたことで nested スコープの変数を参照できるようになりました。
+しかし、そのままでは変更することができません。
+そこで PEP 3104 によって Python 3.0 から nonlocal 文が導入されました。</p> <ul><li><a href="https://www.python.org/dev/peps/pep-3104/" target="_blank" rel="noopener noreferrer">PEP 3104 -- Access to Names in Outer Scopes<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <h3 id="_3-1-カウンタ"><a href="#_3-1-カウンタ" class="header-anchor">#</a> 3.1. カウンタ</h3> <p>さっそく動作を見てみましょう。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">create_counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    c <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">def</span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">nonlocal</span> c  <span class="token comment"># １つ外側の変数 c を束縛する。</span>
+        c <span class="token operator">=</span> c <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> c
+    <span class="token keyword">return</span> count
+
+count <span class="token operator">=</span> create_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; count()
+1
+&gt;&gt;&gt; count()
+2
+&gt;&gt;&gt; count()
+3
+&gt;&gt;&gt; count()
+4
+&gt;&gt;&gt; count()
+5
+&gt;&gt;&gt; 
+</code></pre></div><blockquote><p>nonlocal 文は、
+列挙された識別子がグローバルを除く
+一つ外側のスコープで先に束縛された変数を
+参照するようにします。<br> <a href="https://docs.python.org/ja/3/reference/simple_stmts.html#the-nonlocal-statement" target="_blank" rel="noopener noreferrer">7.13. nonlocal 文<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h3 id="_3-2-擬似乱数"><a href="#_3-2-擬似乱数" class="header-anchor">#</a> 3.2. 擬似乱数</h3> <p>擬似乱数生成する関数です。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">linear_congruential</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> x<span class="token punctuation">,</span> b<span class="token punctuation">,</span> m<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">_</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">nonlocal</span> x
+        x <span class="token operator">=</span> <span class="token punctuation">(</span>a <span class="token operator">*</span> x <span class="token operator">+</span> b<span class="token punctuation">)</span> <span class="token operator">%</span> m
+        <span class="token keyword">return</span> x
+    <span class="token keyword">return</span> _
+
+
+random <span class="token operator">=</span> linear_congruential<span class="token punctuation">(</span><span class="token number">48271</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token operator">**</span><span class="token number">31</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+random<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 386168</span>
+random<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 1460846352</span>
+random<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 1741224500</span>
+</code></pre></div><ul><li><a href="https://ja.wikipedia.org/wiki/%E7%B7%9A%E5%BD%A2%E5%90%88%E5%90%8C%E6%B3%95" target="_blank" rel="noopener noreferrer">線形合同法 - Wikipedia<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <p>一次関数と剰余算が一緒になっている場合、線形合同法による擬似乱数を生成している可能性があります。
+昔、競プロの問題でこれの規則を見つける問題と勘違いして辛い思いをしました。</p> <div class="quiz page" data-v-e3f22cce><div class="content__default question" data-v-e3f22cce><div class="heading answer">答え</div> <p>実行結果の組み合わせとして、正しいものはどれですか？</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">def</span> <span class="token function">create_counter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    c <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">def</span> <span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">nonlocal</span> c
+        c <span class="token operator">=</span> c <span class="token operator">+</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> c
+    <span class="token keyword">return</span> count
+
+count_a <span class="token operator">=</span> create_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_b <span class="token operator">=</span> create_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_c <span class="token operator">=</span> create_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+count_a<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_b<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_b<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_c<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_c<span class="token punctuation">(</span><span class="token punctuation">)</span>
+count_c<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; count_a()
+実行結果
+&gt;&gt;&gt; count_b()
+実行結果
+&gt;&gt;&gt; count_b()
+実行結果
+&gt;&gt;&gt; count_c()
+実行結果
+&gt;&gt;&gt; count_c()
+実行結果
+&gt;&gt;&gt; count_c()
+実行結果
+&gt;&gt;&gt; 
+</code></pre></div><div data-v-eaf9e654><div style="height: 20px;" data-v-eaf9e654><!----></div> <div style="position:relative;display:flex;justify-content:center;height:140px;" data-v-eaf9e654><div style="position:absolute;max-width:500px;width:100%;top:0px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button data-v-eaf9e654>
+     1, 2, 3, 4, 5, 6
+    </button></button></div><div style="position:absolute;max-width:500px;width:100%;top:49px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button data-v-eaf9e654>
+     1, 1, 2, 1, 2, 3
+    </button></button></div></div></div></div></div> <h2 id="_4-nonlocal-文の使いどき"><a href="#_4-nonlocal-文の使いどき" class="header-anchor">#</a> 4. nonlocal 文の使いどき</h2> <p>nonlocal 文を使いたい時はいつでしょうか？
+専用のオブジェクトを作らないで、
+変数だけで簡単に状態を持たせたいということかなと思っています。</p> <p>通常、なにか状態を持たせる時はクラスを作ります。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">Counter</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_times <span class="token operator">=</span> <span class="token number">0</span>
+    
+    <span class="token keyword">def</span> <span class="token function">count</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_times <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>_times
+
+counter <span class="token operator">=</span> Counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+counter<span class="token punctuation">.</span>count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+counter<span class="token punctuation">.</span>count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+counter<span class="token punctuation">.</span>count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+counter<span class="token punctuation">.</span>count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+counter<span class="token punctuation">.</span>count<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; counter.count()
+1
+&gt;&gt;&gt; counter.count()
+2
+&gt;&gt;&gt; counter.count()
+3
+&gt;&gt;&gt; counter.count()
+4
+&gt;&gt;&gt; counter.count()
+5
+&gt;&gt;&gt; 
+</code></pre></div><p>nonlocal を使えば、わざわざクラスを定義する必要もありませんでした。
+ただ、この例では、結局書いている行数が変わらないので、分かりにくいです。</p> <p>PEP の本文の中に、こういう時に便利だよね！という例があります。
+Namespace というクラスが不要になったので、コードが短くなります。
+ちょっと分かりにくいのですが、PEP の記載されていたコードを引用します。</p> <div class="language- extra-class"><pre class="language-text"><code>#
+# **Python 2** では、こうやって書くしかない
+#
+class Namespace:
+    pass
+
+def make_scoreboard(frame, score=0):
+    ns = Namespace()
+    ns.score = 0
+    label = Label(frame)
+    label.pack()
+    for i in [-10, -1, 1, 10]:
+        def increment(step=i):
+            ns.score = ns.score + step
+            label['text'] = ns.score
+        button = Button(frame, text='%+d' % i, command=increment)
+        button.pack()
+    return label
+</code></pre></div><div class="language-python extra-class"><pre class="language-python"><code><span class="token comment">#</span>
+<span class="token comment"># こうやって書けたらいいけど...</span>
+<span class="token comment"># -&gt; nonlocal 文を導入しよう</span>
+<span class="token comment">#</span>
+<span class="token keyword">def</span> <span class="token function">make_scoreboard</span><span class="token punctuation">(</span>frame<span class="token punctuation">,</span> score<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    label <span class="token operator">=</span> Label<span class="token punctuation">(</span>frame<span class="token punctuation">)</span>
+    label<span class="token punctuation">.</span>pack<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+        <span class="token keyword">def</span> <span class="token function">increment</span><span class="token punctuation">(</span>step<span class="token operator">=</span>i<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            score <span class="token operator">=</span> score <span class="token operator">+</span> step  <span class="token comment"># fails with UnboundLocalError</span>
+            label<span class="token punctuation">[</span><span class="token string">'text'</span><span class="token punctuation">]</span> <span class="token operator">=</span> score
+        button <span class="token operator">=</span> Button<span class="token punctuation">(</span>frame<span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token string">'%+d'</span> <span class="token operator">%</span> i<span class="token punctuation">,</span> command<span class="token operator">=</span>increment<span class="token punctuation">)</span>
+        button<span class="token punctuation">.</span>pack<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> label
+</code></pre></div><ul><li><a href="https://www.python.org/dev/peps/pep-3104/" target="_blank" rel="noopener noreferrer">PEP 3104 -- Access to Names in Outer Scopes<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <h3 id="◯-クラスと-nonlocal-の使い分け"><a href="#◯-クラスと-nonlocal-の使い分け" class="header-anchor">#</a> ◯ クラスと nonlocal の使い分け</h3> <p>メソッドを１つしか持たないクラスの場合かつ、
+nonlocal 文を使うと短く簡潔に書ける場合は、
+nonlocal 文を使ってもいいかなと思います。
+ただ、多くの場合はクラス定義文を使った方が望ましいかなと感じています。</p> <p>まず第一に、オブジェクトが状態を持っていると分かりやすいからです。
+オブジェクトからメソッドを呼び出した場合、そのメソッドは何かしらの副作用を有しているかもしれないと考えることができます。
+関数だけで副作用を有しているというのは正直、ちょっと怖い気がします。</p> <ul><li><a href="/side-effect/">副作用ってなに？</a></li></ul> <p>また第二に nonlocal 文はあまり見かけません。
+例えば GitHub で Django と Flask のソースコードに nonlocal で検索をしたのですが、
+あまり使われている箇所は多くはありません。</p> <ul><li><a href="https://github.com/django/django/search?q=nonlocal&amp;unscoped_q=nonlocal" target="_blank" rel="noopener noreferrer">Search nonlocal - Django - GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://github.com/pallets/flask/search?q=nonlocal&amp;unscoped_q=nonlocal" target="_blank" rel="noopener noreferrer">Search nonlocal - Flask - GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <h2 id="_5-2つの名前の探し方"><a href="#_5-2つの名前の探し方" class="header-anchor">#</a> 5. ２つの名前の探し方</h2> <div class="quiz page" data-v-e3f22cce><div class="content__default question" data-v-e3f22cce><div class="heading">
+  問題
+</div> <p>以下のスクリプトを実行すると
+<code>0</code> と <code>1</code> どちらが表示されるでしょうか？</p> <div class="language-python extra-class"><pre class="language-python"><code>x <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> <span class="token number">1</span>
+    f<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+g<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 実行結果１</span>
+</code></pre></div><p>実行結果１に最も近いものは次のうち、どれですか？</p> <div data-v-eaf9e654><div style="height: 20px;" data-v-eaf9e654><!----></div> <ul class="dot-button-list" data-v-eaf9e654><li class="dot-button-item" data-v-eaf9e654><div class="dot-button-wrapper" data-v-eaf9e654><button class="dot-button" data-v-eaf9e654>
+              ア
+            </button></div> <div class="dot-button-description" data-v-eaf9e654><span data-v-eaf9e654>
+      0
+    </span></div></li><li class="dot-button-item" data-v-eaf9e654><div class="dot-button-wrapper" data-v-eaf9e654><button class="dot-button" data-v-eaf9e654>
+              イ
+            </button></div> <div class="dot-button-description" data-v-eaf9e654><span data-v-eaf9e654>
+      1
+    </span></div></li><li class="dot-button-item" data-v-eaf9e654><div class="dot-button-wrapper" data-v-eaf9e654><button class="dot-button" data-v-eaf9e654>
+              ウ
+            </button></div> <div class="dot-button-description" data-v-eaf9e654><span style="font-size:10px;" data-v-eaf9e654>
+      例外 NameError が raise される。
+    </span></div></li></ul></div></div></div> <h3 id="_5-1-静的スコープ"><a href="#_5-1-静的スコープ" class="header-anchor">#</a> 5.1. 静的スコープ</h3> <p><span style="background:linear-gradient(#FBEFEF, #FBEFEF);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   変数を 
+</span> <span style="background:linear-gradient(#F5A9A9, #F5A9A9);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   定義 
+</span> <span style="background:linear-gradient(#FBEFEF, #FBEFEF);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   した箇所から外側に向けて広がるスコープ 
+</span>
+を静的スコープと呼ばれているのを目にします。
+Python は静的スコープを採用しています。</p> <ul><li><a href="https://ja.wikipedia.org/wiki/%E9%9D%99%E7%9A%84%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" target="_blank" rel="noopener noreferrer">静的スコープ - Wikipedia<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <p>そんな言葉もあるんだなくらいに抑えておいていただければなと思います。
+関数 f は呼び出されると、自分が定義されたスコープから外側へと変数を探しに行きます。</p> <h3 id="_5-2-動的スコープ"><a href="#_5-2-動的スコープ" class="header-anchor">#</a> 5.2. 動的スコープ</h3> <p><span style="background:linear-gradient(#FBEFEF, #FBEFEF);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   変数を 
+</span> <span style="background:linear-gradient(#F5A9A9, #F5A9A9);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   参照 
+</span> <span style="background:linear-gradient(#FBEFEF, #FBEFEF);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   した箇所から外側に向けて広がるスコープ 
+</span>
+を動的コープと呼ばれているのを目にします。
+Python は動的スコープは採用していません。</p> <ul><li><a href="https://ja.wikipedia.org/wiki/%E5%8B%95%E7%9A%84%E3%82%B9%E3%82%B3%E3%83%BC%E3%83%97" target="_blank" rel="noopener noreferrer">動的スコープ - Wikipedia<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <p>もし Python がレキシカルスコープであったなら、
+呼び出された箇所の外側のスコープを探し <code>1</code> が表示されます。</p> <p>ダイナミックスコープは危険らしいです。
+関数が呼び出される場所によって、
+参照するスコープが変化してしまうのは、
+可読性はちょっと辛そうな気はします。あまりちゃんと理解できていません。</p> <blockquote><p>ダイナミックスコープは危険で、最近の言語ではほとんど採用されていない。<br>
+dynamic scoping can be dangerous and few modern languages use it.<br> <a href="https://en.wikipedia.org/wiki/Scope_(computer_science)#Dynamic_scoping" target="_blank" rel="noopener noreferrer">Scope - Wikipedia<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h3 id="◯-参考文献"><a href="#◯-参考文献" class="header-anchor">#</a> ◯ 参考文献</h3> <p>以下の記事がとても参考になります。
+レキシカルスコープとは静的スコープのことです。
+英語圏の文献ではレキシカルスコープ (lexical scope) の表記を割と多く見かけます。</p> <ul><li><a href="https://jutememo.blogspot.com/2012/03/blog-post.html" target="_blank" rel="noopener noreferrer">レキシカルスコープとダイナミックスコープ - すぐに忘れる脳みそのた...<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <h2 id="_6-クラスのスコープ"><a href="#_6-クラスのスコープ" class="header-anchor">#</a> 6. クラスのスコープ</h2> <p>クラスにもスコープがあります。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">:</span>
+    a <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+    <span class="token comment"># 1</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+<span class="token comment"># NameError</span>
+</code></pre></div><p>クラススコープの使いどきは <code>property</code> を使うときかなと思います。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token comment">#</span>
+<span class="token comment"># attr*2 はクラススコープの attr*1 を参照しています。</span>
+<span class="token comment">#</span>
+<span class="token keyword">class</span> <span class="token class-name">Class</span><span class="token punctuation">:</span>
+    <span class="token comment"># 参照</span>
+    <span class="token decorator annotation punctuation">@property</span>
+    <span class="token keyword">def</span> <span class="token function">attr</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment"># attr*1</span>
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>_attr
+    
+    <span class="token comment"># 代入</span>
+    <span class="token decorator annotation punctuation">@attr<span class="token punctuation">.</span>setter</span>  <span class="token comment"># attr*2</span>
+    <span class="token keyword">def</span> <span class="token function">attr</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>_attr <span class="token operator">=</span> value
+
+instance <span class="token operator">=</span> Class<span class="token punctuation">(</span><span class="token punctuation">)</span>
+instance<span class="token punctuation">.</span>attr <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>instance<span class="token punctuation">.</span>attr<span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; print(instance.attr)
+0
+&gt;&gt;&gt; 
+</code></pre></div><p><code>property</code> 自体、あまり目にすることがないので、
+クラススコープを意識することはないのかなと思います。
+<code>property</code> は、コードを改修する際に代入や参照を全て書き換えるのが面倒な時に、
+逃げの一手として使うものだと個人的に思っています。</p> <h3 id="_6-1-クラスの-nested-スコープ"><a href="#_6-1-クラスの-nested-スコープ" class="header-anchor">#</a> 6.1. クラスの nested スコープ</h3> <p>そして、クラスのスコープは、すこし独特な動作をします。
+この動作については以下の記事から知ることができました。ありがとうございます。</p> <ul><li><a href="https://www.haya-programming.com/entry/2018/04/07/145324" target="_blank" rel="noopener noreferrer">クラス変数のスコープには注意が必要<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <p>スコープの基本的な考え方は
+<span style="background:linear-gradient(#CEECF5, #CEECF5);background-size:0% 45%;background-position:0% 100%;background-repeat:no-repeat;transition-delay:0.5s;transition-duration:2.5s;">
+   中から外は見ることができる 
+</span>
+でした。
+普通はローカルスコープで変数が定義されていなかった時、
+１つ外側のスコープの名前が参照されます。</p> <p>例えば、関数定義時は、ローカル変数が定義されていなかった場合、
+１つ外側の名前空間を参照されるようになっています。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token comment"># 普通は...</span>
+x <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">def</span> <span class="token function">g</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> <span class="token number">1</span>  <span class="token comment"># &lt;-- こっちが参照される</span>
+    <span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> x  <span class="token comment"># 1</span>
+
+    <span class="token keyword">return</span> f
+
+f <span class="token operator">=</span> g<span class="token punctuation">(</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><p>しかし、クラススコープは、たとえ nested スコープがあったとしても、
+見ることができません。
+直接 global スコープが参照されてしまいます。</p> <div class="language-python extra-class"><pre class="language-python"><code>x <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">class</span> <span class="token class-name">B</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>... 
+0
+&gt;&gt;&gt; 
+</code></pre></div><p>メソッドを定義する時は、１つ外側の名前空間は、何もしないと参照されません。
+もしクラス変数を参照したければ、 self.x と書かないといけません。</p> <p>PEP 227 によると、ローカル変数とクラス変数（文中ではクラス属性）を明確に区別するために、
+このような例外を設けたようです。</p> <blockquote><p>このルールは、クラス属性への参照とローカル変数への参照の間における奇妙な相互作用を防ぐためです。<br>
+This rule prevents odd interactions between class attributes and local variable access.<br> <a href="https://www.python.org/dev/peps/pep-0227/#discussion" target="_blank" rel="noopener noreferrer">Statically Nested Scopes - PEP 227<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <p>もちろん、クラス定義内であれば、名前空間を明示しなくても使えます。
+むしろ明示するとエラーになります。
+なぜエラーになるかというと名前 C に
+クラスオブジェクトが束縛されていないからです。</p> <div class="language-python extra-class"><pre class="language-python"><code><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>  <span class="token comment"># 0</span>
+
+    y <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>C<span class="token punctuation">.</span>y<span class="token punctuation">)</span>  <span class="token comment"># NameError</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>...
+0
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;&lt;stdin&gt;&quot;, line 6, in C
+AttributeError: class C has no attribute 'y'
+&gt;&gt;&gt;
+</code></pre></div><div class="quiz page" data-v-e3f22cce><div class="content__default question" data-v-e3f22cce><div class="heading answer">答え</div> <p>実行結果２はどれですか？</p> <div class="language-python extra-class"><pre class="language-python"><code>x <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+obj <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
+obj<span class="token punctuation">.</span>f<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; obj.f()
+実行結果２
+&gt;&gt;&gt;
+</code></pre></div> <div data-v-eaf9e654><div style="height: 20px;" data-v-eaf9e654><!----></div> <div style="position:relative;display:flex;justify-content:center;height:210px;" data-v-eaf9e654><div style="position:absolute;max-width:500px;width:100%;top:0px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button data-v-eaf9e654>
+      0
+    </button></button></div><div style="position:absolute;max-width:500px;width:100%;top:49px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button data-v-eaf9e654>
+      1
+    </button></button></div><div style="position:absolute;max-width:500px;width:100%;top:98px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button style="font-size:10px;" data-v-eaf9e654>
+      NameError が投げ返される。
+    </button></button></div></div></div></div></div> <div class="quiz page" data-v-e3f22cce><div class="content__default question" data-v-e3f22cce><div class="heading">
+  問題
+</div> <p>実行結果３を答えてください。</p> <div class="language-python extra-class"><pre class="language-python"><code>x <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>x<span class="token punctuation">)</span>
+
+obj <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span>
+obj<span class="token punctuation">.</span>f<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>&gt;&gt;&gt; obj.f()
+実行結果３
+&gt;&gt;&gt;
+</code></pre></div><div data-v-eaf9e654><div style="height: 20px;" data-v-eaf9e654><!----></div> <div style="position:relative;display:flex;justify-content:center;height:210px;" data-v-eaf9e654><div style="position:absolute;max-width:500px;width:100%;top:0px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button data-v-eaf9e654>
+      0
+    </button></button></div><div style="position:absolute;max-width:500px;width:100%;top:49px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button data-v-eaf9e654>
+      1
+    </button></button></div><div style="position:absolute;max-width:500px;width:100%;top:98px;" data-v-eaf9e654><button class="rectangle-button" data-v-eaf9e654><button style="font-size:9px;" data-v-eaf9e654>
+      AttributeError が投げ返される。
+    </button></button></div></div></div></div></div> <h3 id="_6-2-3-つの例外"><a href="#_6-2-3-つの例外" class="header-anchor">#</a> 6.2. 3 つの例外</h3> <p>Python の名前解決は、そのほかにも２つの例外があります。</p> <blockquote><p>議論<br>
+... 名前解決のルールは、静的スコープの言語に典型的なものです。
+ただし、３つの例外があります:</p> <ul><li><strong>クラススコープの名前は、参照できません。</strong></li> <li>global 文は通常のルールをショートカットします。</li> <li>変数は宣言されません。</li></ul> <p>Discussion<br>
+...
+The name resolution rules are typical for statically scoped languages,
+with three primary exceptions:</p> <ul><li><strong>Names in class scope are not accessible.</strong></li> <li>The global statement short-circuits the normal rules.</li> <li>Variables are not declared.</li></ul> <p><a href="https://www.python.org/dev/peps/pep-0227/#discussion" target="_blank" rel="noopener noreferrer">Statically Nested Scopes - PEP 227<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <p>「global 文は通常のルールをショートカットします。」というのは、
+global 文が付与された変数は nestedd スコープをショートカッして直接 global スコープを参照することを指しています。</p> <p>「変数は宣言されません」というのは、
+例えばローカル変数を使う場合は、
+他のプログラミング言語、例えば JavaScript のように <code>let</code>, <code>const</code> と書かなくていいですよ、
+と言っています。</p> <h2 id="_7-おわりに"><a href="#_7-おわりに" class="header-anchor">#</a> 7. おわりに</h2> <p>ここまで以下のように見てきました。</p> <p></p><div class="table-of-contents"><ul><li><a href="#_0-関数の中で定義する関数">0. 関数の中で定義する関数</a></li><li><a href="#_1-クロージャ">1. クロージャ</a><ul><li><a href="#_1-1-普通の関数">1.1. 普通の関数</a></li><li><a href="#_1-2-関数の中で定義された関数">1.2. 関数の中で定義された関数</a></li></ul></li><li><a href="#_2-クロージャの使いどき">2. クロージャの使いどき</a><ul><li><a href="#_2-1-デコレータ">2.1. デコレータ</a></li><li><a href="#_2-2-カリー化と部分適用">2.2. カリー化と部分適用</a></li><li><a href="#◯-wikipedia-の説明">◯ Wikipedia の説明</a></li></ul></li><li><a href="#_3-nonlocal-文">3. nonlocal 文</a><ul><li><a href="#_3-1-カウンタ">3.1. カウンタ</a></li><li><a href="#_3-2-擬似乱数">3.2. 擬似乱数</a></li></ul></li><li><a href="#_4-nonlocal-文の使いどき">4. nonlocal 文の使いどき</a><ul><li><a href="#◯-クラスと-nonlocal-の使い分け">◯ クラスと nonlocal の使い分け</a></li></ul></li><li><a href="#_5-2つの名前の探し方">5. ２つの名前の探し方</a><ul><li><a href="#_5-1-静的スコープ">5.1. 静的スコープ</a></li><li><a href="#_5-2-動的スコープ">5.2. 動的スコープ</a></li><li><a href="#◯-参考文献">◯ 参考文献</a></li></ul></li><li><a href="#_6-クラスのスコープ">6. クラスのスコープ</a><ul><li><a href="#_6-1-クラスの-nested-スコープ">6.1. クラスの nested スコープ</a></li><li><a href="#_6-2-3-つの例外">6.2. 3 つの例外</a></li></ul></li><li><a href="#_7-おわりに">7. おわりに</a></li></ul></div><p></p> <p>以上になります。ありがとうございました。</p></div><div data-v-04310c16></div></div><div class="page-right-sidebar page-right-sidebar" data-v-23631fb5 data-v-04310c16><div class="my-table-of-contents" data-v-23631fb5>Python のクロージャと nonlocal ってなに？<ul data-v-23631fb5><li data-v-23631fb5><a href="/closure-and-nonlocal/#_0-関数の中で定義する関数" class="sidebar-link" data-v-23631fb5>0. 関数の中で定義する関数</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_1-クロージャ" class="sidebar-link" data-v-23631fb5>1. クロージャ</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_2-クロージャの使いどき" class="sidebar-link" data-v-23631fb5>2. クロージャの使いどき</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_3-nonlocal-文" class="sidebar-link" data-v-23631fb5>3. nonlocal 文</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_4-nonlocal-文の使いどき" class="sidebar-link" data-v-23631fb5>4. nonlocal 文の使いどき</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_5-2つの名前の探し方" class="sidebar-link" data-v-23631fb5>5. ２つの名前の探し方</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_6-クラスのスコープ" class="sidebar-link" data-v-23631fb5>6. クラスのスコープ</a></li><li data-v-23631fb5><a href="/closure-and-nonlocal/#_7-おわりに" class="sidebar-link" data-v-23631fb5>7. おわりに</a></li></ul></div></div></div><slot name="bottom" data-v-04310c16></slot><div class="page-nav" data-v-e9689aaa data-v-04310c16><div class="inner" data-v-e9689aaa><span class="prev" data-v-e9689aaa>
+      ←
+      <a href="/scope/" data-v-e9689aaa>
+        スコープ
+      </a></span> <span class="next" data-v-e9689aaa><a href="/class/" data-v-e9689aaa>
+        クラス
+      </a>
+      →
+    </span></div></div></main> <header class="header" data-v-a609c31c data-v-7dc41b4c><div class="icon-wrapper" data-v-a609c31c><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon" data-v-a609c31c><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z" data-v-a609c31c></path></svg></div> <div data-v-a609c31c></div></header> <aside class="sidebar" style="transform:translateX(-100%);transition:transform .2s ease;" data-v-b9ed40ee data-v-7dc41b4c><a href="/" target="_blank" rel="noopener" class="sidebar__title" data-v-b9ed40ee>民主主義に乾杯</a>  <ul class="sidebar-contents sidebar__contents" data-v-450105e9 data-v-b9ed40ee><li class="sidebar-content-wrapper" data-v-450105e9><a href="/object--welcome/" class="sidebar-article" data-v-450105e9>はじめに</a></li><li class="sidebar-content-wrapper" data-v-450105e9><section class="sidebar-category collapsable" data-v-7d4dadae data-v-450105e9><p class="sidebar-category__title open" data-v-7d4dadae><span data-v-7d4dadae>
+      名前空間
+    </span> <span class="arrow down" data-v-7d4dadae></span></p> <ul class="sidebar-contents sidebar-contents" data-v-450105e9 data-v-7d4dadae data-v-efc05d98 data-v-7d4dadae><li class="sidebar-content-wrapper" data-v-450105e9><section class="sidebar-category collapsable" data-v-7d4dadae data-v-450105e9><p class="sidebar-category__title open" data-v-7d4dadae><span data-v-7d4dadae>
+      名前空間
+    </span> <span class="arrow down" data-v-7d4dadae></span></p> <ul class="sidebar-contents sidebar-contents" data-v-450105e9 data-v-7d4dadae data-v-efc05d98 data-v-7d4dadae><li class="sidebar-content-wrapper" data-v-450105e9><a href="/namespace/" class="sidebar-article" data-v-450105e9>名前空間</a></li><li class="sidebar-content-wrapper" data-v-450105e9><a href="/import/" class="sidebar-article" data-v-450105e9>import 文</a></li><li class="sidebar-content-wrapper" data-v-450105e9><a href="/venv/" class="sidebar-article" data-v-450105e9>仮想環境</a></li><li class="sidebar-content-wrapper" data-v-450105e9><a href="/scope/" class="sidebar-article" data-v-450105e9>スコープ</a></li><li class="sidebar-content-wrapper" data-v-450105e9><a href="/closure-and-nonlocal/" aria-current="page" class="sidebar-article active" data-v-450105e9>クロージャと nonlocal</a></li></ul></section></li><li class="sidebar-content-wrapper" data-v-450105e9><section class="sidebar-category collapsable" data-v-7d4dadae data-v-450105e9><p class="sidebar-category__title" data-v-7d4dadae><span data-v-7d4dadae>
+      オブジェクト指向
+    </span> <span class="arrow right" data-v-7d4dadae></span></p> <!----></section></li></ul></section></li><li class="sidebar-content-wrapper" data-v-450105e9><section class="sidebar-category collapsable" data-v-7d4dadae data-v-450105e9><p class="sidebar-category__title" data-v-7d4dadae><span data-v-7d4dadae>
+      型
+    </span> <span class="arrow right" data-v-7d4dadae></span></p> <!----></section></li><li class="sidebar-content-wrapper" data-v-450105e9><section class="sidebar-category collapsable" data-v-7d4dadae data-v-450105e9><p class="sidebar-category__title" data-v-7d4dadae><span data-v-7d4dadae>
+      オブジェクト
+    </span> <span class="arrow right" data-v-7d4dadae></span></p> <!----></section></li><li class="sidebar-content-wrapper" data-v-450105e9><a href="/object--farewell/" class="sidebar-article" data-v-450105e9>おわりに</a></li></ul> <div class="sidebar__spacer" data-v-b9ed40ee></div> <!----> </aside> <div class="sidebar-mask" style="display:none;" data-v-7dc41b4c></div> <!----></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.e1863f3d.js" defer></script><script src="/assets/js/7.176c125c.js" defer></script><script src="/assets/js/105.d7af7abe.js" defer></script><script src="/assets/js/64.41c3bab0.js" defer></script><script src="/assets/js/177.e80e463a.js" defer></script><script src="/assets/js/50.29c4a8e5.js" defer></script><script src="/assets/js/175.ee68e9ad.js" defer></script><script src="/assets/js/171.c1ea9432.js" defer></script><script src="/assets/js/173.75cb3529.js" defer></script>
+  </body>
+</html>
