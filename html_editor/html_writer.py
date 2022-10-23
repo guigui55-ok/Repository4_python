@@ -106,6 +106,7 @@ class HtmlWriter():
         buf = buf.replace(target_value,replace_value)
         with open(path,'w',encoding='utf-8')as f:
             f.write(buf)
+            
     def _replace_line_to_file(self,path:str,target_value:str,replace_line:str):
         """
         target_valueが含まれる行を、replace_lineに置き換える

@@ -4,6 +4,9 @@ DOCTYPE = '<!DOCTYPE html>'
 CSS_MARKER = '<!--link_css-->'
 CSS_BEGIN_TAG = '<link rel="stylesheet" href="'
 CSS_END_TAG = '">'
+
+REPLACE_VALUE = '__VALUE__'
+CSS_TAG_SAMPLE = '<link rel="stylesheet" href="{}">'.format(REPLACE_VALUE)
 NEW_LINE = '\n'
 # BODY_MAIN_CONTENTS_MARKER = '<!--main contents-->'
 # BODY_MAIN_CONTENTS_MARKER = '<body><!--main contents--></body>'

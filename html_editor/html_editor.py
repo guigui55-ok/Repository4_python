@@ -5,7 +5,7 @@ if __name__ == '__main__' or __name__ == 'html_editor':
     from html_const import HtmlTagName
     from html_const import tag_is_closing_type
 else:
-    import html_editor as html_const
+    import html_editor.html_const as html_const
     from html_editor.html_const import HtmlTagName
     from html_editor.html_const import tag_is_closing_type
 
@@ -15,14 +15,14 @@ INDENT = '    '
 class HtmlElement():
     def __init__(
         self,
-        text:str='',
+        tag_text:str='',
         tag_name:str=HtmlTagName.DIV,
         attribute:dict={},
         indent:int=-1) -> None:
         """
         
         """
-        self.text = text
+        self.tag_text = tag_text
         self.tag = tag_name
         self.attribute = attribute
         self.child_elements:'list[HtmlElement]' = []
@@ -71,7 +71,7 @@ class HtmlElement():
          HtmlElement [tag_name=HtmlTagName.P, text='test', {'class':'p_tag'}]
           -> <p class="p_tag">test</p>
         """
-        if element==None:
+        if element==None: 
             element=self
         ret = ''
         ret += self.__get_indent_str(element)
@@ -104,13 +104,15 @@ class HtmlElement():
         ###
         return ret
     
-    def __align_str_attr(self,value):
+    def __align_str_attr(self,value:str):
+        """
+        """
         if len(value)<1:
             return value
         if value == ' ':
             return ''
         else:
-            if value[1]!=' ':
+            if value[0]!=' ':
                 value = ' '+value
             if value[-1]==' ':
                 return value[:-1]
