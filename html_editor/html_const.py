@@ -1,5 +1,6 @@
 
 BASIC_FILE_NAME = 'basic.html'
+BASIC_CSS_FILE_NAME = 'basic.css'
 DOCTYPE = '<!DOCTYPE html>'
 CSS_MARKER = '<!--link_css-->'
 CSS_BEGIN_TAG = '<link rel="stylesheet" href="'

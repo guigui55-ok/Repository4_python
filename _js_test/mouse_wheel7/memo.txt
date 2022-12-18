@@ -1,0 +1,13 @@
+
+    width:230px;
+    height:230px;
+    margin-left: 2em;
+    margin-right: 2em;
+
+    
+.wheel_test_inner .log p{
+    float:left;
+    display: block;
+    width:190px;
+    height:190px;
+}

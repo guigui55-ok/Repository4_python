@@ -1,0 +1,79 @@
+.procedure_box{
+    float:none;
+    clear:both;
+}
+
+.procedure_box p::before{
+    content: "";
+}
+
+.cp_linetab {
+    position: relative;
+    overflow: hidden;
+    width: 35pt;
+    margin: 0 3px;
+    color: #fff;
+    float:left;
+    display: block;
+}
+.cp_linetab input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.cp_linetab label {
+    font-weight: bold;
+    line-height: 3;
+    position: relative;
+    display: block;
+    padding: 0 0 0 1em;
+    cursor: pointer;
+    margin: 0 0 1px 0;
+    background: #53d1bd;
+    border-radius:5px;
+}
+.cp_linetab label .invalid{
+        width:0%;
+}
+
+.procedure_box p{
+    height: 3em;
+    display: block;
+}
+
+.cp_linetab-content {
+    overflow: hidden;
+    max-height: 0;
+    -webkit-transition: max-height 0.5s;
+    transition: max-height 0.5s;
+    color: #333333;
+    background: #eaeaea;
+}
+
+.cp_linetab-content p {
+    margin: 1em;
+    font-size: 14px;
+}
+
+p {
+    margin-bottom:0px;
+}
+    
+input:checked ~ .cp_linetab-content {
+    max-height: 20em;
+}
+    
+label:after{
+    color: #fff;
+    font-family:"FontAwesome";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 3em;
+}
+    
+input:checked ~ label::after {
+    color: #fff;
+    font-family:"FontAwesome";
+}

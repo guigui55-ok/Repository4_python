@@ -1,0 +1,138 @@
+
+body {
+    margin:auto 50px;
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+.main_contents {
+    background-color: #ffffff;
+    padding: 0 30px 0;
+    padding: 30px;
+    overflow-wrap:break-word;
+}
+.main_contents .invalid {
+    border : solid 1px;
+}
+
+.main_contents * {
+    overflow-wrap:break-word;
+}
+
+.clearfix {
+    clear:both;
+    margin:10px;
+}
+
+
+
+.procedureb {
+    /* overflow-x:scroll; */
+    /* overflow-y: hidden; */
+    height:60px;
+}
+
+.procedureb .log{
+    display: block;
+    float:left;
+    border : solid 1px;
+    width:300px;
+    height:50px;
+}
+
+.procedureb .log-image-box{
+    float:left;
+}
+
+
+.procedure_details {
+    padding-left:20px;
+    /* display: block; */
+    clear:both;
+    margin: bottom 30px;
+    padding-bottom: 32px;
+    /* overflow-y:hidden; */
+    overflow-x:scroll;
+    /* height: 80px; */
+}
+
+.procedure_details div {
+    /* height: 80px; */
+    /* width:1000%; */
+    vertical-align: middle;
+}
+
+.procedure_details div p.log{
+    float:left;
+    border : solid 1px;
+    width:300px;
+    height:50px;
+}
+
+#procedure2 {
+    margin-top:30px;
+}
+
+.main_title{
+    font-size: 18pt;
+    font-weight: 200;
+    color:#f0f0f0;
+    background-color: rgb(57, 57, 255);
+    padding: 5px;
+    padding-left: 38px;
+    padding-bottom: 2px;
+}
+
+.section_title{
+    border-left:solid 12px rgb(57, 57, 255);
+    border-bottom:solid 1px rgb(57, 57, 255);
+    padding-left:12px;
+    font-size:14pt;
+    margin-left:10px;
+    font-weight: bold;
+}
+
+.procedure {
+    padding-left: 28px;
+    font-size: 12pt;
+    margin-left:10px;
+    font-weight: bold;
+}
+
+.log {
+    padding-left:28px;
+    margin-left:10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 12pt;
+}
+
+.log_image_box {
+    width: inherit;
+    height: 400px;
+    margin-top:20px;
+    margin-bottom:20px;
+    position:  relative; 
+}
+
+.log_image_box img {
+    padding-left:48px;
+    height: 400px;
+    float:left;
+    border : solid 1px;
+}
+
+.log_image {
+    height: 100%;
+    width: auto;
+    display: block;
+}
+
+.log_image_description {
+    margin-left:20px;
+    font-size: 10pt;
+    position:  absolute;
+    top:40%;
+}

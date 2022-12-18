@@ -1,0 +1,39 @@
+
+    width:230px;
+    height:230px;
+    margin-left: 2em;
+    margin-right: 2em;
+
+    
+.wheel_test_inner .log p{
+    float:left;
+    display: block;
+    width:190px;
+    height:190px;
+}
+
+
+        <div class="proceure_box_b">
+            <input id="acd-check1" class="accordion_check" type="checkbox">
+            <label class="accordion_label" for="acd-check1">1. Procedure</label>
+            <div class="accordion_content">
+                <div id="procedureb1" class="procedureb wheel_test">
+                    <div class="inner_frame">
+                        <div class="log">
+                            <div class="log_image_box">
+                                <img src="./test_image.png" alt="save_page_source_and_screenshot">
+                                <span class="log_image_description">save_page_source_and_screenshot</span>
+                            </div>
+                        </div>
+                        <div class="log"><p>https://www.youtube.com/watch?v=xxxxxxxxxM</p></div>
+                        <div class="log"><p>https://www.youtube.com/watch?v=xxxxxxxxxM</p></div>
+                        <div class="log"><p>prepared select movie(after send url).</p></div>
+                        <div class="log"><p>waiting download button.[0]</p></div>
+                        <div class="log"><p>prepared download button.</p></div>
+                        <div class="log"><p>waiting download button.[0]</p></div>
+                        <div class="log"><p>prepared download button.</p></div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,29 @@
+
+.procedure_details {
+    padding-left:20px;
+    /* display: block; */
+    clear:both;
+    margin: bottom 30px;
+    padding-bottom: 32px;
+    /* overflow-y:hidden; */
+    overflow-x:scroll;
+    /* height: 80px; */
+}
+
+.procedure_details div {
+    /* height: 80px; */
+    /* width:1000%; */
+    vertical-align: middle;
+}
+
+.procedure_details div p.log{
+    float:left;
+    border : solid 1px;
+    width:300px;
+    height:50px;
+}
+
+
+#procedure2 {
+    margin-top:30px;
+}

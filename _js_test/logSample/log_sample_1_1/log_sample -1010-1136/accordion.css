@@ -1,0 +1,60 @@
+.cp_linetab {
+    position: relative;
+    overflow: hidden;
+    width: 49%;
+    margin: 0 3px;
+    color: #fff;
+    float:none;
+    }
+    .cp_linetab input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    }
+    .cp_linetab label {
+    font-weight: bold;
+    line-height: 3;
+    position: relative;
+    display: block;
+    padding: 0 0 0 1em;
+    cursor: pointer;
+    margin: 0 0 1px 0;
+    background: #53d1bd;
+    border-radius:5px;
+    }
+    .cp_linetab .cp_linetab-content {
+    overflow: hidden;
+    max-height: 0;
+    -webkit-transition: max-height 0.5s;
+    transition: max-height 0.5s;
+    color: #333333;
+    background: #eaeaea;
+    }
+    .cp_linetab .cp_linetab-content p {
+    margin: 1em;
+    font-size: 14px;
+    }
+    .cp_linetab p{
+    margin-bottom:0px;
+    }
+    
+    .cp_linetab input:checked ~ .cp_linetab-content {
+    max-height: 20em;
+    }
+    
+    .cp_linetab label:after{
+    color: #fff;
+    font-family:"FontAwesome";
+    content:" \f078";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2em;
+    height: 3em;
+    }
+    
+    .cp_linetab input:checked ~ label::after {
+    color: #fff;
+    font-family:"FontAwesome";
+    content:" \f077";
+    }

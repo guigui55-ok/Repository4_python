@@ -8,8 +8,10 @@ from html_editor.html_writer import HtmlWriter
 from html_editor.html_const import HtmlTagName
 
 def editer_test_main():
-    html_path = str(pathlib.Path(__file__).parent.joinpath('test.html'))
-    css_path = str(pathlib.Path(__file__).parent.joinpath('test.html'))
+    sample_path = r'C:\Users\OK\source\repos\test_media_files\beautigulsoup_test'
+    dirname = 'log_test1'
+    html_path = str(pathlib.Path(sample_path).joinpath(dirname,'test.html'))
+    css_path = str(pathlib.Path(sample_path).joinpath(dirname, 'test.css'))
     editor = HtmlEditorBs()
 
     editor.create_html(html_path)
@@ -18,8 +20,10 @@ def editer_test_main():
     editor.update_file()
 
 def write_test_main():
-    html_path = str(pathlib.Path(__file__).parent.joinpath('test_writer.html'))
-    css_path = str(pathlib.Path(__file__).parent.joinpath('test.css'))
+    sample_path = r'C:\Users\OK\source\repos\test_media_files\beautigulsoup_test'
+    dirname = 'log_test1'
+    html_path = str(pathlib.Path(sample_path).joinpath(dirname,'test_writer.html'))
+    css_path = str(pathlib.Path(sample_path).joinpath(dirname, 'test.css'))
     writer = HtmlEditorBs()
 
     # writer.create_html_content(html_path)

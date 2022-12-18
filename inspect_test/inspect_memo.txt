@@ -1,0 +1,28 @@
+"""
+css_path is not exists. [path=./log.css]
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Program Files\Python\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "c:\Users\OK\.vscode\extensions\ms-python.python-2022.16.1\pythonFiles\lib\python\debugpy\__main__.py", line 39, in <module>  
+    cli.main()
+  File "c:\Users\OK\.vscode\extensions\ms-python.python-2022.16.1\pythonFiles\lib\python\debugpy/..\debugpy\server\cli.py", line 430, in main
+    run()
+  File "c:\Users\OK\.vscode\extensions\ms-python.python-2022.16.1\pythonFiles\lib\python\debugpy/..\debugpy\server\cli.py", line 284, in run_file
+    runpy.run_path(target, run_name="__main__")
+  File "c:\Users\OK\.vscode\extensions\ms-python.python-2022.16.1\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "c:\Users\OK\.vscode\extensions\ms-python.python-2022.16.1\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "c:\Users\OK\.vscode\extensions\ms-python.python-2022.16.1\pythonFiles\lib\python\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
+    exec(code, run_globals)
+  File "c:\Users\OK\source\repos\Repository4_python\scraping_test\html_log\test_html_logger_bs.py", line 52, in <module>
+    html_log_test()
+  File "c:\Users\OK\source\repos\Repository4_python\scraping_test\html_log\test_html_logger_bs.py", line 36, in html_log_test        
+    logger.finish_to_create_html()
+  File "c:\Users\OK\source\repos\Repository4_python\scraping_test\html_log\html_logger_bs.py", line 122, in finish_to_create_html    
+    raise Exception()
+Exception
+PS C:\Users\OK\source\repos\Repository4_python\scraping_test> 
+"""

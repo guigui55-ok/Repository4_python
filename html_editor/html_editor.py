@@ -11,6 +11,8 @@ else:
 
 NEW_LINE = html_const.NEW_LINE
 INDENT = '    '
+import os
+# import shutil
 
 class HtmlElement():
     def __init__(
@@ -86,7 +88,7 @@ class HtmlElement():
         ###
         ### add Tag Text
         if not tag_is_closing_type(element.tag):
-            ret += element.text
+            ret += element.tag_text
         ### add Child Element Tag
         buf = ''
         for child in element.child_elements:
@@ -140,6 +142,10 @@ class HtmlEditor():
         else: self.html_path = html_path
         import shutil
         src_path = self.get_default_basic_path(basic_html_file_path)
+        # if os.path.exists(html_path):
+        #     os.remove(html_path)
+        if not os.path.exists(os.path.dirname(html_path)):
+            os.mkdir(os.path.dirname(html_path))
         shutil.copy(src_path,html_path)
 
     def add_element_by_text(
@@ -184,7 +190,7 @@ class HtmlEditor():
             attr = key + '=' + element.get_attribute(key) + ' '
         ret += self.__align_str_attr(attr) + '>'
         ###
-        ret += element.text
+        ret += element.tag_text
         ###
         buf = ''
         for child in element.child_elements:
@@ -217,3 +223,15 @@ class HtmlEditor():
         return ret
 
 
+
+    def copy_file(self, src_path, dist_path):
+        import shutil
+        shutil.copy(src_path, dist_path)
+
+    def get_html_dir(self):
+        return os.path.dirname(self.html_path)
+
+    def copy_to_html_dir(self, src_path,  absolute_path:str=''):
+        base_name = os.path.basename(src_path)
+        dist_path = os.path.join( self.get_html_dir(), absolute_path, base_name)
+        self.copy_file(src_path, dist_path)

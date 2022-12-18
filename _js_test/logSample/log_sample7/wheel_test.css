@@ -1,0 +1,32 @@
+
+
+/* .wheel_test {
+    width:1000px;
+    height: 200px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+} */
+
+.wheel_test_frame{
+    width:95%
+}
+
+.wheel_test{
+    /* width: 95%; */
+    height: 250px;
+    margin: 10px auto 10px auto;
+    border:solid 1px;
+    padding: 10px;
+    /* #### */
+    /* width:2000px; */
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+.wheel_test_inner{
+    width:2000px;
+}
+
+.wheel_test .over{
+    width: 1000px;
+}

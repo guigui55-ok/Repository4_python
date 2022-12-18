@@ -63,6 +63,9 @@ def delete_py_chache_core(path_list:'list[str]'):
 
 
 def main():
+    print()
+    print('*****')
+    #####
     base_dir = r'C:\Users\OK\source\repos\Repository4_python'
     ext = '/*'
     path_list = get_file_path_list(base_dir,ext)
@@ -70,6 +73,8 @@ def main():
     path_list = get_file_paths_list_all_up_to_bottom_dir(path_list,ext)
     print('file_list_count = {}'.format( len(path_list) ))
     delete_py_chache_core(path_list)
+    #####
+    print(f'base_dir = {base_dir}')
 
     return
 

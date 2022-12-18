@@ -48,6 +48,11 @@ class GameButton(QPushButton):
             if result[0] == result[1] == result[2] == "○":
                 print("○の勝ち")
                 [btn.setStyleSheet("color : #ff0000;") for btn in btns]
+                # ボタンの入力を無効にする
+                for btn in self.buttons:
+                    btn.setEnabled(False)
+                # exit()
+                # return
 
         # btns : list[GameButton] = [self.buttons[i] for i in patterns[0]]
         # # print(btns)

@@ -1,0 +1,55 @@
+
+
+
+.log {
+    width:200px;
+    height:200px;
+}
+
+.log_image_box {
+    margin:auto;
+}
+
+.log_image_box img{
+    display: block;
+    width:200px;
+    height:200px;
+}
+
+.clearfix{
+    clear:both;
+}
+/* ############################### */
+.procedureb {
+    height:250px;
+}
+
+.inner_frame {
+    height:100%;
+}
+/* ############################### */
+.inner_frame .log{
+    float:left;
+    display: block;
+    width:230px;
+    height:230px;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.inner_frame .log p {
+    margin:auto;
+    /* overflow-y: hidden;
+    overflow-x: hidden; */
+}
+/* ############################### */
+.procedureb {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    width: inherit;
+}
+
+.inner_frame {
+    width:400%;
+}
+/* ############################### */

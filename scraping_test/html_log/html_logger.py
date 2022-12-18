@@ -5,7 +5,6 @@ if __name__ == '__main__':
 else:
     from common_utility.log_util.logging_util import LoggerUtility,LogLevel,BasicLogger
 
-from genericpath import isdir
 from html_editor.html_writer import HtmlWriter
 from html_editor.html_editor import HtmlElement
 from html_editor.html_const import HtmlTagName
@@ -50,13 +49,16 @@ class HtmlLogger():
         self.init_log_dir_path(log_dir_path)
         
         # HtmlWriter
-        self.log_html_file_name = log_html_file_name
-        log_html_path = os.path.join(self.logger_dir_path,log_html_file_name)
-        self.html_writer:HtmlWriter = HtmlWriter(log_html_path)
-        self.html_writer.css_path = log_html_css_path
-        if create_log:
-            self.create_log()
-            self.html_writer.add_css_file_path(log_html_css_path)
+        # self.log_html_file_name = log_html_file_name
+        # log_html_path = os.path.join(self.logger_dir_path,log_html_file_name)
+        # # self.html_writer:HtmlWriter = HtmlWriter(log_html_path)
+        # self.html_writer = HtmlWriter(log_html_path)
+        # self.html_writer.css_path = log_html_css_path
+        # self.html_writer.init_values_html_writer(log_html_path,log_html_css_path)
+        # if create_log:
+        #     self.create_log()
+        #     self.html_writer.add_css_file_path(log_html_css_path)
+        self._init_html_writer(log_html_file_name, log_html_css_path, create_log)
 
         # TextLog
         self.log_txt_file_name = log_txt_file_name        
@@ -73,6 +75,17 @@ class HtmlLogger():
         self.log_level_txt = LogLevel.INFO.value
         # self.add_log_txt('create log')
         # 
+
+    def _init_html_writer(self,log_html_file_name, log_html_css_path, create_log):
+        # HtmlWriter
+        self.log_html_file_name = log_html_file_name
+        log_html_path = os.path.join(self.logger_dir_path,log_html_file_name)
+        self.html_writer:HtmlWriter = HtmlWriter(log_html_path)
+        self.html_writer.css_path = log_html_css_path
+        self.html_writer.init_values_html_writer(log_html_path,log_html_css_path)
+        if create_log:
+            self.create_log()
+            self.html_writer.add_css_file_path(log_html_css_path)
     # def __init__(self,
     #     logger_name: str,
     #     config_file_path: str = '', 
@@ -119,7 +132,7 @@ class HtmlLogger():
     ########## HTML
     def __add_log_txt_align_format(self,el:HtmlElement):
         """HtmlElementからテキストlogに追記する"""
-        value = el.text
+        value = el.tag_text
         #通常ログならインデントする
         if el.get_attribute('class') == HtmlLogConst.CLASS_NAME_LOG:
             value = HtmlLogConst.INDENT + value
@@ -129,9 +142,15 @@ class HtmlLogger():
         self.__add_log_txt_align_format(el)
     def __add_log_main(self,el:HtmlElement,log_level:int = LogLevel.INFO.value):
         """ログに追記する main"""
-        self.__add_log_html(el,log_level)
+        self._add_log_html(el,log_level)
         self.__add_log_txt(el)
     def __add_log_html(self,el:HtmlElement,log_level:int = LogLevel.INFO.value):
+        """HtmlElement から HTML log に追記する"""
+        if self.log_level <= log_level:
+            self.html_writer.add_to_file(el)
+
+            
+    def _add_log_html(self,el:HtmlElement,log_level:int = LogLevel.INFO.value):
         """HtmlElement から HTML log に追記する"""
         if self.log_level <= log_level:
             self.html_writer.add_to_file(el)
@@ -157,7 +176,7 @@ class HtmlLogger():
         el = HtmlElement(
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_MAIN_TITLE})
-        self.__add_log_main(el)
+        self._add_log_main(el)
     def add_section_title(self,value:str):
         """
         section のタイトルをログに出力する
@@ -166,7 +185,7 @@ class HtmlLogger():
         el = HtmlElement(
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_SECTION_TITLE})
-        self.__add_log_main(el)
+        self._add_log_main(el)
     def add_log(self,value:str):
         """
         ログを出力する（標準）
@@ -175,7 +194,7 @@ class HtmlLogger():
         el = HtmlElement(
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG})
-        self.__add_log_main(el)
+        self._add_log_main(el)
         
     def add_log_image(
         self,image_path:str,
@@ -204,9 +223,9 @@ class HtmlLogger():
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_DESC})
         box_el.add_element(span_el)
         #イメージの場合は DIVタグがからテキストで無駄なログが出力されてしまう
-        # self.__add_log_main(box_el)
+        # self._add_log_main(box_el)
         #htmlに要素を書き込み
-        self.__add_log_html(box_el,log_level)
+        self._add_log_html(box_el,log_level)
         #txtログには説明とイメージパスを追記
         self.__add_log_txt(span_el)
         self.add_log_txt(image_path,self.log_level_txt)
@@ -217,7 +236,7 @@ class HtmlLogger():
         ログにHTML要素を追記する
         """
         self.html_writer.add_to_file(element)
-        self.txt_logger.info(element.text)
+        self.txt_logger.info(element.tag_text)
         
     def info(self,value:str):
         """
@@ -235,7 +254,7 @@ class HtmlLogger():
         el = HtmlElement(
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_PROCEDURE})
-        self.__add_log_main(el)
+        self._add_log_main(el)
     def add_confirmation(self,value:str):
         """
         確認内容をログに出力する
@@ -244,7 +263,7 @@ class HtmlLogger():
         el = HtmlElement(
             value,HtmlTagName.P,
             {HtmlLogConst.ATTR_CLASS:HtmlLogConst.CLASS_NAME_CONFIRMATION})
-        self.__add_log_main(el)
+        self._add_log_main(el)
     ##########
     # def add_log_element(self,element:HtmlElement):
     #     """
@@ -266,15 +285,22 @@ class HtmlLogger():
           <body><div class="main-contents"></div></body>で囲み、ファイルを完成させる。
         """
         self.html_writer.add_outline_body_with_div()
-        self.html_writer.add_css_file_path(self.html_writer.css_path)
+        # self.html_writer.add_css_file_path(self.html_writer.css_path)
+        self.html_writer.write_css_path()
 
-    def set_css_path(self, css_path):
+    def set_css_path(self, css_path:str, absolute_path:str='./'):
         """
         cssファイルを設定する
          stylesheetタグに入力する、ルートからの相対パス
         """
-        self.html_writer.css_path = css_path
+        self.html_writer.add_css_file_path_list(css_path, absolute_path)
+        # self.html_writer.css_path = css_path
+        
 
+    def _add_log_main(self,el:HtmlElement,log_level:int = LogLevel.INFO.value):
+        """ログに追記する main"""
+        self._add_log_html(el,log_level)
+        self.__add_log_txt(el)
 
 
 def _mkdir(dir_path:str):

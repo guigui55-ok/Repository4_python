@@ -10,6 +10,7 @@ from bs4.element import Tag
 from bs4.formatter import Formatter
 import html_editor.html_const as html_const
 from html_editor.html_const import tag_is_closing_type
+import os
 
 class HtmlElementBs(HtmlElementbase,Tag):
     def __init__(
@@ -24,6 +25,15 @@ class HtmlElementBs(HtmlElementbase,Tag):
         self.tag_text = ''
         super().__init__(tag_text, tag_name, attribute, indent)
         self.child_tags:'list[Tag]' = []
+
+    @classmethod
+    def cnv_to_html_element_bs(cls,element:'HtmlElementbase'):
+        el_bs = HtmlElementBs(
+            tag_text=element.tag_text,
+            tag_name=element.tag,
+            attribute=element.attribute
+        )
+        return el_bs
 
     def cnv_html_element_to_tag(self):
         # soup = BeautifulSoup()
@@ -77,11 +87,14 @@ class HtmlElement(HtmlElementBs):
 class HtmlEditorBs(HtmlEditor,HtmlWriter):
     def __init__(self, html_path: str = '') -> None:
         super().__init__(html_path)
+        self.init_values_html_writer(html_path)
+        
         self.body:Tag = None
         self.soup = None
 
     def init_values(self,css_path:str=''):
         self.css_path = css_path
+        self.js_path = ''
 
     def create_html(self,html_path:str='',basic_html_file_path:str=''):
         super().create_html(html_path, basic_html_file_path)
@@ -145,14 +158,18 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         with open(self.html_path,'w',encoding='utf-8')as f:
             f.write(w_data)
         return
-    def add_css_file_path(self, css_path: str):
+    def add_css_file_path(self, css_path: str, absolute_path:str='./'):
         # return super().add_css_file_path(css_path)
+        if self._is_exists_css_path(css_path, absolute_path):
+            print('[WARNING]css_path is not exists. [path={}[abs={}]]'.format(css_path, absolute_path))
+            print('FILE {} , {}:'.format(__file__, 'add_css_file_path'))
         if css_path=='':
             css_path = self.css_path
+        css = absolute_path + os.path.basename(css_path)
         header_tag = self.soup.find('head')
         attr = {"rel":"stylesheet"}
         new_tag = self.soup.new_tag(
-            'link',href=css_path, attrs=attr)
+            'link',href=css, attrs=attr)
         header_tag.append(new_tag)
 
     def _is_exists_str_in_file(self, path: str, value: str):
@@ -167,8 +184,10 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
     def get_default_basic_path(self, basic_html_file_path: str = ''):
         return super().get_default_basic_path(basic_html_file_path)
     
-    def create_html_content(self, html_path: str = ''):
-        return super().create_html_content(html_path)
+    def create_html_content(self, html_path: str = '', basic_html_path:str=''):
+        # return super().create_html_content(html_path)
+        if html_path == '': html_path = self.html_path
+        self.create_html(html_path, basic_html_path)
 
     def add_to_file(self, element: 'HtmlElement'):
         """ html ファイルの body タグの最後に追記する"""
@@ -199,3 +218,87 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
     def __add_element(self, element: HtmlElement):
         # return super().__add_element(element)
         self.soup.body.append(element.get_tag())
+
+    def add_css_file_path_list(self, css_path: str, absolute_path: str = './'):
+        super().add_css_file_path_list(css_path, absolute_path)
+        css = os.path.basename(css_path)
+        value = absolute_path + css
+        self.add_css_file_path(value)
+
+    def add_css_file_path_from_file(self, css_file_path: str, absolute_path_from_root: str = './'):
+        # return super().add_css_file_path_from_file(css_file_path, absolute_path_from_root)
+        self.add_css_file_path_list(css_file_path,absolute_path_from_root)
+
+    def write_css_path(self):
+        # return super().write_css_path()
+        for css_tag in self.css_tags:
+            self._create_css_tag(css_tag.path, css_tag.absolute_path)
+
+    def _create_css_tag(self, css_file_path: str, absolute_path_from_root: str = './'):
+        # return super()._create_css_tag(css_file_path, absolute_path_from_root)
+        # path = self._get_css_absolute_path(css_file_path, absolute_path_from_root)
+        # indent = self._get_indent(self.indent_space)
+        # tag = indent + html_const.CSS_TAG_SAMPLE.replace(
+        #     html_const.REPLACE_VALUE,path) + NEW_LINE
+        # self._insert_str_to_file(self.html_path, '</head>',tag)
+        self.add_css_file_path(css_file_path, absolute_path_from_root)
+
+    def add_tag_to_body(self,add_element):
+        self.add_tag_to(add_element, 'body')
+
+
+    def add_tag_to(
+        self,
+        add_element:HtmlElementBs,
+        tag_name=None,
+        attrs={},
+        recursive=True,
+        text=None,
+        limit=None,
+        index:int=-1,
+        **kwargs
+        ):
+        """
+        """
+        # tags = self.soup.find(
+        #     tag_name,attrs,recursive,text=text,limit=limit,kwargs=kwargs)
+        tags = self.soup.find(
+            tag_name,attrs,recursive,text=text,kwargs=kwargs)
+        if len(tags)==1:
+            tags.append(add_element.get_tag())
+        else:
+            # tags[index].append(add_element.get_tag())
+            tag_list = [t for t in tags]
+            tag_list[index].append(add_element.get_tag())
+    
+    # def add_tag_by_id(self,add_element:HtmlElementBs, id:str):
+    #     tag = self.soup.find_all(id=id)
+    #     tag.append(add_element.get_tag())
+
+    # def add_tag_by_class(self,add_element:HtmlElementBs, class_name:str, index:int=-1):
+    #     tags = self.soup.find_all(class_=class_name)
+    #     tags[index].append(add_element.get_tag())
+
+    def add_tag_to_last_div(self, add_element:HtmlElementBs):
+        self.add_tag_to(add_element,'div')
+
+    def _get_first_dict(attrs:dict):
+        for k in attrs.keys():
+            return k,attrs[k]
+
+
+    def add_js_file_path(self, js_path: str, absolute_path:str='./'):
+        # return super().add_css_file_path(css_path)
+        if self._is_exists_css_path(js_path, absolute_path):
+            print('[WARNING]js_path is not exists. [path={}[abs={}]]'.format(
+                js_path, absolute_path))
+            print('FILE {} , {}:'.format(__file__, 'add_css_file_path'))
+        if js_path=='':
+            js_path = self.js_path
+        js = absolute_path + os.path.basename(js_path)
+        header_tag = self.soup.find('head')
+        # <script src="consoleLogDir.js"></script>
+        attr = {"src":"stylesheet"}
+        new_tag = self.soup.new_tag(
+            'script',href=js, attrs=attr)
+        header_tag.append(new_tag)
