@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reading External Text File</title>
+</head>
+<body>
+    <div id="content"></div>
+
+    <script>
+        fetch("./sample.txt")
+        .then(response => response.text())
+        .then(text => {
+            document.getElementById("content").innerHTML = text;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reading External Text File</title>
+</head>
+<body>
+    <div id="content"></div>
+
+    <script>
+        fetch("./sample.txt")
+            .then(response => response.text())
+            .then(text => {
+                document.querySelector("#content").innerHTML = text;
+            });
+            // document.querySelector("#content").innerHTML = 'aaa';
+    </script>
+</body>
+</html>

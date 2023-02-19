@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reading External Text File</title>
+</head>
+<body>
+    <div id="content"></div>
+
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "./sample.txt", true);
+        xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("content").innerHTML = xhr.responseText;
+        }
+        };
+        xhr.send();
+    </script>
+</body>
+</html>
