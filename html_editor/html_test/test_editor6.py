@@ -3,7 +3,7 @@ import sys,pathlib
 path = str(pathlib.Path(__file__).parent.parent.parent) #python4
 sys.path.append(path)
 
-from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs, HtmlElement
+from html_editor.html_editor_bs.html_editor_bs_main import HtmlEditorBs, HtmlElement
 from html_editor.html_writer import HtmlWriter
 from html_editor.html_const import HtmlTagName
 
@@ -128,7 +128,8 @@ import pathlib
 def write_test_main():
     # ファイルを読み込み、一部の要素をコピーする
     
-    read_dir_path = pathlib.Path(__file__).joinpath('test_sample1')
+    read_dir_path = pathlib.Path(__file__).parent.joinpath('test_sample1')
+    html_path = read_dir_path.joinpath('index.html')
 
     write_dirname = 'log_test3'
     write_dir_path = pathlib.Path(__file__).parent
@@ -155,9 +156,14 @@ def write_test_main():
     writer.add_css_file_path_from_file(css_path3)
     # writer.add_css_file_path(css_path)
     writer.add_outline_body()
-    print('html path=' + writer.html_path)
+    writer.update_file()
+    print('html path=' + str(writer.html_path))
+
+    # ゼロからeditorでhtml作成
+    # 元ファイルをコピー、テンプレ用htmlから作成
 
 if __name__ == '__main__':
     # editer_test_main()
-
+    print()
+    print('*****')
     write_test_main()

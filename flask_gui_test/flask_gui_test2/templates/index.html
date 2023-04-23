@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Flask GUI2</title>
+	<script>
+		function handleFiles(files) {
+			var folderInput = document.getElementById("folderInput");
+			if (files.length) {
+				folderInput.value = files[0].name;
+			}
+		}
+	</script>
+</head>
+<body>
+	<h1>Test Flask GUI1</h1>
+	<label for="folderInput">フォルダ名:</label>
+	<input type="text" id="folderInput" name="folderInput" style="width: 400px;"><br><br>
+	<label for="modeInput">モード:</label>
+	<input type="number" id="modeInput" name="modeInput" value="1" style="width: 50px;"><br><br>
+	<label for="logOutput">実行結果ログ:</label>
+	<textarea id="logOutput" name="logOutput" style="width: 600px; height: 300px;"></textarea><br><br>
+	<button onclick="execute()">実行</button>
+	<script>
+		function execute() {
+			var folderInput = document.getElementById("folderInput").value;
+			var modeInput = document.getElementById("modeInput").value;
+			var logOutput = document.getElementById("logOutput");
+			logOutput.value = "実行中...\n" + logOutput.value;
+
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					logOutput.value = this.responseText + "\n" + logOutput.value;
+					document.getElementById("folderInput").value = "";
+				}
+			};
+			xhr.open("POST", "/execute", true);
+			xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			xhr.send(JSON.stringify({"folderInput": folderInput, "modeInput": modeInput}));
+		}
+	</script>
+</body>
+</html>

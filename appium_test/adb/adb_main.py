@@ -44,6 +44,10 @@ def get_stdout_from_result(result:CompletedProcess):
     # title = '#####  STDOUT/STDERR  #####'
     title = ''
     buf:str = result.stdout.decode('shift-jis')
+    """
+    adb deviceが認識されていない場合は以下のエラーとなる
+    "adb.exe: device unauthorized.\r\nThis adb server's $ADB_VENDOR_KEYS is not set\r\nTry 'adb kill-server' if that seems wrong.\r\nOtherwise check for a confirmation dialog on your device.\r\n"
+    """
     if buf!='':
         buf = buf.replace(CRLF , NEW_LINE)
         # ret_str = title + NEW_LINE + buf

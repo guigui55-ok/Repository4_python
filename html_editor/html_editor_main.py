@@ -144,9 +144,13 @@ class HtmlEditor():
         src_path = self.get_default_basic_path(basic_html_file_path)
         # if os.path.exists(html_path):
         #     os.remove(html_path)
-        if not os.path.exists(os.path.dirname(html_path)):
-            os.mkdir(os.path.dirname(html_path))
-        shutil.copy(src_path,html_path)
+        import pathlib
+        html_dir_path = pathlib.Path(html_path).parent
+        if not html_dir_path.exists():
+            os.mkdir(str(html_dir_path))
+        # if not os.path.exists(os.path.dirname(str(html_path))):
+        #     os.mkdir(os.path.dirname(str(html_path)))
+        shutil.copy(src_path, html_path)
 
     def add_element_by_text(
         self,text:str='',

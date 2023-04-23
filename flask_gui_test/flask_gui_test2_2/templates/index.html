@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Flask GUI2_2</title>
+</head>
+<body>
+	<h1>Test Flask GUI1</h1>
+	<form method="POST" action="/execute">
+		<label for="folderInput">フォルダ名:</label>
+		<input type="text" id="folderInput" name="folderInput" style="width: 400px;"><br><br>
+		<label for="modeInput">モード:</label>
+		<input type="number" id="modeInput" name="modeInput" value="1" style="width: 50px;"><br><br>
+		<label for="logOutput">実行結果ログ:</label>
+		<textarea id="logOutput" name="logOutput" style="width: 600px; height: 300px;"></textarea><br><br>
+		<button type="submit">実行</button>
+	</form>
+</body>
+</html>

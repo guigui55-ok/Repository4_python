@@ -3,11 +3,11 @@
 if __name__ == '__main__':
     import html_const
     from html_const import NEW_LINE, HtmlTagName
-    from html_editor import HtmlElement
+    from html_editor_main import HtmlElement
 else:
     import html_editor.html_const as html_const
     from html_editor.html_const import NEW_LINE, HtmlTagName
-    from html_editor.html_editor import HtmlElement
+    from html_editor.html_editor_main import HtmlElement
 
 import os
 import pathlib

@@ -2,15 +2,15 @@
 if __name__ == '__main__':
     import __init__
 
+import os
 from bs4 import BeautifulSoup
-from html_editor.html_editor import HtmlEditor,HtmlTagName
-from html_editor.html_editor import HtmlElement as HtmlElementbase
+from html_editor.html_editor_main import HtmlEditor,HtmlTagName
+from html_editor.html_editor_main import HtmlElement as HtmlElementbase
 from html_editor.html_writer import HtmlWriter
 from bs4.element import Tag
 from bs4.formatter import Formatter
 import html_editor.html_const as html_const
 from html_editor.html_const import tag_is_closing_type
-import os
 
 class HtmlElementBs(HtmlElementbase,Tag):
     def __init__(
@@ -84,6 +84,10 @@ class HtmlElement(HtmlElementBs):
     pass
 
 
+################################################################################
+################################################################################
+################################################################################
+
 class HtmlEditorBs(HtmlEditor,HtmlWriter):
     def __init__(self, html_path: str = '') -> None:
         super().__init__(html_path)
@@ -140,11 +144,12 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
     # def add_outline_body(self, html_basic_path: str = ''):
         # return super().add_outline_body(html_basic_path)
     def add_outline_body(self,html_basic_path:str=''):
-        """
-        bodyタグの前後を追記する
-         メインコンテンツ部も追記している
-          <body><div class="main-contents"></div></body> 
-        """
+        """ save_soup_to_file """
+        # """
+        # bodyタグの前後を追記する
+        #  メインコンテンツ部も追記している
+        #   <body><div class="main-contents"></div></body> 
+        # """
         # html_basic_path = self.get_default_basic_path(html_basic_path)
         # with open(html_basic_path, 'r',encoding='utf-8')as f:
         #     html_buf = f.read()
