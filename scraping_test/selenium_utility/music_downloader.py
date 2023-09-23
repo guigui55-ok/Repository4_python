@@ -23,6 +23,10 @@ class ConstResult():
     ERROR = 3
     NOTHING = 4
 
+class DownloadMode():
+    MOVIE_YOU_TUBE = 1
+    MUSIC_YOU_TUBE = 2
+
 class DirChecker():
     def __init__(self,dir_path:str) -> None:
         self.path = dir_path
@@ -67,6 +71,10 @@ class DownloadDirectoryObserver():
         self.ext = ''
         self.logger:BasicLogger = logger
     def set_conditions(self,value:str):
+        """
+        ダウンロード中のファイル名の後ろに付与される文字列をセットする
+         この文字列を含むファイルがあるときは待機を継続する
+        """
         self.target_type = value
         self.ext=value
     def init_dir(self):
@@ -159,6 +167,8 @@ class MovieDownloader():
 
 
     def set_download_dir_observer(self,observer):
+        """ observer をセットするだけ。
+        """
         self.observer = observer
     
     def init_download_dir(self):
@@ -222,7 +232,7 @@ class MovieDownloader():
         return is_registed
 
 
-    def download_movie_main(self):
+    def download_movie_main(self, mode:int=1):
         """lnkが格納されているディレクトリのlnkからURLを読み取り、ダウンロードする。
         終わるまで待って、終わったらlnkを別ディレクトリに移動"""
         for path in self.lnk_list:
@@ -269,7 +279,13 @@ class MovieDownloader():
                 self.add_log('is_downloaded = False, skip regist_to_db  , move_link')
 
     def move_link_file_finished(self,path):
-        """ダウンロードが終わったら、終わった用ディレクトリに移動する"""
+        """
+        ダウンロードが終わったら、終わった用ディレクトリに移動する
+
+        Memo:
+            終わった用のディレクトリは、path＋self.end_dir_name としている
+             デフォルトでは end ディレクトリを作ってそこに移動する
+        """
         if not os.path.exists(path): return
         end_dir_path = os.path.join(self.path,self.end_dir_name)
         end_dir_path = self.get_end_dir(end_dir_path)
@@ -311,7 +327,7 @@ class MovieDownloader():
 
     def download_movie(self,url:str):
         """
-        ダウンロード債をを開いてURLを入力、STARTをクリックして、動画をWeb上で取得する。
+        ダウンロードサイトをを開いてURLを入力、STARTをクリックして、動画をWeb上で取得する。
         その後、画面が切り替わったらダウンロードをクリックして、
         ポップアップした要素の（前とは別の）ダウンロードをクリックする。"""
         self.add_log(url)
@@ -344,11 +360,11 @@ class MovieDownloader():
 ################################################################################
 
 def main():
-    
+    ######
+    # initialize
     path = r'C:\ZMyFolder\newDoc\新しいfiles\_test_movie'
     path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
-    path = r'C:\Users\OK\Desktop\0704 you'
-    path = r'C:\Users\OK\Desktop\fas'
+    path = r'C:\ZMyFolder\newDoc\新しいDOC\Memo\_Music\music0807'
     donwload_dir = r'C:\Users\OK\Downloads'
     log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
     from html_log.html_logger import HtmlLogger
@@ -360,10 +376,11 @@ def main():
     downloader.not_check_db = True
     downloader.not_check_db = False
     observer = DownloadDirectoryObserver(donwload_dir,html_logger)
+    #####
     observer.set_conditions(TARGET_EXT)
     downloader.set_download_dir_observer(observer)
     downloader.make_file_list_from_dir()
-    downloader.download_movie_main()
+    downloader.download_movie_main(mode=DownloadMode.MUSIC_YOU_TUBE)
     html_logger.finish_to_create_html()
 
 
