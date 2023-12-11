@@ -6,7 +6,7 @@ else:
     from common_utility.log_util.logging_util import LoggerUtility,LogLevel,BasicLogger
 
 from html_editor.html_writer import HtmlWriter
-from html_editor.html_editor import HtmlElement
+from html_editor.html_editor_main import HtmlElement
 from html_editor.html_const import HtmlTagName
 import pathlib,os
 

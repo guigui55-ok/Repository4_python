@@ -22,6 +22,7 @@ from selenium import webdriver
 import os
 import traceback
 
+from selenium.webdriver.common.by import By
 
 
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
@@ -83,6 +84,8 @@ class WebElementUtility():
         try:
             if self.element == None:
                 return 'NONE'
+            if attr_name=='text':
+                return str(self.element.text)
             return str(self.element.get_attribute(attr_name))
         except Exception as e:
             print(str(e))
@@ -336,7 +339,11 @@ class WebDriverUtility():
         # get width and height of the page
         # w = driver.execute_script("return document.body.scrollWidth;")
         # h = driver.execute_script("return document.body.scrollHeight;") # Windowがリサイズされる
-        html_el = driver.find_element_by_tag_name('body')
+        # 231123 
+        # AttributeError: 'WebDriver' object has no attribute 'find_element_by_tag_name'
+        # html_el = driver.find_element_by_tag_name('body') 
+        # kw_search = browser.find_element(By.CSS_SELECTOR, "#sbtc > div > div.a4bIc > input")# example
+        html_el = driver.find_element(By.CSS_SELECTOR, "body")
         w = html_el.size['width']
         h = html_el.size['height']
         print('screenshot w,h ={},{}'.format(w,h))

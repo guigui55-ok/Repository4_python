@@ -1,23 +1,16 @@
-import numpy as np
 
-x = np.array([1])
-print(x) 
-yi = np.array([0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,1,1,0,0,0,1,1,0])
-print(yi)
-#出力
-#[0 0 1 0 0 1 0 0 0 0 0 0 0 0 1 0 0 1 0 1 1 0 1 1 0 0 0 1 1 0]
-#[array([ 2,  5, 14, 17, 19, 20, 22, 23, 27, 28])]
+# for i in range(1):
+#     print(i)
 
-m=30
 
-flag=np.where(x==1)
-print(flag)
 
-flag = np.any(x==1)
-print(flag)
-
-# for i in range(m): 
-#   if i in yi.any():
-#     print("ある")
-#   else:
-#     print("ない")
+buf = ''
+for i in range(1000):
+    if i==0:continue
+    buf = ['2']*i
+    buf = ''.join(buf)
+    buf = int(buf)
+    print(buf)
+print()
+print('*****')
+print(buf + 1)

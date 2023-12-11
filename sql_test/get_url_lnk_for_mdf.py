@@ -113,7 +113,7 @@ class MovieLinkInfo():
         print('url = '+ self.url)
         print('movie_name = ' + self.movie_name)
         print('movie_id = ' + self.movie_id)
-        print('regist_times = ' + self.regist_times)
+        print('regist_times = ' + str(self.regist_times))
         print('folder = ' + self.folder)
         print('date = '+ str(self.date))
         print('time = ' + str(self.time))

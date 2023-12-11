@@ -455,6 +455,18 @@ class BasicLogger(metaclass=ABCMeta):
         """ファイルをコピーする（ファイル名はそのまま）"""
         basename = os.path.basename(src_path)
         dist_path = os.path.join(dist_dir,basename)
+        # コピー元とコピー先が同じ
+        if pathlib.Path(src_path) == pathlib.Path(dist_path):
+            return dist_path
+        # コピー元ファイルがない
+        if not pathlib.Path(src_path).exists():
+            self.add_log('Path is Not Exists. Pass Process. SrcPath='.format(src_path))
+            print('########## WARNING ##########')
+            return 'src_path_is_nothing'
+        # 同じファイルがあるときは削除する
+        if pathlib.Path(dist_path).exists():
+            os.remove(dist_path)
+            self.add_log('Path is Exists. Remove={}'.format(dist_path))
         shutil.copy(src_path,dist_path)
         return dist_path
     def _move(self,src_path:str,dist_dir:str):

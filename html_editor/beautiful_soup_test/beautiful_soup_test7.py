@@ -11,7 +11,7 @@ import requests
 def get_read_path():
     import pathlib
     dir_path = str(pathlib.Path(__file__).parent.parent.joinpath('html_test'))
-    file_name='ダウンロード.htm'
+    # file_name='ダウンロード.htm'
     file_name = 'test_writer2.html'
     path = str(pathlib.Path(dir_path).joinpath(file_name))
     ###
@@ -38,13 +38,8 @@ def test_main7():
     print(tag)
     # <link href="/media/examples/link-element-example.css" rel="stylesheet">
 
-    # attr = {
-    #     "href":"./test.css",
-    #     "rel":"stylesheet"
-    # }
     attr = {"rel":"stylesheet"}
-    new_tag = soup.new_tag(
-        'link',href='./test.css', attrs=attr)
+    new_tag = soup.new_tag('link',href='./test.css', attrs=attr)
     tag.append(new_tag)
     ###
 

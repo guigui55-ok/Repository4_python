@@ -171,6 +171,10 @@ class MovieDownloader():
         glob_path = os.path.join(self.path,'*')
         buf_list = glob.glob(glob_path)
         self.lnk_list = self.exact_lnk_path_from_list(buf_list)
+        # import pprint
+        # print('lnk_list')
+        # pprint.pprint(self.lnk_list)
+        # print()
     
     def exact_lnk_path_from_list(self,buf_list:'list[str]'):
         import os
@@ -229,8 +233,11 @@ class MovieDownloader():
             if not self.not_check_db:
                 if self.path_is_donloaded(path):
                     self.add_log('**** path is donloaded.  lnk_path={}'.format(path))
-                    self.move_link_file_finished(path)
-                    continue
+                    # @@@Avlori.com
+                    #231124 ダウンロード失敗時にもカウント＋１されて、2回目以降はここでスキップされる
+                    # 現状は手動コメントアウトで対応
+                    # self.move_link_file_finished(path)
+                    # continue
             url = self.get_url_from_link(path)
             # if not self.url_is_valid(url): continue
             self.init_download_dir()
@@ -330,6 +337,7 @@ class MovieDownloader():
         if isinstance(downloader,YouTube) \
         or isinstance(downloader,VdSite)\
         or isinstance(downloader,DonwloadSite):
+            downloader:YouTube = downloader
             downloader.set_log_path(self.log_dir_path)
             is_downloded = downloader.excute_download_movie(url)
         self.downloader = downloader
@@ -349,6 +357,7 @@ def main():
     path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
     path = r'C:\Users\OK\Desktop\0704 you'
     path = r'C:\Users\OK\Desktop\fas'
+    path = r'C:\Users\OK\Desktop\231123 youel\you'
     donwload_dir = r'C:\Users\OK\Downloads'
     log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
     from html_log.html_logger import HtmlLogger
@@ -363,6 +372,10 @@ def main():
     observer.set_conditions(TARGET_EXT)
     downloader.set_download_dir_observer(observer)
     downloader.make_file_list_from_dir()
+    #231124
+    # ダウンロード失敗時にもカウント＋１されるので、修正が必要
+    # 231124
+    # selenium_logを実行ごとに別フォルダに区切る（現状は連なっている）
     downloader.download_movie_main()
     html_logger.finish_to_create_html()
 

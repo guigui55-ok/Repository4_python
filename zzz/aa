@@ -1,0 +1,34 @@
+# coding: utf-8
+# 自分の得意な言語で
+# Let's チャレンジ！！
+input_line = input()
+max_count = int(input_line)
+
+
+# 働く日付を一度すべてリストに格納する
+work_days = []
+for _ in range(max_count):
+    input_line = input()
+    ary = input_line.split(' ')
+    start_day = int(ary[0])
+    end_day = int(ary[1])
+    for i in range(start_day, end_day + 1):
+        if not i in work_days:
+            work_days.append(i)
+
+#働く日付をすべてチェックして、途切れない連続したものの一番長いところを結果とする
+max_day = max(work_days)
+count = 0
+result = 0
+for i in range(max_day):
+    if i in work_days:
+        count += 1
+    else:
+        count = 0
+    if result < count:
+        result = count
+
+# 出勤日は計算された数＋1となる
+if 1 < result: result += 1
+
+print(result)

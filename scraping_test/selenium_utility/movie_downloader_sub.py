@@ -138,7 +138,8 @@ class YouTube(DonwloadSite):
 
     def input_movie_url(self,movie_url):
         chrome = self.chrome
-        input_el = chrome.driver.find_element_by_tag_name('input')
+        # input_el = chrome.driver.find_element_by_tag_name('input')
+        input_el = chrome.driver.find_element(By.CSS_SELECTOR, "input")
         input_el.click()
         chrome.timer.wait_short()
         for _ in range(int(2)):
@@ -183,24 +184,37 @@ class YouTube(DonwloadSite):
         画質を選択する
         """
         element:WebElement=None
-        count = 20
+        # 231123
+        # 1つ目がAuteQuality で2つ目が最高画質となるのでカウンタで調整
+        word_count = 0
+        # count = 20
+        # 231123 サムネイルが増えたためダウンロードまでの移動回数を追加
+        # count = 50
+        count = 70
         for _ in range(count):
             self.chrome.timer.wait_little()
             element = self.chrome.driver.switch_to.active_element
             el_text = WebElementUtility(element).get_attribute('text')
+            # if 'download' in el_text.lower():
+            #     print()
             if el_text.find('ダウンロード')>=0:
                 # self.chrome.save_page_source_and_screenshot('click_download')
-                element.click()
-                return True
+                word_count+=1
             elif el_text.find(' \xa0 Download ') >= 0:
-                element.click()
-                return True
+                word_count+=1
+            elif el_text.find('  Download') >= 0: #231123
+                word_count+=1
             else:
                 # print('[{}]'.format(WebElementUtility(element).get_attribute('text')))
                 pass
+            if word_count>=1:
+                element.click()
+                return True
             element.send_keys(Keys.TAB)
         else:
-            self.add_log('ダウンロードボタンがない。')
+            msg = 'ダウンロードボタンがない。'
+            self.chrome.save_page_source_and_screenshot(msg)
+            self.add_log(msg)
             return False
         self.chrome.timer.wait(0.2)
         # chrome.save_page_source_and_screenshot('waiting_save_button')
@@ -240,7 +254,8 @@ class YouTube(DonwloadSite):
         """
         ダウンロードボタンをクリックする
         """
-        elements = self.chrome.driver.find_elements_by_tag_name('a')
+        # elements = self.chrome.driver.find_elements_by_tag_name('a')
+        elements = self.chrome.driver.find_elements(By.CSS_SELECTOR, "a")
         for element in elements:
             cls = WebElementUtility(element).get_attribute('class')
             if cls == 'btn btn-success btn-file':
@@ -739,14 +754,16 @@ class VdSite(DonwloadSite):
         value = '<strong>予期せぬエラーが発生しました'
         if self.chrome.page_source_ex.is_exists_find_all(value,True):
             el = self.chrome.driver.find_element_by_class_name('_on-error')
-            a_tag = el.find_element_by_tag_name('a')
+            # a_tag = el.find_element_by_tag_name('a')
+            a_tag = self.chrome.driver.find_element(By.CSS_SELECTOR, "a")
             url = self.chrome.get_webelement_attribute(a_tag,'href')
             return url
         return ''
 
     def input_movie_url(self,movie_url):
         chrome = self.chrome
-        input_el = chrome.driver.find_element_by_tag_name('input')
+        # input_el = chrome.driver.find_element_by_tag_name('input')
+        input_el = self.chrome.driver.find_element(By.CSS_SELECTOR, "input")
         input_el.click()
         chrome.timer.wait_short()
         for _ in range(int(2)):
@@ -848,7 +865,8 @@ class VdSite(DonwloadSite):
         """
         ダウンロードボタンをクリックする
         """
-        elements = self.chrome.driver.find_elements_by_tag_name('a')
+        # elements = self.chrome.driver.find_elements_by_tag_name('a')
+        elements = self.chrome.driver.find_elements(By.CSS_SELECTOR, "a")
         for element in elements:
             cls = WebElementUtility(element).get_attribute('class')
             if cls == 'btn btn-success btn-file':
