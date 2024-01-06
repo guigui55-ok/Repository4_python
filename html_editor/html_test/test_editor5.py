@@ -3,7 +3,8 @@ import sys,pathlib
 path = str(pathlib.Path(__file__).parent.parent.parent) #python4
 sys.path.append(path)
 
-from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs, HtmlElement
+# from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs, HtmlElement
+from html_editor.html_editor_bs.html_editor_bs_main import HtmlEditorBs, HtmlElement
 from html_editor.html_writer import HtmlWriter
 from html_editor.html_const import HtmlTagName
 

@@ -10,6 +10,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.utils import column_index_from_string
 import re
 from typing import Union
+from pathlib import Path
 
 
 def get_cell_value(sheet:Worksheet, address):
@@ -41,7 +42,33 @@ def get_cell_value_r1c1(sheet:Worksheet, row:int, col:int):
         # 文字列に変換できないエラーの時はスキップ 予定（未対応）
         # 何のエラーが発生するか確認してから対応する
         raise e
-    
+
+
+def set_cell_value(sheet:Worksheet, address, value):
+    """
+    セルのデータを入力（文字列）
+    """
+    try:
+        sheet[address].value = value
+    except Exception as e:
+        # 文字列に変換できないエラーの時はスキップ 予定（未対応）
+        # 何のエラーが発生するか確認してから対応する
+        # address==Noneの時は TypeError が発生する
+        # TypeError: expected string or bytes-like object
+        raise e
+
+def set_cell_value_r1c1(sheet:Worksheet, row:int, col:int, value):
+    """
+    セルのデータを入力（R1C1形式）
+    """
+    try:
+        sheet.cell(row=row, column=col).value = value
+    except Exception as e:
+        # 文字列に変換できないエラーの時はスキップ 予定（未対応）
+        # 何のエラーが発生するか確認してから対応する
+        raise e
+
+
 def _get_cell_value(cell_val:Cell):
     """
     セルのデータを取得（文字列）
@@ -74,7 +101,10 @@ def _get_rectangle(worksheet_val:Worksheet, begin_address:str, end_address:str):
     rectangle = worksheet_val[begin_address:end_address]
     return rectangle
 
-def _search_keyword_in_rectangle(rectangle:list[list[Cell]] ,pattern:Union[str, list[str]]):
+def _search_keyword_in_rectangle(
+        rectangle:list[list[Cell]] ,
+        pattern:Union[str, list[str]],
+        debug:bool=False):
     """
     特定の範囲を検索（セルのリストは取得済みであること）
 
@@ -83,9 +113,12 @@ def _search_keyword_in_rectangle(rectangle:list[list[Cell]] ,pattern:Union[str, 
         keyword: 検索対象の文字列、または、パターン
     """
     result = []
+    cell:Cell=None
     for col in rectangle:
         for cell in col:
             value = _get_cell_value(cell)
+            if debug:
+                print((cell.row, cell.column, value))
             if _is_match_patterns(pattern, value):
                 cell_address = _get_cells_address(cell)
                 result.append(cell_address)
@@ -95,7 +128,8 @@ def search_rectangle_in_sheet(
     worksheet_val:Worksheet,
     begin_address:str,
     end_address:str,
-    keyword:Union[str, list[str]]):
+    keyword:Union[str, list[str]],
+    debug:bool=False):
     """
     指定したワークシートの、特定の範囲を検索
      (ワークシートと開始・終了アドレスを指定するVer)
@@ -105,7 +139,7 @@ def search_rectangle_in_sheet(
         range_address: address (ex) 'A1:C5'
     """
     rectangle = _get_rectangle(worksheet_val,begin_address,end_address)
-    result = _search_keyword_in_rectangle(rectangle, keyword)
+    result = _search_keyword_in_rectangle(rectangle, keyword, debug)
     return result
 
 def search_entire_sheet(worksheet_val:Worksheet, keyword):
@@ -454,11 +488,11 @@ class ExcelSheetDataUtil():
     class Direction(Direction):
         pass
 
-    def __init__(self, file_path:str, sheet_name:str) -> None:
-        self.__init_param(file_path, sheet_name)
+    def __init__(self, file_path:str, sheet_name:str, data_only:bool=True) -> None:
+        self.__init_param(file_path, sheet_name, data_only)
     
-    def __init_param(self, file_path:str, sheet_name:str):
-        self.set_workbook(file_path)
+    def __init_param(self, file_path:str, sheet_name:str, data_only:bool):
+        self.set_workbook(file_path, data_only)
         self.set_sheet(sheet_name)
         self._update_valid_cell_in_sheet()
         self.address = ''
@@ -469,6 +503,14 @@ class ExcelSheetDataUtil():
         # 初期値Noneとして、sheet.min_rowなどの値を使用する
         self.loop_max_row = None
         self.loop_max_col = None
+    
+    def reset_book_sheet(self, data_only:bool=True):
+        # file_path = self.book.path
+        # from zipfile import ZipFile, ZIP_DEFLATED, BadZipfile
+        # file_path = self.book.filename
+        sheet_name = self.sheet.title
+        self.set_workbook(self.file_path, data_only)
+        self.set_sheet(sheet_name)
 
     def _update_valid_cell_in_sheet(self):
         """ WorkSheetの有効なセルの値を更新する """
@@ -490,38 +532,81 @@ class ExcelSheetDataUtil():
         else:
             self.sheet = None
     
-    def set_workbook(self, file_path:Union[str,Workbook]):
+    def set_workbook(self, file_path:Union[str,Workbook], data_only:bool):
+        
         if isinstance(file_path, Workbook):
             self.book = file_path
+            self.file_path = None
             return
+        self.file_path = str(file_path)
         if file_path!=None:
-            self.book = openpyxl.load_workbook(file_path)
+            if not Path(file_path).exists():
+                raise FileNotFoundError(file_path)
+            self.book = openpyxl.load_workbook(file_path, data_only=data_only)
         else:
             self.book = None
 
+    def save_book(self, file_path:str=None):
+        """
+        WorkBookを保存する
+
+        Caution:
+            拡張子は'.xlsx'にすること。
+             '.xlsm'で保存すると、開けなくなるので注意。
+              この場合拡張子を'.xlsx'に変更すると開けるようになる。
+        """
+        # ファイルを開いているとエラーが発生する
+        # 例外が発生しました: PermissionError [Errno 13] Permission denied: 'file_name_.xlsx'
+        self.book.save(self._get_file_path(file_path))
+
+    def _get_file_path(self, file_path:str):
+        if file_path==None:
+            file_path = self.file_path
+        return file_path
 
     def set_address_by_find(
             self, 
             keyword:str, 
             find_begin_address:str=None, 
             find_end_address:str=None, 
-            found_number:int=0):
+            found_number:int=0,
+            debug:bool=True):
         """
         文字列を検索して、存在したらセルのアドレスをセットする
 
         Args:
             keyword : regix pattern
         """
-        address_list = ExcelSheetDataUtil.find_value(self.sheet, keyword, find_begin_address, find_end_address)
+        if find_begin_address==None:
+            find_begin_address = 'A1'
+        if find_end_address==None:
+            find_end_address = get_a1_address_from_row_and_col(
+                self.valid_cell.end_cell.row, self.valid_cell.end_cell.col)
+        address_list = ExcelSheetDataUtil.find_value(
+            self.sheet, keyword, find_begin_address, find_end_address, debug)
         if 0<len(address_list):
             address = address_list[found_number]
         else:
             address = None
         self.address = address
         return address
+    
+    @classmethod
+    def address_is_valid(cls, address):
+        ret = re.search('^[A-Z]{1,3}\d+$', str(address))
+        if ret!=None:
+            return True
+        else:
+            return False
 
     @classmethod
-    def find_value(cls, sheet:Worksheet, keyword:str, find_begin_address:str=None, find_end_address:str=None):
+    def find_value(
+        cls,
+        sheet:Worksheet,
+        keyword:str,
+        find_begin_address:str=None,
+        find_end_address:str=None,
+        debug:bool=False):
         """
         文字列を検索して、存在したらセルのアドレスをセットする
 
@@ -532,7 +617,7 @@ class ExcelSheetDataUtil():
             address = search_entire_sheet(sheet, keyword)
         else:
             address = search_rectangle_in_sheet(
-                sheet, find_begin_address, find_end_address, keyword)
+                sheet, find_begin_address, find_end_address, keyword, debug)
         return address
     
     def value_is_blank(self):
@@ -613,8 +698,17 @@ class ExcelSheetDataUtil():
         return get_cell_value(self.sheet, address)
 
     def get_value_r1c1(self, row:int, col:int):
-        self.sheet.cell(row=row, column=col).value
+        # self.sheet.cell(row=row, column=col).value
         return get_cell_value_r1c1(self.sheet, row, col)
+    
+    def set_value(self, value:str, address:str=None):
+        if address==None:
+            address = self.address
+        return set_cell_value(self.sheet, address, value)
+
+    def set_value_r1c1(self, value:str, row:int, col:int):
+        # self.sheet.cell(row=row, column=col).value
+        return get_cell_value_r1c1(self.sheet, value, row, col)
 
     @classmethod
     def _cnv_row_col_from_a1_address(cls, a1_address):
@@ -826,5 +920,6 @@ def main():
         
 
 if __name__ == '__main__':
-    main()
+    print('# Excute Excel_data.py\n')
+    # main()
 

@@ -43,6 +43,7 @@ class HtmlTagName():
     TBODY = 'tbody'
     CAPTION = 'caption'
     THREAD = 'thead'
+    TD = 'td'
     TH = 'th'
     TR = 'tr'
     COLGROUP = 'colgroup'

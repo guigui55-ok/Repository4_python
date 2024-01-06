@@ -36,17 +36,19 @@ class HtmlElementBs(HtmlElementbase,Tag):
         return el_bs
 
     def cnv_html_element_to_tag(self):
-        # soup = BeautifulSoup()
         # attrs = self.attribute
         # tag = soup.new_tag(self.tag, attrs=attrs)
         # tag.string = self.tag_text
         tag = self.get_tag_single(self)
         self.child_tags = []
+        ch:HtmlElement = None
         for ch in self.child_elements:
             # c_attrs = ch.attribute
             # c_tag = soup.new_tag(ch.tag, attrs=c_attrs)
             # c_tag.string = self.text
-            c_tag = ch.get_tag_single(ch)
+            #
+            # c_tag = ch.get_tag_single(ch)
+            c_tag = ch.cnv_html_element_to_tag()
             self.child_tags.append(c_tag)
             tag.append(c_tag)
         return tag
@@ -56,10 +58,10 @@ class HtmlElementBs(HtmlElementbase,Tag):
         if tag_is_closing_type(element.tag):
             ret = element.cnv_html_element_to_str()
             #BeautifulSoup.new_tagを使用した場合
-            #imgなどの単体でのタグでも<img></img>となってしまうので
-            #HtmlElement.cnv_html_element_to_str を使用して<img ~>とする
+            #imgなどの閉じるが必要ないタグでも<img></img>となってしまうので
+            #HtmlElement.cnv_html_element_to_str を使用してstr:"<img ~ />"とする
             #この場合タグデータが文字列となり扱いにくいので、
-            #spanタグの bs4.element.Tag の中に入れて扱う
+            #spanタグ(bs4.element.Tag)の中に入れて扱う
             tag = soup.new_tag('span')
             if not isinstance(tag.string, type(None)):
                 tag.string += ret
@@ -100,9 +102,10 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         self.css_path = css_path
         self.js_path = ''
 
-    def create_html(self,html_path:str='',basic_html_file_path:str=''):
+    def create_html(self,html_path:str='',basic_html_file_path:str='', encoding='cp932'):
         super().create_html(html_path, basic_html_file_path)
-        self.soup = BeautifulSoup(open(self.html_path), 'html.parser')
+        self.soup = BeautifulSoup(
+            open(self.html_path, encoding=encoding), 'html.parser')
 
     def add_element_by_text(
         self, text: str = '',
@@ -120,6 +123,7 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         self.soup.body.append(element.get_tag())
 
     def update_file(self):
+        """ write file """
         # return super().update_file()
         wbuf = self.soup.prettify()
         with open(self.html_path,'w',encoding='utf-8')as f:
@@ -144,7 +148,7 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
     # def add_outline_body(self, html_basic_path: str = ''):
         # return super().add_outline_body(html_basic_path)
     def add_outline_body(self,html_basic_path:str=''):
-        """ save_soup_to_file """
+        """ save_soup_to_file (write file)"""
         # """
         # bodyタグの前後を追記する
         #  メインコンテンツ部も追記している
@@ -252,6 +256,50 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         self.add_tag_to(add_element, 'body')
 
 
+    def clear_tag(
+        self,
+        tag_name=None,
+        attrs={},
+        recursive=True,
+        text=None,
+        limit=None,
+        index:int=-1,
+        **kwargs
+        ):
+        """
+        既存のタグを削除する
+         （soup.find で検索して見つかったタグリストのindexで指定したタグをclearする）
+        Args:
+            tag_name: 対象のタグ名 （soup.findで使用する）
+            attrs : 対象のタグ属性 （soup.findで使用する）
+            recursive : （soup.findで使用する）
+            text : （soup.findで使用する）
+            limit : 使用していません
+            index : soup.find で複数見つかったときに指定する(default=-1)
+        """
+        """
+        Memo:
+            https://beautiful-soup-4.readthedocs.io/en/latest/
+            clear
+            extract
+            decompose
+            replace_with
+        """
+        tags = self.soup.find(
+            tag_name,attrs,recursive,text=text,kwargs=kwargs)
+        if len(tags)==1:
+            tags.clear()
+        else:
+            pass
+            tags = self._get_tag_list_after_find(tags)
+            # add = add_element.get_tag()
+            # # 240105 リストの値が「\n」の時は以下のエラーとなる
+            # # tag_list[index].append(add_element.get_tag())
+            # # AttributeError  NavigableString' object has no attribute 'contents'
+            # tags[index].append(add)
+            for tag in tags:
+                tag.clear()
+
     def add_tag_to(
         self,
         add_element:HtmlElementBs,
@@ -264,18 +312,75 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         **kwargs
         ):
         """
+        既存のタグにタグを新たに追加する
+         （soup.find で検索して見つかったタグリストのindexで指定したものにadd_elementが追加される）
+        Args:
+            add_element: 新たに追加するタグ
+            tag_name: 追加される対象のタグ名 （soup.findで使用する）
+            attrs : 追加される対象のタグ属性 （soup.findで使用する）
+            recursive : （soup.findで使用する）
+            text : （soup.findで使用する）
+            limit : 使用していません
+            index : soup.find で複数見つかったときに指定する(default=-1)
+
         """
-        # tags = self.soup.find(
-        #     tag_name,attrs,recursive,text=text,limit=limit,kwargs=kwargs)
         tags = self.soup.find(
             tag_name,attrs,recursive,text=text,kwargs=kwargs)
         if len(tags)==1:
             tags.append(add_element.get_tag())
         else:
-            # tags[index].append(add_element.get_tag())
-            tag_list = [t for t in tags]
-            tag_list[index].append(add_element.get_tag())
+            tags = self._get_tag_list_after_find(tags)
+            add = add_element.get_tag()
+            # 240105 リストの値が「\n」の時は以下のエラーとなる
+            # tag_list[index].append(add_element.get_tag())
+            # AttributeError  NavigableString' object has no attribute 'contents'
+            tags[index].append(add)
     
+    def _get_tag_list_after_find(self, tags)->'list[Tag]':
+        """
+        soup.find で取得した戻り値からタグのリストを取得する
+         要素が改行のみのデータがあるのでそれは除外している
+        """
+        # tag_list = [t for t in tags]
+        # tag_list = list(tags)
+        ret = []
+        tag:Tag = None
+        for tag in tags:
+            if '\n' == tag:
+                continue
+            ret.append(tag)
+        return ret
+        
+        """
+        以下のように改行のみの時があるのでそれは除外する
+0:
+'\n'
+1:
+<tr>
+<th>番号</th>
+<th>コメント</th>
+<th>スマホ画面</th>
+</tr>
+2:
+'\n'
+3:
+<tr>
+<td>1</td>
+<td>コメント内容A</td>
+<td><img alt="スマホ画面A" src="placeholder.jpg" style="width:100px;height:100px;"/></td>
+</tr>
+4:
+'\n'
+5:
+<tr>
+<td>2</td>
+<td>コメント内容B</td>
+<td><img alt="スマホ画面B" src="placeholder.jpg" style="width:100px;height:100px;"/></td>
+</tr>
+6:
+'\n'
+        """
+
     # def add_tag_by_id(self,add_element:HtmlElementBs, id:str):
     #     tag = self.soup.find_all(id=id)
     #     tag.append(add_element.get_tag())

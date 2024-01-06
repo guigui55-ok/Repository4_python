@@ -12,6 +12,7 @@ else:
 NEW_LINE = html_const.NEW_LINE
 INDENT = '    '
 import os
+from pathlib import Path
 # import shutil
 
 class HtmlElement():
@@ -138,19 +139,25 @@ class HtmlEditor():
         return basic_html_file_path
     
     def create_html(self,html_path:str='',basic_html_file_path:str=''):
-        if html_path=='': html_path = self.html_path
-        else: self.html_path = html_path
+        """
+        編集するhtmlファイルを作成する
+
+        Args:
+            basic_html_file_path:テンプレートのhtmlファイルパス
+             設定した場合はこのファイルがコピーされる
+        """
+        if html_path=='':
+            html_path = self.html_path
+        else:
+            self.html_path = html_path
         import shutil
         src_path = self.get_default_basic_path(basic_html_file_path)
-        # if os.path.exists(html_path):
-        #     os.remove(html_path)
         import pathlib
         html_dir_path = pathlib.Path(html_path).parent
         if not html_dir_path.exists():
             os.mkdir(str(html_dir_path))
-        # if not os.path.exists(os.path.dirname(str(html_path))):
-        #     os.mkdir(os.path.dirname(str(html_path)))
-        shutil.copy(src_path, html_path)
+        if Path(src_path).exists():
+            shutil.copy(src_path, html_path)
 
     def add_element_by_text(
         self,text:str='',

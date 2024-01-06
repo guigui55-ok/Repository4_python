@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        .title-bar {
+            background-color: #4689FF;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .section {
+            background-color: white;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            background-color: #5D99FF;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-bar">
+        <h1>レポートタイトル</h1>
+    </div>
+    <div class="section">
+        <div class="section-title">サマリー</div>
+        <p>ここにサマリーの内容を記載します。</p>
+    </div>
+    <div class="section">
+        <div class="section-title">備考情報</div>
+        <p>ここに備考情報の内容を記載します。</p>
+    </div>
+    <div class="section">
+        <div class="section-title">レポート</div>
+        <table>
+            <tr>
+                <th>番号</th>
+                <th>コメント</th>
+                <th>スマホ画面</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>コメント内容A</td>
+                <td><img src="placeholder.jpg" alt="スマホ画面A" style="width:100px;height:100px;"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>コメント内容B</td>
+                <td><img src="placeholder.jpg" alt="スマホ画面B" style="width:100px;height:100px;"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

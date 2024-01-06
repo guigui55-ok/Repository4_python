@@ -1,4 +1,5 @@
 import sys,pathlib
+from pathlib import Path
 
 path = str(pathlib.Path(__file__).parent.parent.parent) #python4
 sys.path.append(path)
@@ -128,7 +129,7 @@ import pathlib
 def write_test_main():
     # ファイルを読み込み、一部の要素をコピーする
     
-    read_dir_path = pathlib.Path(__file__).parent.joinpath('test_sample1')
+    read_dir_path = pathlib.Path(__file__).parent.joinpath('test_sample2')
     html_path = read_dir_path.joinpath('index.html')
 
     write_dirname = 'log_test3'
@@ -137,9 +138,10 @@ def write_test_main():
     
     css_path = write_dir_path.joinpath(write_dirname, 'test.css')
     css_path2 = write_dir_path.joinpath(write_dirname, 'test_2.css')
-    sample_path2 = r'C:\Users\OK\source\repos\test_media_files\beautigulsoup_test\log_test3_mouse_wheel4'
+    sample_path2 = r'C:\Users\OK\source\repos\Repository4_python\html_editor\html_test\test_sample2\base'
     js_path = str(pathlib.Path(sample_path2).joinpath('test.js'))
     css_path3 = str(pathlib.Path(sample_path2).joinpath('wheel_test.css'))
+    sample_html_path = Path(sample_path2).joinpath('updated_sample_report.html')
 
     writer = HtmlEditorBs()
     # writer.get_default_basic_path
@@ -147,16 +149,78 @@ def write_test_main():
     dir_path = os.path.dirname(html_path)
     
     # writer.create_html_content(html_path)
-    writer.create_html(html_path)
+    writer.create_html(html_path, sample_html_path, encoding='utf-8')
     writer.add_css_file_path_list(css_path2)
+    #####
+
+    ### tableに任意の番号があるか判定、
+    # https://beautiful-soup-4.readthedocs.io/en/latest/
+    # writer.clear_tag(HtmlTagName.TD, text='99')
+    
+    tag = writer.soup.find(
+        HtmlTagName.TD ,attrs={}, recursive=True ,text='99')
+    if tag == None:
+        print('tag==None')
+    # for tag in tags:
+    #     print(tag)
+    
+
+    ### tableタグに複数のtdを追加
+    tr = HtmlElement('',HtmlTagName.TR)
+    td_num = HtmlElement('99',HtmlTagName.TD)
+    td_text = HtmlElement('コメント',HtmlTagName.TD)
+    td_image = HtmlElement('',HtmlTagName.TD)
+    img_path = 'placeholder.jpg'
+    img_attr ={'src':img_path, 'alt':'スマホ画面B', 'width':'400', 'height':'200'}
+    img = HtmlElement('procedure',HtmlTagName.IMG, img_attr)
+    td_image.add_element(img)
+    # tags = soup.find(
+    #     tag_name,attrs,recursive,text=text,kwargs=kwargs)
+    tr.add_element(td_num)
+    tr.add_element(td_text)
+    tr.add_element(td_image)
+    writer.add_tag_to(tr,'table')
+
+    ### tableに任意の番号があるか判定、
+    ### tableタグの中の任意のタグを削除
+    # https://beautiful-soup-4.readthedocs.io/en/latest/
+    # writer.clear_tag(HtmlTagName.TD, text='99')
+    
+    # tag = writer.soup.find(
+    #     HtmlTagName.TD ,attrs={}, recursive=True ,text='99')
+    # if tag == None:
+    #     print('tag==None')
+    # else:
+    #     print(tag.parent)
+    #     tag.parent.clear()
+    #     print('cleard tag')
+        
+
+    """
+    https://ai-inter1.com/beautifulsoup_1/
+select: 子孫要素の取得
+soup.select("body a")
+select: 子要素の取得
+# body要素の子要素の内、class属性に"end"をもつp要素を取得する場合
+soup.select("body > p.end")
+select: 隣接する直後の兄弟要素の取得
+class属性に"title"をもつp要素の直後の兄弟要素
+soup.select("p.title + p")
+select: 後ろの全ての兄弟要素の取得
+class属性に"title"をもつp要素の後ろの兄弟要素を取得
+soup.select("p.title ~ p")
+リストのn番目の要素の取得
+soup.select("ul#book > li:nth-of-type(1)")
+    """
 
     #####
     writer.add_js_file_path(js_path)
     writer.add_css_file_path_from_file(css_path)
-    writer.add_css_file_path_from_file(css_path3)
+    # writer.add_css_file_path_from_file(css_path3)
     # writer.add_css_file_path(css_path)
+    #####
     writer.add_outline_body()
-    writer.update_file()
+    # writer.update_file() #img タグの"<"が文字化けする
     print('html path=' + str(writer.html_path))
 
     # ゼロからeditorでhtml作成
