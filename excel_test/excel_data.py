@@ -9,8 +9,10 @@ from openpyxl.workbook.workbook import Workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.utils import column_index_from_string
 import re
+import copy
 from typing import Union
 from pathlib import Path
+from datetime import datetime, timedelta
 
 
 def get_cell_value(sheet:Worksheet, address):
@@ -82,10 +84,83 @@ def _get_cell_value(cell_val:Cell):
 
 def _get_cells_address(cell_val:Cell):
     """
-    セルの番地を取得
+    Cell からセルの番地を取得する(A1形式)
+    
+    Memo:
+        cell_valがA1形式の文字列の時はそのまま返す
     """
+    if isinstance(cell_val, str):
+        if _is_a1_address(cell_val):
+            return str(cell_val)
+        else:
+            raise TypeError(type(cell_val))
     cell_address = get_column_letter(cell_val.column) +  str(cell_val.row)
     return cell_address
+
+def _is_include_address(cell_a:'Union[Cell, str]', cell_b:'Union[Cell,str]'):
+    """
+    cell_a と cell_b の範囲が重なっている部分があるか判定する
+
+    Returns: {bool}
+    """
+    a_begin_cell, a_end_cell = get_row_and_col_from_a1_address_range(
+        cell_a)
+    b_begin_cell, b_end_cell = get_row_and_col_from_a1_address_range(
+        cell_b)
+    if a_begin_cell.row <= b_begin_cell.row <= a_end_cell.row\
+        or a_begin_cell.row <= b_end_cell.row <= a_end_cell.row:
+        if a_begin_cell.column <= b_begin_cell.column <= a_end_cell.column\
+            or a_begin_cell.column <= b_end_cell.column <= a_end_cell.column:
+            return True
+    return False
+
+
+def get_row_and_col_from_a1_address_range(cell_address):
+    """
+    A1形式のアドレスを行と列に分割する 範囲用 （例:'A1:B2'）
+
+    Memo:
+      未対応(対応予定) 'A1:B2, C3, D4:E5:F6'
+        ['A1:B2', 'C3', 'D4:E5:F6']
+    
+    Returns:
+        list[SimpleCellInfo, SimpleCellInfo]  :  
+          list[begin_cell, bend_cell]
+    """
+    cell_address = _get_cells_address(cell_address)
+    if ':' in cell_address:
+        buf = cell_address.split(':')
+        begin_address = buf[0]
+        end_address = buf[1]
+    else:
+        begin_address = cell_address
+        end_address = cell_address
+    row, col = get_row_and_col_from_a1_address(begin_address)
+    # begin_cell = SimpleCellInfo()
+    begin_cell = Cell(worksheet=None, row=row, column=col)
+    # openxl.~.Cell は インスタンス引数にworksheetがあるので、上記クラスで扱う
+    row, col = get_row_and_col_from_a1_address(end_address)
+    end_cell = Cell(worksheet=None, row=row, column=col)
+    return begin_cell, end_cell
+
+def _is_a1_address(value):
+    ret = re.search(r'[a-zA-Z]{1,3}[0-9]{1,8}', value)
+    if ret!=None:
+        return True
+    else:
+        return False
+
+def _is_single_cell(cell_address:str):
+    cell_address = _get_cells_address(cell_address)
+    if not ':' in cell_address:
+        if not ',' in cell_address:
+            return True
+    
+    row, col = get_row_and_col_from_a1_address(cell_address)
+    if row==1 and col==1:
+        return True
+    else:
+        return False
 
 def _is_match_patterns(patterns:Union[str, list[str]], value:str):
     if not isinstance(patterns, list):
@@ -111,6 +186,9 @@ def _search_keyword_in_rectangle(
     Args:
         rectangle: セルのリスト Worksheet["A1":"B2"]で取得されたもの
         keyword: 検索対象の文字列、または、パターン
+    
+    Returns:
+        list[str] : A1形式のアドレス文字列のリスト
     """
     result = []
     cell:Cell=None
@@ -163,8 +241,10 @@ def get_row_and_col_from_a1_address(address:Union[str, Cell]):
     """
     A1形式のアドレスを行と列に分割する
 
-    Memo: 'A1:B5' は A1(row=1,col=1) を返す
-    Returns: int,int  == int(row_number), int(column_number)
+    Memo:
+        'A1:B5' は A1(row=1,col=1) を返す
+    Returns:
+        int, int  :  row_number, column_number
     """
     address_ = address
     if isinstance(address_, Cell):
@@ -255,6 +335,26 @@ class TwoCellsInfo():
         self.begin_cell.col = min_col
         self.end_cell.row = max_row
         self.end_cell.col = max_col
+
+
+class TwoCellsInfo():
+    """ 2つのセルの値を扱う（主にBegin,Endの矩形アドレスを扱う想定） """
+    def __init__(self) -> None:
+        self.begin_cell = SimpleCellInfo()
+        self.end_cell = SimpleCellInfo()
+    
+    def set_row_col(self, min_row, min_col, max_row, max_col):
+        self.begin_cell.row = min_row
+        self.begin_cell.col = min_col
+        self.end_cell.row = max_row
+        self.end_cell.col = max_col
+
+class ConstExcel():
+    ROW = 1
+    COLUMN = 2
+    COL = COLUMN
+    STYLE_NORMAL = '標準'
+
 
 class Direction():
     LEFT = 1 << 0  # 0000000001 in binary
@@ -475,17 +575,31 @@ def _update_min_max_by_compare(min, max, value):
         max = value
     return min, max
 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 class ExcelSheetDataUtil():
     """
     エクセルのデータを扱うクラス
-
-    Memo:
-        実装済み
-            ファイルオープン
-             1つのシートのみを対象とする
+     主にCellのアドレス・値を扱う
+      （1つのシートのみを対象とする）
+    
+    use modules:
+        主に使用しているクラス・モジュールなど
+        import openpyxl
+        from openpyxl.cell import Cell
+        from openpyxl.worksheet.worksheet import Worksheet
+        from openpyxl.workbook.workbook import Workbook
+        from openpyxl.utils import get_column_letter
+        from openpyxl.utils import column_index_from_string
     """
     class Direction(Direction):
+        pass
+
+    class ConstExcel(ConstExcel):
         pass
 
     def __init__(self, file_path:str, sheet_name:str, data_only:bool=True) -> None:
@@ -495,14 +609,22 @@ class ExcelSheetDataUtil():
         self.set_workbook(file_path, data_only)
         self.set_sheet(sheet_name)
         self._update_valid_cell_in_sheet()
-        self.address = ''
-        self.range_address = ''
+        self.address = 'A1'
+        self.range_address = 'A1'
         # self.loop_max_row = _EXCEL_ROW_MAX
         # self.loop_max_col = _EXCEL_COLUMN_MAX
         # 有効なセル最大までにすると、すべて処理したときに時間がかかるので
         # 初期値Noneとして、sheet.min_rowなどの値を使用する
         self.loop_max_row = None
         self.loop_max_col = None
+    
+    def copy_values_from_other_cell(self, other_cell:'ExcelSheetDataUtil'):
+        """
+        他の ExcelSheetDataUtil から アドレスのみをコピーする
+         （book,sheetの値はコピーされない）
+        """
+        self.address = other_cell.address
+        self.range_address = other_cell.range_address
     
     def reset_book_sheet(self, data_only:bool=True):
         # file_path = self.book.path
@@ -528,7 +650,17 @@ class ExcelSheetDataUtil():
             self.sheet = sheet_name
             return
         if sheet_name!=None:
-            self.sheet = self.book[sheet_name]
+            try:
+                self.sheet = self.book[sheet_name]
+            except KeyError as e:
+                if 'Worksheet Copy does not exist.' in str(e):
+                # 例外が発生しました: KeyError 'Worksheet Copy does not exist.'
+                    msg = str(e)
+                    filename = Path(self.file_path).name
+                    msg += '(file={}, sheet={})'.format(filename, sheet_name)
+                    raise KeyError(msg)
+                else:
+                    raise e
         else:
             self.sheet = None
     
@@ -551,13 +683,16 @@ class ExcelSheetDataUtil():
         WorkBookを保存する
 
         Caution:
-            拡張子は'.xlsx'にすること。
+            * 拡張子は'.xlsx'にすること。
              '.xlsm'で保存すると、開けなくなるので注意。
               この場合拡張子を'.xlsx'に変更すると開けるようになる。
+            * ファイルを開いているとエラーが発生する 
+                PermissionError [Errno 13] Permission denied: 'myworkbook.xlsx'
         """
-        # ファイルを開いているとエラーが発生する
-        # 例外が発生しました: PermissionError [Errno 13] Permission denied: 'file_name_.xlsx'
         self.book.save(self._get_file_path(file_path))
+
+    def close(self):
+        self.book.close()
 
     def _get_file_path(self, file_path:str):
         if file_path==None:
@@ -570,7 +705,8 @@ class ExcelSheetDataUtil():
             find_begin_address:str=None, 
             find_end_address:str=None, 
             found_number:int=0,
-            debug:bool=True):
+            debug:bool=True,
+            check_after:bool=True):
         """
         文字列を検索して、存在したらセルのアドレスをセットする
 
@@ -589,7 +725,28 @@ class ExcelSheetDataUtil():
         else:
             address = None
         self.address = address
+        if check_after:
+            if not self.address_is_valid(self.address):
+                msg = 'Not found value(address={})'.format(self.address)
+                msg += '(sheet={}, keyword={}, begin={}, end={})'.format(self.sheet.title, keyword, find_begin_address, find_end_address)
+                raise Exception(msg)
         return address
+    
+    def set_address_r1c1(self, row=None, col=None):
+        """
+        row,col によって self.addressをセットする
+         row,colがNoneの場合は self.addressの値を使用する。
+        """
+        if row==None or col==None:
+            self_row, self_col=self.get_row_and_col()
+            if row==None:
+                row = self_row
+            if col==None:
+                col = self_col
+        address = self._cnv_a1_address_from_row_col(row, col)
+        self.address = address
+
+
     
     @classmethod
     def address_is_valid(cls, address):
@@ -631,11 +788,21 @@ class ExcelSheetDataUtil():
         return get_end_address_to_end_vertical(
             self.sheet, self.address, direction, max_row)
     
+    def set_end_address_to_end_vertical(self, direction):
+        """ 連続した空白or連続した入力済みのセルの最終のアドレスを取得する 縦方向-垂直"""
+        self.address = self.get_end_address_to_end_vertical(direction)
+        return self.address
+    
     def get_end_address_to_end_horizon(self,direction):
         """ 連続した空白or連続した入力済みのセルの最終のアドレスを取得する 横方向-水平"""
         max_col = self._get_loop_max_col()
         return get_end_address_to_end_horizon(
             self.sheet, self.address, direction, max_col)
+    
+    def set_end_address_to_end_horizon(self,direction):
+        """ 連続した空白or連続した入力済みのセルの最終のアドレスを取得する 横方向-水平"""
+        self.address = self.get_end_address_to_end_horizon(direction)
+        return self.address
 
     def _get_loop_max_col(self, update_info:bool=False):
         if self.loop_max_col!=None:
@@ -667,6 +834,52 @@ class ExcelSheetDataUtil():
         self.range_address = begin_address + ':' + end_address
         return self.range_address
 
+    def get_rows_range(self):
+        begin_cell, end_cell = get_row_and_col_from_a1_address_range(
+            self.address)
+        return range(begin_cell.row, end_cell.row+1)
+    
+    def get_cols_range(self):
+        begin_cell, end_cell = get_row_and_col_from_a1_address_range(
+            self.address)
+        return range(begin_cell.column, end_cell.column+1)
+    
+    def set_address_entire(self, opt):
+        """
+        列全体（or行全体）をself.addressにセットする
+
+        Args:
+            opt : row=1, col=2
+        """
+        if opt==ConstExcel.ROW:
+            # row
+            re_ret = re.search('[1-9]{1,8}', self.address)
+            row_str = re_ret.group()
+            begin_address = 'A' + row_str
+            col_max = get_column_letter(self.valid_cell.end_cell.col)
+            end_address = col_max + row_str
+        elif opt==ConstExcel.COL:
+            # col
+            re_ret = re.search('[a-zA-Z]{1,3}', self.address)
+            col_str = re_ret.group()
+            begin_address = col_str + '1'
+            end_address = col_str + str(self.valid_cell.end_cell.row)
+        self.address = begin_address + ':' + end_address
+        return self.address
+
+    def set_range_address(self, address_value:'Union[str, list[str]]'):
+        if isinstance(address_value, str):
+            address_value = [address_value]
+        elif isinstance(address_value, list):
+            pass
+        else:
+            msg = 'address_value type is invalid. (type={})'.format(type(address_value))
+            raise TypeError(msg)
+        if self.address != '':
+            address_value = [self.address] + address_value
+        begin_address, end_address = get_range_address(address_value)
+        self.range_address = begin_address + ':' + end_address
+
     def _address_is_loop_max_row(self, address:str):
         """ address がこのクラス内で処理する最大 "行" かを判定する """
         arg_row, arg_col = get_row_and_col_from_a1_address(address)
@@ -683,7 +896,7 @@ class ExcelSheetDataUtil():
         else:
             return False
 
-    def move_address(self, offset_row, offset_col):
+    def move_address(self, offset_row:int, offset_col:int):
         """ self.addressから offset_row, offset_col の分を移動する """
         now_row, now_col = get_row_and_col_from_a1_address(self.address)
         new_row = now_row + offset_row
@@ -691,7 +904,23 @@ class ExcelSheetDataUtil():
         new_address = get_a1_address_from_row_and_col(new_row, new_column)
         self.address = new_address
         return new_address
-    
+
+    @classmethod
+    def move_address_from(address:str, offset_row:int, offset_col:int):
+        """
+        addressから offset_row, offset_col の分を移動する
+
+        Args:
+            Address:A1形式のアドレスのみ対応
+        """
+        now_row, now_col = get_row_and_col_from_a1_address(address)
+        new_row = now_row + offset_row
+        new_column = now_col + offset_col
+        new_address = get_a1_address_from_row_and_col(new_row, new_column)
+        return new_address
+
+
+
     def get_value(self, address=None):
         if address==None:
             address = self.address
@@ -700,18 +929,78 @@ class ExcelSheetDataUtil():
     def get_value_r1c1(self, row:int, col:int):
         # self.sheet.cell(row=row, column=col).value
         return get_cell_value_r1c1(self.sheet, row, col)
+
+    def get_cell_r1c1(self, row:int, col:int):
+        # self.sheet.cell(row=row, column=col).value
+        return self.sheet.cell(row=row, column=col)
     
     def set_value(self, value:str, address:str=None):
         if address==None:
             address = self.address
         return set_cell_value(self.sheet, address, value)
 
+    def copy_value(self, src_cell:Union[Cell,'ExcelSheetDataUtil'], style:bool=False, exists_only:bool=True):
+        """
+        引数src_cellから self.addressに値をコピーする
+
+        Args:
+            src_cell : コピー元のCell
+                ExcelSheetDataUtil でも可能
+            style : True=書式をコピーする
+            exists_only : True=値or書式が設定されているもののみコピーする
+        """
+        # dist_cell:Cell = self.sheet[self.address]
+        dist_cell = self._get_openxl_cell(self)
+        src_cell:Cell = self._get_openxl_cell(src_cell)
+        src_value = src_cell.value
+        if src_value != '':
+            dist_cell.value = src_value
+        src_style = src_cell.style
+        if src_style != self.ConstExcel.STYLE_NORMAL:
+            # テーブルの書式は無視され’標準’となる
+            if style:
+                if src_cell.has_style :
+                    dist_cell.style = src_cell.style
+                    dist_cell.fill = src_cell.fill
+        if style:
+            dist_cell.style = src_cell.style
+            # 例外が発生しました: TypeError unhashable type: 'StyleProxy'
+            # コピーしないと上記エラーとなる
+            dist_cell.fill = copy.copy(src_cell.fill)
+            dist_cell.border = copy.copy(src_cell.border)
+    
+    def _get_openxl_cell(self, value:Union[Cell,'ExcelSheetDataUtil']):
+        if 'ExcelSheetDataUtil' in str(type(value)):
+            ret = value.sheet[value.address]
+        elif isinstance(value, Cell):
+            ret = value
+        else:
+            ret = value
+        return ret
+
     def set_value_r1c1(self, value:str, row:int, col:int):
         # self.sheet.cell(row=row, column=col).value
         return get_cell_value_r1c1(self.sheet, value, row, col)
 
+    def get_row_and_col(self):
+        """
+        A1形式のアドレスから、行と列を取得する
+
+        Memo:
+            'A1:B5' は A1(row=1,col=1) を返す
+        Returns:
+            int, int  :  row_number, column_number
+        """
+        row, col = get_row_and_col_from_a1_address(self.address)
+        return row, col
+
     @classmethod
     def _cnv_row_col_from_a1_address(cls, a1_address):
+        """ A1 > (1,1)  """
+        return get_row_and_col_from_a1_address(a1_address)
+    
+    @classmethod
+    def get_row_and_col_from_a1_address(cls, a1_address):
         """ A1 > (1,1)  """
         return get_row_and_col_from_a1_address(a1_address)
     
@@ -720,6 +1009,18 @@ class ExcelSheetDataUtil():
         """ (1,1) > A1 """
         return get_a1_address_from_row_and_col(row, col)
     
+    @classmethod
+    def get_a1_address_from_row_and_col(cls, a1_address):
+        """ A1 > (1,1)  """
+        return get_a1_address_from_row_and_col(a1_address)
+
+    @classmethod
+    def _get_cells_address(cls, cell:Cell):
+        """
+        Cell からセルの番地を取得する(A1形式)
+        """
+        return _get_cells_address(cell)
+
     def get_values_from_range_address_np(self, range_address:str=None):
         """
         矩形のセルからすべて値を取得する
@@ -775,6 +1076,25 @@ class ExcelSheetDataUtil():
             columns=columns, index=index)
         return df
 
+    @classmethod
+    def _cnv_datetime(cls, value:str):
+        if isinstance(value, str):
+            if not value.isdigit():
+                return value
+        elif isinstance(value, int):
+            pass
+        else:
+            return value
+        return(datetime(1899, 12, 30) + timedelta(days=value))
+    
+    def copy_self(self):
+        return copy.copy(self)
+
+
+##########################################################################################
+##########################################################################################
+##########################################################################################
+##########################################################################################
 
 def get_row_and_col_from_rect_address(table_address:str):
     """
