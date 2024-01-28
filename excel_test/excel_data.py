@@ -627,9 +627,7 @@ class ExcelSheetDataUtil():
         self.range_address = other_cell.range_address
     
     def reset_book_sheet(self, data_only:bool=True):
-        # file_path = self.book.path
-        # from zipfile import ZipFile, ZIP_DEFLATED, BadZipfile
-        # file_path = self.book.filename
+        self.close()
         sheet_name = self.sheet.title
         self.set_workbook(self.file_path, data_only)
         self.set_sheet(sheet_name)
@@ -654,7 +652,8 @@ class ExcelSheetDataUtil():
                 self.sheet = self.book[sheet_name]
             except KeyError as e:
                 if 'Worksheet Copy does not exist.' in str(e):
-                # 例外が発生しました: KeyError 'Worksheet Copy does not exist.'
+                    # 主にWSheetがを存在しないときに発生する
+                    # 例外が発生しました: KeyError 'Worksheet Copy does not exist.'
                     msg = str(e)
                     filename = Path(self.file_path).name
                     msg += '(file={}, sheet={})'.format(filename, sheet_name)
@@ -692,7 +691,8 @@ class ExcelSheetDataUtil():
         self.book.save(self._get_file_path(file_path))
 
     def close(self):
-        self.book.close()
+        if self.book!=None:
+            self.book.close()
 
     def _get_file_path(self, file_path:str):
         if file_path==None:
@@ -982,9 +982,17 @@ class ExcelSheetDataUtil():
         # self.sheet.cell(row=row, column=col).value
         return get_cell_value_r1c1(self.sheet, value, row, col)
 
+    def get_diff_row_and_col(self, row:int , col:int):
+        now_row, now_col = get_row_and_col_from_a1_address(self.address)
+        return row - now_row, col - now_col
+
+    def get_offset_row_and_col(self, offset_row:int, offset_col:int):
+        row, col = get_row_and_col_from_a1_address(self.address)
+        return row + offset_row , col + offset_col
+
     def get_row_and_col(self):
         """
-        A1形式のアドレスから、行と列を取得する
+        self.address(A1形式のアドレス)から、行と列を取得する
 
         Memo:
             'A1:B5' は A1(row=1,col=1) を返す
@@ -993,6 +1001,14 @@ class ExcelSheetDataUtil():
         """
         row, col = get_row_and_col_from_a1_address(self.address)
         return row, col
+    
+    def get_row(self):
+        row, col = get_row_and_col_from_a1_address(self.address)
+        return row
+
+    def get_col(self):
+        row, col = get_row_and_col_from_a1_address(self.address)
+        return col
 
     @classmethod
     def _cnv_row_col_from_a1_address(cls, a1_address):

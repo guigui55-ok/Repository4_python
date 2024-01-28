@@ -59,3 +59,11 @@ def cnv_date_str(value):
 df['カテゴリA'] = df['カテゴリA'].map(cnv_date_str)
 df['カテゴリB'] = df['カテゴリB'].map(cnv_date_str)
 print(df.values)
+
+target_date = datetime.datetime(year=2024, month=1, day=19).strftime('%Y/%m/%d')
+df_cat_a = df['カテゴリA'].value_counts()
+print('df_cat_a = ')
+print(df_cat_a)
+count = df_cat_a[target_date]
+print('カテゴリA [{}] = {}'.format(target_date ,count))
+
