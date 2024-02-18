@@ -9,7 +9,6 @@
 
 
 from excel_data import ExcelSheetDataUtil
-
 from pathlib import Path
 # text_path = Path(__file__).parent.joinpath('test_ref.txt')
 # with open(str(text_path), 'r', encoding='utf-8')as f:
@@ -37,6 +36,7 @@ title = 'ID'
 ex_data.set_address_by_find(title, 'I3', debug=False,)
 print('begin_address = {}'.format(ex_data.address))
 
+# right_end_cell:ExcelSheetDataUtil = ex_data.copy_self()
 right_end_cell = ex_data.copy_self()
 right_end_cell.get_end_address_to_end_horizon(ex_data.Direction.RIGHT)
 # コピー先開始セル

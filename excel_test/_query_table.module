@@ -1,0 +1,96 @@
+
+Sub UpdateOrCreateQueryTableCsv(sheetName As String, filePath As String, destination As String)
+    'Args: destination: 開始アドレスの文字列（例："A2"）
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets(sheetName) ' 対象のワークシートを指定
+
+    Dim qt As QueryTable
+'    Dim filePath As String
+'    filePath = "C:\path\to\your\file.txt" ' テキストファイルのパスを指定
+
+    Dim found As Boolean
+    found = False
+
+    ' 既存のQueryTableを探す
+    For Each qt In ws.QueryTables
+        If qt.Connection = "TEXT;" & filePath Then
+            found = True
+            Exit For
+        End If
+    Next qt
+
+    If found Then
+        Debug.Print "found=True"
+        ' 既存のQueryTableを更新
+'        Debug.Print qt.BackgroundQuery
+'        qt.Delete
+        qt.Refresh
+        ' 作成済みのクエリを消した後ファイルを再度開かないと、Queryが存在していることになる。
+'        Debug.Print ("Refresh Query")
+    Else
+        Debug.Print "found=False"
+        ' 新しいQueryTableを追加
+        Set qt = ws.QueryTables.Add( _
+            Connection:="TEXT;" & filePath, _
+            destination:=ws.Range(destination))
+
+        With qt
+            .TextFileCommaDelimiter = True 'カンマ区切りの指定
+            .TextFileStartRow = 1 '開始行の指定
+            .TextFilePlatform = 65001 ' または必要に応じて別のエンコーディング
+            .TextFileParseType = xlDelimited
+            .TextFileTabDelimiter = True
+            .Refresh
+        End With
+'        Debug.Print ("Create Query")
+    End If
+End Sub
+
+
+
+Sub DeleteQueryTableCsv(sheetName As String, filePath As String, destination As String)
+    'Args: destination: 開始アドレスの文字列（例："A2"）
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets(sheetName) ' 対象のワークシートを指定
+
+    Dim qt As QueryTable
+'    Dim filePath As String
+'    filePath = "C:\path\to\your\file.txt" ' テキストファイルのパスを指定
+
+    Dim found As Boolean
+    found = False
+
+    ' 既存のQueryTableを探す
+    For Each qt In ws.QueryTables
+        If qt.Connection = "TEXT;" & filePath Then
+            found = True
+            Exit For
+        End If
+    Next qt
+
+    If found Then
+        Debug.Print "found=True"
+        ' 既存のQueryTableを更新
+'        Debug.Print qt.BackgroundQuery
+        qt.Delete
+'        qt.Refresh
+        ' 作成済みのクエリを消した後ファイルを再度開かないと、Queryが存在していることになる。
+'        Debug.Print ("Refresh Query")
+    Else
+        Debug.Print "found=False"
+'        ' 新しいQueryTableを追加
+'        Set qt = ws.QueryTables.Add( _
+'            Connection:="TEXT;" & filePath, _
+'            destination:=ws.Range(destination))
+'
+'        With qt
+'            .TextFileCommaDelimiter = True 'カンマ区切りの指定
+'            .TextFileStartRow = 1 '開始行の指定
+'            .TextFilePlatform = 65001 ' または必要に応じて別のエンコーディング
+'            .TextFileParseType = xlDelimited
+'            .TextFileTabDelimiter = True
+'            .Refresh
+'        End With
+'        Debug.Print ("Create Query")
+    End If
+End Sub

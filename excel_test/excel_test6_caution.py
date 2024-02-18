@@ -5,7 +5,7 @@ from excel_data import ExcelSheetDataUtil
 
 
 """
-エクセル参照をしているとき、ほかのファイルをopenpyxlで実行するとどうなるか確認
+エクセルでほかのファイルのデータを参照をしているとき、その他のファイルをopenpyxlで実行するとどうなるか確認
 
 data_only=True、式ではなくデータとして読み込んでSaveをすると式がすべて値になる
 Falseなら式はそのままだが、値は読み込めない
@@ -29,11 +29,13 @@ from pathlib import Path
 print('*参照式の値変更')
 
 print('*参照しているセルの値')
-file_name = 'FileIO.xlsx'
+# file_name = 'FileIO.xlsm'
+file_name = 'myworkbook.xlsx'
 import shutil
 back_path = Path(__file__).parent.joinpath('back')
 shutil.copy(file_name, back_path)
-sheet_name = 'Sheet1'
+# sheet_name = 'Sheet1'
+sheet_name = 'Sheet'
 ex_data = ExcelSheetDataUtil(file_name, sheet_name, data_only=False)
 ex_data.address = 'N16'
 
@@ -57,6 +59,8 @@ print('title, val = {}, {}'.format(name, val))
 val = ex_data.get_value('N19')
 val = int(val)+1
 ex_data.set_value(val, 'N19')
+msg = '保存するときは別ファイルにしてください。'
+raise Exception(msg)
 ex_data.save_book()
 print('save path  = {}'.format(ex_data.file_path))
 # import os

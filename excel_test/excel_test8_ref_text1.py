@@ -3,7 +3,8 @@
 
 外部データ連携
 """
-"""
+
+r"""
 textインポート
 https://xtech.nikkei.com/it/pc/article/NPC/20060214/229255/
 
@@ -19,7 +20,7 @@ Sub UpdateDataSource()
 End Sub
 """
 
-"""
+r"""
 エクセル側では以下のVBAでデータソース(参照しているテキストファイル)をボタンで更新する
 
 Private Sub UpdateDataSource_Click()
@@ -90,11 +91,12 @@ print('write text value = {}'.format(lines[1]))
 print('*セルを読み取って合計')
 # file_name = 'myworkbook.xlsx'
 file_name = 'myworkbook.xlsm'
+file_path = Path(__file__).parent.joinpath(file_name)
 ### 書き込み処理するときは念のためバックアップ
 import shutil
 back_path = Path(__file__).parent.joinpath('back')
 back_path.mkdir(exist_ok=True)
-shutil.copy(file_name, back_path)
+shutil.copy(file_path, back_path)
 ###
 sheet_name = 'my sheet'
 ex_data = ExcelSheetDataUtil(file_name, sheet_name, data_only=False)

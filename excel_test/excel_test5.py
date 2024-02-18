@@ -6,8 +6,10 @@
 from excel_data import ExcelSheetDataUtil
 
 
-file_name = 'FileIO.xlsm'
-sheet_name = 'Sheet1'
+# file_name = 'FileIO.xlsm'
+file_name = 'myworkbook.xlsx'
+# sheet_name = 'Sheet1'
+sheet_name = 'Sheet'
 ex_data = ExcelSheetDataUtil(file_name, sheet_name)
 
 print('*結合セル取得')

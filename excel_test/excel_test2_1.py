@@ -6,6 +6,7 @@ import openpyxl
 from openpyxl.cell import Cell
 from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.utils import get_column_letter
+from typing import Union
 
 def _get_cell_value(cell_val:Cell):
     """
@@ -15,6 +16,7 @@ def _get_cell_value(cell_val:Cell):
         return str(cell_val.value)
     except Exception as e:
         # 文字列に変換できないエラーの時はスキップ（未対応）
+        # 何のエラーが発生するか確認してから対応する
         raise e
 
 def _get_cells_address(cell_val:Cell):
@@ -66,9 +68,53 @@ def _search_cell_list(cell_list:'list[Cell]', keyword:str):
             
 #     return result
 
+def _get_address_a1_str(value:'Union[str, Cell]'):
+    """
+    A1アドレスを取得する
+     文字列の場合はそのまま、Cellの場合はCell.coordinateを取得する
+    """
+    if isinstance(value, str):
+        return value
+    elif isinstance(value, Cell):
+        return str(value.coordinate)
+    else:
+        return value
+
+
+def _get_cells_iterator(
+        worksheet_val:Worksheet,
+        begin_address:'Union[str, Cell]',
+        end_address:'Union[str, Cell]'):
+    """ 指定した範囲のCellの Iterator を取得する """
+    begin_address = _get_address_a1_str(begin_address)
+    end_address = _get_address_a1_str(end_address)
+    rectangle = worksheet_val[begin_address:end_address]
+    return rectangle
+
 def _get_rectangle(worksheet_val:Worksheet, begin_address:str, end_address:str):
     rectangle = worksheet_val[begin_address:end_address]
     return rectangle
+
+def _get_cells_by_search_keyword_in_rectangle(rectangle:list[list[Cell]] ,keyword:str):
+    """
+    特定の範囲を検索（セルのリストは取得済みであること）
+
+    Args:
+        rectangle: セルのリスト Worksheet["A1":"B2"]で取得されたもの
+        keyword: 検索対象の文字列
+    
+    Returns:
+        {list[openxl.cell.Cell]} : 見つかったCellのリスト
+    """
+    result_cells = []
+    for col in rectangle:
+        for cell in col:
+            value = _get_cell_value(cell)
+            if value == keyword:
+                # cell_address = _get_cells_address(cell)
+                # result.append(cell_address)
+                result_cells.append(cell)
+    return result_cells
 
 def _search_keyword_in_rectangle(rectangle:list[list[Cell]] ,keyword:str):
     """
@@ -101,7 +147,6 @@ def search_rectangle_in_sheet(worksheet_val:Worksheet, begin_address:str, end_ad
     result = _search_keyword_in_rectangle(rectangle, keyword)
     return result
 
-
 # 特定の範囲を検索
 def search_rectangle(rectangle ,keyword:str):
     """
@@ -129,15 +174,53 @@ def main():
     例外が発生しました: InvalidFileException
 openpyxl does not support binary format .xlsb, please convert this file to .xlsx format if you want to open it with openpyxl
     """
-    filename = 'FileIO.xlsm'
+    # filename = 'FileIO.xlsm'
+    filename = 'myworkbook.xlsx'
     wb = openpyxl.load_workbook(filename)
-    ws = wb['TestData']
+    ws = wb['my sheet1']
+
+    buf_list = ws['A1':'A1'] #tuple
+    buf_list = list(buf_list)
+    print('***')
+    # 行と列を扱うので、2次元になっている
+    for x in buf_list:
+        print(x[0])
+        print(x[0].coordinate)
+        # print(x[1])
+        print(len(x))
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['A1':'C3']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['C3':'A1']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['A3':'A1']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['A1':'A3']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['A1':'C1']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['A1:C1']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    buf_list = ws['A':'C']
+    buf_list_b = [x[0].coordinate for x in buf_list]
+    print(buf_list_b)
+    print('***')
 
     # result = search_column(ws['A'], 'scarf')
     # result = search_row(ws['42'], 'neutral')
-    result = search_rectangle(ws['A1':'F38'], '■TableA')
+    result = search_rectangle(ws['A1':'F38'], '■テスト表')
     # result = search_entire_sheet(ws, 'soda_bottle')
-    print(result)
+    search_cells = _get_cells_iterator(ws, 'A1', 'F38')
+    print(type(search_cells))
+    result_cell = _get_cells_by_search_keyword_in_rectangle(search_cells, '■テスト表')
+    print(result_cell)
 
 if __name__ == '__main__':
     main()

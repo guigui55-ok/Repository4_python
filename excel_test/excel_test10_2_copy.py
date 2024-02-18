@@ -7,7 +7,6 @@
 
 
 from excel_data import ExcelSheetDataUtil
-
 from pathlib import Path
 
 print('*ファイル読み込み')
