@@ -21,7 +21,10 @@ print(df.dtypes)
 エクセルの場合は下記のように使います。
 .read_excel("任意のファイル名.xlsx",encoding='utf8')
 
-例えば、Pandasでcsvファイルを読み込む場合は、「read_csv」を使い、データの出力には「to_csv」や「to_excel」などが利用可能です。csv以外にも、「read_json」や「read_excel」、「read_json」「read_sql」もあり、それらの出力メソッドもあります。
+例えば、Pandasでcsvファイルを読み込む場合は、「read_csv」を使い、
+データの出力には「to_csv」や「to_excel」などが利用可能です。
+csv以外にも、「read_json」や「read_excel」、「read_json」「read_sql」もあり、
+それらの出力メソッドもあります。
 TSVファイルの場合は、「read_table」を使うことで区切り文字がタブ\tのファイルを処理することが出来ます。
 """
 

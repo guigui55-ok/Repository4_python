@@ -4,9 +4,7 @@ pandas
 """
 
 import pandas as pd
-
 path = r'C:\Users\OK\source\repos\Repository4_python\pandas_test\related_data_japanese_updated1.csv'
-
 
 from pathlib import Path
 dir_path = r'C:\Users\OK\source\repos\Repository4_python\pandas_test'

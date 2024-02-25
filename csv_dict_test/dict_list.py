@@ -36,35 +36,48 @@ class DictList():
             return False
         return True
     
+    def _raise_error_if_invalid_value(self, value):
+        if isinstance(value,dict):
+             return value
+        else:
+            raise TypeError(value)
+    
     def update_dict_by_dict(self,update_dict:dict,condition_dict:dict):
         """only first comp(match)"""
-        _condition_dict:dict = None
-        if isinstance(condition_dict,dict):
-            _condition_dict = condition_dict
-        else:
-            raise Exception('condition_dict is invalid')
+        _condition_dict = self._raise_error_if_invalid_value(
+            condition_dict)
         
         for i in range(len(self.value)):
             dict_value = self.value[i]
             if self.comp_dict_in_dict(dict_value,_condition_dict):
                 self.value[i].update(update_dict)
 
-    def get_value_by_dict(self,key:str,condition_dict:dict):
-        """only first comp(match)"""
-        _condition_dict:dict = None
-        if isinstance(condition_dict,dict):
-            _condition_dict = condition_dict
-        else:
-            raise Exception('condition_dict is invalid')
+    def get_value_by_dict(self, key:str, condition_dict:dict):
+        """
+        condition_dict と一致するとき、そのindexのdictのkeyを取得する
+
+        only first comp(match)
+        """
+        dict_value = self.get_dict_by_dict(condition_dict)
+        return dict_value[key]
+
+    def get_dict_by_dict(self, condition_dict:dict):
+        """
+        condition_dict と一致するとき、そのindexのdictを取得する
+
+        only first comp(match)
+        """
+        _condition_dict = self._raise_error_if_invalid_value(
+            condition_dict)
         
         for dict_value in self.value:
             if self.comp_dict_in_dict(dict_value,_condition_dict):
-                value = dict_value[key]
-                return value
+                return dict_value
     
     def comp_dict_in_dict(self,target_dict:dict,condition_dict:dict):
-        """dictがcondition_dictとすべて合致する(含まれる)か判定する
-        return float?
+        """
+        dictがcondition_dictとすべて合致する(含まれる)か判定する
+         return bool
         """
         for key in condition_dict.keys():
             comp_val = condition_dict[key]

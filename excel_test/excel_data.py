@@ -14,7 +14,9 @@ from typing import Union
 from pathlib import Path
 from datetime import datetime, timedelta
 import numpy as np
-
+# for password
+import io
+import msoffcrypto #pip install msoffcrypto-tool
 
 _DEBUG = False
 # https://office-hack.com/excel/maximum-number-of-lines/
@@ -1112,7 +1114,7 @@ class ExcelSheetDataUtil():
             self.sheet = None
     
     def set_workbook(self, file_path:Union[str,Workbook], data_only:bool):
-        
+        """ open excel file (openpyxl.load_workbook) """
         if isinstance(file_path, Workbook):
             self.book = file_path
             self.file_path = None
@@ -1124,6 +1126,22 @@ class ExcelSheetDataUtil():
             self.book = openpyxl.load_workbook(file_path, data_only=data_only)
         else:
             self.book = None
+
+    def set_workbook_with_pass(self, file_path, password, data_only:bool, out_put_file_path=None):
+        """パスワード付きExcelファイルを読み込む"""
+        decrypted = io.BytesIO()
+        with open(file_path, 'rb') as fp:
+            msfile = msoffcrypto.OfficeFile(fp)
+            msfile.load_key(password=password)
+            msfile.decrypt(decrypted)
+        if out_put_file_path==None:
+            file_name = Path(file_path).stem + '_unlock' + Path(file_path).suffix
+            out_put_file_path = Path(file_path).parent.joinpath(file_name)
+        # 暗号解除した後ファイルに保存
+        with open(out_put_file_path, 'wb') as fp:
+            fp.write(decrypted.getbuffer())
+        # ファイルを開く
+        self.set_workbook(out_put_file_path, data_only=data_only)
 
     def save_book(self, file_path:str=None):
         """
@@ -1537,6 +1555,8 @@ class ExcelSheetDataUtil():
         # new_address = get_a1_address_from_row_and_col(new_row, new_column)
         # self.address = new_address
         # return new_address
+        if (offset_row==0) and (offset_col==0):
+            return self.cell
         cell = get_offset_cell(self.sheet, self.cell, offset_row, offset_col)
         self.set_cell(cell)
         return cell

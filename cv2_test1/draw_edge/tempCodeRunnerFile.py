@@ -1,0 +1,1 @@
+ lineType=cv2.LINE_8)

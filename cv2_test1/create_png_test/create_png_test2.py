@@ -35,6 +35,7 @@ def main():
         import os
         path = os.path.join(img_dir,file_name)
         color = const_color.BLACK.value[::-1]
+        color = const_color.GRAY.value[::-1]
         width = 720
         height = 1440
         create_png(path,width,height,color)

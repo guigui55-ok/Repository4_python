@@ -14,4 +14,5 @@ width = 200
 blank = np.zeros((height, width, 3))
  
 cv2.imwrite(path,blank)
+print('image_path=')
 print(path)
