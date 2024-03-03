@@ -17,6 +17,7 @@ import numpy as np
 # for password
 import io
 import msoffcrypto #pip install msoffcrypto-tool
+from typing import Union
 
 _DEBUG = False
 # https://office-hack.com/excel/maximum-number-of-lines/
@@ -1242,6 +1243,7 @@ class ExcelSheetDataUtil():
             # self.set_address_a1(value)
             if _is_a1_address(value):
                 self.address = value
+                self.cell = get_cells(self.sheet, value)
             else:
                 msg = 'value is not a1 address(value={})'.format(value)
                 raise ValueError(msg)
@@ -1473,6 +1475,48 @@ class ExcelSheetDataUtil():
                     return True 
         return False
 
+    ### CopyCells
+    def copy_range_address(self,src_begin_cell_ex:'ExcelSheetDataUtil', src_cells:'Union[tuple, tuple[tuple]]', debug:bool=True):
+        """
+        sheet[address] で取得された src_cellsのでーたを、このクラスのアドレスを開始アドレスとして書き込む
+        """
+        debug = self._get_debug(debug)
+        dist_begin_cell_ex = self
+        src_cell_temp:Cell=None
+        for crc_cell in src_cells:
+            if isinstance(crc_cell, tuple):
+                #2次元の場合
+                for src_cell_b in crc_cell:
+                    src_cell_temp = src_cell_b
+                    offset_row, offset_col = src_begin_cell_ex.get_diff_row_and_col(
+                        src_cell_temp.row, src_cell_temp.column)
+                    dist_now_cell_ex = dist_begin_cell_ex.get_offset_cell_ex(offset_row, offset_col)
+                    dist_now_cell_ex.copy_value(src_cell_temp, style=True)
+                    ### log
+                    value = src_cell_temp.value
+                    if debug:
+                        # if isinstance(value, datetime):
+                        #     print()
+                        print(' src({},{}) >> dist({},{})  [value={}]'.format(
+                            src_cell_temp.row, src_cell_temp.column,
+                            dist_now_cell_ex.cell.row, dist_now_cell_ex.cell.column, value))
+            else:
+                #1次元の場合
+                src_cell_temp = crc_cell[0]
+                offset_row, offset_col = src_begin_cell_ex.get_diff_row_and_col(
+                    src_cell_temp.row, src_cell_temp.column)
+                dist_now_cell_ex = dist_begin_cell_ex.get_offset_cell_ex(offset_row, offset_col)
+                dist_now_cell_ex.copy_value(src_cell_temp, style=True)
+                ### log
+                value = src_cell_temp.value
+                if debug:
+                    print(' src({},{}) >> dist({},{})  [value={}]'.format(
+                        src_cell_temp.row, src_cell_temp.column,
+                        dist_now_cell_ex.cell.row, dist_now_cell_ex.cell.column, value))
+            ###
+
+
+
     ### add for test4
     def get_begin_address_in_range(self):
         if not ':' in self.range_address:
@@ -1631,6 +1675,7 @@ class ExcelSheetDataUtil():
             dist_cell.style = src_cell.style
             # 例外が発生しました: TypeError unhashable type: 'StyleProxy'
             # コピーしないと上記エラーとなる
+            dist_cell.number_format = src_cell.number_format
             dist_cell.fill = copy.copy(src_cell.fill)
             dist_cell.border = copy.copy(src_cell.border)
     
@@ -1648,12 +1693,37 @@ class ExcelSheetDataUtil():
         return get_cell_value_r1c1(self.sheet, value, row, col)
 
     def get_diff_row_and_col(self, row:int , col:int):
+        """
+        引数のアドレス[row,col]から、self.address(self.cell)のアドレスを引いたrow,colを取得する
+         ※cellコピーをするときにコピー元のbegin_cellとnowの差分を算出するとき使用する
+        """
         now_row, now_col = get_row_and_col_from_a1_address(self.address)
         return row - now_row, col - now_col
 
     def get_offset_row_and_col(self, offset_row:int, offset_col:int):
+        """
+        self.address(self.cell)から、offset[row,col]を足したrow,colを取得する
+         ※cellコピーをするときにコピー先のbegin_cellに足して今のコピー先を算出するのに使用する
+        """
         row, col = get_row_and_col_from_a1_address(self.address)
         return row + offset_row , col + offset_col
+
+    def get_offset_cell(self, offset_row:int, offset_col:int)->Cell:
+        """
+        self.address(self.cell)から、offset[row,col]を足した "Cell" を取得する
+         ※cellコピーをするときにコピー先のbegin_cellに足して今のコピー先を算出するのに使用する
+        """
+        return self.get_offset_cell_ex(offset_row, offset_col).cell
+
+    def get_offset_cell_ex(self, offset_row:int, offset_col:int)->'ExcelSheetDataUtil':
+        """
+        self.address(self.cell)から、offset[row,col]を足した "ExcelSheetDataUtil" を取得する
+         ※cellコピーをするときにコピー先のbegin_cellに足して今のコピー先を算出するのに使用する
+        """
+        cell_ex = self.copy_self()
+        cell_ex.move_address(offset_row, offset_col)
+        return cell_ex
+
 
     def get_row_and_col(self):
         """
@@ -1696,6 +1766,9 @@ class ExcelSheetDataUtil():
     def get_col(self):
         row, col = get_row_and_col_from_a1_address(self.address)
         return col
+    
+    def get_column_letter(self):
+        return get_column_letter(self.cell.column)
     
     @classmethod
     def _cnv_a1_address_from_cell(cls, cell:Cell):
