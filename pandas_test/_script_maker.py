@@ -19,6 +19,9 @@ class Const():
     MODE_PROC = 1
     MODE_CONFIRM = 2
 
+PROCEDURE_TEXT = "procedure('##$$##')"
+CONFIRM_TEXT = "confirm('##$$##')"
+
 class OneStep():
     """ 1つの手順・確認を扱うクラス（複数行あることを想定） """
     def __init__(self) -> None:
@@ -105,12 +108,12 @@ class ScriptMaker():
     def _make_script_line(self,line:str):
         """ 手順の文字列をスクリプトに張り付けるように変換する(OneStep.lines > line) """
         if self.mode == Const.MODE_PROC:
-            base_str = "main_tester.put_test_procedure('##$$##')"
+            base_str = PROCEDURE_TEXT
             # if '※' in line:
             #     pass
         else:
             # Const.MODE_CONFIRM
-            base_str = "main_tester.put_check_point('##$$##')"
+            base_str = CONFIRM_TEXT
         ret = self.indent + base_str.replace('##$$##', line)
         return ret
 

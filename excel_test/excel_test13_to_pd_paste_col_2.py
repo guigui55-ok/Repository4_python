@@ -73,3 +73,18 @@ df_a['Result'] = merged_df['Result_y']
 
 # 結果を表示
 print(df_a)
+
+
+from pathlib import Path
+from excel_data import ExcelSheetDataUtil
+print('*テーブルにデータ入力DataFrame')
+file_name = 'myworkbook.xlsx'
+# ### 書き込み処理するときは念のためバックアップ
+# import shutil
+# back_path = Path(__file__).parent.joinpath('back')
+# back_path.mkdir(exist_ok=True)
+# shutil.copy(file_name, back_path)
+# ###
+sheet_name = 'input_data'
+file_path = Path(__file__).parent.joinpath(file_name)
+ex_data = ExcelSheetDataUtil(file_path, sheet_name, data_only=True)

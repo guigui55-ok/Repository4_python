@@ -71,8 +71,12 @@ print(df_b.values)
 # https://pythondatascience.plavox.info/pandas/%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%92%E5%87%BA%E5%8A%9B%E3%81%99%E3%82%8B
 
 # CSV ファイル (employee.csv) として出力
-df_b.to_csv("data_from_df.csv")
-df_b.to_csv("data_from_df_sjis.csv", encoding="shift_jis")
+file_name = "data_from_df.csv"
+df_b.to_csv(file_name)
+print('csv_file_name = {}'.format(file_name))
+file_name = "data_from_df_sjis.csv"
+df_b.to_csv(file_name, encoding="shift_jis")
+print('csv_file_name = {}'.format(file_name))
 
 
 # # col_index_b = list(df_b.columns).index('Result')

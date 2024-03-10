@@ -1,5 +1,5 @@
 """
-エクセルから読み込んで合計
+エクセルから読み込んで、別のエクセルにコピーする
 
 データ集計加工
 """
@@ -99,8 +99,9 @@ df_a['Result'] = merged_df['Result_y']
 # 結果を表示
 print('df_a = ')
 print(df_a)
-
+# 書き込みのためにシートを読み直す（data_only=False)
 ex_data.reset_book_sheet(data_only=False)
+#
 range_begin_address , range_end_address = range_address_a.split(':')
 print('range_address_a = {}'.format(range_address_a))
 ex_data.address = range_address_a

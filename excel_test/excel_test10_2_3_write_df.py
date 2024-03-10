@@ -1,10 +1,9 @@
 """
 エクセルから読み込んでデータ加工
 
-列全体をほかの列にコピーする、書式ごと
- 
+表を読み込んで、別のところにコピーする（ファイル書き込み）
+ DataFrame
 """
-
 
 from excel_data import ExcelSheetDataUtil
 from pathlib import Path

@@ -1,0 +1,190 @@
+Sub UpdateOrCreateQueryTable(sheetName As String, filePath As String, destination As String)
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets(sheetName) ' 対象のワークシートを指定
+    Dim qt As QueryTable
+    Dim found As Boolean
+    found = False
+
+    ' 既存のQueryTableを探す
+    For Each qt In ws.QueryTables
+        If qt.Connection = "TEXT;" & filePath Then
+            found = True
+            Exit For
+        End If
+    Next qt
+
+    Debug.Print "FilePath:" & filePath
+    If found Then
+        Debug.Print "Found Query"
+        ' 既存のQueryTableを更新
+        qt.Refresh
+        ' 作成済みのクエリを消した後ファイルを再度開かないと、Queryが存在していることになる。
+        Debug.Print ("Refresh Query")
+    Else
+        ' 新しいQueryTableを追加
+        Debug.Print "NotFound Query"
+        Set qt = ws.QueryTables.Add( _
+            Connection:="TEXT;" & filePath, _
+            destination:=ws.Range(destination))
+
+        With qt
+            .TextFilePlatform = 65001 ' または必要に応じて別のエンコーディング
+            .TextFileCommaDelimiter = True 'カンマ区切りの指定
+            .TextFileParseType = xlDelimited  ' 区切り文字の形式
+            .TextFileTabDelimiter = True
+            .TextFileStartRow = 1 '開始行の指定
+            .RefreshStyle = xlOverwriteCells ' 既存のセルのデータを上書き
+'            .TextFileColumnDataTypes = Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1) '項目（列）の型指定
+            .Refresh
+        End With
+        Debug.Print ("Created Query")
+    End If
+End Sub
+
+
+Sub DeleteQueryTableCsv(sheetName As String, filePath As String, destination As String)
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets(sheetName) ' 対象のワークシートを指定
+    Dim qt As QueryTable
+    Dim found As Boolean
+    found = False
+
+    ' 既存のQueryTableを探す
+    For Each qt In ws.QueryTables
+        If qt.Connection = "TEXT;" & filePath Then
+            found = True
+            Exit For
+        End If
+    Next qt
+
+    If found Then
+        Debug.Print "found=True"
+        qt.Delete
+        Debug.Print "Deleted Query"
+    Else
+        Debug.Print "found=False"
+    End If
+End Sub
+
+
+
+
+
+'##############################################
+'##############################################
+'##############################################
+
+
+
+Function GetPresetData(number As Integer) As Variant
+    Dim prisetA() As String ' 文字列型の配列を宣言
+    prisetA = Split("K2,M5", ",") ' パスのアドレス,書き込み開始位置アドレス
+    prisetB = Split("K49,M52", ",") ' パスのアドレス,書き込み開始位置アドレス
+    Dim paramList(1 To 2) As Variant ' 変数型の配列を宣言
+    ' プリセットデータを配列へ
+    paramList(1) = prisetA
+    paramList(2) = prisetB
+    ' 引数Numberより、使用するプリセットを選択する
+    ' -1の場合はすべてのリストを取得する（2次元配列）
+    If number < 0 Then
+        GetPresetData = paramList
+        Exit Function
+    End If
+    ' 番号指定の場合は1つのプリセットを取得する（1次元配列）
+    GetPresetData = paramList(number)
+End Function
+
+
+Private Sub UpdateOrCreateQueryTableByNumber(number As Integer)
+    '番号からプリセットデータを取得（番号のみを設定する）
+'    Dim Number As Integer: Number = 1
+    PresetData = GetPresetData(number)
+    '読み込みファイルパスを取得
+    Dim filePath As String
+    filePath = Range(PresetData(0)).Value
+    '書き込み開始アドレスを取得
+    Dim writeBegin As String
+    writeBegin = PresetData(1)
+'    Debug.Print filePath
+'    Debug.Print WriteBegin
+    'CSVを読み込み、データに張り付け、（QueryTable接続をする）
+    'すでに同じファイルパスのQueryTableがすでにある場合は、更新する（QueryTable新規追加はしない）
+    '（追加したい場合は、Deleteしてから）
+    UpdateOrCreateQueryTable ActiveSheet.Name, filePath, writeBegin
+End Sub
+
+Private Sub DeleteQueryTableCsvByNumber(number As Integer)
+    '番号からプリセットデータを取得（番号のみを設定する）
+'    Dim Number As Integer: Number = 1
+    PresetData = GetPresetData(number)
+    '読み込みファイルパスを取得
+    Dim filePath As String
+    filePath = Range(PresetData(0)).Value
+    '書き込み開始アドレスを取得
+    Dim writeBegin As String
+    writeBegin = PresetData(1)
+'    Debug.Print filePath
+'    Debug.Print WriteBegin
+    'CSVを読み込み、データに張り付け、（QueryTable接続をする）
+    'すでに同じファイルパスのQueryTableがすでにある場合は、更新する（QueryTable新規追加はしない）
+    '（追加したい場合は、Deleteしてから）
+    DeleteQueryTableCsv ActiveSheet.Name, filePath, writeBegin
+End Sub
+
+Private Sub CommandButton1_Click()
+    UpdateOrCreateQueryTableByNumber 1
+End Sub
+
+Private Sub CommandButton2_Click()
+    DeleteQueryTableCsvByNumber 1
+End Sub
+
+Private Sub CommandButton3_Click()
+    UpdateOrCreateQueryTableByNumber 2
+End Sub
+
+Private Sub CommandButton4_Click()
+    DeleteQueryTableCsvByNumber 2
+End Sub
+
+Private Sub Worksheet_Activate()
+    'ワークシートからフラグを見つけて、ONならクエリをすべて更新する
+    Debug.Print "Workbook_SheetActivate"
+    Dim findValue As String: findValue = "ワークブックアクティブ時Table更新フラグ"
+    Dim matchRange As Range
+    Set matchRange = ThisWorkbook.ActiveSheet.UsedRange _
+        .Find(What:=findValue, LookAt:=xlWhole, SearchOrder:=xlByRows)
+    If matchRange Is Nothing Then
+        MsgBox findValue & " が見つかりません。"
+        Exit Sub
+    Else
+        Set matchRange = matchRange.Offset(0, 1)
+        FlagInt = Int(matchRange.Value)
+    End If
+    If FlagInt > 0 Then
+        Dim PrisetDataList As Variant
+        PrisetDataList = GetPresetData(-1)
+        For i = LBound(PrisetDataList) To UBound(PrisetDataList)
+            Debug.Print "  > Query Update > Number=" & Str(i)
+            UpdateOrCreateQueryTableByNumber (i)
+        Next
+        Debug.Print "Updated Table"
+    End If
+End Sub
+
+'Private Sub CommandButton2_Click()
+'    Dim Number As Integer: Number = 1
+'    PresetData = GetPresetData(Number)
+'    'プリセットデータから開始位置を取得
+'    Dim WriteBegin As String
+'    WriteBegin = PresetData(1)
+'    '左側グレーのガイドの初期位置(TOP)を記憶
+'    Dim TopRange As Range
+'    Set TopRange = Range(WriteBegin).Offset(0, -1)
+'    '左側グレーのガイドの下限位置(BOTTOM)を記憶
+'    Dim BottomRange As Range
+'    Set BottomRange = TopRange.End(xlDown)
+'    'データ削除の対象の位置に移動
+'    Set TopRange = TopRange.Offset(0, 1)
+'    Set BottomRange = BottomRange.Offset(0, 1)
+'End Sub

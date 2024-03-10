@@ -46,6 +46,11 @@ W（週次）は毎日曜日が対象となるが、W-MONのように任意の�
 四半期Q、年次AまたはYでは終了月あるいは開始月をQ-FEBのように指定できる。
 毎月の第何週目の曜日を指定できる。WOM-4FRIのようにWOM-<第何週かの数値><曜日>で指定する。
 100Dは100日ごと、100Bは100営業日ごと、10Wは10週ごとの日曜日、10W-WEDは10週ごとの水曜日、2Mは隔月、90Tは90分ごととなる。
+
+
+#http://ailaby.com/date_range/
+
+
 """
 
 
@@ -77,10 +82,10 @@ df = pd.DataFrame(DF_TEST_DATA_B, columns=DF_TEST_DATA_COLUMNS)
 # 'Date'列をdatetime型に変換
 df['Date'] = pd.to_datetime(df['Date'])
 
-# 日付範囲を指定
+# 日付範囲から1日ごとのDataFrameを作成する
 df_check_date = pd.date_range('2023-11-01', '2023-11-08', freq='D')
 
-# 日付範囲内のデータをフィルタリング
+# 元データを日付範囲のデータでフィルターを掛ける
 df_filtered = df[df['Date'].isin(df_check_date)]
 
 # 日付でソート

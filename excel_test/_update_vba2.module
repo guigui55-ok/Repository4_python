@@ -38,3 +38,19 @@ Sub UpdateOrCreateQueryTable(sheetName As String, filePath As String, destinatio
 '        Debug.Print ("Create Query")
     End If
 End Sub
+
+'##############################################
+
+Private Sub CommandButton1_Click()
+    Dim FilePath As String
+    FilePath = Range("O2").Value
+    UpdateOrCreateQueryTable ActiveSheet.Name, FilePath, "N5"
+End Sub
+
+
+Private Sub Workbook_SheetActivate(ByVal Sh As Object)
+
+End Sub
+
+
+

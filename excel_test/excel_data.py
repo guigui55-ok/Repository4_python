@@ -404,9 +404,20 @@ def get_a1_address_from_cell(cell:Cell):
     """ A1形式のアドレスを取得する """
     return cell.coordinate
 
+def get_row_and_col_from_any(address:Union[str, Cell]):
+    """
+    A1形式のアドレスを行と列に分割する(Cellでも対応可)
+
+    Memo:
+        'A1:B5' は A1(row=1,col=1) を返す
+    Returns:
+        int, int  :  row_number, column_number
+    """
+    return get_row_and_col_from_a1_address(address)
+
 def get_row_and_col_from_a1_address(address:Union[str, Cell]):
     """
-    A1形式のアドレスを行と列に分割する
+    A1形式のアドレスを行と列に分割する(Cellでも対応可)
 
     Memo:
         'A1:B5' は A1(row=1,col=1) を返す
@@ -778,6 +789,19 @@ def get_table_address(value_list:'list[Union[str,Cell]]'):
     end_address = get_a1_address_from_row_and_col(max_row, max_col)
     return begin_address + ':' + end_address
 
+
+def get_max_address(value_list:'list[Union[str,Cell]]'):
+    """ 引数のリストの中の最大行と最大列のセルを取得する """
+    max_row, max_col = 0,0
+    for value in value_list:
+        row, col = get_row_and_col_from_any(value)
+        if max_row <= row:
+            max_row = row
+        if max_col <= col:
+            max_col = col
+    ret = get_a1_address_from_row_and_col(max_row, max_col)
+    return ret
+
 def get_begin_and_end_cell_in_range(sheet:Worksheet, value_list:'list[Union[str,Cell]]'):
     """ 複数のA1形式アドレスのリストから矩形のアドレスを探して、そのbeginとendのCell取得する """
     begin_address, end_address = get_begin_and_end_address_in_range(value_list)
@@ -1049,10 +1073,11 @@ class ExcelSheetDataUtil():
     class ConstExcel(ConstExcel):
         pass
 
-    def __init__(self, file_path:str, sheet_name:str, data_only:bool=True) -> None:
-        self.__init_param(file_path, sheet_name, data_only)
+    def __init__(self, file_path:str, sheet_name:str, data_only:bool=True, debug:bool=None) -> None:
+        self.__init_param(file_path, sheet_name, data_only, debug)
     
-    def __init_param(self, file_path:str, sheet_name:str, data_only:bool):
+    def __init_param(self, file_path:str, sheet_name:str, data_only:bool, debug:bool=None):
+        self.debug = debug
         self.set_workbook(file_path, data_only)
         self.set_sheet(sheet_name)
         self._update_valid_cell_in_sheet()
@@ -1122,20 +1147,30 @@ class ExcelSheetDataUtil():
             return
         self.file_path = str(file_path)
         if file_path!=None:
+            if self.debug:
+                print('# read_file_path = {}'.format(file_path))
             if not Path(file_path).exists():
                 raise FileNotFoundError(file_path)
             self.book = openpyxl.load_workbook(file_path, data_only=data_only)
         else:
+            if self.debug:
+                print('# read_file_path = {}'.format(None))
             self.book = None
 
-    def set_workbook_with_pass(self, file_path, password, data_only:bool, out_put_file_path=None):
+    def set_workbook_with_pass(self, file_path, password, data_only:bool, out_put_file_path=None, debug:bool=None):
         """パスワード付きExcelファイルを読み込む"""
         decrypted = io.BytesIO()
-        with open(file_path, 'rb') as fp:
+        if self._get_debug(debug):
+            print('* read_file_path = {}'.format(file_path))
+            print('  data_only = {}'.format(data_only))
+            print('  password = {}'.format(password))
+        with open(str(file_path), 'rb') as fp:
             msfile = msoffcrypto.OfficeFile(fp)
             msfile.load_key(password=password)
             msfile.decrypt(decrypted)
         if out_put_file_path==None:
+            if self._get_debug(debug):
+                print('* out_put_file_path = {}'.format(out_put_file_path))
             file_name = Path(file_path).stem + '_unlock' + Path(file_path).suffix
             out_put_file_path = Path(file_path).parent.joinpath(file_name)
         # 暗号解除した後ファイルに保存

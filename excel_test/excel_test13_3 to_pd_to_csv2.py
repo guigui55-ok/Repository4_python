@@ -26,13 +26,6 @@ _IS_SHIFT_JIS = True
 def main():
     print('*範囲データをCSVにする')
     file_name = _FILE_NAME
-    # file_name = 'myworkbook.xlsm'
-    ### 書き込み処理するときは念のためバックアップ
-    import shutil
-    back_path = Path(__file__).parent.joinpath('back')
-    back_path.mkdir(exist_ok=True)
-    shutil.copy(file_name, back_path)
-    ###
     sheet_name = _SHEET_NAME
     ex_data = ExcelSheetDataUtil(file_name, sheet_name, data_only=True)
 
@@ -48,7 +41,6 @@ def main():
     print('range_address = {}'.format(ex_data.range_address))
 
     df = ex_data.get_values_from_range_address_pd(ex_data.range_address, columns=1)
-
     print('df = ')
     print(df.columns)
     print(df.values)
@@ -58,12 +50,10 @@ def main():
     if _IS_SHIFT_JIS:
         path = Path(_OUTPUT_CSV_FILE_NAME)
         file_name = path.stem + '_sjis' + path.suffix
-        w_path = str(Path(__file__).parent.joinpath(file_name))
-        df.to_csv(w_path, encoding="shift_jis") 
     else:
         file_name = _OUTPUT_CSV_FILE_NAME
-        w_path = str(Path(__file__).parent.joinpath(file_name))
-        df.to_csv(w_path)
+    w_path = str(Path(__file__).parent.joinpath(file_name))
+    df.to_csv(w_path)
     print('###')
     print('write_csv_path = {}'.format(w_path))
 
