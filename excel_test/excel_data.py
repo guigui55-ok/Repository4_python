@@ -1192,6 +1192,27 @@ class ExcelSheetDataUtil():
         """
         self.book.save(self._get_file_path(file_path))
 
+    def create_new_file(
+            self,
+            file_path:str,
+            sheet_name:str,
+            set_self:bool=True,
+            data_only:bool=False,
+            debug:bool=None):
+        """
+        新規ファイルを作成する（xlsx）のみ対応
+         （xlsmは非対応）
+        
+        Args:
+            set_self : 新規作成した後、workbook,sheetなどをselfにセットする
+        """
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        sheet.title = sheet_name
+        workbook.save(file_path)
+        if set_self:
+            self.__init_param(file_path, sheet_name, data_only, debug)
+
     def close(self):
         if self.book!=None:
             self.book.close()
@@ -1683,6 +1704,10 @@ class ExcelSheetDataUtil():
             address = self.address
         return set_cell_value(self.sheet, address, value)
 
+    def set_value_offset(self, value:str, offset_row:int=0, offset_col:int=0):
+        cell = self.get_offset_cell(offset_row, offset_col)
+        return self.set_value(value, cell.coordinate)
+
     def copy_value(self, src_cell:Union[Cell,'ExcelSheetDataUtil'], style:bool=False, exists_only:bool=True):
         """
         引数src_cellから self.addressに値をコピーする
@@ -1892,6 +1917,9 @@ class ExcelSheetDataUtil():
             cell_values_np,
             columns=columns, index=index)
         return df
+
+    def write_to_cell_by_pd(self):
+        raise NotImplementedError()
 
     @classmethod
     def _cnv_datetime(cls, value:str):

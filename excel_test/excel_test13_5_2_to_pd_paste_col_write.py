@@ -124,6 +124,8 @@ print('begin_cell_buf = {}'.format(begin_cell_buf))
 # print(begin_cell_buf)
 # ex_data.reset_book_sheet(data_only=False)
 cells_2d = ex_data.get_entire_col_in_range_by_cell(begin_cell_buf)
+# cells_2d:list[numpy.ndarray]
+print('格納先のCellをリスト[cells_2d]にすべて取得しておいて、そこにdfのfor文で直接Cell.Valueに入れていく')
 from openpyxl.cell import Cell
 cell:Cell=None
 df = df_a['Result']

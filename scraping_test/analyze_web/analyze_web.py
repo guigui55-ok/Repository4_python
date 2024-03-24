@@ -182,8 +182,8 @@ def test_main():
     wd_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
 
     target_url = 'http://192.168.1.9:5000/temp'
-    target_url = 'http://127.0.0.1:5000/submit_top'
-    target_url = 'https://www.youtube.com/watch?v=50TXCo4MDy0'
+    target_url = '//127.0.0.1:5000/submit_top'
+    target_url = 'https://www.youtube.com/watch?v=00AAAo4AAa0'
 
     log_dir_path = str(pathlib.Path(__file__).parent.joinpath('log'))
     log_dir_name = get_log_dir_name()

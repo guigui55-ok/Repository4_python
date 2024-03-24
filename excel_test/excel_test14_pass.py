@@ -16,6 +16,6 @@ ex_data.set_workbook_with_pass(file_path, password=password, data_only=True)
 ex_data.set_sheet(sheet_name)
 ex_data._update_valid_cell_in_sheet()
 
-print('*結合セル取得')
+print('*セル取得')
 val = ex_data.get_value('A1')
 print('val = {}'.format(val))
