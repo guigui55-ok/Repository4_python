@@ -39,6 +39,7 @@ df_a = ex_data.get_values_from_range_address_pd(ex_data.range_address, columns=1
 
 print('df_a = ')
 print(df_a.columns)
+print(df_a.shape)
 
 ################################################################################
 ################################################################################
@@ -61,33 +62,30 @@ df_b = ex_data.get_values_from_range_address_pd(ex_data.range_address, columns=1
 
 print('df_b = ')
 print(df_b.columns)
+print(df_b.shape)
 ################################################################################
+################################################################################
+print('シートを追加（式を保持するためにファイルを読み直す')
+ex_data.reset_book_sheet(data_only=False)
+ex_data.add_sheet('項目書C')
+print()
+ex_data.save_book()
+print()
 ################################################################################
 import pandas as pd
+print()
+print('######')
+print('項番 列を文字列型に変換して、A>Bにマージする')
 # 'ID'列を文字列型に変換
 df_a['項番'] = df_a['項番'].astype(str)
 df_b['項番'] = df_b['項番'].astype(str)
 
 # df_aとdf_bを'ID'列を基にして結合
-df = pd.merge(df_a, df_b, on='ID', how='left')
+# df = pd.merge(df_a, df_b, on='ID', how='left')
+df = pd.merge(df_b, df_a, on='項番', how='left')
+print('df = ')
+print(df)
+################################################################################
+################################################################################
 
-# import datetime
-# def cnv_date_str(value):
-#     buf = ExcelSheetDataUtil._cnv_datetime(value)
-#     if isinstance(buf , datetime.datetime):
-#         return buf.strftime('%y/%m/%d')
-#     else:
-#         return buf
-
-# df['カテゴリA'] = df['カテゴリA'].map(cnv_date_str)
-# df['カテゴリB'] = df['カテゴリB'].map(cnv_date_str)
-# print(df.values)
-
-# target_date = datetime.datetime(year=2024, month=1, day=19).strftime('%y/%m/%d')
-# # target_date = '24/1/19' # KeyError
-# df_cat_a = df['カテゴリA'].value_counts()
-# print('df_cat_a = ')
-# print(df_cat_a)
-# count = df_cat_a[target_date]
-# print('カテゴリA [{}] = {}'.format(target_date ,count))
 

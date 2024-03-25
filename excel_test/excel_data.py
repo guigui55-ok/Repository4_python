@@ -1206,9 +1206,12 @@ class ExcelSheetDataUtil():
         Args:
             set_self : 新規作成した後、workbook,sheetなどをselfにセットする
         """
-        workbook = openpyxl.Workbook()
-        sheet = workbook.active
-        sheet.title = sheet_name
+        workbook = openpyxl.Workbook() 
+        # workbook.create_sheet()
+        names = workbook.get_sheet_names()#この時シートの状態は['Sheet']となっている
+        # sheet = workbook.active
+        workbook.worksheets[0].title = sheet_name
+        names_b = workbook.get_sheet_names()
         workbook.save(file_path)
         if set_self:
             self.__init_param(file_path, sheet_name, data_only, debug)
@@ -2083,6 +2086,12 @@ class ExcelSheetDataUtil():
         if cell_list.ndim == 1:
             cell_list = [cell_list]
         return cell_list
+
+    def add_sheet(self, add_sheet_name:str):
+        names = self.book.get_sheet_names()
+        self.book.create_sheet(add_sheet_name)
+        names_b = self.book.get_sheet_names()
+        ''#debug用
 
 ##########################################################################################
 ##########################################################################################
