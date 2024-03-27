@@ -39,6 +39,21 @@ Excel 2019
 1,048,576	16,384
 """
 
+class ConstExcel():
+    #1つのSheetの最大列、最大行を決める
+    MAX = 32767
+    EXCEL_ROW_MAX = 1048576
+    EXCEL_COLUMN_MAX = 16384
+    # pandasでデータを取得するときに、strに格納するか、StrCellに格納するかを指定するときに使用する
+    MODE_VALUE_STR_CELL = 1
+    MODE_VALUE_STR = 2
+    MODE_VALUE_STR_CELL_EX = 2
+    # 何か処理の時に、ROW、COLを分岐させるときに使用する
+    ROW = 1
+    COLUMN = 2
+    COL = COLUMN
+    STYLE_NORMAL = '標準'
+
 _MAX = 32767
 _EXCEL_ROW_MAX = 1048576
 _EXCEL_COLUMN_MAX = 16384
@@ -500,9 +515,55 @@ def _value_is_blank(value):
     if value == None:
         is_blank = True
     return is_blank
+## END Local Method
+######################################################################
+######################################################################
+## Classes
 
-######################################################################
-######################################################################
+class StrCell(str):
+    """
+    文字列として振る舞い、Cellをメンバに保持するクラス
+     pandasなどで扱うときに、値以外にもCell内の書式などのデータもも扱いたいため、
+      このクラスを使用してCellとValueを扱う。
+    """
+    def __init__(self, cell) -> None:
+        if isinstance(cell, Cell):
+            self = StrCell(str(cell.value))
+            self.cell = cell
+        elif isinstance(cell, str):
+            super().__init__()
+            self = str(cell)
+        else:
+            self.cell = None
+        str
+        
+    # def __str__(self):
+    #     try:
+    #         if self.cell == None:
+    #             return ''
+    #         self.cell.value
+    #     except AttributeError:
+    #         return ''
+
+   
+# class StrCell(str):
+#     """
+#     文字列として振る舞い、Cellをメンバに保持するクラス
+#      pandasなどで扱うときに、値以外にもCell内の書式などのデータもも扱いたいため、
+#       このクラスを使用してCellとValueを扱う。
+#     """
+#     def __init__(self, value:str, cell:Cell) -> None:
+#         if isinstance(cell, Cell):
+#             self = StrCell(str(value))
+#             self.cell = cell
+#         elif isinstance(cell, str):
+#             super().__init__()
+#             self = str(value)
+#         else:
+#             self.cell = None
+#         ''
+#         str
+
 class SimpleCellInfo():
     """ セルの値を扱う（簡単な処理をするときに使用する） """
     def __init__(self) -> None:
@@ -536,11 +597,6 @@ class TwoCellsInfo():
         self.end_cell.row = max_row
         self.end_cell.col = max_col
 
-class ConstExcel():
-    ROW = 1
-    COLUMN = 2
-    COL = COLUMN
-    STYLE_NORMAL = '標準'
 
 class Direction():
     LEFT = 1 << 0  # 0000000001 in binary
@@ -564,6 +620,9 @@ class Direction():
             if _DEBUG:
                 print('flag = Direction.UP')
 
+### End Classes
+######################################################################
+### Local Method2
 def _set_dirction(direction):
     """ 方向をセットする、何もない場合はRIGHT,BOTTOMとする """
     horizon = None
@@ -1045,7 +1104,7 @@ def get_values_from_range_address_np(book:Workbook, sheet:Worksheet, range_addre
             cell_values_list = np.vstack((cell_values_list, data_rows))
     return cell_values_list
 
-
+### End Local Method2
 ################################################################################
 ################################################################################
 ################################################################################
@@ -1865,7 +1924,7 @@ class ExcelSheetDataUtil():
         """
         return _get_cell_address(cell)
 
-    def get_values_from_range_address_np(self, range_address:str=None):
+    def get_values_from_range_address_np(self, range_address:str=None, mode=ConstExcel.MODE_VALUE_STR_CELL):
         """
         矩形のセルからすべて値を取得する
 
@@ -1887,7 +1946,16 @@ class ExcelSheetDataUtil():
             row += 1
             data_rows = np.zeros(col_amount, dtype=object) #型指定しないと数値となる
             for i, col in enumerate(range(begin_col, end_col+1)):
-                value = self.get_value_r1c1(row, col)
+                value_str = self.get_value_r1c1(row, col)
+                if mode==ConstExcel.MODE_VALUE_STR:
+                    value = value_str
+                else:
+                    # デフォルトはStrCellで扱う
+                    # elif ConstExcel.MODE_VALUE_STR_CELL
+                    # value = StrCell(value_str, cell=self.get_cell_r1c1(row, col))
+                    # value = StrCell(self.get_cell_r1c1(row, col))
+                    value = StrCell(value_str)
+                    value.cell = self.get_cell_r1c1(row, col)
                 np.put(data_rows, [i], value)
             # data_rowsを cell_values_list に追加する
             if cell_values_list.size < 1:
@@ -1899,7 +1967,7 @@ class ExcelSheetDataUtil():
 
 
     def get_values_from_range_address_pd(
-            self, range_address:str=None, columns:int=None, index:int=None):
+            self, range_address:str=None, columns:int=None, index:int=None, mode=ConstExcel.MODE_VALUE_STR_CELL):
         """
         矩形のセルからすべて値を取得する
 
@@ -1909,7 +1977,7 @@ class ExcelSheetDataUtil():
             pandas.DataFrame
         """
         import pandas as pd
-        cell_values_np = self.get_values_from_range_address_np(range_address)
+        cell_values_np = self.get_values_from_range_address_np(range_address, mode=mode)
         if columns!=None:
             columns = cell_values_np[0]
             cell_values_np = cell_values_np[1:]
@@ -1929,10 +1997,19 @@ class ExcelSheetDataUtil():
         if isinstance(value, str):
             if not value.isdigit():
                 return value
+            else:
+                value = int(value)
+        elif isinstance(value, StrCell):
+            if not str(value).isdigit():
+                return str(value)
+            else:
+                value = str(value).__int__()
         elif isinstance(value, int):
             pass
         else:
             return value
+        # return(datetime(1899, 12, 30) + timedelta(days=value))
+        # return(datetime(1899, 12, 30) + timedelta(days=str(value))) #TypeError: unsupported type for timedelta days component: str
         return(datetime(1899, 12, 30) + timedelta(days=value))
     
     def copy_self(self, cell_or_address_value:'Union[str,Cell]'=None)->'ExcelSheetDataUtil':
@@ -2093,6 +2170,11 @@ class ExcelSheetDataUtil():
         names_b = self.book.get_sheet_names()
         ''#debug用
 
+    def get_str_cell_obj(self):
+        """ 保持しているself.cell を StrCell class で取得する """
+        return StrCell(self.cell)
+
+### End ExcelSheetDataUtil class
 ##########################################################################################
 ##########################################################################################
 ##########################################################################################

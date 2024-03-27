@@ -25,7 +25,9 @@ print('buf_bottom_address = {}'.format(buf_bottom_address))
 ex_data.set_range_address([buf_right_address, buf_bottom_address])
 print('range_address = {}'.format(ex_data.range_address))
 
-df = ex_data.get_values_from_range_address_pd(ex_data.range_address, columns=1)
+import excel_data 
+df = ex_data.get_values_from_range_address_pd(
+    ex_data.range_address, columns=1, mode=excel_data.ConstExcel.MODE_VALUE_STR_CELL)
 
 print('df = ')
 print(df.columns)
