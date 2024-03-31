@@ -213,8 +213,8 @@ class SimpleCellInfo():
 class TwoCellsInfo():
     """ 2つのセルの値を扱う（主にBegin,Endの矩形アドレスを扱う想定） """
     def __init__(self) -> None:
-        self.begin_cell = SimpleCellInfo()
-        self.end_cell = SimpleCellInfo()
+        self.begin_cell:Cell = None
+        self.end_cell:Cell = None
     
     def set_row_col(self, min_row, min_col, max_row, max_col):
         self.begin_cell.row = min_row
@@ -472,10 +472,10 @@ class ExcelSheetDataUtil():
 
     def _update_valid_cell_in_sheet(self):
         """ WorkSheetの有効なセルの値を更新する """
-        self.valid_cell = TwoCellsInfo()
+        self.valid_cells = TwoCellsInfo()
         if self.sheet==None:
             return
-        self.valid_cell.set_row_col(
+        self.valid_cells.set_row_col(
             min_row=self.sheet.min_row,
             min_col=self.sheet.min_column,
             max_row=self.sheet.max_row,
@@ -558,7 +558,7 @@ class ExcelSheetDataUtil():
         else:
             if update_info:
                 self._update_valid_cell_in_sheet()
-            return self.valid_cell.end_cell.col
+            return self.valid_cells.end_cell.column
 
     def _get_loop_max_row(self, update_info:bool=False):
         if self.loop_max_row!=None:
@@ -566,7 +566,7 @@ class ExcelSheetDataUtil():
         else:
             if update_info:
                 self._update_valid_cell_in_sheet()
-            return self.valid_cell.end_cell.row
+            return self.valid_cells.end_cell.row
 
     def get_range_address(self, direction=Direction.RIGHT|Direction.DOWN):
         """

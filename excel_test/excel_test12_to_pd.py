@@ -46,17 +46,29 @@ df = ex_data.get_values_from_range_address_pd(ex_data.range_address, columns=1)
 print('df = ')
 print(df.columns)
 
+from excel_data import StrCell
 import datetime
 def cnv_date_str(value):
     buf = ExcelSheetDataUtil._cnv_datetime(value)
     if isinstance(buf , datetime.datetime):
-        return buf.strftime('%y/%m/%d')
+        ret = StrCell(buf.strftime('%y/%m/%d'))
+        ret.cell = value.cell
     else:
-        return buf
+        ret = buf
+    # print(' * ret type = {}, {}'.format(type(ret), ret))
+    return ret
+    
+data = df['カテゴリA'].loc[0]
+print('data.cell.coordinate = ')
+print(data.cell.coordinate)
 
 df['カテゴリA'] = df['カテゴリA'].map(cnv_date_str)
 df['カテゴリB'] = df['カテゴリB'].map(cnv_date_str)
 print(df.values)
+
+data = df['カテゴリA'].loc[0]
+print('data.cell.coordinate = ')
+print(data.cell.coordinate)
 
 target_date = datetime.datetime(year=2024, month=1, day=19).strftime('%y/%m/%d')
 # target_date = '24/1/19' # KeyError

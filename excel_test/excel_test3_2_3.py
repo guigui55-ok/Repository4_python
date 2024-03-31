@@ -1059,10 +1059,10 @@ class ExcelSheetDataUtil():
 
     def _update_valid_cell_in_sheet(self):
         """ WorkSheetの有効なセルの値を更新する """
-        self.valid_cell = TwoCellsInfo()
+        self.valid_cells = TwoCellsInfo()
         if self.sheet==None:
             return
-        self.valid_cell.set_row_col(
+        self.valid_cells.set_row_col(
             min_row=self.sheet.min_row,
             min_col=self.sheet.min_column,
             max_row=self.sheet.max_row,
@@ -1144,7 +1144,7 @@ class ExcelSheetDataUtil():
             find_begin_address = 'A1'
         if find_end_address==None:
             find_end_address = get_a1_address_from_row_and_col(
-                self.valid_cell.end_cell.row, self.valid_cell.end_cell.col)
+                self.valid_cells.end_cell.row, self.valid_cells.end_cell.col)
         # address_list = ExcelSheetDataUtil.find_value(
         #     self.sheet, keyword, find_begin_address, find_end_address, debug)
         address_list = CellUtil.get_address_list_by_find_keyword(
@@ -1331,7 +1331,7 @@ class ExcelSheetDataUtil():
         else:
             if update_info:
                 self._update_valid_cell_in_sheet()
-            return self.valid_cell.end_cell.col
+            return self.valid_cells.end_cell.col
 
     def _get_loop_max_row(self, update_info:bool=False):
         if self.loop_max_row!=None:
@@ -1339,7 +1339,7 @@ class ExcelSheetDataUtil():
         else:
             if update_info:
                 self._update_valid_cell_in_sheet()
-            return self.valid_cell.end_cell.row
+            return self.valid_cells.end_cell.row
 
     def get_range_address(self, direction=Direction.RIGHT|Direction.DOWN):
         """
@@ -1439,14 +1439,14 @@ class ExcelSheetDataUtil():
             re_ret = re.search('[1-9]{1,8}', self.address)
             row_str = re_ret.group()
             begin_address = 'A' + row_str
-            col_max = get_column_letter(self.valid_cell.end_cell.col)
+            col_max = get_column_letter(self.valid_cells.end_cell.col)
             end_address = col_max + row_str
         elif opt==ConstExcel.COL:
             # col
             re_ret = re.search('[a-zA-Z]{1,3}', self.address)
             col_str = re_ret.group()
             begin_address = col_str + '1'
-            end_address = col_str + str(self.valid_cell.end_cell.row)
+            end_address = col_str + str(self.valid_cells.end_cell.row)
         self.address = begin_address + ':' + end_address
         return self.address
 

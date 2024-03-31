@@ -81,6 +81,8 @@ def get_cell_value(sheet:Worksheet, value:'Union[str,Cell]'):
 def get_cell_value_r1c1(sheet:Worksheet, row:int, col:int):
     """
     セルのデータを取得（R1C1形式）
+
+    Returns: Cell
     """
     try:
         val = sheet.cell(row=row, column=col).value
@@ -467,6 +469,9 @@ def get_cells(sheet:Worksheet, *args):
         *args:
             第1引数がstrならA1形式
             第1引数、第2引数がintならR1C1形式
+    
+    Retruns:
+        Cell
     """
     # 引数の最初が数値ならR1C1形式を採用、
     # この場合2つ目も読み取り、それぞれをrow,colとして扱う
@@ -515,6 +520,11 @@ def _value_is_blank(value):
     if value == None:
         is_blank = True
     return is_blank
+
+def reset_cell(cell:Cell):
+    """セルをリセットする（文字を消して、書式を'標準'にする"""
+    cell.value=None
+    cell.style=ConstExcel.STYLE_NORMAL
 ## END Local Method
 ######################################################################
 ######################################################################
@@ -523,20 +533,83 @@ def _value_is_blank(value):
 class StrCell(str):
     """
     文字列として振る舞い、Cellをメンバに保持するクラス
-     pandasなどで扱うときに、値以外にもCell内の書式などのデータもも扱いたいため、
-      このクラスを使用してCellとValueを扱う。
     """
-    def __init__(self, cell) -> None:
-        if isinstance(cell, Cell):
-            self = StrCell(str(cell.value))
-            self.cell = cell
-        elif isinstance(cell, str):
-            super().__init__()
-            self = str(cell)
+    def __new__(cls, value):
+        if isinstance(value, Cell):
+            _value = value.value
         else:
-            self.cell = None
-        str
+            _value = value
+        obj = str.__new__(cls, str(_value))
+        obj.cell = value
+        return obj
+
+    def __init__(self, value:Cell=None):
+        # str クラスはイミュータブルであるため、__init__ での初期化は不要です。
+        # cell のセットアップは __new__ で行います。
+        self.cell = self.cell
+        super().__init__()
+
+# class StrCell(str):
+#     """
+#     文字列として振る舞い、Cellをメンバに保持するクラス
+#      pandasなどで扱うときに、値以外にもCell内の書式などのデータもも扱いたいため、
+#       このクラスを使用してCellとValueを扱う。
+#     """
+#     def __new__(cls, value):
+#         #     self = object.__new__(cls)
+#         # TypeError: object.__new__(StrCell) is not safe, use str.__new__()
+#         if isinstance(value, Cell):
+#             self = str.__new__(cls, str(value.value))
+#         else:
+#             self = str.__new__(cls, value)
+#         # cls.cell = None
+#         # self.__init__(value)
+#         self.__set_cell(value)
+#         pass
+
+#     def __init__(self, cell) -> None:
+#         self.cell = cell
+#         if isinstance(cell, Cell):
+#             self = StrCell(str(cell.value))
+#             self.cell = cell
+#         elif isinstance(cell, str):
+#             super().__init__()
+#             self = str(cell)
+#             # self.cell = None
+#         else:
+#             self.cell = None
+#         str
+#     def __set_cell(self, value):
+#         if isinstance(value, Cell):
+#             self.cell = value
+#         else:
+#             self.cell = None
+    #####
         
+    # def __new__(cls, value):
+    #     #     self = object.__new__(cls)
+    #     # TypeError: object.__new__(StrCell) is not safe, use str.__new__()
+    #     if isinstance(value, Cell):
+    #         self = StrCell(str(value.value))
+    #         self.cell = cell
+    #     self = str.__new__(cls)
+    #     # cls.cell = None
+    #     self.__init__(value)
+    #     pass
+    # def __init__(self, cell) -> None:
+    #     self.cell = cell
+    #     if isinstance(cell, Cell):
+    #         self = StrCell(str(cell.value))
+    #         self.cell = cell
+    #     elif isinstance(cell, str):
+    #         super().__init__()
+    #         self = str(cell)
+    #         # self.cell = None
+    #     else:
+    #         self.cell = None
+    #     str
+    
+    #####
     # def __str__(self):
     #     try:
     #         if self.cell == None:
@@ -570,6 +643,15 @@ class SimpleCellInfo():
         self.row = 0
         self.col = 0
         self.address = ''
+    def set_row_and_col(self, row, col):
+        self.row = row
+        self.col = col
+        self.address = get_a1_address_from_row_and_col(row, col)
+    def set_address(self, a1_address):
+        self.address = a1_address
+        row, col = get_row_and_col_from_a1_address(a1_address)
+        self.row = row
+        self.col = col
 
 
 class TwoCellsInfo():
@@ -585,18 +667,17 @@ class TwoCellsInfo():
         self.end_cell.col = max_col
 
 
-class TwoCellsInfo():
+class TwoCells():
     """ 2つのセルの値を扱う（主にBegin,Endの矩形アドレスを扱う想定） """
     def __init__(self) -> None:
-        self.begin_cell = SimpleCellInfo()
-        self.end_cell = SimpleCellInfo()
+        self.begin_cell:Cell = None
+        self.end_cell:Cell = None
     
-    def set_row_col(self, min_row, min_col, max_row, max_col):
-        self.begin_cell.row = min_row
-        self.begin_cell.col = min_col
-        self.end_cell.row = max_row
-        self.end_cell.col = max_col
-
+    def set_row_col(self, sheet:Worksheet, min_row, min_col, max_row, max_col):
+        # self.begin_cell.set_row_and_col(min_row, min_col)
+        # self.end_cell.set_row_and_col(max_row, max_col)
+        self.begin_cell = get_cells(sheet, min_row, min_col)
+        self.end_cell = get_cells(sheet, max_row, max_col)
 
 class Direction():
     LEFT = 1 << 0  # 0000000001 in binary
@@ -1073,7 +1154,11 @@ def get_values_from_range_address(book:Workbook, sheet:Worksheet, range_address:
     return cell_values_list
 
 
-def get_values_from_range_address_np(book:Workbook, sheet:Worksheet, range_address:str):
+def get_values_from_range_address_np(
+        book:Workbook,
+        sheet:Worksheet,
+        range_address:str=None,
+        mode=ConstExcel.MODE_VALUE_STR_CELL):
     """
     矩形のセルからすべて値を取得する
 
@@ -1095,7 +1180,16 @@ def get_values_from_range_address_np(book:Workbook, sheet:Worksheet, range_addre
         row += 1
         data_rows = np.zeros(col_amount, dtype=object) #型指定しないと数値となる
         for i, col in enumerate(range(begin_col, end_col+1)):
-            value = ex_data.get_value_r1c1(row, col)
+            value_str = set_cell_value_r1c1(sheet, row, col)
+            if mode==ConstExcel.MODE_VALUE_STR:
+                value = value_str
+            else:
+                # デフォルトはStrCellで扱う
+                # elif ConstExcel.MODE_VALUE_STR_CELL
+                # value = StrCell(value_str)
+                # value.cell = self.get_cell_r1c1(row, col)
+                cell = get_cells(sheet, row, col)
+                value = StrCell(cell)
             np.put(data_rows, [i], value)
         # data_rowsを cell_values_list に追加する
         if cell_values_list.size < 1:
@@ -1103,6 +1197,60 @@ def get_values_from_range_address_np(book:Workbook, sheet:Worksheet, range_addre
         else:
             cell_values_list = np.vstack((cell_values_list, data_rows))
     return cell_values_list
+
+
+def reset_cells(sheet:Worksheet, begin_address:str, end_address:str):
+    cells = sheet[begin_address : end_address]
+    cell:Cell=None
+    for rows in cells:
+        for cell in rows:
+            cell.value = None
+            cell.style = ConstExcel.STYLE_NORMAL
+
+def copy_cell(
+        src_cell:Union[Cell,'ExcelSheetDataUtil'],
+        dist_cell:Union[Cell,'ExcelSheetDataUtil'],
+        style:bool=False):
+    """
+    引数src_cellから dist_cellにセルをコピーする（書式と値）
+
+    Args:
+        src_cell : コピー元のCell
+            ExcelSheetDataUtil でも可能
+        dist_cell : コピー先のCell
+        style :
+            True=書式をコピーする
+        exists_only :
+            True=値or書式が設定されているもののみコピーする
+    """
+    src_cell:Cell = _get_openxl_cell(src_cell)
+    dist_cell:Cell = _get_openxl_cell(dist_cell)
+    src_value = src_cell.value
+    if src_value != '' and src_value!=None:
+        dist_cell.value = src_value
+    # src_style = src_cell.style
+    # if src_style != ConstExcel.STYLE_NORMAL:
+    #     # テーブルの書式は無視され’標準’となる
+    #     if style:
+    #         if src_cell.has_style :
+    #             dist_cell.style = src_cell.style
+    #             dist_cell.fill = src_cell.fill
+    if style:
+        dist_cell.style = src_cell.style
+        dist_cell.number_format = src_cell.number_format
+        # 例外が発生しました: TypeError unhashable type: 'StyleProxy'
+        # コピーしないと上記エラーとなる
+        dist_cell.fill = copy.copy(src_cell.fill)
+        dist_cell.border = copy.copy(src_cell.border)
+
+def _get_openxl_cell(value:Union[Cell,'ExcelSheetDataUtil']):
+    if 'ExcelSheetDataUtil' in str(type(value)):
+        ret = value.sheet[value.address]
+    elif isinstance(value, Cell):
+        ret = value
+    else:
+        ret = value
+    return ret
 
 ### End Local Method2
 ################################################################################
@@ -1168,14 +1316,23 @@ class ExcelSheetDataUtil():
 
     def _update_valid_cell_in_sheet(self):
         """ WorkSheetの有効なセルの値を更新する """
-        self.valid_cell = TwoCellsInfo()
+        self.valid_cells = TwoCells()
         if self.sheet==None:
             return
-        self.valid_cell.set_row_col(
+        self.valid_cells.set_row_col(
+            sheet=self.sheet,
             min_row=self.sheet.min_row,
             min_col=self.sheet.min_column,
             max_row=self.sheet.max_row,
             max_col=self.sheet.max_column)
+    
+    def get_max_cell(self, update=False):
+        """
+        WorkSheetの有効なセルを取得する
+        """
+        if update:
+            self._update_valid_cell_in_sheet()
+        
     
     def set_sheet(self, sheet_name:Union[str, Worksheet]):
         if isinstance(sheet_name, Worksheet):
@@ -1197,6 +1354,7 @@ class ExcelSheetDataUtil():
                     raise e
         else:
             self.sheet = None
+        self._update_valid_cell_in_sheet()
     
     def set_workbook(self, file_path:Union[str,Workbook], data_only:bool):
         """ open excel file (openpyxl.load_workbook) """
@@ -1310,7 +1468,7 @@ class ExcelSheetDataUtil():
             find_begin_address = 'A1'
         if find_end_address==None:
             find_end_address = get_a1_address_from_row_and_col(
-                self.valid_cell.end_cell.row, self.valid_cell.end_cell.col)
+                self.valid_cells.end_cell.row, self.valid_cells.end_cell.col)
         # address_list = ExcelSheetDataUtil.find_value(
         #     self.sheet, keyword, find_begin_address, find_end_address, debug)
         address_list = CellUtil.get_address_list_by_find_keyword(
@@ -1345,6 +1503,7 @@ class ExcelSheetDataUtil():
         cell = get_cells(self.sheet, address)
         self.set_cell(cell)
         return cell
+
 
     def set_cell(self, value:'Union[str, Cell, ExcelSheetDataUtil]'):
         """
@@ -1523,7 +1682,7 @@ class ExcelSheetDataUtil():
         else:
             if update_info:
                 self._update_valid_cell_in_sheet()
-            return self.valid_cell.end_cell.col
+            return self.valid_cells.end_cell.column
 
     def _get_loop_max_row(self, update_info:bool=False):
         if self.loop_max_row!=None:
@@ -1531,7 +1690,29 @@ class ExcelSheetDataUtil():
         else:
             if update_info:
                 self._update_valid_cell_in_sheet()
-            return self.valid_cell.end_cell.row
+            return self.valid_cells.end_cell.row
+
+    def get_range_address_with_find(self, keyword:str, direction=Direction.RIGHT|Direction.DOWN):
+        """
+        keywordを検索して、マッチしたaddress から Directionの方向に、連続したセルをチェックして、
+         矩形のアドレスの始点と終点（左上と右下）を取得する
+
+        Returns:
+            range_address
+        """
+        cells = search_rectangle_in_sheet(
+            self.sheet,
+            self.valid_cells.begin_cell,
+            self.valid_cells.end_cell,
+            keyword)
+        if len(cells)<1:
+            return None
+        self.set_cell(cells[0])
+        horizon_end_address = self.get_end_address_to_end_horizon(direction)
+        vertical_end_address = self.get_end_address_to_end_vertical(direction)
+        begin_address, end_address = get_range_address([horizon_end_address, vertical_end_address])
+        self.range_address = begin_address + ':' + end_address
+        return self.range_address
 
     def get_range_address(self, direction=Direction.RIGHT|Direction.DOWN):
         """
@@ -1669,14 +1850,14 @@ class ExcelSheetDataUtil():
             re_ret = re.search('[1-9]{1,8}', self.address)
             row_str = re_ret.group()
             begin_address = 'A' + row_str
-            col_max = get_column_letter(self.valid_cell.end_cell.col)
+            col_max = get_column_letter(self.valid_cells.end_cell.column)
             end_address = col_max + row_str
         elif opt==ConstExcel.COL:
             # col
             re_ret = re.search('[a-zA-Z]{1,3}', self.address)
             col_str = re_ret.group()
             begin_address = col_str + '1'
-            end_address = col_str + str(self.valid_cell.end_cell.row)
+            end_address = col_str + str(self.valid_cells.end_cell.row)
         self.address = begin_address + ':' + end_address
         return self.address
 
@@ -1780,26 +1961,30 @@ class ExcelSheetDataUtil():
             style : True=書式をコピーする
             exists_only : True=値or書式が設定されているもののみコピーする
         """
-        # dist_cell:Cell = self.sheet[self.address]
-        dist_cell = self._get_openxl_cell(self)
-        src_cell:Cell = self._get_openxl_cell(src_cell)
-        src_value = src_cell.value
-        if src_value != '':
-            dist_cell.value = src_value
-        src_style = src_cell.style
-        if src_style != self.ConstExcel.STYLE_NORMAL:
-            # テーブルの書式は無視され’標準’となる
-            if style:
-                if src_cell.has_style :
-                    dist_cell.style = src_cell.style
-                    dist_cell.fill = src_cell.fill
-        if style:
-            dist_cell.style = src_cell.style
-            # 例外が発生しました: TypeError unhashable type: 'StyleProxy'
-            # コピーしないと上記エラーとなる
-            dist_cell.number_format = src_cell.number_format
-            dist_cell.fill = copy.copy(src_cell.fill)
-            dist_cell.border = copy.copy(src_cell.border)
+        copy_cell(
+            src_cell,
+            self.cell,
+            style=style)
+        # # dist_cell:Cell = self.sheet[self.address]
+        # dist_cell = self._get_openxl_cell(self)
+        # src_cell:Cell = self._get_openxl_cell(src_cell)
+        # src_value = src_cell.value
+        # if src_value != '':
+        #     dist_cell.value = src_value
+        # src_style = src_cell.style
+        # if src_style != self.ConstExcel.STYLE_NORMAL:
+        #     # テーブルの書式は無視され’標準’となる
+        #     if style:
+        #         if src_cell.has_style :
+        #             dist_cell.style = src_cell.style
+        #             dist_cell.fill = src_cell.fill
+        # if style:
+        #     dist_cell.style = src_cell.style
+        #     # 例外が発生しました: TypeError unhashable type: 'StyleProxy'
+        #     # コピーしないと上記エラーとなる
+        #     dist_cell.number_format = src_cell.number_format
+        #     dist_cell.fill = copy.copy(src_cell.fill)
+        #     dist_cell.border = copy.copy(src_cell.border)
     
     def _get_openxl_cell(self, value:Union[Cell,'ExcelSheetDataUtil']):
         if 'ExcelSheetDataUtil' in str(type(value)):
@@ -1924,12 +2109,22 @@ class ExcelSheetDataUtil():
         """
         return _get_cell_address(cell)
 
-    def get_values_from_range_address_np(self, range_address:str=None, mode=ConstExcel.MODE_VALUE_STR_CELL):
+    def get_values_from_range_address_np(
+            self,
+            range_address:str=None,
+            mode=ConstExcel.MODE_VALUE_STR_CELL):
         """
         矩形のセルからすべて値を取得する
 
         Args:
-            range_address : 'A1:B2'
+            range_address :
+                対象の範囲
+                 例）'A1:B2'
+            mode :
+                値を取得する型を指定する
+                    ConstExcel.MODE_VALUE_STR_CELL : StrCell型で取得する（メンバcellを持つstr）
+                    ConstExcel.MODE_VALUE_STR : 通常のstrで取得する
+
         Returns:
             numpy.Array
         """
@@ -1946,16 +2141,18 @@ class ExcelSheetDataUtil():
             row += 1
             data_rows = np.zeros(col_amount, dtype=object) #型指定しないと数値となる
             for i, col in enumerate(range(begin_col, end_col+1)):
+                if get_a1_address_from_row_and_col(row, col) == 'J42':
+                    print()
                 value_str = self.get_value_r1c1(row, col)
                 if mode==ConstExcel.MODE_VALUE_STR:
                     value = value_str
                 else:
                     # デフォルトはStrCellで扱う
                     # elif ConstExcel.MODE_VALUE_STR_CELL
-                    # value = StrCell(value_str, cell=self.get_cell_r1c1(row, col))
-                    # value = StrCell(self.get_cell_r1c1(row, col))
-                    value = StrCell(value_str)
-                    value.cell = self.get_cell_r1c1(row, col)
+                    # value = StrCell(value_str)
+                    # value.cell = self.get_cell_r1c1(row, col)
+                    cell = self.get_cell_r1c1(row, col)
+                    value = StrCell(cell)
                 np.put(data_rows, [i], value)
             # data_rowsを cell_values_list に追加する
             if cell_values_list.size < 1:
@@ -1978,10 +2175,10 @@ class ExcelSheetDataUtil():
         """
         import pandas as pd
         cell_values_np = self.get_values_from_range_address_np(range_address, mode=mode)
-        if columns!=None:
+        if columns!=None and columns!=0:
             columns = cell_values_np[0]
             cell_values_np = cell_values_np[1:]
-        if index!=None:
+        if index!=None and index!=0:
             index = cell_values_np[:, 0]
             cell_values_np = cell_values_np[:, 1:]
         df = pd.DataFrame(
@@ -1993,7 +2190,7 @@ class ExcelSheetDataUtil():
         raise NotImplementedError()
 
     @classmethod
-    def _cnv_datetime(cls, value:str):
+    def _cnv_datetime(cls, value):
         if isinstance(value, str):
             if not value.isdigit():
                 return value
@@ -2001,9 +2198,9 @@ class ExcelSheetDataUtil():
                 value = int(value)
         elif isinstance(value, StrCell):
             if not str(value).isdigit():
-                return str(value)
+                return value
             else:
-                value = str(value).__int__()
+                value = value
         elif isinstance(value, int):
             pass
         else:
@@ -2173,6 +2370,18 @@ class ExcelSheetDataUtil():
     def get_str_cell_obj(self):
         """ 保持しているself.cell を StrCell class で取得する """
         return StrCell(self.cell)
+
+    def reset_valid_cells(self):
+        """
+        シートの有効なセルをすべてリセットする(value=None, style='標準')
+
+        Returns : {str} : クリアした範囲のアドレス文字列 ”A1:B2”
+        """
+        begin_address = self.valid_cells.begin_cell.coordinate
+        end_address = self.valid_cells.end_cell.coordinate
+        reset_cells(self.sheet, begin_address, end_address)
+        return begin_address + ':' + end_address
+
 
 ### End ExcelSheetDataUtil class
 ##########################################################################################
