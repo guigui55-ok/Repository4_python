@@ -1252,6 +1252,40 @@ def _get_openxl_cell(value:Union[Cell,'ExcelSheetDataUtil']):
         ret = value
     return ret
 
+# from excel_data import StrCell
+import datetime
+def cnv_date_str_cell(excel_date_number_str_cell:StrCell):
+    """
+    エクセルから読み取った日付データ数値をYMD書式に変換する
+        対象の型 StrCell
+    Memo:
+        "42523" > "2024/11/23"
+    """
+    buf = ExcelSheetDataUtil._cnv_datetime(excel_date_number_str_cell)
+    if isinstance(buf , datetime.datetime):
+        ret = StrCell(buf.strftime('%y/%m/%d'))
+        ret.cell = excel_date_number_str_cell.cell
+    else:
+        ret = buf
+    # print(' * ret type = {}, {}'.format(type(ret), ret))
+    return ret
+
+
+def cnv_date_str(excel_date_number_str):
+    """
+    エクセルから読み取った日付データ数値をYMD書式に変換する
+        対象の型 str
+    Memo:
+        "42523" > "2024/11/23"
+    """
+    buf = ExcelSheetDataUtil._cnv_datetime(excel_date_number_str)
+    if isinstance(buf , datetime.datetime):
+        ret = buf.strftime('%y/%m/%d')
+    else:
+        ret = buf
+    # print(' * ret type = {}, {}'.format(type(ret), ret))
+    return ret
+
 ### End Local Method2
 ################################################################################
 ################################################################################
@@ -2191,6 +2225,7 @@ class ExcelSheetDataUtil():
 
     @classmethod
     def _cnv_datetime(cls, value):
+        """ str(value)が isdiit=True の時intに変換する（str StrCellに対応） """
         if isinstance(value, str):
             if not value.isdigit():
                 return value
@@ -2200,7 +2235,7 @@ class ExcelSheetDataUtil():
             if not str(value).isdigit():
                 return value
             else:
-                value = value
+                value = int(value)
         elif isinstance(value, int):
             pass
         else:

@@ -1,6 +1,7 @@
 """
-表をコピペする
- （連続したセルの表を読み取り、他のシートにコピーする）
+表のAとBを比較して、差分を表示させる
+    差分あり〇、削除された×、新しく追加されたNew、変わらない＞空白
+ （差分は別のシートに出力される）
     書き込み前に、書き込み先のシートの有効範囲をすべて削除する
      ** 別テーブルMerge版（異なる行、異なる列のテーブル）
 """
@@ -83,6 +84,28 @@ print(df_merged.columns)
 
 # 結果格納用のDataFrameを作成
 df_c = pd.DataFrame()
+import math
+def apply_proc(row):
+    def is_nan(value):
+        try:
+            return math.isnan(value)
+        except ValueError as e:
+            return False
+        except TypeError: #TypeError: must be real number, not str
+            return False
+        except Exception as e:
+            print(str(e))
+            return False
+    if row[original_col] != row[original_col + '_b']:
+        print('{}, {}'.format(row[original_col], row[original_col + '_b']))
+        if str(row[original_col])=='' or row[original_col]==None or is_nan(row[original_col]):
+            return "New"
+        elif is_nan(row[original_col + '_b']):
+            return "×"
+        else:
+            return "〇"
+    else:
+        return ""
 
 # 列ごとに処理
 for col in df_merged.columns:
@@ -92,8 +115,10 @@ for col in df_merged.columns:
         # if original_col + '_a' in df_merged and original_col + '_b' in df_merged:
         # columna_nameとcolumna_name_bがあるcolumn配下の処理
         if (original_col in df_merged) and (original_col + '_b' in df_merged):
+            # 前の値が空なら、Newにする
+            
             # 値が異なる場合は "〇"、同じ場合は "" をセット
-            apply_proc = lambda row: "〇" if row[original_col] != row[original_col + '_b'] else ""
+            # apply_proc = lambda row: "〇" if row[original_col] != row[original_col + '_b'] else ""
             buf_data = df_merged.apply(apply_proc, axis=1)
             df_c[original_col] = buf_data
         elif original_col in df_merged:
@@ -107,12 +132,26 @@ for col in df_merged.columns:
         if not col in df_a.columns:
             df_c.loc[1:, col] = "New"
 
+
+#列を入れ替え（備考が2番目に来るので）
+# 順番を入れ替えたい列を保持
+target_col = "備考"
+df_target = df_c[target_col]
+buf_index = [i for i, x in enumerate(df_c.columns) if x==target_col]
+index = buf_index[0]
+# 入れ替え対称の列を削除
+df_d = df_c.drop(target_col, axis=index)
+# 任意の場所に対象の列を挿入
+df_d.insert(len(df_d.columns), target_col, df_target)
+
+
 print('****************')
 print('df_c = ')
+df_c = df_d
 print(df_c)
 
-print('格納先のCellをリスト[cells_2d]にすべて取得ない処理パターン')
-print('開始セルアドレスをセットして、dfの配列を順番に書き込んでいく')
+
+print('*開始セルアドレスをセットして、dfの配列を順番に書き込んでいく')
 dist_ex_data = ex_data.copy_self()
 dist_ex_data.set_sheet('Write')
 dist_ex_data.set_cell('C3')
@@ -123,6 +162,8 @@ w_df = df_c
 # 共通の列にのみ値をコピーする
 common_columns = [col for col in df_a.columns if col in df_c.columns]
 df_c.loc[0, common_columns] = df_a.iloc[0][common_columns].values
+# 
+print('*DataFrameをエクセルに書き込む')
 for i , column_name in enumerate(w_df.columns):
     print('Processing {}'.format(i))
     for j, data_series_value in enumerate(w_df[column_name]):
