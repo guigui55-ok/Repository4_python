@@ -534,7 +534,7 @@ class StrCell(str):
     """
     文字列として振る舞い、Cellをメンバに保持するクラス
     """
-    def __new__(cls, value):
+    def __new__(cls, value:Cell):
         if isinstance(value, Cell):
             _value = value.value
         else:
@@ -1253,8 +1253,7 @@ def _get_openxl_cell(value:Union[Cell,'ExcelSheetDataUtil']):
     return ret
 
 # from excel_data import StrCell
-import datetime
-def cnv_date_str_cell(excel_date_number_str_cell:StrCell):
+def cnv_date_str_cell(excel_date_number_str_cell:StrCell, date_format='%y/%m/%d'):
     """
     エクセルから読み取った日付データ数値をYMD書式に変換する
         対象の型 StrCell
@@ -1262,13 +1261,70 @@ def cnv_date_str_cell(excel_date_number_str_cell:StrCell):
         "42523" > "2024/11/23"
     """
     buf = ExcelSheetDataUtil._cnv_datetime(excel_date_number_str_cell)
-    if isinstance(buf , datetime.datetime):
-        ret = StrCell(buf.strftime('%y/%m/%d'))
+    if isinstance(buf , datetime):
+        ret = StrCell(buf.strftime(date_format))
         ret.cell = excel_date_number_str_cell.cell
     else:
         ret = buf
     # print(' * ret type = {}, {}'.format(type(ret), ret))
     return ret
+
+import pandas as pd
+def cnv_date_str_yobi_cell(timestamp:pd.Timestamp, date_format='%Y/%m/%d(%aaa)'):
+    """
+    pd.date_range で作成した pandas.TimeStamp を文字列に変換する。
+        対象の型 pandas.TimeStamp
+    Memo:
+        "2023-01-15 00:00:00" > "2023/01/15(日)"
+         <class 'pandas._libs.tslibs.timestamps.Timestamp'> > str
+    """
+    _YOUBI_REPLACE_STR = '#__aaa__#'
+    youbi=''
+    if '%aaa' in date_format:
+        # 曜日を日本語表記に変換する辞書
+        day_of_week_dict = {
+            0: '月',
+            1: '火',
+            2: '水',
+            3: '木',
+            4: '金',
+            5: '土',
+            6: '日'
+        }
+        youbi = day_of_week_dict[timestamp.day_of_week]
+        date_format = date_format.replace('%aaa', _YOUBI_REPLACE_STR)
+    # Timestampオブジェクトを指定された形式の文字列に変換する
+    formatted_date = f"{timestamp.strftime(date_format)}"
+    if _YOUBI_REPLACE_STR in date_format:
+        formatted_date = formatted_date.replace(_YOUBI_REPLACE_STR, youbi)
+    return formatted_date
+
+
+def remove_youbi(timestamp_str:str, date_format='(%aaa)'):
+    """
+    文字列の日付データの曜日を消去する。
+        対象の型 pandas.TimeStamp
+    Memo:
+        "2023/01/15(日)" > "2023/01/15"
+         str > str
+    """
+    _YOUBI_REPLACE_STR = '#__aaa__#'
+    youbi=''
+    if '%aaa' in date_format:
+        # 曜日を日本語表記に変換する辞書
+        day_of_week_dict = {
+            0: '月',
+            1: '火',
+            2: '水',
+            3: '木',
+            4: '金',
+            5: '土',
+            6: '日'
+        }
+        for buf in day_of_week_dict.values():
+            rep_str = date_format.replace(date_format, buf)
+            timestamp_str = timestamp_str.replace(rep_str, '')
+    return timestamp_str
 
 
 def cnv_date_str(excel_date_number_str):
@@ -1279,7 +1335,7 @@ def cnv_date_str(excel_date_number_str):
         "42523" > "2024/11/23"
     """
     buf = ExcelSheetDataUtil._cnv_datetime(excel_date_number_str)
-    if isinstance(buf , datetime.datetime):
+    if isinstance(buf , datetime):
         ret = buf.strftime('%y/%m/%d')
     else:
         ret = buf
@@ -1961,20 +2017,27 @@ class ExcelSheetDataUtil():
         # self.sheet.cell(row=row, column=col).value
         return get_cell_value_r1c1(self.sheet, row, col)
 
-    def get_cell_r1c1(self, row:int, col:int):
+    def get_cell_r1c1(self, row:int, col:int)->Cell:
         # self.sheet.cell(row=row, column=col).value
         return self.sheet.cell(row=row, column=col)
     
     def get_cell(self):
-        # self.sheet.cell(row=row, column=col).value
+        """
+        self.address のセルを取得する
+        """
         row, col = get_row_and_col_from_a1_address(self.address)
         return self.sheet.cell(row=row, column=col)
     
     @classmethod
-    def _get_cell(cls, address:str):
+    def _get_cell(cls, sheet:Worksheet, address:str):
         # self.sheet.cell(row=row, column=col).value
         row, col = get_row_and_col_from_a1_address(address)
-        return Cell(worksheet=None, row=row, column=col)
+        # return Cell(worksheet=sheet, row=row, column=col)
+        return sheet.cell(row=row, column=col)
+    
+    @classmethod
+    def _get_cell_not_sheet(cls, address:str):
+        return cls._get_cell(None, address)
 
     def set_value(self, value:str, address:str=None):
         if address==None:
@@ -2175,8 +2238,8 @@ class ExcelSheetDataUtil():
             row += 1
             data_rows = np.zeros(col_amount, dtype=object) #型指定しないと数値となる
             for i, col in enumerate(range(begin_col, end_col+1)):
-                if get_a1_address_from_row_and_col(row, col) == 'J42':
-                    print()
+                # if get_a1_address_from_row_and_col(row, col) == 'J42':
+                #     print()
                 value_str = self.get_value_r1c1(row, col)
                 if mode==ConstExcel.MODE_VALUE_STR:
                     value = value_str
@@ -2196,28 +2259,85 @@ class ExcelSheetDataUtil():
         return cell_values_list
 
 
-
-    def get_values_from_range_address_pd(
-            self, range_address:str=None, columns:int=None, index:int=None, mode=ConstExcel.MODE_VALUE_STR_CELL):
+    def get_values_from_range_address_pd_temp(
+            self, range_address:str=None,
+            columns:int=0,
+            index:int=None,
+            mode=ConstExcel.MODE_VALUE_STR_CELL):
         """
         矩形のセルからすべて値を取得する
 
         Args:
             range_address : 'A1:B2'
+            columns:
+                df.columnsに指定する行（この次の行からdfとして扱う）
+            mode:
+                エクセルから読み取ったときにdfの中の値の型を指定する
+                    ConstExcelで指定する
         Returns:
             pandas.DataFrame
         """
         import pandas as pd
         cell_values_np = self.get_values_from_range_address_np(range_address, mode=mode)
-        if columns!=None and columns!=0:
-            columns = cell_values_np[0]
-            cell_values_np = cell_values_np[1:]
+        if columns!=None and 0<=columns:
+            columns_np = cell_values_np[columns]
+            cell_values_np = cell_values_np[columns+1:]
+        else:
+            columns_np = None
         if index!=None and index!=0:
-            index = cell_values_np[:, 0]
+            index_np = cell_values_np[:, 0]
             cell_values_np = cell_values_np[:, 1:]
+        else:
+            index_np = None
         df = pd.DataFrame(
             cell_values_np,
-            columns=columns, index=index)
+            columns=columns_np, index=index_np)
+        if columns!=None and 0<=columns:
+            # first_row_as_list = df.iloc[columns_np].astype(str).tolist()
+            # first_row_as_list = columns_np.astype(str).tolist()
+            first_row_as_list = df.iloc[columns].astype(str).tolist()
+            df.columns = first_row_as_list
+        return df
+
+    def get_values_from_range_address_pd(
+            self, range_address:str=None,
+            columns:int=0,
+            index:int=None,
+            mode=ConstExcel.MODE_VALUE_STR_CELL):
+        """
+        矩形のセルからすべて値を取得する
+
+        Args:
+            range_address : 'A1:B2'
+            columns:
+                df.columnsに指定する行（この次の行からdfとして扱う）
+            mode:
+                エクセルから読み取ったときにdfの中の値の型を指定する
+                    ConstExcelで指定する
+        Returns:
+            pandas.DataFrame
+        """
+        import pandas as pd
+        cell_values_np = self.get_values_from_range_address_np(
+            range_address, mode=mode)
+        if columns!=None and 0<=columns:
+            columns_np = cell_values_np[0]
+            cell_values_np = cell_values_np[1:]
+        else:
+            columns_np = None
+        if index!=None and index!=0:
+            index_np = cell_values_np[:, 0]
+            cell_values_np = cell_values_np[:, 1:]
+        else:
+            index_np = None
+        df = pd.DataFrame(
+            cell_values_np,
+            columns=columns_np, index=index_np)
+        # if columns!=None and 0<=columns:
+        #     # first_row_as_list = df.iloc[columns_np].astype(str).tolist()
+        #     # first_row_as_list = columns_np.astype(str).tolist()
+        #     first_row_as_list = df.iloc[columns].astype(str).tolist()
+        #     df.columns = first_row_as_list
         return df
 
     def write_to_cell_by_pd(self):

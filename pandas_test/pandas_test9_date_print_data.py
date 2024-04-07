@@ -3,6 +3,7 @@ pandas その他
 
 日付ごとの計算
  データをプリントする
+  日付文字列をDate型に変換
 
 """
 import pandas as pd

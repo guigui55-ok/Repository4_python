@@ -1,9 +1,10 @@
 """
-表のAとBを比較して、差分を表示させる
+表のAとBを比較して、差分を表示させる（新たにDataFrameの表を作成して、別の場所に書き込み）
     差分あり〇、削除された×、新しく追加されたNew、変わらない＞空白
  （差分は別のシートに出力される）
     書き込み前に、書き込み先のシートの有効範囲をすべて削除する
      ** 別テーブルMerge版（異なる行、異なる列のテーブル）
+     DataFrame、StrCellを使用、書式はなし
 """
 
 
@@ -86,6 +87,15 @@ print(df_merged.columns)
 df_c = pd.DataFrame()
 import math
 def apply_proc(row):
+    """
+    DataFrameの各値の差分を比較して、その比較結果文字列（〇、×、New）を出力する。
+        A==Bは空白、A!=Bは〇、AがあってBがないものは×、AがなくてBにある場合はNew
+    
+    Memo:
+        Cellで値がないときは 空白''かNoneとなり、
+        DataFrameで新規に行列を追加した場合は float(nan)となるので、すべてに対応している。
+    """
+    ### Inner Method BEGIN
     def is_nan(value):
         try:
             return math.isnan(value)
@@ -96,6 +106,7 @@ def apply_proc(row):
         except Exception as e:
             print(str(e))
             return False
+    ### Inner Method END
     if row[original_col] != row[original_col + '_b']:
         print('{}, {}'.format(row[original_col], row[original_col + '_b']))
         if str(row[original_col])=='' or row[original_col]==None or is_nan(row[original_col]):

@@ -1,0 +1,808 @@
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType=None, fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.fill_type = None
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+----
+buf_cell.fill.patternType = None
+buf_cell.fill.gfcolor = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.bgColor = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+side.color = None
+side.color = None
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType=None, fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.fill_type = None
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+----
+buf_cell.fill.patternType = None
+buf_cell.fill.gfcolor = 00000000
+buf_cell.fill.bgColor = 00000000
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+side.color = None
+side.color = None
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = None
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType=None, fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.fill_type = None
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+----
+buf_cell.fill.patternType = None
+buf_cell.fill.gfcolor = 00000000
+buf_cell.fill.bgColor = 00000000
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+side.color = None
+side.color = None
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = C7
+value = None
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType=None, fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.fill_type = None
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+----
+buf_cell.fill.patternType = None
+buf_cell.fill.gfcolor = 00000000
+buf_cell.fill.bgColor = 00000000
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+side.color = None
+side.color = None
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B42
+value = None
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType=None, fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.fill_type = None
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb='00000000', indexed=None, auto=None, theme=None, tint=0.0, type='rgb'
+----
+buf_cell.fill.patternType = None
+buf_cell.fill.gfcolor = 00000000
+buf_cell.fill.bgColor = 00000000
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+side.color = None
+side.color = None
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B42
+value = A04
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=-0.3499862666707358, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=-0.3499862666707358, type='theme'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+----
+buf_cell.fill.patternType = solid
+buf_cell.fill.gfcolor = Values must be of type <class 'str'>
+buf_cell.fill.bgColor = Values must be of type <class 'str'>
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = thin
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B42
+value = A04
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = False
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=1, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 1
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=-0.3499862666707358, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=-0.3499862666707358, type='theme'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+----
+buf_cell.fill.patternType = solid
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = 行番号
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = True
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 0
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+----
+buf_cell.fill.patternType = solid
+buf_cell.fill.gfcolor = Values must be of type <class 'str'>
+buf_cell.fill.bgColor = Values must be of type <class 'str'>
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = thin
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = 行番号
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = True
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 0
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+----
+buf_cell.fill.patternType = solid
+buf_cell.fill.gfcolor = Values must be of type <class 'str'>
+buf_cell.fill.bgColor = Values must be of type <class 'str'>
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = 行番号
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = True
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 0
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+----
+buf_cell.fill.patternType = solid
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = 行番号
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = True
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 0
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme'
+buf_cell.fill.end_color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+----
+buf_cell.fill.patternType = solid
+buf_cell.fill.gfcolor = 3
+buf_cell.fill.bgColor = 64
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = thin
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = 行番号
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = True
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=0.0, type='theme'
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 0
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = 3
+buf_cell.fill.end_color = 64
+----
+buf_cell.fill.patternType = solid
+buf_cell.fill.gfcolor = 3
+buf_cell.fill.bgColor = 64
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = thin
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################
+データの用意
+*セルを取得して値を出力する
+#############################
+address = B7
+value = 行番号
+============ font
+buf_cell.font.name = ＭＳ Ｐゴシック
+buf_cell.font.size = 11.0
+buf_cell.font.bold = True
+buf_cell.font.italic = False
+buf_cell.font.underline = None
+buf_cell.font.strike = None
+============ color
+buf_cell.font.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=0, tint=0.0, type='theme'
+color.value = 0
+color.rgb = Values must be of type <class 'str'>
+color.indexed = Values must be of type <class 'int'>
+color.type = theme
+color.auto = Values must be of type <class 'bool'>
+color.theme = 0
+color.tint = 0.0
+============ fill
+buf_cell.fill.fill_type = <openpyxl.styles.fills.PatternFill object>
+Parameters:
+patternType='solid', fgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=None, auto=None, theme=3, tint=0.0, type='theme', bgColor=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.fill.fill_type = solid
+buf_cell.fill.start_color = 3
+buf_cell.fill.end_color = 64
+----
+buf_cell.fill.patternType = solid
+buf_cell.fill.gfcolor = 3
+buf_cell.fill.bgColor = 64
+============ border
+buf_cell.border.left = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = <openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+side.color = thin
+buf_cell.border.right = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.top = <openpyxl.styles.borders.Side object>
+Parameters:
+style='thin', color=<openpyxl.styles.colors.Color object>
+Parameters:
+rgb=None, indexed=64, auto=None, theme=None, tint=0.0, type='indexed'
+buf_cell.border.bottom = <openpyxl.styles.borders.Side object>
+Parameters:
+style=None, color=None
+============ etc
+buf_cell.number_format = General
+buf_cell.alignment.horizontal = None
+buf_cell.alignment.vertical = None
+buf_cell.alignment.wrap_text = None
+buf_cell.alignment.shrink_to_fit = None
+buf_cell.alignment.indent = 0.0
+buf_cell.alignment.text_rotation = 0
+#############################

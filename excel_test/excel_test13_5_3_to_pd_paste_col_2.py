@@ -1,5 +1,6 @@
 """
 シートの任意の位置からデータ入力
+ StrCellではない普通のstrを値に持つDataFrameをエクセルに書き込み、ファイルを保存
 
 """
 from pathlib import Path
