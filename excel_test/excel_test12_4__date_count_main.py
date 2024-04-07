@@ -72,6 +72,8 @@ print('-------')
 print('*日付型を文字列に変換')
 df_ret[date_col_name] = df_ret[date_col_name].map(cnv_date_str)
 
+print('書き込みのためにシートを読み直す（data_only=False)')
+ex_data.reset_book_sheet(data_only=False)
 
 print('*特定の日付の出現回数をカウント')
 print('*読み取った表Aから日付のdfに値をコピーする')
@@ -135,7 +137,7 @@ for i, df_ret_date in enumerate(df_ret[date_col_name]):
         print('[{}] -> {}, date={}'.format(
             None, count, target_date))
         continue
-    #buf_df_bはDataFrame型が返る
+    #buf_df_b はDataFrame型が返る
     for index, row in buf_df_b.iterrows():
         row[result_col_name].cell.value = count
         print('[{}] -> {}, date={}'.format(

@@ -1486,7 +1486,7 @@ class ExcelSheetDataUtil():
         # ファイルを開く
         self.set_workbook(out_put_file_path, data_only=data_only)
 
-    def save_book(self, file_path:str=None):
+    def save_book(self, file_path:str=None, debug:bool=True):
         """
         WorkBookを保存する
 
@@ -1497,7 +1497,10 @@ class ExcelSheetDataUtil():
             * ファイルを開いているとエラーが発生する 
                 PermissionError [Errno 13] Permission denied: 'myworkbook.xlsx'
         """
-        self.book.save(self._get_file_path(file_path))
+        w_path = self._get_file_path(file_path)
+        self.book.save(w_path)
+        if debug:
+            print('# write_excel_file = {}'.format(w_path))
 
     def create_new_file(
             self,
@@ -2333,11 +2336,11 @@ class ExcelSheetDataUtil():
         df = pd.DataFrame(
             cell_values_np,
             columns=columns_np, index=index_np)
-        # if columns!=None and 0<=columns:
-        #     # first_row_as_list = df.iloc[columns_np].astype(str).tolist()
-        #     # first_row_as_list = columns_np.astype(str).tolist()
-        #     first_row_as_list = df.iloc[columns].astype(str).tolist()
-        #     df.columns = first_row_as_list
+        if columns!=None and 0<=columns:
+            # first_row_as_list = df.iloc[columns_np].astype(str).tolist()
+            # first_row_as_list = columns_np.astype(str).tolist()
+            first_row_as_list = df.iloc[columns].astype(str).tolist()
+            df.columns = first_row_as_list
         return df
 
     def write_to_cell_by_pd(self):
