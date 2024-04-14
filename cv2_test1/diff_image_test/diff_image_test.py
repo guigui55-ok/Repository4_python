@@ -29,7 +29,8 @@ def main():
 
 def test():
     try:
-        dir_path = r'C:\Users\OK\source\repos\Repository4_python\movie_test\write_frames_test\write_frames_result_2112_062327'
+        # dir_path = r'C:\Users\OK\source\repos\Repository4_python\movie_test\write_frames_test\write_frames_result_2112_062327'
+        dir_path = r'C:\Users\OK\source\repos\test_media_files\movie_test_media_files\write_frames_result_2112_062327'
         import os
         path_a = os.path.join(dir_path,'pad_dunsion_1.png')
         path_b = os.path.join(dir_path,'pad_dunsion_7.png')
@@ -51,8 +52,6 @@ def test():
         if im1_u8.shape != im2_u8.shape:
             print("サイズが違います")
             sys.exit()
-
-
 
         # 負の値も扱えるようにnp.int16に変換
         im1_i16 = im1_u8.astype(np.int16)

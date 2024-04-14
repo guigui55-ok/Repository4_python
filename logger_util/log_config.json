@@ -18,7 +18,7 @@
         "basicFileHandler": {
             "class": "logging.FileHandler",
             "level": "INFO",
-            "filename": "./sample2_app.log",
+            "filename": "./__sample_2_app.log",
             "mode": "a",
             "formatter":"basicFormatter"
         }

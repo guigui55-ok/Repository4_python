@@ -1,7 +1,9 @@
-"""logger_test.py - 
+"""
+logger_test.py - 
+
 logging.Logger クラス を使用するサンプル
-config.dictConfig を使用しない★
-logger を委譲したクラスを使用
+    config.dictConfig を使用しない★
+    logger を委譲したクラスを使用
 """
 from logging import getLogger
 from logging import config

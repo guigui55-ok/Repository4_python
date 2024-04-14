@@ -8,7 +8,8 @@ import import_init
 
 def get_paths():
     try:
-        import pathlib,os
+        import pathlib
+        import os
         dir_path = str(pathlib.Path(__file__).parent.parent)
         image_path = os.path.join(dir_path,'image','histgram')
         file_base = 'sample.png'
@@ -54,6 +55,7 @@ def print_data(data,not_print_data = None):
 def test():
     try:
         dir_path = r'C:\Users\OK\source\repos\Repository4_python\movie_test\write_frames_test\write_frames_result_2112_062327'
+        dir_path = r'C:\Users\OK\source\repos\test_media_files\movie_test_media_files\write_frames_result_2112_062327'
         import os
         path_a = os.path.join(dir_path,'pad_dunsion_1.png')
         path_b = os.path.join(dir_path,'pad_dunsion_7.png')
@@ -104,12 +106,21 @@ def test():
         im_bool = base_img > 128
         im_new = np.empty((*base_img.shape, 3))
         r, g, b = 255, 128, 32
-        buf = im_new[:, :, 0] 
-        print(str(buf))
+        buf = im_new[:, :, 0]
+        # print('ime_new = {}'.format(buf.tolist()))
+        print('ime_new = {}'.format(buf.shape))
+        # print(str(buf))
+        """
+        np.uint8(im_new)にてim_new配列の形状とデータタイプを確認し、
+        それが画像として適切な形状（例えば、高さ×幅×色チャネル）とデータタイプ（np.uint8）を持つことを確認する必要があります
+        """
+
         im_new[:, :, 0] = im_bool * r
         im_new[:, :, 1] = im_bool * g
         im_new[:, :, 2] = im_bool * b
         path = './numpy_binarization_color.png'
+
+
         Image.fromarray(np.uint8(im_new)).save(path)
         import pathlib
         print(pathlib.Path(path).resolve())
@@ -125,9 +136,10 @@ def test():
         '''ここまで作成する画像によって異なる処理'''
 
         # 画像表示
-        ret_img.show()
+        # ret_img.show()
         return
     except:
         traceback.print_exc()
 
-test()
+if __name__ == '__main__':
+    test()

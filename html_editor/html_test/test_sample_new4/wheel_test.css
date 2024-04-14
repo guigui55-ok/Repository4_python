@@ -1,0 +1,13 @@
+
+.wheel_test{
+    width: 95%;
+    margin: 10px auto 10px auto;
+    border:solid 1px;
+    padding: 10px;
+    /* #### */
+    overflow-x: scroll;
+}
+
+.wheel_test .over{
+    width: 1000px;
+}

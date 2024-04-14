@@ -1,10 +1,12 @@
-"""logger_test.py - 
+"""
+logger_test.py - 
+
 logging.Logger クラス を使用するサンプル
-コード上でのみ logger クラス設定を実装する
-config.dictConfig を使用しない
-logger を委譲したクラスを使用する
-logger_test8 から発展させようとしたが→logging_util で試す★
-logger_test8 とおなじ
+    コード上でのみ logger クラス設定を実装する
+    config.dictConfig を使用しない
+    logger を委譲したクラスを使用する
+    logger_test8 から発展させようとしたが→logging_util で試す★
+    logger_test8 とおなじ
 """
 import logging
 import logger_test_common
