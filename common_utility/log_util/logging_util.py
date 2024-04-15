@@ -442,9 +442,11 @@ class BasicLogger(metaclass=ABCMeta):
         img_dir_path = os.path.join(self.log_dir , self.image_dir)
         img_path = self._copy(image_path, img_dir_path)
         self.add_log('image path = ' + img_path)
+
     def get_image_dir_path(self):
         img_dir_path = os.path.join(self.log_dir , self.image_dir)
         return img_dir_path
+    
     def save_image_move(self,value:str,image_path:str):
         """imageファイルをLogのimageに移動して、内容をLogに追記する"""
         self.add_log(value)

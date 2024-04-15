@@ -374,3 +374,5 @@ __test_*.png
 __sample_*.*
 chromedriver_binary/
 __download_file_*.*
+log.txt
+__log*/

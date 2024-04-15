@@ -9,8 +9,16 @@ Selenium_webdriver webdriver_utility を使用時のログ出力モジュール
 
 import datetime
 import pathlib
-
+from pathlib import Path
+#/
+# C:\Users\OK\source\repos\Repository4_python\scraping_test\html_log
+# C:\Users\OK\source\repos\Repository4_python\scraping_test\selenium_utility\selenium_webdriver\selenium_log.py
+# C:\Users\OK\source\repos\Repository4_python\scraping_test\selenium_utility\google_search_info.py
+import sys
+path = r'C:\Users\OK\source\repos\Repository4_python\scraping_test'
+sys.path.append(path)
 from html_log.html_logger import LogLevel
+#/
 class SeleniumLogger():
     def __init__(self,log_dir:str='',any_logger=None) -> None:
         if log_dir == '':
