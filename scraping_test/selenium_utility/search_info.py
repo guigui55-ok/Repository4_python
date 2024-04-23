@@ -1,4 +1,55 @@
 
+
+
+########################################################################
+
+class ConstPlatform():
+    """ 実行するPCの環境 """
+    WINDOWS = 1
+    LINUX = 2
+    MAC = 3
+
+class ConstSearchInfo():
+    """ search_info.py で使用する定数 """
+    # 240416 以下にいろいろ小分けにした定数クラスがあるが、わかりにくいのでこのクラスで一元管理する。
+    # 使用目的をPrefixに付与している。
+    #/
+    # 検索時のデータの種類
+    # 他に、list,single_data,avgなどを想定している（検討中）
+    SEARCH_DATA_TYPE_STRING = 0
+    SEARCH_DATA_TYPE_NUMBER = 1
+    #/
+    # 検索の結果判定方法
+    # いくつ探して、いくつヒットしたら合致、 ヒットしたものすべて、などを想定しています
+    MATCH_CONDITIONS_PERFECT = 1
+    MATCH_CONDITIONS_PART = 2
+    MATCH_CONDITIONS_ANY = 3
+    MATCH_CONDITIONS_ALL= 4
+    MATCH_CONDITIONS_FIRST_ONLY = 5
+    #/
+    # Seleniumを実行するPCの環境
+    PLATFORM_WINDOWS = 1
+    PLATFORM_LINUX = 2
+    PLATFORM_MAC = 3
+    class ConstPlatform(ConstPlatform):
+        """ 実行するPCの環境 """
+        pass
+    #/
+    # 検索する対象のもの、検索時にメインで使用するもの
+    SEARCH_TARGET_WEB = 1
+    SEARCH_TARGET_DATABASE = 2
+    SEARCH_TARGET_FILE_MANAGER = 3
+    SEARCH_TARGET_FILE_CONTENT = 4
+    SEARCH_TARGET_FILE_EXCEL = 5
+    SEARCH_TARGET_FILE_TEXT = 6
+    SEARCH_TARGET_EXCEL_VALUE = 10
+    #/
+    # 検索時に使用するアプリ名
+    APP_NAME_BROWSER_CHROME = 1
+    APP_NAME_BROWSER_FIREFOX = 2
+    APP_NAME_EXPLORER = 10
+
+########################################################################
 class DataType():
     STRING = 1
     NUMBER = 2
@@ -9,11 +60,6 @@ class MatchConditions():
     PERFECT = 1
     # いくつ探して、いくつヒットしたら合致
     # ヒットしたものすべて
-
-class Platform():
-    WINDOWS = 1
-    LINUX = 2
-    MAC = 3
 
 class SearchTarget():
     WEB = 1
@@ -30,13 +76,16 @@ class AppKind():
         pass
 
 class TaargetDataInfo():
-    def __init__(self,value:str='') -> None:
-        self.data_type = DataType.STRING
+    """
+    何かを検索するときに使用するクラス
+    """
+    def __init__(self, value:str='') -> None:
+        self.data_type = ConstSearchInfo.SEARCH_DATA_TYPE_STRING
         self.data_value = value
-        self.platform = Platform.WINDOWS
-        self.match_conditions = MatchConditions.PERFECT
-        self.search_target = SearchTarget.WEB
-        self.app_kind = AppKind.browser.CHROME
+        self.platform = ConstPlatform.WINDOWS
+        self.match_conditions = ConstSearchInfo.MATCH_CONDITIONS_PERFECT
+        self.search_target = ConstSearchInfo.SEARCH_TARGET_WEB
+        self.app_kind = ConstSearchInfo.APP_NAME_BROWSER_CHROME
 
 from abc import ABCMeta, abstractmethod
 class AbstractSearchInfomations(metaclass=ABCMeta):

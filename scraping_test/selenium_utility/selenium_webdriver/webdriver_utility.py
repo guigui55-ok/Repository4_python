@@ -195,6 +195,8 @@ class WebDriverUtility():
         self.driver = webdriver.Chrome(webdriver_path,options=self.options)
         self.page_source_ex = PageSourceUtility(self.driver)
 
+    def set_url(self, url:str):
+        raise NotImplementedError()
 
     def get_webelement_attribute(self,element:WebElement,attr_name:str):
         if element==None:

@@ -10,11 +10,30 @@ else:
 # from html_editor.html_const import HtmlTagName
 # from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs as HtmlWriter
 # from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs as HtmlElement
-from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs
-from html_editor.html_editor_bs.html_editor_bs import HtmlElementBs
-from html_editor.html_editor import HtmlElement
-from html_editor.html_editor_bs.html_editor_bs import HtmlTagName as HtmlTagName
-import pathlib,os
+#/
+# from html_editor.html_editor_bs.html_editor_bs import HtmlEditorBs
+# from html_editor.html_editor_bs.html_editor_bs import HtmlElementBs
+# from html_editor.html_editor import HtmlElement
+# from html_editor.html_editor_bs.html_editor_bs import HtmlTagName as HtmlTagName
+#/
+# from html_log.html_logger_bs import HtmlEditorBs
+# from html_log.html_logger_bs import HtmlElementBs
+#/
+from html_editor.html_editor_bs.html_editor_bs_main import HtmlEditorBs
+from html_editor.html_editor_bs.html_editor_bs_main import HtmlElementBs
+
+if __name__ == '__main__':
+    from html_log.html_logger import HtmlElement
+    from html_log.html_logger import HtmlTagName
+    from html_log.html_logger import HtmlLogger
+else:
+    # from html_log.html_logger import HtmlTagName
+    from html_editor.html_const import HtmlTagName
+    from html_editor.html_editor_main import HtmlElement
+
+import pathlib
+import os
+from pathlib import Path
 
 from html_log.html_logger import HtmlLogger
 
@@ -40,6 +59,7 @@ class HtmlLoggerBs(HtmlLogger):
 
     def _init_html_writer(self,log_html_file_name, log_html_css_path, create_log):
         # HtmlWriter
+        # from html_log.html_logger_bs import HtmlEditorBs
         self.log_html_file_name = log_html_file_name
         log_html_path = os.path.join(self.logger_dir_path,log_html_file_name)
         self.html_writer:HtmlEditorBs = HtmlEditorBs(log_html_path)
@@ -50,6 +70,10 @@ class HtmlLoggerBs(HtmlLogger):
             self.html_writer.add_css_file_path(log_html_css_path)
 
     
+    def _add_log_main(self, el:HtmlElement, log_level:int = LogLevel.INFO.value):
+        """ ログに追記する main """
+        self._add_log_html(el,log_level)
+        self.__add_log_txt(el)
     # def __add_log_html(self, el: HtmlElementBs, log_level: int = LogLevel.INFO.value):
     #     # return super().__add_log_html(el, log_level)
     #     """HtmlElement から HTML log に追記する"""
@@ -110,7 +134,8 @@ class HtmlLoggerBs(HtmlLogger):
         if isinstance(el,HtmlElement):
             el = HtmlElementBs.cnv_to_html_element_bs(el)
         if self.log_level <= log_level:
-            self.html_writer.add_to_file(el)
+            # self.html_writer.add_to_file(el)
+            self.html_writer.add_to_file_main_contents(el)
 
     def finish_to_create_html(self):
         """

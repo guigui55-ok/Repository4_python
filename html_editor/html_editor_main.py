@@ -1,9 +1,12 @@
 
 
 if __name__ == '__main__' or __name__ == 'html_editor':
-    import html_const
-    from html_const import HtmlTagName
-    from html_const import tag_is_closing_type
+    # import html_const
+    # from html_const import HtmlTagName
+    # from html_const import tag_is_closing_type
+    from html_editor import html_const
+    from html_editor.html_const import HtmlTagName
+    from html_editor.html_const import tag_is_closing_type
 else:
     import html_editor.html_const as html_const
     from html_editor.html_const import HtmlTagName

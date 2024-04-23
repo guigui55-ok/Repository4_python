@@ -1,18 +1,33 @@
 
 
 if __name__ == '__main__':
-    import html_const
-    from html_const import NEW_LINE, HtmlTagName
-    from html_editor_main import HtmlElement
+    # import html_const
+    from html_editor import html_const
+    # from html_const import NEW_LINE, HtmlTagName
+    # from html_editor_main import HtmlElement
+    from html_log.html_logger import HtmlLogger, HtmlLogConst
+    from html_log.html_logger import HtmlElement,  HtmlTagName
+    from html_editor.html_const import NEW_LINE
 else:
     import html_editor.html_const as html_const
-    from html_editor.html_const import NEW_LINE, HtmlTagName
+    # from html_editor.html_const import NEW_LINE, HtmlTagName
+    # from html_editor.html_editor_main import HtmlElement
+    #/
+    # Exception: cannot import name 'HtmlWriter' from partially initialized module 'html_editor.html_writer' (most likely due to a circular import) (c:\Users\OK\source\repos\Repository4_python\html_editor\html_writer.py)
+    #/
+    # from html_log.html_logger import HtmlLogger, HtmlLogConst
+    # from html_log.html_logger import HtmlElement,  HtmlTagName
+    # from html_editor.html_const import NEW_LINE
+    from html_editor.html_const import HtmlTagName
     from html_editor.html_editor_main import HtmlElement
+    from html_editor.html_const import NEW_LINE
 
 import os
 import pathlib
+from pathlib import Path
+from typing import Union
 
-
+# 以下は基本となるhtmlの書式と連動していて、変更するとファイル書き込み時に消えてしまうので注意
 BODY_BEFORE_STR = '<body><!--main contents--></body>'
 BODY_AFTER_LEFT_STR = '<body>\n<div class="main-contents">\n'
 BODY_AFTER_RIGHT_STR = '\n</div>\n</body>'
@@ -30,6 +45,8 @@ class HtmlWriter():
         self.init_values_html_writer(html_path)
     
     def init_values_html_writer(self,html_path:str='', css_path:str=''):
+        # from html_log.html_logger import HtmlElement
+        from html_editor.html_editor_main import HtmlElement
         self.css_path = css_path
         self.html_path = html_path
         self.body:HtmlElement = HtmlElement('',HtmlTagName.BODY,{},1)
@@ -102,7 +119,7 @@ class HtmlWriter():
             self._replace_str_to_file(path,html_const.CSS_MARKER,value)
             return
     
-    def add_css_file_path_list(self, css_path:str, absolute_path:str='./'):
+    def add_css_file_path_list(self, css_path:'Union[str,list[str]]', absolute_path:str='./'):
         import shutil
         dir_path = os.path.dirname(self.html_path)
         if absolute_path.startswith('./'):
@@ -110,11 +127,16 @@ class HtmlWriter():
         dir_path = os.path.join(dir_path , buf)
         if not os.path.exists(dir_path):
             os.mkdir(dir_path)
+        if isinstance(css_path , list):
+            css_path_list = css_path
+        else:
+            css_path_list = [css_path]
         # print(os.path.dirname(css_path))
-        if not _equals_path(dir_path, os.path.dirname(css_path)):
-            _remove_if_exists(dir_path, css_path)
-            shutil.copy(css_path, dir_path)
-        self.css_tags.append(CssTag(css_path,absolute_path))
+        for css_path in css_path_list:
+            if not _equals_path(dir_path, os.path.dirname(css_path)):
+                _remove_if_exists(dir_path, css_path)
+                shutil.copy(css_path, dir_path)
+            self.css_tags.append(CssTag(css_path,absolute_path))
 
     
     def write_css_path(self):
@@ -247,7 +269,7 @@ class HtmlWriter():
                 str(pathlib.Path(__file__).parent.joinpath(html_const.BASIC_CSS_FILE_NAME))]
         return basic_css_file_path_list
 
-    def create_html_content(self,html_path:str=''):
+    def create_html_content(self,html_path:str='', delete_file:bool=True):
         """空のテキストファイルを作る"""
         if html_path=='': html_path = self.html_path
         else: self.html_path = html_path
@@ -255,6 +277,10 @@ class HtmlWriter():
         dir_path = os.path.dirname(self.html_path)
         if not os.path.exists(dir_path):
             os.mkdir(dir_path)
+        # ファイルが既に存在する場合は一度削除する
+        if delete_file:
+            if Path(html_path).exists():
+                os.remove(html_path)
         with open(html_path,'w',encoding='utf-8')as f:
             f.write('')
 

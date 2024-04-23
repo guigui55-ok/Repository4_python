@@ -4,7 +4,7 @@ body {
     background-color: #f0f0f0;
 }
 
-#main_contents {
+#main_contents, #main-contents, .main-contents{
     margin:auto 50px;
     width: 90%;
     background-color: white;

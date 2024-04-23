@@ -10,6 +10,7 @@ def excute_command(cmd):
     
     Returns:
         {list[str]} 標準出力 (行毎).
+            各行の後ろにはすべて、改行コード \n があります
     '''
     ret_byte_lines = get_lines(cmd)
     ret_str_lines = cnv_byte_to_str_lines(ret_byte_lines)

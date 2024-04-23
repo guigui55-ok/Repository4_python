@@ -4,9 +4,13 @@ if __name__ == '__main__':
 
 import os
 from bs4 import BeautifulSoup
-from html_editor.html_editor_main import HtmlEditor,HtmlTagName
+from typing import Union
+# from html_editor.html_editor_main import HtmlEditor,HtmlTagName
+from html_editor.html_const import HtmlTagName
+from html_editor.html_editor_main import HtmlEditor
 from html_editor.html_editor_main import HtmlElement as HtmlElementbase
 from html_editor.html_writer import HtmlWriter
+from html_editor.html_const import NEW_LINE
 from bs4.element import Tag
 from bs4.formatter import Formatter
 import html_editor.html_const as html_const
@@ -94,7 +98,6 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
     def __init__(self, html_path: str = '') -> None:
         super().__init__(html_path)
         self.init_values_html_writer(html_path)
-        
         self.body:Tag = None
         self.soup = None
 
@@ -104,6 +107,7 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
 
     def create_html(self,html_path:str='',basic_html_file_path:str='', encoding='cp932'):
         super().create_html(html_path, basic_html_file_path)
+        self.add_outline_body_with_div()
         self.soup = BeautifulSoup(
             open(self.html_path, encoding=encoding), 'html.parser')
 
@@ -140,10 +144,26 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
     #     return super().init_values(css_path)
 
     def add_outline_body_with_div(self, html_basic_path: str = ''):
-        # return super().add_outline_body_with_div(html_basic_path)
+        # HtmlEditerBSでは動作を調整中、
+        # 一旦html headerタグと、<body><!--main contents--></body>が記載されていることを想定
+        #/
+        # なので、bodyタグに div class=main_contents を差し込む
+        BEFORE_STR = '<body><!--main contents--></body>'
+        AFTER_STR = '<body><!--main contents-->' + NEW_LINE
+        AFTER_STR += '    <div class="main-contents">' + NEW_LINE
+        AFTER_STR += '    </div><!--main contents-->' + NEW_LINE
+        AFTER_STR += '</body>'
+        with open(self.html_path, 'r')as fr:
+            buf = fr.read()
+        import time
+        time.sleep(0.1)
+        buf = buf.replace(BEFORE_STR, AFTER_STR)
+        with open(self.html_path, 'w') as fw:
+            fw.write(buf)
+        # super().add_outline_body_with_div(html_basic_path)
         return 
     def remover_html_source_outer_main_contents(self):
-        # return super().remover_html_source_outer_main_contents()
+        super().remover_html_source_outer_main_contents()
         return
     # def add_outline_body(self, html_basic_path: str = ''):
         # return super().add_outline_body(html_basic_path)
@@ -203,6 +223,12 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         self.soup.body.append(element.get_tag())
         # return super().add_to_file(element)
     
+    def add_to_file_main_contents(self, element: 'HtmlElement'):
+        """ html ファイルの body タグの中の div class="main_contents" の最後に追記する"""
+        main_contents = self.soup.body.find('div', class_='main-contents')
+        self.soup.body.append(element.get_tag())
+        # return super().add_to_file(element)
+    
     def add_to_file_by_text(
         self, 
         text: str = '', 
@@ -228,11 +254,16 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         # return super().__add_element(element)
         self.soup.body.append(element.get_tag())
 
-    def add_css_file_path_list(self, css_path: str, absolute_path: str = './'):
+    def add_css_file_path_list(self, css_path: 'Union[str,list[str]]', absolute_path: str = './'):
         super().add_css_file_path_list(css_path, absolute_path)
-        css = os.path.basename(css_path)
-        value = absolute_path + css
-        self.add_css_file_path(value)
+        if isinstance(css_path, list):
+            css_path_list = css_path
+        else:
+            css_path_list = [css_path]
+        for css_path in css_path_list:
+            css = os.path.basename(css_path)
+            value = absolute_path + css
+            self.add_css_file_path(value)
 
     def add_css_file_path_from_file(self, css_file_path: str, absolute_path_from_root: str = './'):
         # return super().add_css_file_path_from_file(css_file_path, absolute_path_from_root)

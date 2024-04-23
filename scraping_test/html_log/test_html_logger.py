@@ -1,5 +1,8 @@
 
-import pathlib,sys
+import pathlib
+from pathlib import Path
+import os
+import sys
 path = str(pathlib.Path(__file__).parent.parent)
 sys.path.append(path)
 import import_init
@@ -13,7 +16,6 @@ except Exception as e:
 
 
 def html_log_test():
-    import pathlib,os
     log_dir = str(pathlib.Path(__file__).parent.joinpath('test_log'))
     css_path = os.path.join(log_dir, 'log.css')
     css_path = 'log.css'

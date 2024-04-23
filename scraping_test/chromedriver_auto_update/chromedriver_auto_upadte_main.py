@@ -47,7 +47,8 @@ def download_webdriver_version(version, file_url):
     import shutil
     unzip_dir = dl_dir.joinpath(Path(save_path).stem)
     unzip_dir.mkdir(exist_ok=True)
-    shutil.unpack_archive(save_file.name, str(unzip_dir))
+    # shutil.unpack_archive(save_file.name, str(unzip_dir))
+    unzip_file(save_file.name, unzip_dir)
     print('# zipファイルはいらないので削除 ')
     os.remove(save_path)
     # chromedriver_binary > chromedriver_xxx.x.xxxx.xxx > chromedriver-platform > chromedriver.exe があるはず
@@ -172,20 +173,23 @@ i = 4
 
 """
 
+def _excute_command(cmd):
+    from excute_command_main import excute_command
+    ret_line = excute_command(cmd)
+    return ret_line
+
 # https://qiita.com/yuyhiraka/items/6debaf0ad20a7fd4426c
 def get_command_chrome_browser_version_win():
     """ コマンドでChromeブラウザのバージョンを取得する Windows """
     win_cmd = 'dir /B /O-N "C:\Program Files (x86)\Google\Chrome\Application" | findstr "^[0-9].*¥>'
-    from excute_command_main import excute_command
-    ret = excute_command(win_cmd)
-    return ret[0].strip()
+    ret_lines = _excute_command(win_cmd)
+    return ret_lines[0].strip()
 
 def get_command_chrome_browser_version_mac():
     """ コマンドでChromeブラウザのバージョンを取得する Mac """
     mac_cmd = '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version'
-    from excute_command_main import excute_command
-    ret = excute_command(mac_cmd)
-    return ret[0].strip()
+    ret_lines = _excute_command(mac_cmd)
+    return ret_lines[0].strip()
 
 def get_command_chrome_browser_version():
     """ コマンドでChromeブラウザのバージョンを取得する Windows/Mac """
@@ -215,8 +219,7 @@ def get_pip_package_path(package_name):
     pip install のパッケージのインストールフォルダパスを取得する
     """
     mac_cmd = 'pip show {}'.format(package_name)
-    from excute_command_main import excute_command
-    ret_lines = excute_command(mac_cmd)
+    ret_lines = _excute_command(mac_cmd)
     for line in ret_lines:
         if 'WARNING: Package(s) not found'in line:
             raise Exception('パッケージが存在しません。(package_name={})'.format(package_name))
@@ -254,8 +257,7 @@ def get_chromedriver_ver_in_pip():
     pip の chromedriver-binary のバージョンを取得する
     """
     mac_cmd = 'pip show chromedriver-binary'
-    from excute_command_main import excute_command
-    ret_lines = excute_command(mac_cmd)
+    ret_lines = _excute_command(mac_cmd)
     for line in ret_lines:
         if 'Version:' in line:
             ret = line.replace('Version:', '').strip()
@@ -277,6 +279,9 @@ def get_chromedriver_ver_in_pip():
 
 
 def update_chrome_driver_in_target_dir(targeet_dir):
+    """
+    特定のフォルダの chromedriver の binary ファイルを更新する。
+    """
     chrome_ver = get_command_chrome_browser_version()
     print('chrome_ver = {}'.format(chrome_ver))
     major_ver = get_chrome_major_version(chrome_ver)
@@ -291,8 +296,28 @@ def update_chrome_driver_in_target_dir(targeet_dir):
     shutil.copy(
         src=downloaded_chromedriver_binary_path,
         dst=targeet_dir)
-    from pathlib import Path
     print('COPIED [{}] = {}'.format(Path(downloaded_chromedriver_binary_path).name, targeet_dir))
+    # ダウンロード・解凍したファイル・フォルダは削除していないので注意
+
+def unzip_file(read_zip_file_path, save_file_dir_path):
+    import zipfile
+    from pathlib import Path
+    # ZIPファイルを開く
+    with zipfile.ZipFile(str(read_zip_file_path), 'r') as zip_ref:
+        # ZIPファイル内のファイル名リストを取得
+        for file_name in zip_ref.namelist():
+            # ファイルをバイナリモードで開く
+            with zip_ref.open(file_name, 'r') as file:
+                # ファイル内容をバイナリデータとして読み込む
+                binary_data = file.read()
+                # バイナリデータを適切に扱う（保存や処理）
+                Path(save_file_dir_path).mkdir(exist_ok=True)
+                # file_name 'chromedriver-win64/LICENSE.chromedriver' の時に親ディレクトリがないとNoSuchエラーとなる
+                Path(save_file_dir_path).joinpath(file_name).parent.mkdir(exist_ok=True)
+                save_path = str(Path(save_file_dir_path).joinpath(file_name))
+                with open(save_path, 'wb') as out_file:
+                    out_file.write(binary_data)
+
 
 
 def _test_method():
@@ -308,8 +333,7 @@ def _test_method():
     print('chromedriver url = {}'.format(download_url))
     #/
     cmd = 'pip install chromedriver-binary=={}'.format(json_version)
-    from excute_command_main import excute_command
-    ret_lines = excute_command(cmd)
+    ret_lines = _excute_command(cmd)
     print(''.join(ret_lines))
 #     """
 #     pip chromedriverインストール成功時

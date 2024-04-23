@@ -369,6 +369,7 @@ __memo.txt
 __* - ショートカット
 __backup/
 __temp/
+__temp_*/
 __test_sample/
 __test_*.png
 __sample_*.*

@@ -8,7 +8,9 @@ else:
 from html_editor.html_writer import HtmlWriter
 from html_editor.html_editor_main import HtmlElement
 from html_editor.html_const import HtmlTagName
-import pathlib,os
+import pathlib
+from pathlib import Path
+import os
 
 class HtmlLogConst():
     ATTR_CLASS = 'class'
@@ -21,7 +23,14 @@ class HtmlLogConst():
     CLASS_NAME_PROCEDURE = 'procedure' 
     CLASS_NAME_CONFIRMATION = 'confirmation' 
     INDENT = '    '
-import os
+    LOG_FORMAT_MAIN_TITLE = 'add_main_title'
+    LOG_FORMAT_SECTION_TITLE = 'add_section_title'
+    LOG_FORMAT_NORMAL = 'add_log'
+    LOG_FORMAT_IMAGE_BOX = 'add_log_image_box'
+    LOG_FORMAT_IMAGE_DESC = 'add_log_image_desc'
+    LOG_FORMAT_PROCEDURE = 'add_procedure'
+    LOG_FORMAT_CONFIRMATION = 'add_confirmation'
+
 class HtmlLogger():
     """
     操作や処理のログなどファイルに保存する
@@ -75,6 +84,79 @@ class HtmlLogger():
         self.log_level_txt = LogLevel.INFO.value
         # self.add_log_txt('create log')
         # 
+        self.log_format_dict = {}
+        self._init_css_format_values()
+    
+    ######################################################################
+    ### _init_css_format_values BEGIN
+    def _init_css_format_values(self, tag_dict:dict=None):
+        """
+        log.htmlで使用するcssスタイルを設定する
+
+        Args:
+            {lof_format_name : HtmlElement}
+
+        Memo:
+            目的別のログ出力のメソッド（add_log_main_title, add_log_procedure など）
+             のフォーマットを設定する。
+              （log_format_name[dictのkey]は HtmlLogConst.LOG_FORMAT_~ で指定する）
+            タグやCSS（クラス名やプロパティ）を変えたいときはこれを変更する。
+
+        Related Methods:
+            add_main_title
+             add_section_title
+            add_log
+             add_log_image
+            add_procedure
+             add_confirmation
+        """
+        tag_text = ''
+        name = 'add_main_title'
+        key = HtmlLogConst.LOG_FORMAT_MAIN_TITLE
+        el = HtmlElement(
+            tag_text, HtmlTagName.P,
+            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_MAIN_TITLE})
+        self.log_format_dict.update({key:el})
+        #/
+        key = HtmlLogConst.LOG_FORMAT_SECTION_TITLE
+        el = HtmlElement(
+            tag_text, HtmlTagName.P,
+            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_SECTION_TITLE})
+        self.log_format_dict.update({key:el})
+        #/
+        # add log normal
+        key = HtmlLogConst.LOG_FORMAT_NORMAL
+        el = HtmlElement(
+            tag_text, HtmlTagName.P,
+            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG})
+        self.log_format_dict.update({key:el})
+        #/
+        key = HtmlLogConst.LOG_FORMAT_IMAGE_BOX
+        box_el = HtmlElement(
+            '',HtmlTagName.DIV,
+            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_BOX})
+        self.log_format_dict.update({key:box_el})
+        #/
+        key = HtmlLogConst.LOG_FORMAT_IMAGE_DESC
+        image_description:str='log-image'
+        span_el = HtmlElement(
+            image_description,HtmlTagName.SPAN,
+            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_DESC})
+        self.log_format_dict.update({key:span_el})
+        #/
+        key = HtmlLogConst.LOG_FORMAT_PROCEDURE
+        el = HtmlElement(
+            tag_text, HtmlTagName.P,
+            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_PROCEDURE})
+        self.log_format_dict.update({key:el})
+        #/
+        key = HtmlLogConst.LOG_FORMAT_CONFIRMATION
+        el = HtmlElement(
+            tag_text, HtmlTagName.P,
+            {HtmlLogConst.ATTR_CLASS:HtmlLogConst.CLASS_NAME_CONFIRMATION})
+        self.log_format_dict.update({key:el})
+    ### _init_css_format_values END
+    ######################################################################
 
     def _init_html_writer(self,log_html_file_name, log_html_css_path, create_log):
         # HtmlWriter
@@ -168,39 +250,52 @@ class HtmlLogger():
     def reset_log_file(self):
         self.html_writer.create_html_content()
         self.add_log_txt('reset html')
-    def add_main_title(self,value:str):
+
+    ########
+    # 目的別のログ出力メソッド
+    ########
+    def add_main_title(self, tag_text:str):
         """
         html のメインタイトルをログに出力する
          HtmlTagName.P,{'class':'main_title'})
         """
-        el = HtmlElement(
-            value,HtmlTagName.P,
-            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_MAIN_TITLE})
+        # el = HtmlElement(
+        #     value,HtmlTagName.P,
+        #     {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_MAIN_TITLE})
+        el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_MAIN_TITLE]
+        el.tag_text = tag_text
         self._add_log_main(el)
-    def add_section_title(self,value:str):
+
+    def add_section_title(self, tag_text:str):
         """
         section のタイトルをログに出力する
          HtmlTagName.P,{'class':'section-title'})
         """
-        el = HtmlElement(
-            value,HtmlTagName.P,
-            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_SECTION_TITLE})
+        # el = HtmlElement(
+        #     value,HtmlTagName.P,
+        #     {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_SECTION_TITLE})
+        el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_SECTION_TITLE]
+        el.tag_text = tag_text
         self._add_log_main(el)
-    def add_log(self,value:str):
+
+    def add_log(self, tag_text:str):
         """
         ログを出力する（標準）
          HtmlTagName.P,{'class':'log'}
         """
-        el = HtmlElement(
-            value,HtmlTagName.P,
-            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG})
+        # el = HtmlElement(
+        #     value,HtmlTagName.P,
+        #     {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG})
+        el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_NORMAL]
+        el.tag_text = tag_text
         self._add_log_main(el)
         
     def add_log_image(
-        self,image_path:str,
-         image_description:str='log-image',
-         css_add_class_name:str='',
-         log_level:int=LogLevel.INFO.value):
+        self,
+        image_path:str,
+        image_description:str='log-image',
+        css_add_class_name:str='',
+        log_level:int=LogLevel.INFO.value):
         """
         ログを出力する（画像）
          HtmlTagName.IMG,{'class':'log-image'}
@@ -211,16 +306,18 @@ class HtmlLogger():
             if not os.path.exists(self.log_image_dir_path):
                 os.mkdir(self.log_image_dir_path)
             return
-        box_el = HtmlElement(
-            '',HtmlTagName.DIV,
-            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_BOX})
+        # box_el = HtmlElement(
+        #     '',HtmlTagName.DIV,
+        #     {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_BOX})
+        box_el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_IMAGE_BOX]
         box_el.add_class_name(css_add_class_name)
         
-        img_el = HtmlElement.create_html_element_img(image_path,image_description)
+        img_el = HtmlElement.create_html_element_img(image_path, image_description)
         box_el.add_element(img_el)
-        span_el = HtmlElement(
-            image_description,HtmlTagName.SPAN,
-            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_DESC})
+        # span_el = HtmlElement(
+        #     image_description,HtmlTagName.SPAN,
+        #     {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_LOG_IMAGE_DESC})
+        span_el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_IMAGE_DESC]
         box_el.add_element(span_el)
         #イメージの場合は DIVタグがからテキストで無駄なログが出力されてしまう
         # self._add_log_main(box_el)
@@ -229,7 +326,6 @@ class HtmlLogger():
         #txtログには説明とイメージパスを追記
         self.__add_log_txt(span_el)
         self.add_log_txt(image_path,self.log_level_txt)
-    
 
     def add_log_element(self,element:HtmlElement):
         """
@@ -246,23 +342,29 @@ class HtmlLogger():
         """
         self.add_log(value)
     ##########
-    def add_procedure(self,value:str):
+
+    def add_procedure(self, tag_text:str):
         """
         手順をログに出力する
          HtmlTagName.P,{'class':'procedure'})
         """
-        el = HtmlElement(
-            value,HtmlTagName.P,
-            {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_PROCEDURE})
+        # el = HtmlElement(
+        #     value,HtmlTagName.P,
+        #     {HtmlLogConst.ATTR_CLASS: HtmlLogConst.CLASS_NAME_PROCEDURE})
+        el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_PROCEDURE]
+        el.tag_text = tag_text
         self._add_log_main(el)
-    def add_confirmation(self,value:str):
+
+    def add_confirmation(self, tag_text:str):
         """
         確認内容をログに出力する
          HtmlTagName.P,{'class':'confirmation'})
         """
-        el = HtmlElement(
-            value,HtmlTagName.P,
-            {HtmlLogConst.ATTR_CLASS:HtmlLogConst.CLASS_NAME_CONFIRMATION})
+        # el = HtmlElement(
+        #     value,HtmlTagName.P,
+        #     {HtmlLogConst.ATTR_CLASS:HtmlLogConst.CLASS_NAME_CONFIRMATION})
+        el:HtmlElement = self.log_format_dict[HtmlLogConst.LOG_FORMAT_CONFIRMATION]
+        el.tag_text = tag_text
         self._add_log_main(el)
     ##########
     # def add_log_element(self,element:HtmlElement):
