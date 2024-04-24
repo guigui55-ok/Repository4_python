@@ -2,8 +2,9 @@
 
 
 .log {
-    width:200px;
-    height:200px;
+    /* width:200px; */
+    /* height:200px; */
+    width:auto;
 }
 
 .log_image_box {

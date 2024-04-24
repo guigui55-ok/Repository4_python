@@ -219,9 +219,15 @@ class HtmlLogger():
         if el.get_attribute('class') == HtmlLogConst.CLASS_NAME_LOG:
             value = HtmlLogConst.INDENT + value
         self.add_log_txt(value)
+    
+    def add_log_txt_align_format(self,el:HtmlElement):
+        """HtmlElementからテキストlogに追記する"""
+        return self.__add_log_txt_align_format(el)
+    
     def __add_log_txt(self,el:HtmlElement):
         """HtmlElement からテキストlog に追記する"""
         self.__add_log_txt_align_format(el)
+
     def __add_log_main(self,el:HtmlElement,log_level:int = LogLevel.INFO.value):
         """ログに追記する main"""
         self._add_log_html(el,log_level)

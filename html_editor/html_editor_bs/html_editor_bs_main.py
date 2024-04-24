@@ -1,6 +1,7 @@
 
 if __name__ == '__main__':
-    import __init__
+    # import __init__
+    pass
 
 import os
 from bs4 import BeautifulSoup
@@ -40,6 +41,13 @@ class HtmlElementBs(HtmlElementbase,Tag):
         return el_bs
 
     def cnv_html_element_to_tag(self):
+        """
+        HtmlElement を from bs4.element import Tag に変換する。
+            （子要素も処理をする）
+        
+        Memo:
+            imgタグは使いやすいように追加の処理をしている
+        """
         # attrs = self.attribute
         # tag = soup.new_tag(self.tag, attrs=attrs)
         # tag.string = self.tag_text
@@ -58,6 +66,13 @@ class HtmlElementBs(HtmlElementbase,Tag):
         return tag
 
     def get_tag_single(self,element:'HtmlElement'):
+        """
+        HtmlElement を from bs4.element import Tag に変換する。
+            （子要素は処理をしない）
+        
+        Memo:
+            imgタグは使いやすいように追加の処理をしている
+        """
         soup = BeautifulSoup()
         if tag_is_closing_type(element.tag):
             ret = element.cnv_html_element_to_str()
@@ -84,6 +99,12 @@ class HtmlElementBs(HtmlElementbase,Tag):
         self.child_tags.append(element.get_tag())
     
     def get_tag(self):
+        """
+        HtmlElement を from bs4.element import Tag に変換する。
+        
+        Memo:
+            self.cnv_html_element_to_tag
+        """
         return self.cnv_html_element_to_tag()
         
 class HtmlElement(HtmlElementBs):
@@ -222,11 +243,13 @@ class HtmlEditorBs(HtmlEditor,HtmlWriter):
         """ html ファイルの body タグの最後に追記する"""
         self.soup.body.append(element.get_tag())
         # return super().add_to_file(element)
+
     
     def add_to_file_main_contents(self, element: 'HtmlElement'):
         """ html ファイルの body タグの中の div class="main_contents" の最後に追記する"""
         main_contents = self.soup.body.find('div', class_='main-contents')
-        self.soup.body.append(element.get_tag())
+        main_contents.append(element.get_tag())
+        # self.soup.body.append(element.get_tag())
         # return super().add_to_file(element)
     
     def add_to_file_by_text(

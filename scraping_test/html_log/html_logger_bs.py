@@ -21,21 +21,23 @@ else:
 #/
 from html_editor.html_editor_bs.html_editor_bs_main import HtmlEditorBs
 from html_editor.html_editor_bs.html_editor_bs_main import HtmlElementBs
+# from html_editor.html_editor_main import HtmlElement
 
 if __name__ == '__main__':
-    from html_log.html_logger import HtmlElement
     from html_log.html_logger import HtmlTagName
+    from html_log.html_logger import HtmlElement
     from html_log.html_logger import HtmlLogger
 else:
     # from html_log.html_logger import HtmlTagName
     from html_editor.html_const import HtmlTagName
     from html_editor.html_editor_main import HtmlElement
+    from html_log.html_logger import HtmlLogger
 
 import pathlib
 import os
 from pathlib import Path
 
-from html_log.html_logger import HtmlLogger
+# from html_log.html_logger import HtmlLogger
 
 class HtmlLogConst():
     ATTR_CLASS = 'class'
@@ -48,14 +50,18 @@ class HtmlLogConst():
     CLASS_NAME_PROCEDURE = 'procedure' 
     CLASS_NAME_CONFIRMATION = 'confirmation' 
     INDENT = '    '
-import os
 
 class HtmlLoggerBs(HtmlLogger):
     def __init__(self, logger_name: str, log_dir_path: str = '', log_dir_name: str = 'log', log_txt_file_name: str = 'log.txt', log_html_file_name: str = 'log.html', log_html_css_path: str = 'log.css', log_image_dir_name: str = 'image', create_log: bool = False, log_level: int = LogLevel.REPORT.value) -> None:
-        super().__init__(logger_name, log_dir_path, log_dir_name, log_txt_file_name, log_html_file_name, log_html_css_path, log_image_dir_name, create_log, log_level)
+        super().__init__(
+            logger_name, log_dir_path, log_dir_name, log_txt_file_name, log_html_file_name, log_html_css_path, log_image_dir_name, create_log, log_level)
         # self.html_writer.__class__ = HtmlEditorBs
         # HtmlWriter
         self._init_html_writer(log_html_file_name, log_html_css_path, create_log)
+        # # スーパークラス名を取得して出力
+        # for cls in HtmlLoggerBs.__bases__:
+        #     print(cls.__name__)
+        # print( HtmlLoggerBs.__bases__)
 
     def _init_html_writer(self,log_html_file_name, log_html_css_path, create_log):
         # HtmlWriter
@@ -71,9 +77,25 @@ class HtmlLoggerBs(HtmlLogger):
 
     
     def _add_log_main(self, el:HtmlElement, log_level:int = LogLevel.INFO.value):
-        """ ログに追記する main """
+        """ ログに追記する main  HtmlLoggerBs"""
         self._add_log_html(el,log_level)
-        self.__add_log_txt(el)
+        # print( HtmlLoggerBs.__bases__)
+        # self.__add_log_txt(el)
+        value = self.add_log_txt_align_format(el)
+        # value = self.__add_log_txt_align_format(el)
+        # self.html_writer.add_
+        # value = super().__add_log_txt_align_format(el) #AttributeError: 'super' object has no attribute '_HtmlLoggerBs__add_log_txt_align_format'
+        
+        # self.add_log_txt(value, log_level)
+    
+    def __add_log_txt(self, el: HtmlElement):
+        return super().__add_log_txt(el)
+
+    def add_log_txt(self,value:str,log_level:int = LogLevel.INFO.value):
+        """テキストlogのみに追記する base"""
+        if self.log_level_txt <= log_level:
+            self.txt_logger.info(value)
+
     # def __add_log_html(self, el: HtmlElementBs, log_level: int = LogLevel.INFO.value):
     #     # return super().__add_log_html(el, log_level)
     #     """HtmlElement から HTML log に追記する"""
@@ -109,7 +131,6 @@ class HtmlLoggerBs(HtmlLogger):
     #     self.__add_log_html(el,log_level)
     #     self.__add_log_txt(el)
 
-        
     # def _add_log_main(self,el:HtmlElementBs,log_level:int = LogLevel.INFO.value):
     #     """ログに追記する main"""
     #     if isinstance(el, HtmlElement):

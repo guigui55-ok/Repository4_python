@@ -79,6 +79,8 @@ def html_log_test():
     logger.info('テキストのみ')
     logger.add_section_title('セクションタイトル2')
     logger.info('内容2')
+    image_path = str(Path(__file__).parent.joinpath('__test_sample'))
+    logger.add_log_image()
     logger.set_css_path(css_paths)
     logger.finish_to_create_html()
     # is check tag
