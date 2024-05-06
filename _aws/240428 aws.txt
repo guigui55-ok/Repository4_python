@@ -1,0 +1,1786 @@
+
+######################################################################
+
+
+AWSのサービスについて、何があるかを列挙してください。
+
+ChatGPT
+AWS（Amazon Web Services）は多岐にわたるクラウドサービスを提供しており、それぞれが特定の技術ニーズに対応しています。以下は、AWSが提供する主要なサービスの一部をカテゴリ別に列挙したものです：
+
+コンピューティング
+Amazon EC2 (Elastic Compute Cloud): 仮想マシンを提供。
+AWS Lambda: サーバーレスコンピューティングを実現。
+Amazon Lightsail: シンプルな仮想プライベートサーバー(VPS)。
+Amazon ECS (Elastic Container Service): コンテナ管理。
+Amazon EKS (Elastic Kubernetes Service): Kubernetes オーケストレーション。
+ストレージ
+Amazon S3 (Simple Storage Service): オブジェクトストレージサービス。
+Amazon EBS (Elastic Block Store): ブロックレベルストレージ。
+Amazon Glacier: 長期データアーカイブとバックアップ。
+AWS Storage Gateway: オンプレミスとクラウドのストレージを統合。
+データベース
+Amazon RDS (Relational Database Service): リレーショナルデータベース管理。
+Amazon DynamoDB: NoSQLデータベースサービス。
+Amazon Redshift: データウェアハウスサービス。
+Amazon ElastiCache: インメモリデータストア／キャッシュサービス。
+マシンラーニング
+Amazon SageMaker: 機械学習モデルの開発とデプロイメント。
+AWS DeepLens: ディープラーニング対応ビデオカメラ。
+Amazon Rekognition: 画像とビデオ分析。
+IoT
+AWS IoT Core: デバイスをクラウドに接続。
+Amazon FreeRTOS: IoTデバイス用のオペレーティングシステム。
+AWS IoT Analytics: IoTデータの分析。
+ネットワーキング
+Amazon VPC (Virtual Private Cloud): 仮想ネットワークをユーザー定義。
+AWS Direct Connect: オンプレミスネットワークとAWSの直接接続。
+Amazon Route 53: スケーラブルなDNSウェブサービス。
+開発者ツール
+AWS CodeCommit: プライベートGitリポジトリ。
+AWS CodeBuild: コンパイルおよびテストコード。
+AWS CodeDeploy: 自動デプロイメントサービス。
+管理とガバナンス
+AWS CloudTrail: ユーザー活動とAPI使用の記録。
+Amazon CloudWatch: リソースとアプリケーションの監視。
+AWS Auto Scaling: アプリケーションのスケールアップおよびスケールダウン。
+これらはAWSが提供するサービスの一部に過ぎませんが、クラウドコンピューティングのあらゆる側面をカバーしていることがわかります。各サービスは特定のニーズに合わせて設計されており、それぞれが独自の機能とメリットを提供します。
+
+
+
+
+
+######################################################################
+AWSとは？できることや構築手順をわかりやすく解説
+https://dx.nid.co.jp/column/what-is-aws
+
+
+
+AWSの代表的なサービス6選
+
+CodeCommit
+https://qiita.com/itawn/items/00f6deaf6534980063d1
+
+コンピューティング
+コンピューティングは、いわゆるサーバ構成の部分のことで、サーバのスペックや台数によって時間ごとの料金にも変動があります。
+例えば、無料利用枠として用意されているLinuxのt3.microを、東京リージョンを選択し有料で使用する場合、1時間あたり0.0136USD（1.93円）かかります
+
+ストレージ
+ストレージは、基本的にはオブジェクトを1GB保存するごとに料金が発生します。
+例えばS3標準を使用した場合、表のような料金設定となっており、使用量が増えるほど1GBあたりの料金は下がるよう設定されています。
+～50TB
+0.023USD（3.27円）
+
+
+データ転送（アウト）
+AWSからインターネットへのデータ転送（アウト）は、同じデータセンター内やAWSに向かうデータ転送を除き、データの転送量に応じて料金が発生します。
+すべての AWS のサービスとリージョン（中国と GovCloud ※を除く）で合計100GB のインターネットへのデータ転送（OUT）は、毎月無料で利用できます。
+例えば東京リージョンからインターネットへ転送（アウト）する場合、表のような料金設定になっています。
+ひと月あたりの転送データ量
+1GBあたりの料金
+～10TB
+0.114USD（16.21円）
+
+
+AWSでサーバを構築する方法
+自社で構築する
+外部に依頼する
+
+
+AWSを用いて自社でサーバ構築する際の手順とポイント
+アカウント設定、開設
+セキュリティの設定
+データのバックアップ設定・信頼性
+コストと料金体系の把握
+支出の出所の確認は「AWS Cost Explorer」、予算目標の策定は「AWS Budgets」を利用すると把握できます。
+ベストプラクティスの理解
+
+
+######################################################################
+サーバ構築前に準備すべきこと
+Amazon EC2の構築方法
+無料利用枠の対象になっているインスタンスを選択すると、1ヵ月あたり750時間分が無料で利用できます。
+750時間＝31.25日
+
+コンソールにログインする
+インスタンスを起動する
+ワークロードに最適なインスタンスタイプを選択し、作成します。
+「t2.micro」や「AMI（Amazon Machine Image）:Amazon Linux 2 AMI」などがおすすめです。
+
+インスタンスを設定する
+インスタンスに接続する
+インスタンスを終了する
+
+######################################################################
+
+AWSを用いたサーバ構築を外注する際のポイント
+AWSでの構築実績を確認する
+AWSの運用保守も対応可能か確認する
+セキュリティレベルの高さを確認する
+
+※検索について
+Google検索「AWS　構築」だと、広告、宣伝系が多いので
+DuckDuckGO https://duckduckgo.com/ で上記を検索
+
+※環境構築方法、手順
+【超簡単】無料枠内におさまる範囲でAWS環境を構築する
+https://qiita.com/kyooooonaka/items/2e3247d951496cc9a084
+
+
+
+https://qiita.com/kyooooonaka/items/af3b36d5e946b3152021
+「おひとり様」AWS Organizationsを運用する
+
+
+
+######################################################################
+
+IAM Identity Center
+https://qiita.com/sakai00kou/items/086a12caa69a78c18f61#iam-identity-center%E3%81%AE%E6%A7%8B%E6%88%90
+https://qiita.com/kyooooonaka/items/af3b36d5e946b3152021
+
+
+AWS　個人　料金
+ほとんどアクセスのない個人開発サービスがAWSに月額いくら払っているか全て公開します
+https://qiita.com/ttakuru88/items/65b2974cdd2bc9946ed9
+
+EC2 ELB
+EC2 インスタンス
+平均 $11.000（ドル円108円として約1188円）
+
+インスタンスはt2.microが1台。t3ではない。
+microインスタンスには、初回12ヶ月は1台分が無料というキャンペーンがあるんだけど、12ヶ月間の無料期間は過ぎているためお金がかかっている。
+
+
+EC2 その他　　EBSの料金ぽい。
+SSD30Gを使っているので計算は$0.12 * 30。
+空きがめっちゃあるのでもっと少なくてもいけそう。
+
+Route 53
+uwaoe.netのドメインを登録している。
+リクエスト数で料金が上がるらしいが、現状やっすいので、金額的には気にならないレベル。
+
+S3
+おえかきされた絵やアップロードされたユーザのアバターを保存している。
+
+Coundfront
+t2.microサーバから画像配信するのは不安があったので、画像の配信にはCloudfrontを使用するようにした。
+現状やっすいね。
+
+RDS
+使ってない。
+節約のためにEC2インスタンスにmysql-serverを入れちゃったのだけど、メモリが足りなくて辛い。
+t2.microってメモリ0.5Gじゃん？ mysqldがメモリを160MB使っていて、railsを動かしているpumaサーバが180MB使っている。その他サービスで使われているメモリもありで、デプロイを実行するメモリが足りない。デプロイする時、assets:precompileのたびにメモリが足りなくてアプリケーションサーバが死ぬ
+
+CloudWatch
+使ってない。
+別にサービスが何時間止まろうが困らないし・・。
+
+SES
+使ってるけど0円。
+月62,000件までは0円らしい。
+
+合計
+平均 $35.345（ドル円108円として約3817円）
+24/05/03時点
+5,415.33 円
+
+AWSには初回12ヶ月無料なことがいっぱいあって、1年間であれば次の構成が無料にできそう。
+
+EC2 microインスタンス1つ
+ALB 1つ
+RDS microインスタンス1つ
+
+
+
+https://www.youtube.com/watch?v=kLXtqBkGvFE
+ロードバランサー（ELB）
+＞
+Webサーバー（EC2）
+＞
+DB（RDS）
+
+---
+EC21台だけなら、ELBは不要、（EC2サーバーの中にmysqlでDBを運用すれば、RDSも不要）
+
+
+AWSマネジメント～
+右上
+リージョン
+検索欄：EC2
+インスタンス
+インスタンスの作成
+OSの選択
+　スタンダード？：AmazonLinux2AMI（CenoOS7系新しい）
+CPU選択
+　t2.micro
+確認と作成
+　起動
+キーペアの選択
+　キーペア：sshログインのカギ
+　　キーファイルはなくさぬよう
+
+ステータス
+　作成済み
+サーバーのことをインスタンスという
+
+アクション（起動、停止）
+ネットワーキング＞セキュリティグループ
+　　＞ポートの開放設定のこと
+
+インバウンドルール（入ってくるルート・ポートの設定）
+アウトバウンドルール、もある（今回は設定なし）
+
+再起動するたびに、IPが変わる
+　elasticIP（IPアドレス固定化）
+
+設定方法
+　メニュー＞elasticIP
+　　　固定IPの発行をする
+　　　　インスタンスを選択して、右上Actions、メニューから選ぶ
+
+Host　名前好きな名前
+User　ec2-user（EC2サーバーにアクセスするときのデフォルトのユーザー名）
+Hostname　elasticIP
+iDentityfile　sshのファイル（任意の場所）
+
+バックアップ（スナップショット）について
+メニュー＞ボリューム
+　ハードディスクを選択、アクション＞スナップショットの作成
+　　　イメージの作成
+　メニュー＞スナップショットへ
+　　　作成されている
+　　　　バックアップ選択、アクション＞イメージの作成
+　メニュー＞イメージ＞AMI
+　　　イメージが表示されている
+　　　　アクション＞起動＞インスタンスタイプの選択＞
+　　　　　　スナップショットの状態のEC２サーバーが起動される
+
+S3
+　クラウド上にファイルを保存できる機能
+　　S3ではサーバー1台のことをバケットという単位で呼ぶ
+　　　　1バケット
+
+
+######################################################################
+【AWS EC2 料金】無料で使いたい方必見！請求される理由と無料期間後の請求額は？
+https://www.youtube.com/watch?v=DtLIj3k8eSA
+EC2インスタンス（サーバー）
+EBSボリューム（ディスク）
+EIP（固定IPアドレス）
+データ転送
+　EC2インスタンス起動画面
+　　請求画面、請求書
+　　　AWS　無料利用枠　規約
+　　　
+
+---
+Google検索　AWS EC2 料金
+
+t2.microインスタンス
+東京リージョン　１ｈ、0.0152＄×720ｈ
+
+---
+Google検索　AWS EBS 料金
+
+30GB、I/O-200万回、スナップショット1GB
+
+gp3
+gp2
+　　＞30GBまで無料
+　　　デフォルトではEC2、8GBストレージがつく
+
+
+---
+Google検索　AWS EIP 料金
+
+EIP関連付けられている
+　そのインスタンスが実行中なら　料金が発生しない
+　　1つしかアタッチされていないときに　料金が発生しない
+
+1時間当たり、0.005ドル/ｈ
+　（無料にはならない）
+0.005ドル×720ｈ＝3.6ドル
+
+---
+Google検索　AWS 転送料金
+　（サーバーワークスHP内のページがわかりやすい）
+
+インターネット→EC2　費用は掛からない（アップロード）
+EC2→インターネット、ダウンロード　（端末からダウンロード）
+　月1GBまでは　無料
+　Amazon　CloudFront
+　　すべてのユーザーが最大100GBまで無料になった
+
+---
+EC2インスタンス起動画面
+　右上
+　　AMI
+　　　AmazonLinux2（Free）
+　　　　インスタンスタイプ（t2.micro(Free)）＞Next
+　　　　　　PublicIP（グローバルIPアドレスが有効）
+　　　　　　　　安くつかいたい場合は、Enable
+　　　　　　　　　　（起動のたびにIPが変わる）
+　　　　　　　　　　　　EIPを使う場合はDisableにする
+　EBS（8GBが最低）
+　　1GB×0.12ドル＝0.96ドル
+　　　無料は30GBまで無料（1年後でも）
+
+---
+請求の画面
+　AWSマネジメントコンソール
+　　　（ルートアカウント）
+　右上ユーザー名
+　　ダッシュボード　＞請求画面
+　　ページ中段、Free欄、今月の使用量が確認できる
+　※月末などに確認すると、無料枠が過ぎたときのシミュレーションができそう
+
+請求書
+　メニューBill＞Dateを選択
+　　下側にサービスごとになっている
+　　　EC2　Elastic Compute Cloud
+　　　
+
+----
+無料利用枠　規約
+無料サービスは1度のみ
+Amazon Organization
+　1つのアカウントのみ
+
+
+######################################################################
+aws lambda
+AWSLambdaとは
+https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/welcome.html
+
+AWS Lambda料金
+https://aws.amazon.com/jp/lambda/pricing/
+
+AWS Lambda の無料利用枠には、1 か月あたり 100 万件の無料リクエストと、1 か月あたり 40 万 GB-s のコンピューティングタイムが含まれており、x86 および Graviton2 プロセッサの両方を搭載した機能を利用できます。 さらに、無料利用枠には、リクエストごとの最初の 6 MB が無料ですが、それ以外に、1 か月あたり 100 GiB の HTTP レスポンスストリーミングが含まれます。
+
+
+AWS　Lambdaの最初の一歩　関数をつくって実行しよう！
+https://www.youtube.com/watch?v=36lVbVHeIXE
+
+自分のコードを使用する
+　Python,Ruby、C#、Node.jsなどなど
+
+リソース設定
+　メモリ（CPUとネットワークはそれに比例して設定される）
+
+ステートレス
+　外部ストレージに保存する（別途処理が必要）
+
+モニタリングとロギング
+
+---
+　呼び出し元の定義
+　　起動イベントの設定
+　（ステートレスなので、DBやファイルへの出力処理が必要）
+
+---
+　権限モデル
+　
+---
+　マネジメントコンソール＞検索　lambda
+　　メニュー＞関数
+　　　関数の作成
+　　　　1から作成
+　　　　関数名
+　　　　関数の作成
+
+
+
+AWS Cloud9（クラウド上の統合開発環境）＞からAWS lambdaのテストをする
+
+command
+ aws
+ sam
+ docker
+ node
+ python
+
+終了するときは左上メニューGoToDushBoadでAWS設定画面へ
+
+
+######################################################################
+ステップ 4: Hello World アプリケーションをデプロイする
+https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/tutorials-windows-deploy-application.html
+
+
+######################################################################
+######################################################################
+240502
+今回の実際の手順
+https://aws.amazon.com/jp/local/aws-beginner-six-points/
+無料アカウントを今すぐ作成
+
+E メールアドレス
+utauinu8102@gmail.com
+AWS アカウント名
+necko562
+PW
+Fav_at_aws
+
+2段階認証
+連絡先情報の入力
+
+
+https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome%3FhashArgs%3D%2523%26isauthcode%3Dtrue%26state%3DhashArgsFromTB_ap-southeast-2_2095a64af1466f45&client_id=arn%3Aaws%3Asignin%3A%3A%3Aconsole%2Fcanvas&forceMobileApp=0&code_challenge=r6hWfvxrOAsDBkueoiVtlLF-l2mqfJ0S-tLQIeEHizM&code_challenge_method=SHA-256
+
+
+Tips
+左上
+「/Resources」(フォワードスラッシュ) と入力して、検索結果を EC2 インスタンス、S3 バケットなどのリソースに絞り込みます。
+
+右上
+最新: AWS User Notifications の Quick Setup
+AWS User Notifications の新しい Quick Setup 機能を使用して、CloudWatch、EC2、Health の共通通知を有効化します。
+
+
+
+検索窓「EC2」
+メニュー＞インスタンス
+インスタンの起動
+名前
+NeckoWebServer1
+新しいキーペアを作成
+NeckoWebServer1_KeyPair
+インスタンスを起動
+
+KeyPair名について
+https://blog.serverworks.co.jp/tech/2012/09/06/check-out-for-ssh-key-pair-name-with-cloudformation/
+
+(デプロイ編①)世界一丁寧なAWS解説。EC2を利用して、RailsアプリをAWSにあげるまで
+https://qiita.com/naoki_mochizuki/items/814e0979217b1a25aa3e
+
+1.VPC
+VPCとは、Virtual Private Cloudの略です。
+
+
+=====
+リージョン＞複数のアベイラビリティゾーン＞複数のデータセンター
+
+
+
+
+インスタンスの作成
+Chapter 05
+EC2内の環境整備
+Chapter 06
+Githubからのデプロイ
+Chapter 07
+webサーバ、アプリケーションサーバの設定
+Chapter 08
+終わりに
+
+
+https://qiita.com/gyu_outputs/items/f0ab345402362e43db80
+$ cd ~　
+#ターミナルをスタート地点に戻す
+
+$ mkdir ~/.ssh　　
+#.sshというディレクトリを作成
+# エラー『　mkdir: /Users/owner/.ssh: File exists　』と表示の場合、すでに存在します
+
+
+$ mv Downloads/ファイル名.pem .ssh/
+# mvコマンドで、移動させたい対象（ファイル名.pem）　→　.sshディレクトリに移動します。
+
+$ cd .ssh/
+
+$ ls
+# pemファイルが存在するか確認します
+
+
+
+https://qiita.com/gyu_outputs/items/cd2d937e9faf0c0c669c
+ターミナルでEC2とSSH接続は可能。
+
+ダッシュボード
+実行中のインスタンス
+インスタンスを選択
+セキュリティグループの『launch-wizard-3』をクリック
+インバウンド
+ルールを追加
+HTTP　を選択
+保存
+これでIPアドレス、WWW.やドメインでのWEB閲覧が可能となります。
+
+
+https://qiita.com/gyu_outputs/items/fc4f6e54864943121f80
+EC２にログインするにはどうすればいいのか？
+
+IDとPWが必要です。
+ID　＝　Elastic IP（パブリックIP）
+PW　＝　pemキー（EC2インスタンス作成時にダウンロードしたファイル）
+
+
+------------
+保存しておいた（ファイル名.pem）のアクセス権限の制限
+$ cd ~/.ssh
+
+$ ls
+# pemファイルが存在するか確認しましょう
+# ない場合は、『はじめてAWSでデプロイする方法①（インスタンスの作成）』を振り返ってください
+
+$ chmod 600 ダウンロードした鍵の名前.pem
+
+----------
+
+[初心者向け] 初めてのEC2ログイン：Windows編
+https://dev.classmethod.jp/articles/first-login-to-ec2-windows/
+※EC２（Windowｓ）
+
+
+、EC2にログイン後の操作（環境構築
+https://qiita.com/gyu_outputs/items/f4e44f5f88cca6fdbcff
+
+
+sudo yum -y update
+
+sudo yum -y install git make gcc-c++ patch libyaml-devel libffi-devel libicu-devel zlib-devel readline-devel libxml2-devel libxslt-devel ImageMagick ImageMagick-devel openssl-devel
+
+
+
+https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/eb-cli3-install.html
+
+https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/python-development-environment.html
+
+EB CLI をインストールする最も簡単で推奨される方法は、GitHub で入手できる EB CLI セットアップスクリプトを使用することです。
+
+https://github.com/aws/aws-elastic-beanstalk-cli-setup
+
+EB CLIのセットアップスクリプトを使ってみた
+https://qiita.com/ryomoucmei/items/91998479e8e1357ef286
+
+
+
+EB CLIのセットアップスクリプトを使ってみた
+https://qiita.com/ryomoucmei/items/91998479e8e1357ef286
+
+
+
+
+*********
+AWS EC2 AmazonLinux2 Gitをインストールする
+https://qiita.com/miriwo/items/8d5b35950232c1126d36
+
+sudo yum update
+sudo yum install git
+git version
+
+*********
+Linux で Python、pip、EB CLI をインストールする
+https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/eb-cli3-install-linux.html
+
+sudo yum install python
+
+curl -O https://bootstrap.pypa.io/get-pip.py
+
+python3 get-pip.py --user
+pip --version
+
+echo $SHELL
+/bin/bash
+
+## PATH 変数に実行可能パス ~/.local/bin を追加します。
+.bash_profile
+
+vi ~/.bash_profile
+
+export PATH=LOCAL_PATH:$PATH
+
+export PATH=L~/.local/bin:$PATH
+
+source ~/.bash_profile
+
+
+pip install awsebcli --upgrade --user
+
+eb --version
+
+pip install awsebcli --upgrade --user
+
+##########
+pip install virtualenv
+
+##########
+EB CLI の手動インストール
+https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/eb-cli3-install-advanced.html
+
+##########
+https://github.com/aws/aws-elastic-beanstalk-cli-setup
+
+mkdir work
+cd work
+git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
+
+python ./aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
+
+
+[ec2-user@ip-172-31-10-129 work]$ eb --version
+EB CLI 3.20.10 (Python 3.9.16 (main, Mar 28 2024, 00:00:00) 
+[GCC 11.4.1 20230605 (Red Hat 11.4.1-2)])
+
+
+
+
+EB CLI をインストールし、プロジェクトディレクトリを設定したら、1 つのコマンドで環境を作成できます。
+~/my-app$ eb create my-env
+
+
+
+AWS EC2でpythonプログラムを実行する環境構築
+https://qiita.com/jesuissuyaa/items/b0932540cc16edec6f03
+
+gistをつくる
+github gist
+https://gist.github.com/
+
+workフォルダに
+git clone https://gist.github.com/22ddcd47b03e11b92ce916ce35889f3f.git
+
+
+
+
+
+
+
+/////////////
+/////////////
+# vi
+■viの使い方
+https://docs.oracle.com/cd/E19253-01/816-3946/6ma6m5bnf/index.html
+https://www.gi.ce.t.kyoto-u.ac.jp/user/susaki/command/vi.html
+
+
+i:入力モード
+Esc キー:コマンドモード
+Ctrl+l:再描画
+
+※1: 行数を表示させるには、コマンドモードにて、:set nu
+逆に行数を表示させないためには、:set nonu
+と入力する。nu (number), nonu (no number)と覚えよう。
+
+コマンドモードでは、複数のキーボードコマンドを使ってカーソルを移動できます。
+
+
+左に移動するには、h を押します。
+右に移動するには、l を押します。
+下に移動するには、j を押します。
+上に移動するには、k を押します。
+
+
+1 行下への移動　Return
+1 行下の、最初の (空白ではない) 文字にカーソルを移動する
+
+左への移動　Back Spac
+1 文字分左にカーソルを移動する
+
+右への移動　Space Bar
+1 文字分右にカーソルを移動する
+
+先頭行への移動　H
+画面の先頭行にカーソルを移動する (high)
+
+中央行への移動　M
+画面の中央行にカーソルを移動する (middle)
+
+★最終行への移動　L
+画面の先頭行にカーソルを移動する(low)
+
+行頭(行の先頭)　^
+現在カーソルがある行の先頭に、カーソルを移動する
+★行末(行の終端)　$
+現在カーソルがある行の末尾に、カーソルを移動する
+
+a:カーソルの右側にテキストを追加
+A:その行の最後にテキストを追加
+
+:q!　保存しないで終了
+
+/////////////
+
+######################################################################
+AWS開発環境
+
+AWS Tool Kit
+https://aws.amazon.com/jp/builders-flash/202303/serverless-local-dev-environment/
+
+AWS Cloud9 について
+https://aws.amazon.com/jp/cloud9/pricing/
+https://business.ntt-east.co.jp/content/cloudsolution/ih_column-95.html
+
+
+検索バー: Cloud 9
+環境を作成
+既存のコンピューティング
+
+
+
+
+
+
+######################################################################
+AWSアカウント名を確認する方法
+https://dev.classmethod.jp/articles/202309-check-your-aws-account-name/
+
+Step 1 : Rootユーザーでアカウントページへのアクセス
+Rootユーザーの状態にて､下記のURLから AWS Biling のアカウントページにアクセスします｡
+※ ナビゲーションバーの右上にアカウント名やアカウントIDが表示されます｡ここで､ご利用中のアカウント名とIDを確認することも可能です。
+
+https://us-east-1.console.aws.amazon.com/billing/home#/account
+
+
+アカウント ID
+211125549414
+
+アカウント名
+necko562
+
+
+
+IAM ユーザーグループのリストの取得
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_groups_manage_list.html
+
+
+AWS マネジメントコンソール
+https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/home
+
+
+
+######################################################################
+なぜAWSのrootユーザの利用が危険なのか？?アカウント作成後の運用方法についてまとめてみた?
+アカウント作成後の推奨される運用方法
+https://dev.classmethod.jp/articles/rootuser-risk/
+
+
+AWS アカウントの root ユーザー (コンソール) に対して仮想 MFA デバイスを有効にする
+https://docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html
+
+AWS マネジメントコンソールへアクセス
+右上「セキュリティ認証情報」
+MFA を割り当てる
+
+
+
+AWSのルートユーザーにMFAを設定しよう
+https://www.cloudbuilders.jp/articles/469/
+
+認証デバイスのスマホにGoogle認証システムのインストールをしておくこと。
+　Google Authenticator
+
+MFA(Multi-Factor Authenticationまるちふぁくたーおーせんてぃけーしょん)とは多要素認証のことです。
+
+デバイス名はスマートフォン上での名前にもなるので、
+お使いの端末に合わせてわかりやすい登録名にしてください。
+例えばroot_iphone12_mini等です。
+
+root_galaxy_a21
+root_sc42a
+
+==========
+作業用のIAMユーザーを作成する
+
+https://dev.classmethod.jp/articles/minecraft-for-aws_create-iam-user/
+例 : 下記のように特定の権限のみを付与といった事も可能です｡
+
+サーバー(EC2)を起動と停止するだけの権限を付与
+IAMユーザーの作成と削除の権限と､サーバー(EC2)を停止するだけの権限を付与
+
+【AWSコンソール】→【IAM→ユーザー】→【ユーザーを追加
+TestUser1
+
+※IAM Identity Center が無効の場合は、有効にする導線となる
+Q: IAM アイデンティティセンターのコストはいくらですか? IAM アイデンティティセンターに追加料金は必要ありません
+
+＞AWS Organizations で有効にする(推奨)
+
+
+AWS Organizations では、追加料金なしで新しい AWS アカウントを作成できます。
+
+
+AWS Organizations を有効化しメンバーアカウントを新規作成するまでの全体の流れを把握してみる
+https://dev.classmethod.jp/articles/overview-introduction-to-organizations-enabled-configuration-procedure/
+
+アクセスコントロールの属性を管理
+管理者からアプリケーションと AWS アカウントへのアクセス権が付与されると、ここでそれらを見つけることができます。
+
+
+
+会社が管理するメールアドレスを使用します。パブリックメールプロバイダや、サードパーティーによって管理されるメールアドレスは使用しないでください。
+
+受信したメッセージを上級管理者のリストに直接転送するメールアドレスを使用します。アクセス権の確認など、AWS からアカウントの所有者に連絡する必要が生じる事象では、メールは複数の当事者に送信されます。こうすることで、誰かが休暇中や病欠であるか、あるいはすでに退職している場合でも、応答の遅延のリスクを軽減できます。
+
+IAMロールはデフォルトのOrganizationAccountAccessRoleを使います。ベストプラクティスには載っておりませんが、アカウント全体で一貫性のある名前が推奨されています。任意のIAMロール名を使う場合はメンバーアカウント追加時の運用も考慮していただければと思います。
+（名前は作成時に個別に指定できますが、アカウント全体で一貫性のある名前を使用することをお勧めします。）
+
+
+
+
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_accounts_access.html
+
+AWS Organizations の一部として提供されるツールを使用してアカウントを作成する場合、事前に設定済みの OrganizationAccountAccessRole というロールを使用してアカウントにアクセスします。
+
+
+※関連
+IAM ユーザーグループのリストの取得
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_groups_manage_list.html
+
+
+
+管理アカウントのアクセスロールを持つメンバーアカウントへのアクセス
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_access-cross-account-role
+
+AWS Organizations コンソールを使用してメンバーアカウントを作成すると、AWS Organizations によって、OrganizationAccountAccessRole という名前の IAM ロールがアカウントに自動的に作成されます。
+
+
+管理アカウントのベストプラクティス
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_best-practices_mgmt-acct.html
+
+AWS Organizationsとは？rootユーザも制御するその強力さを手を動かして体感してみる
+https://dev.classmethod.jp/articles/organizations-gettingstarted/
+
+最初の概要掴むにはやっぱりこれ。Black Belt資料
+
+##########
+「おひとり様」AWS Organizationsを運用する
+https://qiita.com/kyooooonaka/items/af3b36d5e946b3152021
+
+AWSアカウントの作成自体に費用はかかりません。 AWSはサービスを利用した分だけ課金される「従量課金」という料金体系になっているため、アカウントを作成してもAWSサービスを利用しなければ料金は発生しません
+
+
+開始方法
+https://us-east-1.console.aws.amazon.com/organizations/v2/home/get-started
+アカウントを作成または既存のアカウントを招待する
+組織のメンバーアカウントを OU に整理する
+ポリシーの作成
+AWS Organizations をサポートしている AWS サービスを有効にする
+
+
+
+
+
+OU（Organizational Unit）作成
+https://dev.classmethod.jp/articles/overview-introduction-to-organizations-enabled-configuration-procedure/
+Root にチェックを入れてからアクションをクリックし、組織単位の新規作成を選択。
+
+★
+サービスコントロールポリシー（SCP）の作成
+https://dev.classmethod.jp/articles/organizations-gettingstarted/
+
+ここでは、SCPで制御したいポリシーの代表例として、CloudTrailへのアクセスを制御します。AWSアカウント運用のベストプラクティスとしてCloudTrailの有効化はほぼマストですが、各AWSアカウントでAdministrator権限からCloudTrailの設定を変更されるのは、セキュリティ統制上、好ましく有りません。
+
+ここでは、サービスコントロールポリシーを利用して、メンバーアカウントによるAWS CloudTrailログの作成または変更を禁止します。マネジメントアカウントは、SCPの影響を受けないため、CloudTrail用のSCP適用後、ログの作成はマネジメントアカウントでの実施が必須となります。
+
+ポリシー名：Block CloudTrail Configuration Actions
+ポリシー入力欄で、サービス名にCloudTrailを入力
+アクションを選択：AddTags, CreateTrail, DeleteTrail, RemoveTags, StartLogging, StopLogging, UpdateTrail.
+「リソースを追加する」ボタンをクリックし、以下を設定し「リソースの追加」
+AWSサービス：CloudTrail
+Resource type：All Resources
+
+
+次に、本番環境組織ユニットでユーザーアカウントにアクセスを許可するAWSのサービスを定義し、ポリシー設定します。これにより、本番環境組織ユニットに所属するユーザーアカウントは、利用できるAWSサービスが制限されます。
+
+ポリシー名：Allow List for All Approved Services
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1111111111111",
+            "Effect": "Allow",
+            "Action": [ 
+                "ec2:*",
+                "elasticloadbalancing:*",
+                "codecommit:*",
+                "cloudtrail:*",
+                "codedeploy:*"
+              ],
+            "Resource": [ "*" ]
+        }
+    ]
+}
+
+最後に、メインアプリケーション組織ユニットにおいて、ユーザーのアクセスを拒否するポリシーを設定します。ここでは、DynamoDBへのアクセスを拒否するポリシーを設定します。
+ポリシー名： Deny List for MainApp Prohibited Services
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [ "dynamodb:*" ],
+      "Resource": [ "*" ]
+    }
+  ]
+}
+
+組織ユニットへのサービスコントロールポリシーの適用
+
+
+任意のOUに、先程作成したポリシーをアタッチする
+アカウントにアクセスし動作確認する
+※ルートユーザーでアクセスしているにも関わらず、CloudTrailの設定変更さえできない
+
+
+##########
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_access-cross-account-role
+
+
+https://us-east-1.console.aws.amazon.com/iam/home#/home
+ポリシーの作成
+OrganizationAccountAccessRole
+
+
+ポリシーの作成
+[ビジュアルエディタ] タブで、[サービスの選択] を選択し、検索ボックスに STS と入力してリストをフィルタリングし、[STS] オプションを選択します。
+「アクション」セクションassumeで、検索ボックスに「」と入力してリストをフィルタリングし、AssumeRoleオプションを選択します。
+「リソース」セクションで「特定の」を選択し、ARNs を追加」を選択し、前のセクションで作成したメンバーアカウント番号とロールの名前を入力します ( という名前を付けることをお勧めしますOrganizationAccountAccessRole）。
+ダイアログボックスに正しい ARNsたら、ARN を追加 を選択します。
+確認と作成ページで、新しいポリシーの名前を入力します。例: GrantAccessToOrganizationAccountAccessRole
+
+ユーザーグループ＞アクセス許可
+OrganizationAccountAccessRole
+
+*****
+最小アクセス許可
+組織の別のアカウントから AWS アカウント にアクセスするには、次のアクセス許可が必要です。
+
+sts:AssumeRole - Resource 要素は、アスタリスク (*) に設定するか、新しいメンバーアカウントにアクセスする必要のあるユーザーが含まれるアカウントのアカウント ID 番号に設定する必要があります。
+
+
+
+
+
+AWS Organizations コンソールを使用してメンバーアカウントを作成すると、AWS Organizations によって、OrganizationAccountAccessRole という名前の IAM ロールがアカウントに自動的に作成されます。
+
+
+
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_roles_use_switch-role-console.html
+role_name ? 引き受けるロールの名前。これはロールの ARN の末尾から取得できます。たとえば、ロールの ARN が arn:aws:iam::123456789012:role/TestRole である場合、ロール名は TestRole になります。
+
+
+AWS アカウント での IAM ユーザーの作成
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_users_create.html
+[コンソールアクセスを有効にする - オプション]: ユーザーが AWS Management Console にアクセスする必要がある場合は、該当ユーザーのパスワードを作成します。
+
+IAM Identity Centerを使って複数アカウント管理する。（その１：IAM Identity Centerでのログイン）
+https://qiita.com/sakai00kou/items/086a12caa69a78c18f61
+
+また、ユーザやグループに許可セットを割り当てる際、複数の許可セットを割り当てることもできるため、例えば設定作業用のフルアクセスポリシーと設定確認用のリードオンリーアクセスポリシー両方を付与して、作業時以外はリードオンリーアクセス権限を持つ許可セットでアクセスし、作業時のみフルアクセスを持つ許可セットでアクセスするといったことも簡単に実装可能です。
+
+今回は「事前定義された許可セット」から「AdministratorAccess」を選択し、作成する。
+
+「マルチアカウント許可」→「AWSアカウント」からユーザ・グループ、許可セットを結びつけたいAWSアカウントを選択して「ユーザーまたはグループを割り当て」を選択します。
+
+MFAデバイスの登録
+
+
+※IAMユーザーの作成は管理サイト以外からも作成できる
+IAM ユーザーの作成（コンソール）
+IAM ユーザーの作成 (AWS CLI)
+IAM ユーザーの作成 (AWS API)
+
+アカウントのサインインページへの URL。次の例を使用して、適切なアカウント ID またはアカウントエイリアスと置き換えます。
+https://AWS-account-ID or alias.signin.aws.amazon.com/console
+
+##########
+Identity and Access Management (IAM)
+https://us-east-1.console.aws.amazon.com/iam/home#/home
+
+AWS IAM アイデンティティセンター
+IAM Identity Center
+https://us-east-1.console.aws.amazon.com/iam/home#/home
+
+AWS Organizations
+https://us-east-1.console.aws.amazon.com/organizations/v2/home/accounts
+
+
+★注意
+アカウント管理ツールが複数あって、アカウント情報がそれぞれ共有されず独立しているのでわかりにくい。
+また、権限の設定方法、設定名もポリシーやロールなど変わっているのでわかりにくい。
+
+
+
+
+##########
+AWS ID 管理の概要: ユーザー
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/introduction_identity-management.html#:~:text=%E3%81%93%E3%81%AE%202%20%E3%81%A4%E3%81%AE%E4%B8%BB%E3%81%AA,%E4%BB%98%E4%B8%8E%E3%81%95%E3%82%8C%E3%82%8B%E3%81%93%E3%81%A8%E3%81%A7%E3%81%99%E3%80%82
+
+
+
+
+
+
+##########
+IAM ユーザーを作成します
+ユーザー名：TestUser1
+パスワード
+グループ：AdminGroup
+CSVをダウンロード（PWなどが記載されている）
+AWSコンソールに作成したIAMユーザーでログイン
+　　（ログインできる、ログイン後許可がないこと）
+
+メンバーアカウントの AWS Organizations 管理者ロールを作成するには
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_access-cross-account-role
+
+
+ユーザー: arn:aws:iam::211125549414:user/TestUser1
+サービス: iam
+アクション: GetAccountSummary
+
+管理者でログイン
+IAM コンソールで、ロールに移動し、ロールの作成
+
+AdministratorAccessを選択し、次へを選択します。
+ロール名:OrganizationAccountAccessRole 
+説明:AWS Organizations administrator role for member accounts
+メンバーアカウントの AWS Organizations 管理者ロール（組織に招待するメンバーアカウントへの管理者ロール）
+
+ARNをメモしておく:
+arn:aws:iam::211125549414:role/OrganizationAccountAccessRole
+
+
+-------------
+①
+コンソールでロールを切り替えるためのリンク
+https://signin.aws.amazon.com/switchrole?roleName=OrganizationAccountAccessRole&account=211125549414
+IAMへアクセス
+https://us-east-1.console.aws.amazon.com/iam/home#/home
+ポリシーに移動し、ポリシーの作成を選択します。
+検索欄:STS
+アクション:AssumeRole
+ARN の追加
+ARNをメモしておく
+ロールの名前を入:OrganizationAccountAccessRole
+[次へ]
+ポリシー名:OrganizationAccountAccessRolePolicy
+
+ユーザーグループ＞[アクセス許可] 
+IAM＞ユーザー＞許可ポリシー＞許可の追加
+　検索欄から上記ポリシーを追加
+
+-------------
+②
+管理アカウントのアクセスロールを持つメンバーアカウントへのアクセス
+
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_accounts_access.html#step-choose-group
+後で必要になる管理ポリシーを作成する
+https://us-east-1.console.aws.amazon.com/iam/home#/policies
+ポリシーの作成
+STS
+「アクション」セクションassume
+前のセクションで作成したメンバーアカウント番号とロールの名前を入力します (OrganizationAccountAccessRole という名前を付けることをお勧めします）
+arn:aws:iam::211125549414:role/GrantAccessToOrganizationAccountAccessRole
+
+ポリシー名:GrantAccessToOrganizationAccountAccessRole
+ポリシーの作成
+ユーザーグループ＞アクセスの許可
+これで、グループのメンバーである IAM ユーザーに、次の手順に従って AWS Organizations コンソールで新しいロールに切り替えられるアクセス許可が付与されました。
+
+※①と同じ？
+
+------------
+メンバーのアカウントのロールに切り替えるには
+AWS Organizations コンソールの右上隅で、現在のサインイン名が表示されたリンクをクリックし、[Switch Role] (ロールの切り替え) から切り替えを実行する。
+
+※参考
+AWS Organizations を有効化しメンバーアカウントを新規作成するまでの全体の流れを把握してみる
+https://dev.classmethod.jp/articles/overview-introduction-to-organizations-enabled-configuration-procedure/
+【#Minecraft for AWS】IAMユーザーを作成してみた
+https://dev.classmethod.jp/articles/minecraft-for-aws_create-iam-user/
+
+
+
+----------
+IAM ロールを切り替える
+https://qiita.com/pioho07/items/08abc2ea4937edda9443
+①
+例えば管理者チーム、開発者チームがあるとします。
+それぞれ管理者チームをAdmin_group、開発者チームをDev_groupでIAM Groupを作成していきます。
+Admin_groupにuser1、Dev_groupにuser2を追加していきます。
+②
+AWS Account2に管理者でログインし、IAMの画面で"ロールの作成"をクリックします。
+"AdministratorAccess"のポリシー
+**
+Dev_groupというIAMロールも同じ要領で作成します。
+権限に"AmazonEC2FullAccess"をアタッチ
+③
+Account1で、IAM Policyを作成、それをUserまたはGroupにアタッチ(今回はGroupにアタッチします)
+ポリシー作成
+スイッチ元となるAccount1に管理者でログインし、IAMの画面を開き"ポリシー作成"をクリックします。
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::xxxxxxxxxx58:role/Admin_group"
+        }
+    ]
+}
+"Admin_policy"という名前をつけて"Create"
+
+***
+ユーザー作成
+IAMの画面で"ユーザーの追加"をクリックし、以下を入力し、"次へ"をクリックします。
+ユーザー名に"test_user1"
+ユーザーをグループに追加で"Admin_group"にチェックを入れ"次へ"をクリックします。
+Dev用ユーザーのtest_user2も同じ要領でユーザー作成する
+
+
+
+##########
+※AWSアカウントに失敗したときは以下のようなログが表示される
+car-183c02635d8a42268fe9b5dbda25b30a	Sandbox	2024/5/5	EMAIL_ALREADY_EXISTS
+car-db5768dfa949424bbf51ff1a63136f59	+sandbox	2024/5/5	EMAIL_ALREADY_EXISTS
+
+
+[実際の手順]
+先にIAMでパスワードを作成しておく。
+https://us-east-1.console.aws.amazon.com/iam/home#/users
+作成中に、IAM Identity Centerに飛ばされる
+https://us-east-1.console.aws.amazon.com/singlesignon/home?region=us-east-1&userCreationOrigin=IAM#!/instances/72230c1316ad1c52/users
+Q: IAM アイデンティティセンターのコストはいくらですか? IAM アイデンティティセンターに追加料金は必要ありません。 
+
+ユーザーを作成
+グループを作成・追加
+　　※メールで認証して、パスワードをリセットする
+許可セットを結びつける
+
+
+AWS Organizationsを開始
+AWSアカウントの作成
+※子OUを作成する
+　OUに招待しないとパスワードが設定されていないので、まだログインできない
+
+AWS Organization＞AWSアカウント、下側
+　rootにチェックを入れて、すぐ上（右側）の「アクション」ボタン「新規作成」から子OUを作成する
+
+組織名:OU_Sandbox
+
+メンバーアカウントを OU に所属させる
+※Organizationページのアカウント一覧から、アカウント移動をする
+
+メンバーアカウントへサインイン
+ロール名: OrganizationAccountAccessRole
+
+招待するID,メールアドレスをメモしておく
+Sandbox
+339713082663
+utauinu8102@nifty.com
+
+
+
+-------
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_access-cross-account-role
+※AWS 組織からAWSアカウントを作成すると
+OrganizationAccountAccessRole という名前の IAM ロールがアカウントに自動的に作成されます。
+　作成した後OUに属していないので、移動をする
+作成したAWSアカウントの初回サインアップを行う。
+
+
+メンバーのアカウントのロールに切り替えるには
+
+
+
+
+#########
+※関連情報
+https://tech.nri-net.com/entry/counting_number_of_accounts_by_aws_organizations
+AWS Organizations AWS CLI
+
+AWS組織について
+https://www.ctc-g.co.jp/solutions/cloud/column/article/13.html
+・一括請求（コンソリデーティッドビリング）
+　　課金のアカウントやディカウントの共有ができる
+・Service Control Policy（まとめて指定したり、切り替えが簡単にできる）
+・AWS Organizationsと連携するAWSサービスが受けられる
+
+https://www.acrovision.jp/service/aws/?p=2317
+組織名をMaster
+
+https://pages.awscloud.com/rs/112-TZM-766/images/20180214_AWS-Blackbelt-Organizations.pdf
+組織名Production
+
+組織命令
+test-ou-1
+https://www.slideshare.net/slideshow/aws-organizations-249878141/249878141
+development
+management
+
+######################################################################
+その他
+
+https://zenn.dev/hongmuchan/articles/4cecb2e090947a
+asdfってなに？
+asdfは、全ての言語やツールを一括で管理できる、シンプルなパッケージ管理ツールです。
+
+
+※その他の関連情報
+おひとりさまAWS Organizationsのススメ
+https://www.slideshare.net/slideshow/aws-organizations-249878141/249878141
+. AWSアカウント名は命名規則を決めておく
+
+※AWS Directory Service 
+https://www.sunnycloud.jp/column/20210812-01/
+AWS Directory Service は、Microsoft Active Directory (AD) を AWS の他のマネージメントサービスと併用するための複数の方法を提供しています。
+ディレクトリは “ユーザー” や “グループ” などの情報を保存します。ディレクトリの管理者は、これらのディレクトリを通じて各種リソースなどへのアクセスを管理します。
+AWS Directory Service は、既存の Microsoft AD または LDAP 対応のアプリケーションをクラウド管理上で使用するユーザーに対して複数のディレクトリオプションを提供します。
+
+※AWS IAM Identity Center および AWS Organizations
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/services-that-can-integrate-sso.html
+AWS IAM Identity Center は、すべての AWS アカウント とクラウドアプリケーションのためのシングルサインオンサービスを提供します。AWS Directory Service を通じて Microsoft Active Directory に接続され、そのディレクトリのユーザーは、既存の Active Directory のユーザー名とパスワードを使用して、パーソナライズされた AWS ポータルにサインインできるようになります
+
+
+######################################################################
+「おひとり様」AWS Organizationsを運用する
+https://qiita.com/kyooooonaka/items/af3b36d5e946b3152021
+
+AWS Organizations 組織の作成
+IAM Identity Center のセットアップ
+許可セットの設定
+許可セットの割り当て
+ログイン確認
+
+
+IAM Identity Centerを表示
+アイデンティティソースを確認
+AWS アクセスポータルの URL
+https://d-95675c49f2.awsapps.com/start 
+
+アイデンティティソースが「Identity Center ディレクトリ」であることを確認します。
+----
+アイデンティティソース
+Identity Center ディレクトリ
+
+シングルサインオンで使用するユーザを作成します。
+　左側ユーザーから＞必要事項を入力して作成＞メールが届くのでパスワードを設定
+　ログインするとアクセスできない旨が表示される
+After your administrator gives you access to applications and AWS accounts, you can find them here.管理者からアプリケーションと AWS アカウントへのアクセスが許可されたら、ここでそれらを見つけることができます。
+
+【別のAdminユーザーで】
+許可セットの設定
+許可セットのタイプは「事前定義された許可セット」を選択します。
+AWS マネージドポリシーは今回は「PowerUserAccess」を選択します。
+
+任意で許可セット名と説明を入力し、作成します。
+[AWS アカウント]から「管理アカウント」となっている AWS アカウントにチェックし、[ユーザまたはグループを割り当て]をクリックします。
+
+*****
+AWSアカウントとの結びつけ
+https://qiita.com/sakai00kou/items/086a12caa69a78c18f61
+
+「マルチアカウント許可」→「AWSアカウント」からユーザ・グループ、許可セットを結びつけたいAWSアカウントを選択して「ユーザーまたはグループを割り当て」を選択します。
+--
+結びつけるユーザ、またはグループを選択できるので、任意のユーザもしくはグループを選択し、「次へ」を選択します。
+-
+また、割り当てられたユーザ・グループは、少し分かりづらいですが、「マルチアカウント許可」→「AWSアカウント」→任意のアカウントの詳細画面→「ユーザーとグループ」タブから確認できます。
+
+######################################################################
+Cloud9でできること
+https://qiita.com/zumax/items/312d20594b7eecbd533d
+
+インスタンス ID
+i-054a5660f2d8660c8 (NeckoWebServer1)
+
+パブリック IPv4 アドレス
+52.69.230.144
+
+プライベート IPv4 アドレス
+172.31.10.129
+
+ホスト名のタイプ
+IP 名: ip-172-31-10-129.ap-northeast-1.compute.internal
+
+パブリック IPv4 DNS
+ec2-52-69-230-144.ap-northeast-1.compute.amazonaws.com
+
+オープンアドレス 
+
+プライベート IP DNS 名 (IPv4 のみ)
+ip-172-31-10-129.ap-northeast-1.compute.internal
+
+
+
+アカウント名
+necko562
+アカウント ID
+211125549414
+E メール
+utauinu8102@gmail.com
+
+
+
+https://ap-southeast-2.console.aws.amazon.com/cloud9control/home?region=ap-southeast-2#/product
+
+
+AWS Systems Manager 料金
+https://ap-northeast-1.console.aws.amazon.com/systems-manager/session-manager?region=ap-northeast-1#
+https://aws.amazon.com/jp/systems-manager/pricing/
+
+OpsCenter　有料
+Incident Manager　有料
+AppConfig
+
+
+
+既存のコンピューティング ? 既存の SSH ログインの詳細とポート 22 が 開ける。AWS Cloud9 は、AWS Systems Manager を介してインスタンスに接続します。
+
+★リージョン変更を忘れずに
+IAM ロールが必要
+---
+Session Manager アクションのアクセス許可をカスタム IAM に埋め込む 役割
+追加 既存の IAM ロールに対する Session Manager のアクセス許可
+AmazonSSMManagedInstanceCore
+https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-add-permissions-to-existing-profile.html
+OrganizationAccountAccessRole
+ARN
+arn:aws:iam::211125549414:role/OrganizationAccountAccessRole
+---
+※ポリシー作成時注意（Effect、Action、Resouceキーを削除する）
+KMS キーを使用してセッションデータを暗号化する方法については
+AWS Key Management Service の料金
+AWS KMS で作成した各 AWS KMS キーには、1 USD/月のコストがかかります (時間按分)。
+---
+ポリシー名:SessionManagerPermissions
+---
+セッションマネージャーのアクセス許可を持つカスタム IAM ロールを作成する 唯
+以下のアクセス許可を持つ新しい IAM ロールを作成して使用します。 すべての Systems Manager アクション
+---
+
+◎その他
+※AWS Systems Manage権限
+「デフォルト ホストの使用」を参照してください。 管理構成設定。AmazonSSMManagedEC2InstanceDefaultPolicy
+
+※ハイブリッドアクティベーションについて
+https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/operating-systems-and-machine-types.html#supported-machine-types
+
+
+AWS Cloud9をSSH接続て゛使うまでの手順
+https://qiita.com/predora005/items/bb3a5ef93acbd351a686
+メリット1：AWS以外のサーバーが使える
+メリット2：Cloud9以外の用途にインスタンスを使える
+
+
+
+----
+
+ip-172-31-10-129.ap-northeast-1.compute.internal
+ec2-52-69-230-144.ap-northeast-1.compute.amazonaws.com
+
+ターゲットリソースの現在の状態との競合があるため、リクエストは失敗しました。プロパティを変更して、もう一度試してください。
+AWS Cloud9 couldn't connect to SSH server necko562@ip-172-31-10-129.ap-northeast-1.compute.internal.
+
+Cloud9つかいかた
+https://qiita.com/figgy-pudding/items/17717dd5e30d2f262da3
+
+AWSのCloud9を既存インスタンスで使用する
+https://qiita.com/rockhopper-penguin/items/d5042b71230eb94955d0
+はじめに
+既存のインスタンスを使用して、Cloud9を構築します。Visual Studio CodeのRemote Developmentを使用してEC2に接続できますが、Cloud9だとブラウザがあれば動作するので、タブレットやChromeBookなどでもコーディングをできるようにします。
+
+インバウンドルールのSSHに、Cloud9のIPアドレス18.179.48.128/27　18.179.48.96/27許可します。
+
+タイプ	プロトコル	ポート番号	ソース	説明
+SSH	TCP	18.179.48.128/27	22	Cloud9
+SSH	TCP	18.179.48.96/27	22	Cloud9
+
+ElasticIPについて
+https://zenn.dev/yuta28/articles/publicip-insight
+
+
+
+
+
+$$$
+######################################################################
+
+
+【AWS】終了してしまったEC2インスタンスを復元させる（※スナップショットが必要です）
+https://qiita.com/hagiohagi/items/480befc6e31b2e257d1e
+
+
+
+
+######################################################################
+######################################################################
+
+=========================
+※MySQLがインストールできない
+　→MySQLの公開鍵のダウンロードが必要
+
+GPGキーの関係でmysqlがインストールできない時の対処法
+https://qiita.com/yuyanstart/items/e8a6f1d2fd7cbf1cfd59
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+
+sudo yum clean packages
+
+sudo yum install -y mysql-community-server
+
+https://qiita.com/yuyanstart/items/e8a6f1d2fd7cbf1cfd59
+
+
+=========================
+※参考
+Alma Linuxでdnfやyumを使うとGPG checkエラーになった
+https://twinbird-htn.hatenablog.com/entry/2024/02/03/233000_1
+rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux
+
+https://dev.mysql.com/doc/refman/8.0/ja/checking-gpg-signature.html
+
+
+=========================
+※エラー出力
+[ec2-user@ip-172-31-10-129 ~]$ sudo yum install -y mysql-community-server
+MySQL Connectors Community                                                                3.6 MB/s |  72 kB     00:00    
+MySQL Tools Community                                                                      38 MB/s | 1.2 MB     00:00    
+MySQL 5.7 Community Server                                                                 71 MB/s | 3.1 MB     00:00    
+Dependencies resolved.
+==========================================================================================================================
+ Package                         Architecture    Version                                 Repository                  Size
+==========================================================================================================================
+Installing:
+ mysql-community-server          x86_64          5.7.44-1.el7                            mysql57-community          184 M
+Installing dependencies:
+ libxcrypt-compat                x86_64          4.4.33-7.amzn2023                       amazonlinux                 92 k
+ mysql-community-client          x86_64          5.7.44-1.el7                            mysql57-community           31 M
+ mysql-community-common          x86_64          5.7.44-1.el7                            mysql57-community          313 k
+ mysql-community-libs            x86_64          5.7.44-1.el7                            mysql57-community          3.0 M
+ ncurses-compat-libs             x86_64          6.2-4.20200222.amzn2023.0.6             amazonlinux                323 k
+
+Transaction Summary
+==========================================================================================================================
+Install  6 Packages
+
+Total download size: 219 M
+Installed size: 931 M
+Downloading Packages:
+(1/6): libxcrypt-compat-4.4.33-7.amzn2023.x86_64.rpm                                      994 kB/s |  92 kB     00:00    
+(2/6): mysql-community-common-5.7.44-1.el7.x86_64.rpm                                     7.4 MB/s | 313 kB     00:00    
+(3/6): mysql-community-libs-5.7.44-1.el7.x86_64.rpm                                        30 MB/s | 3.0 MB     00:00    
+(4/6): mysql-community-client-5.7.44-1.el7.x86_64.rpm                                      68 MB/s |  31 MB     00:00    
+(5/6): ncurses-compat-libs-6.2-4.20200222.amzn2023.0.6.x86_64.rpm                         667 kB/s | 323 kB     00:00    
+(6/6): mysql-community-server-5.7.44-1.el7.x86_64.rpm                                      67 MB/s | 184 MB     00:02    
+--------------------------------------------------------------------------------------------------------------------------
+Total                                                                                      72 MB/s | 219 MB     00:03     
+MySQL 5.7 Community Server                                                                4.8 MB/s | 5.8 kB     00:00    
+Importing GPG key 0x5072E1F5:
+ Userid     : "MySQL Release Engineering <mysql-build@oss.oracle.com>"
+ Fingerprint: A4A9 4068 76FC BD3C 4567 70C8 8C71 8D3B 5072 E1F5
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+Key imported successfully
+Import of key(s) didn't help, wrong key(s)?
+Public key for mysql-community-client-5.7.44-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-client-5.7.44-1.el7.x86_64
+ GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+Public key for mysql-community-common-5.7.44-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-common-5.7.44-1.el7.x86_64
+ GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+Public key for mysql-community-libs-5.7.44-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-libs-5.7.44-1.el7.x86_64
+ GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+Public key for mysql-community-server-5.7.44-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-server-5.7.44-1.el7.x86_64
+ GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+The downloaded packages were saved in cache until the next successful transaction.
+You can remove cached packages by executing 'yum clean packages'.
+Error: GPG check FAILED
+
+---------------------
+
+log-error=/var/log/mysqld.log
+
+----------
+実行コマンド：
+sudo systemctl start mysqld
+
+Error:
+Job for mysqld.service failed because the control process exited with error code.
+See "systemctl status mysqld.service" and "journalctl -xeu mysqld.service" for details.
+
+コマンド：
+[ec2-user@ip-172-31-10-129 ~]$ sudo systemctl status mysqld.service
+
+コマンド結果：
+● mysqld.service - MySQL Server
+     Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; preset: disabled)
+     Active: activating (start-pre) since Sun 2024-05-05 10:12:53 UTC; 624ms ago
+       Docs: man:mysqld(8)
+             http://dev.mysql.com/doc/refman/en/using-systemd.html
+Cntrl PID: 248662 (mysqld_pre_syst)
+      Tasks: 2 (limit: 1114)
+     Memory: 27.6M
+        CPU: 559ms
+     CGroup: /system.slice/mysqld.service
+             ├─248662 /bin/bash /usr/bin/mysqld_pre_systemd
+             └─248681 /usr/bin/python3 -Es /usr/sbin/semanage fcontext -a -e /var/lib/mysql >
+
+May 05 10:12:53 ip-172-31-10-129.ap-northeast-1.compute.internal systemd[1]: Starting mysqld>
+lines 1-14/14 (END)
+
+
+
+
+
+######################################################################
+######################################################################
+
+######################################################################
+作成するテストアプリについて
+
+アプリ概要：
+アプリを通じて他の特定のユーザーとメッセージや画像・音声ファイルをやり取りする。
+（やり取りしたメッセージなどのデータは半日でデータが消去される）
+
+
+以下の2つまでは行いましたが、この後の具体的な手順として何をすればよいでしょうか？
+・Pythonのインストール
+・AWSのアカウント作成・ログイン
+
+
+
+※アカウントのエイリアスとは
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/console_account-alias.html
+↓
+https://Your_Account_ID.signin.aws.amazon.com/console/
+
+
+※IAM Identity Center削除
+コンソールホームから、IAM Identity Centerにアクセスしたが
+　別のリージョンで作成されているとメッセージが表示される。
+　　一度削除する旨のメッセージも表示される
+AWS IAM Identity Center の設定を削除してみた
+https://dev.classmethod.jp/articles/delete-aws-iam-identity-center-configuration/
+　IAM Identity Centerの設定の管理タブから削除をする。
+　　リージョンを変えて再度作成する
+
+
+※AWS 組織で作成したアカウント設定タブで以下のように表示される
+AWS アカウント管理の信頼されたアクセスが有効になっていません。このコンテンツを表示するには、信頼されたアクセスを有効にします。
+
+
+
+※既存の IAM ロールにユーザーまたはグループを割り当てるには
+https://docs.aws.amazon.com/ja_jp/directoryservice/latest/admin-guide/assign_role.html
+
+https://ap-northeast-1.console.aws.amazon.com/directoryservicev2/identity/home?region=ap-northeast-1#!/
+
+
+★AWSロールについて
+https://zenn.dev/fdnsy/articles/31105a37126d66
+※IAM の一時的な認証情報
+AWS Security Token Service (AWS STS)
+
+※
+AWS Organizations を他のAWSサービスと併用する
+https://docs.aws.amazon.com/ja_jp/organizations/latest/userguide/orgs_integrate_services.html
+
+信頼されたアクセスを使用するには、2 つのサービス (AWS Organizations と信頼されたサービス) のアクセス権限が必要です
+
+https://us-east-1.console.aws.amazon.com/organizations/v2/home/services?region=us-east-1#
+
+organizations:DisableAWSServiceAccess
+
+organizations:ListAWSServiceAccessForOrganization 
+
+
+※AWS CloudTrail の料金
+その月の取り込み料金: 最初の 5 TB は 2.5 USD/GB (12,800 USD) + 次の 20 TB は 1 USD/GB (20,480 USD) = 33,280 USD。
+
+
+※AWS CloudShellとは
+https://www.netassist.ne.jp/techblog/25905/
+CloudShellは無料で利用することができます。
+
+ただ、CloudShellではAWS CLIを利用することができる為、例えばAWS CLIでEC2インスタンスを作成する、といった操作を行った場合は実際にそのAWSアカウント内にリソースが作成されますので、その分の追加料金が発生します。
+
+
+
+
+※Elastic Beanstalk コマンドラインインターフェイス (EB CLI) の使用 
+Elastic Beanstalk API コマンドラインインターフェイス (廃止)
+https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/using-api-cli.html
+古い EB API CLI スクリプトを変換して AWS CLI または Tools for Windows PowerShell を使用するか、最新の Elastic Beanstalk API にアクセスします。
+
+※OSのバージョン
+[ec2-user@ip-172-31-10-129 ~]$ uname -a
+Linux ip-172-31-10-129.ap-northeast-1.compute.internal 6.1.87-99.174.amzn2023.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Apr 23 00:07:16 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux
+-----
+この出力は、Amazon Web Services (AWS) の EC2 インスタンス上で実行されている Linux オペレーティングシステムの情報を示しています。
+
+OS: Amazon Linux (amzn)
+バージョン: 6.1.87-99.174
+カーネルのバージョン: 6.1.87-99.174
+インスタンスの稼働アーキテクチャ: x86_64
+さらに、SMP PREEMPT_DYNAMIC の部分は、SMP (Symmetric Multiprocessing) というマルチプロセッシングをサポートし、Preemptive Kernel が動的にプロセスを中断して他のプロセスに CPU を割り当てる機能が有効になっていることを示しています。そして、タイムスタンプによれば、このカーネルのビルド日時は2024年4月23日です。
+
+######################################################################
+MySQLをインストール
+https://dev.mysql.com/doc/refman/8.0/ja/linux-installation-yum-repo.html
+sudo yum install mysql-community-server
+Last metadata expiration check: 1 day, 17:32:07 ago on Fri May  3 12:20:45 2024.
+No match for argument: mysql-community-server
+Error: Unable to find a match: mysql-community-server
+
+https://qiita.com/nooboolean/items/7efc5c35b2e95637d8c1
+# yum localinstall http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm 
+
+yum localinstall http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+Error: This command has to be run with superuser privileges (under the root user on most systems).
+※SuperUserが必要
+sudo yum localinstall http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+
+yum info mysql-community-server
+
+sudo yum install -y mysql-community-server
+
+確認
+mysqld --version
+起動
+systemctl start mysqld
+CentOS 6 以下は、serviceコマンドを使ってください。
+service mysqld
+起動
+sudo systemctl start mysqld
+状態確認
+systemctl status mysqld
+停止
+sudo systemctl stop mysqld
+自動起動の設定
+sudo systemctl enable mysqld
+
+MySQLの初期設定
+mysql -u root
+
+初期パスワードの確認
+sudo cat /var/log/mysqld.log | grep root
+
+2024-05-05T06:55:16.005241Z 1 [Note] A temporary password is generated for root@localhost: rjh!mmRN72pZ
+
+rjh!mmRN72pZ
+
+sudo mysql -u root -p
+※パスワードはコピペでもOK
+
+----
+https://qiita.com/hondy12345/items/d32ed749fb49e9da7de6
+※mysqlサーバー未起動時は以下のエラーとなる
+[ec2-user@ip-172-31-10-129 ~]$ sudo mysql -u root -p
+Enter password: 
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)
+[ec2-us
+----
+
+SET PASSWORD = PASSWORD('任意のパスワード')
+Faverz ＠mysql
+Query OK, 0 rows affected (0.00 sec)
+
+SET PASSWORD = 'auth_string';
+
+文字コードの確認と変更
+設定されている文字コードの確認は以下で行えます。
+mysql> show variables like "chara%";
+
+mysql> show variables like "chara%";
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | latin1                     |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | latin1                     |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+
+これを全部UTF-8にしてしまった方が良い
+sudo vi /etc/my.cnf
+
+//以下をファイルの末尾に追記
+character_set_server=utf8
+skip-character-set-client-handshake
+
+[mysqld]
+character-set-server=utf8
+[client]
+default-character-set=utf8
+
+
+sudo systemctl start mysqld
+sudo mysql -u root -p
+sudo systemctl stop mysqld
+systemctl status mysqld
+
+
+Job for mysqld.service failed because the control process exited with error code.
+See "systemctl status mysqld.service" and "journalctl -xeu mysqld.service" for details.
+
+
+
+
+
+※参考
+https://teratail.com/questions/25799
+
+
+
+######################################################################
+AWSスナップショットとは
+https://and-engineer.com/articles/YaTNQxIAAB4AkxP5
+
+
+######################################################################
+C:\ZMyFolder\newDoc\0ProgramingAll\aws
+
+MFA_Device
+root_sc42a
+
+necko562
+utauinu8102@gmail.com
+
+----
+TestUser1
+211125549414
+https://211125549414.signin.aws.amazon.com/console
+MFA_
+admin_sc42a
+Amazon Web Services:admin_sc42a@211125549414  > ooo
+AWS SSO:TestUser1　>XXX
+----------
+AdminUser1
+guigui55_@kem.biglobe.ne.jp
+ID
+339713185197
+ARN
+arn:aws:organizations::211125549414:account/o-94j6t8h2kw/339713185197
+ARN
+arn:aws:iam::211125549414:user/AdminUser1
+コンソールサインインのリンク
+https://211125549414.signin.aws.amazon.com/console
+MFA_device
+admin_sc42a_b
+***
+
+
+----------
+アカウント名
+necko562_ad
+アカウント ID
+211125549414
+E メール
+utauinu8102@gmail.com
+
+
+necko562
+211125549414 | utauinu8102@gmail.com
+AdministratorAccess|Access keys 
+PowerUserAccess|Access keys 
+
+
+----------
+Faverz**＠mysql
+Query OK, 0 rows affected (0.00 sec)
+
+

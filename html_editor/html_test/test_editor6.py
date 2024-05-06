@@ -128,7 +128,7 @@ import pathlib
 def write_test_main():
     # ファイルを読み込み、一部の要素をコピーする
     
-    read_dir_path = pathlib.Path(__file__).parent.joinpath('test_sample1')
+    read_dir_path = pathlib.Path(__file__).parent.joinpath('__test_sample1')
     html_path = read_dir_path.joinpath('index.html')
 
     write_dirname = 'log_test3'

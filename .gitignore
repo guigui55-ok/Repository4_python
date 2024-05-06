@@ -377,3 +377,4 @@ chromedriver_binary/
 __download_file_*.*
 log.txt
 __log*/
+__test_*.txt

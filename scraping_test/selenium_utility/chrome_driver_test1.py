@@ -126,11 +126,11 @@ def _draw_rect_in_image_by_rect(logger:DriverLogger, image_path, rect:Rect):
     else:
         msg = 'image_path = {}'.format(image_path)
         logger.put_log(msg)
-        msg = 'copy_image'
-        logger.put_log(msg)
         # 日本語文字が含まれる場合、imreadでエラーとなるかNoneとなるためファイル名をASCII文字のみにする
         file_name = datetime.datetime.now().strftime('%F_%H%M%S_draw_image.png')
         dist_path = Path(image_path).parent.joinpath(file_name)
+        msg = 'copy_image dist_path = {}'.format(dist_path)
+        logger.put_log(msg)
         shutil.copy(str(image_path), str(dist_path))
     # 画像を読み込む
     image_path = str(dist_path)
