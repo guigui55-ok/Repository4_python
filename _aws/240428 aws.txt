@@ -325,7 +325,9 @@ EC2インスタンス起動画面
 　　1GB×0.12ドル＝0.96ドル
 　　　無料は30GBまで無料（1年後でも）
 
----
+######################################################################
+@@@
+#請求書
 請求の画面
 　AWSマネジメントコンソール
 　　　（ルートアカウント）
@@ -338,7 +340,9 @@ EC2インスタンス起動画面
 　メニューBill＞Dateを選択
 　　下側にサービスごとになっている
 　　　EC2　Elastic Compute Cloud
-　　　
+
+https://us-east-1.console.aws.amazon.com/billing/home#/bills
+https://us-east-1.console.aws.amazon.com/billing/home#/freetier
 
 ----
 無料利用枠　規約
@@ -411,6 +415,7 @@ https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/tutorials-windows-
 ######################################################################
 240502
 今回の実際の手順
+@@@
 https://aws.amazon.com/jp/local/aws-beginner-six-points/
 無料アカウントを今すぐ作成
 
@@ -437,7 +442,7 @@ Tips
 AWS User Notifications の新しい Quick Setup 機能を使用して、CloudWatch、EC2、Health の共通通知を有効化します。
 
 
-
+#インスタンス作成
 検索窓「EC2」
 メニュー＞インスタンス
 インスタンの起動
@@ -446,6 +451,16 @@ NeckoWebServer1
 新しいキーペアを作成
 NeckoWebServer1_KeyPair
 インスタンスを起動
+-----
+240507
+
+NeckoWebServer2
+NeckoWebServer2_KeyPair
+-----
+240508
+
+NeckoWebServer3
+NeckoWebServer3_KeyPair
 
 KeyPair名について
 https://blog.serverworks.co.jp/tech/2012/09/06/check-out-for-ssh-key-pair-name-with-cloudformation/
@@ -492,7 +507,7 @@ $ ls
 # pemファイルが存在するか確認します
 
 
-
+@@@
 https://qiita.com/gyu_outputs/items/cd2d937e9faf0c0c669c
 ターミナルでEC2とSSH接続は可能。
 
@@ -515,6 +530,84 @@ ID　＝　Elastic IP（パブリックIP）
 PW　＝　pemキー（EC2インスタンス作成時にダウンロードしたファイル）
 
 
+#########
+インスタンス接続時にエラーとなる。
+#
+https://dev.classmethod.jp/articles/tsnote-unable-to-delete-sg-rds-elb/
+
+
+ネットワークインターフェイスをデタッチできませんでした。API エラー:「The network interface at device index 0 and networkCard index 0 cannot be detached.」
+
+ネットワークインターフェイスを削除できません
+選択されたネットワークインターフェイスを削除できません
+
+	ネットワークインターフェイスは現在使用されており、そのタイプは "interface" です. 所有可能なリソースは i-0ad87cd273132b8a9 です
+	
+
+アクセス可能にするためにはポート 22 を開く必要があるため、このインスタンスに接続できない場合があります。現在関連付けられているセキュリティグループでは、ポート 22 が開いていません。
+
+
+セキュリティグループルールでトラフィックが許可されていることを確認する
+
+EC2への接続に22番ポートの開放はやめてSystems Managerを使おう
+https://qiita.com/morikaz/items/4da0ed2428cb1f9f9444
+
+どこよりもわかりやすい？AWS EC2インスタンスのリソースネーム（arn）の割り出し方
+https://qiita.com/miriwo/items/6d44244f612bcbaa07a9
+arn:aws:ec2:ap-northeast-1:{{当該EC2の詳細の「所有者」の数字}}:instance/{{当該EC2の概要にある「インスタンスID」}}
+
+211125549414
+i-0ad87cd273132b8a9
+
+arn:aws:ec2:ap-northeast-1211125549414:instance/i-0ad87cd273132b8a9
+
+
+https://qiita.com/morikaz/items/4da0ed2428cb1f9f9444#ssh%E6%8E%A5%E7%B6%9A%E3%81%AE%E8%A8%AD%E5%AE%9A
+高速セットアップを行うと、EC2にAmazonSSMRoleForInstancesQuickSetupというIAMロールが適用されます。このIAMロールにはAmazonSSMManagedInstanceCoreポリシーとAmazonSSMPatchAssociationポリシーが含まれます。
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "ssm:StartSession",
+            "Resource": [
+                "arn:aws:ssm:*:*:document/AWS-StartSSHSession",
+                "arn:aws:ec2:ap-northeast-1211125549414:instance/*"
+            ]
+        }
+    ]
+}
+
+Missing ARN Field: リソース ARN には、少なくとも 6 フィールドが含まれていて、次の構造が含まれている必要があります: arn:partition:service:region:account:resource。
+
+【AWS入門③】VPCの構築～基礎知識を詰め込もう～
+https://zenn.dev/rsk_for_dev/articles/001306058f3c58
+
+VPC とサブネット
+https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/configure-subnets.html
+https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/vpc-ip-addressing.html
+
+
+ネットワークインターフェイスをデタッチできませんでした。API エラー:「The network interface at device index 0 and networkCard index 0 cannot be detached.」
+
+ENIデタッチ時エラー「The network interface at device index 0 and networkcard index 0 cannot be detached.」を回避するには
+https://dev.classmethod.jp/articles/tsnote-ec2-eni-detached-delete-error/
+
+EC2インスタンスのプライベートIPアドレスを引き継ぐ
+https://blog.k-bushi.com/post/tech/tips/ec2-eni-take-over-ip/#gsc.tab=0
+※既存のインスタンスに対して、プライマリENIは削除、変更できないので、
+AMIを作成して、EC2-ENI-test-2 のインスタンスと同じインスタンスを作成する。
+そこに EC2-ENI-test-1 のENIをアタッチすることにした。
+
+※プライマリENIをデタッチしようとすると、 「The network interface at device index 0 and networkCard index 0 cannot be detached.」 とエラーが出る。
+
+https://www.alibabacloud.com/help/ja/ecs/user-guide/unbind-an-eni
+セカンダリ ENI に限り、インスタンスからデタッチすることができます。 プライマリ ENI をデタッチすることはできません。
+
+
+
 ------------
 保存しておいた（ファイル名.pem）のアクセス権限の制限
 $ cd ~/.ssh
@@ -527,15 +620,47 @@ $ chmod 600 ダウンロードした鍵の名前.pem
 
 ----------
 
+
 [初心者向け] 初めてのEC2ログイン：Windows編
 https://dev.classmethod.jp/articles/first-login-to-ec2-windows/
 ※EC２（Windowｓ）
-
 
 、EC2にログイン後の操作（環境構築
 https://qiita.com/gyu_outputs/items/f4e44f5f88cca6fdbcff
 
 
+SSH クライアントを開きます。
+プライベートキーファイルを見つけます。このインスタンスの起動に使用されるキーは NeckoWebServer3_KeyPair.pem です。
+必要に応じて、このコマンドを実行して、キーが公開されていないことを確認します。
+chmod 400 "NeckoWebServer3_KeyPair.pem"
+ご使用のインスタンスの パブリック DNS を使用してインスタンスに接続:
+ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com
+例:
+ssh -i "NeckoWebServer3_KeyPair.pem" ec2-user@ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com
+
+C:\ZMyFolder\newDoc\0ProgramingAll\aws>ssh -i "NeckoWebServer3_KeyPair.pem" ec2-user@ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com
+The authenticity of host 'ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com (52.194.229.11)' can't be established.
+ECDSA key fingerprint is SHA256:ZoFUQWQT0HTcxUaWN0vKiR2DGWEDjrLXVVlrr+IUK0s.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added 'ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com,52.194.229.11' (ECDSA) to the list of known hosts.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions for 'NeckoWebServer3_KeyPair.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "NeckoWebServer3_KeyPair.pem": bad permissions
+ec2-user@ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+
+【AWS初学者】EC2インスタンスへのSSH接続（ログイン）を簡単にしよう！
+https://qiita.com/gon0821/items/b2c22aa4e0eae2f9a100
+https://hisuiblog.com/aws-ssh-ec2-server/
+**SSHでのログインは保留
+
+
+##########
+@@@
 sudo yum -y update
 
 sudo yum -y install git make gcc-c++ patch libyaml-devel libffi-devel libicu-devel zlib-devel readline-devel libxml2-devel libxslt-devel ImageMagick ImageMagick-devel openssl-devel
@@ -1729,6 +1854,65 @@ https://teratail.com/questions/25799
 ######################################################################
 AWSスナップショットとは
 https://and-engineer.com/articles/YaTNQxIAAB4AkxP5
+
+AWSでのスナップショットは、Amazon Elastic Block Store (EBS)・Amazon S3で使うバックアップ機能です
+
+
+保存したデータ量と保存期間で料金が決まる
+AWSスナップショットの利用料金は、バックアップしたデータ量・保存期間によって変動します。課金の対象となるデータ量は、前回分から変更されたブロックに関する部分です。1ヶ月間に格納されたデータ1GBあたり0.05USDのコストが発生します。
+EBSスナップショットの料金は、コスト管理コンソール上で確認できます。
+一方、スナップショットは元データ破損時の復旧が困難である点や、システム構成などの情報を含まない点には気をつけましょう。
+
+
+AWS Backup バックアップ形式・費用について (RDSバックアップ時)
+https://qiita.com/nanaming/items/46cb5bc520cc770b2bc5
+
+https://cloudnavi.nhn-techorus.com/archives/4188
+AWS Backup の料金
+AWS Backupは、使用したバックアップストレージ量および修復したバックアップデータの量に対してのみ料金が発生します（月単位）。料金はリージョンでのリソースごとに異なっています。なおAmazon EC2は、Amazon EBSの料金に含まれます。
+
+
+【初心者向け】AWS EC2の料金をまとめてみた
+https://tech-note-meeting.com/2021/04/02/post-827/#google_vignette
+スナップショットの料金
+一切のバックアップを取得しないということであれば、スナップショットの料金も発生しません。
+利用する場合には、1か月あたり0.05USD/GBの料金が発生
+
+【AWS入門】AWSのEBSとは、EC2向けのストレージ。料金プランや使い方を紹介
+https://cloudnavi.nhn-techorus.com/archives/3524
+無料利用枠
+AWSには、いろいろなサービスを試せる無料枠が用意されています。Amazon EBSの場合は、30GBのAmazon EBS（汎用SSDストレージまたはHDDストレージの任意の組み合わせ）、200万I/O(EBS HDDの場合)、1GBのスナップショットストレージが、最初にサインアップした日から12ヶ月間、無料で利用できます。
+
+２．Amazon EBSスナップショットの作成
+スナップショットを作成すれば、新規ボリュームやデータバックアップ用に使用できます。以下、スナップショットの作成について概要を紹介します。
+
+Amazon EC2 コンソールを開く。
+「Elastic Block Store」の「スナップショット」を選択。
+「スナップショットの作成」を選択。
+「リソースタイプの選択」で「ボリューム」を選択し、「ボリューム」で、ボリュームを選択。
+（必要なら実施）スナップショットの説明を入力。
+（必要なら実施）「タグの追加」を選択し、タグをスナップショットに追加。タグごとに、タグキーとタグの値を指定可能。
+「スナップショットの作成」を選択。
+
+
+復元テスト料金
+https://aws.amazon.com/jp/backup/pricing/
+
+
+AWS見積もりツール
+AWS Pricing Calculator
+https://calculator.aws/#/
+
+※AWSスナップショット課金についてその他
+Amazon EBS スナップショットの請求はどのように行われますか?
+https://repost.aws/ja/knowledge-center/ebs-snapshot-billing
+AWSスナップショットとバックアップの違いは？料金や仕組みも解説
+https://and-engineer.com/articles/YaTNQxIAAB4AkxP5
+AWSでのスナップショットは、Amazon Elastic Block Store (EBS)・Amazon S3で使うバックアップ機能です。
+
+【AWS】終了してしまったEC2インスタンスを復元させる（※スナップショットが必要です）
+https://qiita.com/hagiohagi/items/480befc6e31b2e257d1e
+
 
 
 ######################################################################
