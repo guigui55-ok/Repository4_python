@@ -55,9 +55,14 @@ class SeleniumLogger():
 
 from html_log.html_logger import BasicLogger
 class SeleniumBasicLogger(BasicLogger):
+    """
+    class BasicLogger(metaclass=ABCMeta)
+        Inherit:BasicLogger
+         ..\common_utility\log_util\logging_util.py
+    """
 
     ######### Selenium 共通
-    # HTML、BasicなどそれぞれLoggerの攻勢が異なるため、以下メソッドを別途用意
+    # HTML、BasicなどそれぞれLoggerの構成が異なるため、以下メソッドを別途用意
     def add_log_screenshot(self,image_path:str,screenshot_log:str,log_level:int=LogLevel.INFO):
         """
          == add_log_screenshot_copy
@@ -83,6 +88,11 @@ class SeleniumBasicLogger(BasicLogger):
 
 from html_log.html_logger import HtmlLogger
 class SeleniumHtmlLogger(SeleniumBasicLogger):
+    """
+
+    Inherit:SeleniumBasicLogger(BasicLogger)
+     selenium_log.py
+    """
     # def __init__(
     #     self, 
     #     log_dir: str,

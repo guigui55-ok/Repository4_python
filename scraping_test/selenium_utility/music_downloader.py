@@ -8,7 +8,11 @@ BAR = '########################################'
 import time
 import os
 import glob
-import pathlib,sys
+import pathlib
+import sys
+import shutil
+from pathlib import Path
+
 
 CHROME_DRIVER_PATH = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
 
@@ -27,45 +31,46 @@ class DownloadMode():
     MOVIE_YOU_TUBE = 1
     MUSIC_YOU_TUBE = 2
 
-class DirChecker():
-    def __init__(self,dir_path:str) -> None:
-        self.path = dir_path
-        self.path_list = []
-        self.observe_target = ''
-    def get_now_dir_list(self):
-        temp_list = glob.glob(self.path + '/**')
-        return temp_list
-    def update_list(self):
-        temp_list:list = self.get_now_dir_list()
-        self.path_list = temp_list.copy()
-        return temp_list
-    def get_increased_list(self,arg_list:'list[str]'):
-        """self.path_list より増えているものがあればリストで取得する"""
-        ret_list = []
-        for val in arg_list:
-            if not val in self.path_list:
-                ret_list.append(val)
-        return ret_list
-    def is_exists(self,path:str):
-        if os.path.exists(path):
-            return True
-        return False
-    def get_target_ext(self,ext):
-        now_list = self.get_now_dir_list()
-        ret = []
-        for path in now_list:
-            if path.endswith(ext):
-                ret.append(path)
-        return ret
+from observer_main import DirChecker as DirCheckerBase
+class DirChecker(DirCheckerBase):
+    pass
+    # def __init__(self,dir_path:str) -> None:
+    #     self.path = dir_path
+    #     self.path_list = []
+    #     self.observe_target = ''
+    # def get_now_dir_list(self):
+    #     temp_list = glob.glob(self.path + '/**')
+    #     return temp_list
+    # def update_list(self):
+    #     temp_list:list = self.get_now_dir_list()
+    #     self.path_list = temp_list.copy()
+    #     return temp_list
+    # def get_increased_list(self,arg_list:'list[str]'):
+    #     """self.path_list より増えているものがあればリストで取得する"""
+    #     ret_list = []
+    #     for val in arg_list:
+    #         if not val in self.path_list:
+    #             ret_list.append(val)
+    #     return ret_list
+    # def is_exists(self,path:str):
+    #     if os.path.exists(path):
+    #         return True
+    #     return False
+    # def get_target_ext(self,ext):
+    #     now_list = self.get_now_dir_list()
+    #     ret = []
+    #     for path in now_list:
+    #         if path.endswith(ext):
+    #             ret.append(path)
+    #     return ret
 
-class ObserberType():
-    EXT = 1
-    PATH = 2
-    FILE_NAME = 3
-    DIR_NAME = 4
+from observer_main import ObserberType
 
-class DownloadDirectoryObserver():
-    """.crdownload があったらダウンロードが終わるまで監視する、ダウンロードがストップしたら終了する"""
+from observer_main import DownloadDirectoryObserver as DownloadDirectoryObserverBase
+class DownloadDirectoryObserver(DownloadDirectoryObserverBase):
+    """
+    .crdownload があったらダウンロードが終わるまで監視する、ダウンロードがストップしたら終了する
+    """
     def __init__(self,observe_dir_path:str,logger:BasicLogger) -> None:
         self.dir_path = observe_dir_path
         self.ext = ''
@@ -84,7 +89,18 @@ class DownloadDirectoryObserver():
         for path in path_list:
             if path.endswith(self.ext):
                 os.remove(path)
-    
+
+    def init_move_downloaded_file(self):
+        """
+        監視対象のフォルダに以前のダウンロード後ファイルがあれば移動しておく
+            (self.target_ext を含むファイルをすべて[download_files]フォルダに移動する)
+        """
+        Path(self.move_folder_path).mkdir(exist_ok=True)
+        match_files = glob.glob(str(self.dir_path) + '*' + self.target_ext)
+        for matchfile in match_files:
+            shutil.move(str(matchfile, str(self.move_folder_path)))
+            self._print('move_file = {}'.format(Path(matchfile).name))
+
     def is_exists_download_file(self,target_path:str):
         if os.path.exists(target_path):
             flag = True
@@ -148,7 +164,10 @@ class DownloadDirectoryObserver():
         flag = self.is_exists_download_file(os.path.splitext(target)[0])
         return flag
 
-import shutil
+
+######################################################################
+######################################################################
+######################################################################
 from movie_downloader_sub import YouTube,DonwloadSite,VdSite
 from movie_downloader_sub import get_vd_site_url, get_vd_site_url2
 
@@ -164,6 +183,12 @@ class MovieDownloader():
         self.log_dir_path = log_dir
         self.not_check_db = False
 
+    def wait_for_access_restrictions(self, wait_max=60):
+        # アクセス制限　Access restrictions
+        print_interval_sec = 10
+        for i in range(int(wait_max//print_interval_sec)):
+            msg = 'Wait...[Access restrictions] [{} sec]'.format(i*print_interval_sec)
+            self.logger.add_log(msg)
 
 
     def set_download_dir_observer(self,observer):
@@ -235,7 +260,7 @@ class MovieDownloader():
     def download_movie_main(self, mode:int=1):
         """lnkが格納されているディレクトリのlnkからURLを読み取り、ダウンロードする。
         終わるまで待って、終わったらlnkを別ディレクトリに移動"""
-        for path in self.lnk_list:
+        for i, path in enumerate(self.lnk_list):
             if not self.not_check_db:
                 if self.path_is_donloaded(path):
                     self.add_log('**** path is donloaded.  lnk_path={}'.format(path))
@@ -277,6 +302,10 @@ class MovieDownloader():
                     self.move_link_file_finished(path)
             else:
                 self.add_log('is_downloaded = False, skip regist_to_db  , move_link')
+            if i!=len(self.lnk_list):
+                self.wait_for_access_restrictions(20)
+        msg = 'processed file_length = {}'.format(len(self.lnk_list))
+        self.add_log(msg)
 
     def move_link_file_finished(self,path):
         """
@@ -356,32 +385,6 @@ class MovieDownloader():
     def download_result(self):
         return self.downloader.download_result
 
-################################################################################
-################################################################################
-
-def main():
-    ######
-    # initialize
-    path = r'C:\ZMyFolder\newDoc\新しいfiles\_test_movie'
-    path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
-    path = r'C:\ZMyFolder\newDoc\新しいDOC\Memo\_Music\music0807'
-    donwload_dir = r'C:\Users\OK\Downloads'
-    log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
-    from html_log.html_logger import HtmlLogger
-    html_logger = HtmlLogger('MovieDownloader',log_dir_path)
-    downloader = MovieDownloader()
-    downloader.logger = html_logger
-    downloader.set_dir(path,log_dir_path)
-
-    downloader.not_check_db = True
-    downloader.not_check_db = False
-    observer = DownloadDirectoryObserver(donwload_dir,html_logger)
-    #####
-    observer.set_conditions(TARGET_EXT)
-    downloader.set_download_dir_observer(observer)
-    downloader.make_file_list_from_dir()
-    downloader.download_movie_main(mode=DownloadMode.MUSIC_YOU_TUBE)
-    html_logger.finish_to_create_html()
 
 
 
@@ -473,6 +476,35 @@ def check_dir_test(path = 'F:\ZDOWNLOAD', ext = TARGET_EXT):
         print('is exists = True')
     print('done.')
 
+################################################################################
+################################################################################
+
+def main():
+    ######
+    # initialize
+    # path = r'C:\ZMyFolder\newDoc\新しいfiles\_test_movie'
+    # path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
+    # path = r'C:\ZMyFolder\newDoc\新しいDOC\Memo\_Music\music0807'
+    path = r'C:\Users\OK\Desktop\music240517\240522_music_test'
+    if not Path(path).exists():
+        raise FileNotFoundError(path)
+    donwload_dir = r'C:\Users\OK\Downloads'
+    log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
+    from html_log.html_logger import HtmlLogger
+    html_logger = HtmlLogger('MovieDownloader',log_dir_path)
+    downloader = MovieDownloader()
+    downloader.logger = html_logger
+    downloader.set_dir(path,log_dir_path)
+
+    downloader.not_check_db = True
+    downloader.not_check_db = False
+    observer = DownloadDirectoryObserver(donwload_dir,html_logger)
+    #####
+    observer.set_conditions(TARGET_EXT)
+    downloader.set_download_dir_observer(observer)
+    downloader.make_file_list_from_dir()
+    downloader.download_movie_main(mode=DownloadMode.MUSIC_YOU_TUBE)
+    html_logger.finish_to_create_html()
 #####################################
 # check_dir_test()
 if __name__ == '__main__':

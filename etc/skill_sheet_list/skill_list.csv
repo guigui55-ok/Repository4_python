@@ -1,0 +1,300 @@
+大分類,中分類
+,ITスキル
+インフラ/運用基盤,Active Directory
+インフラ/運用基盤,Amazon Web Services
+インフラ/運用基盤,Apache
+インフラ/運用基盤,Azure
+インフラ/運用基盤,BIND
+インフラ/運用基盤,Drupal
+インフラ/運用基盤,Exchange Server
+インフラ/運用基盤,Google Cloud Platform
+インフラ/運用基盤,Hyper-V
+インフラ/運用基盤,IBM Cloud
+インフラ/運用基盤,IIS
+インフラ/運用基盤,Jboss
+インフラ/運用基盤,JCL
+インフラ/運用基盤,LDAP
+インフラ/運用基盤,Notes Domino
+インフラ/運用基盤,OracleAS
+インフラ/運用基盤,Postfix
+インフラ/運用基盤,qmail
+インフラ/運用基盤,RADIUS
+インフラ/運用基盤,Seasar
+インフラ/運用基盤,SendMail
+インフラ/運用基盤,TerminalService
+インフラ/運用基盤,Tomcat
+インフラ/運用基盤,Weblogic
+インフラ/運用基盤,Websphere
+インフラ/運用基盤,Wordpress
+技術・製品/セキュリティ,A-AUTO
+技術・製品/セキュリティ,ArcServe
+技術・製品/セキュリティ,BackupEXEC
+技術・製品/セキュリティ,Citrix
+技術・製品/セキュリティ,Digital Shadows
+技術・製品/セキュリティ,DMZ
+技術・製品/セキュリティ,FireWall
+技術・製品/セキュリティ,Hinemos
+技術・製品/セキュリティ,HULFT
+技術・製品/セキュリティ,IDS
+技術・製品/セキュリティ,Intra-mart
+技術・製品/セキュリティ,JP1
+技術・製品/セキュリティ,M365
+技術・製品/セキュリティ,MetaFrame
+技術・製品/セキュリティ,O365
+技術・製品/セキュリティ,Open View
+技術・製品/セキュリティ,Power Platform
+技術・製品/セキュリティ,ServiceNow
+技術・製品/セキュリティ,SharePoint
+技術・製品/セキュリティ,SonicWall
+技術・製品/セキュリティ,System Walker
+技術・製品/セキュリティ,Tivoli
+技術・製品/セキュリティ,VMWare
+技術・製品/セキュリティ,Zabbix
+技術・製品/セキュリティ,サイボウズ
+ネットワーク,Cisco 2000 シリーズ
+ネットワーク,Cisco 3000 シリーズ
+ネットワーク,Cisco 4000 シリーズ
+ネットワーク,Cisco 5000 シリーズ
+ネットワーク,Cisco 6000 シリーズ
+ネットワーク,Cisco 7000 シリーズ
+ネットワーク,Cisco 9000 シリーズ
+ネットワーク,Cisco ASR シリーズ
+ネットワーク,InternetVPN
+ネットワーク,IP-VPN
+ネットワーク,Layer 2 Switch
+ネットワーク,Layer 3 Switch
+ネットワーク,QoS
+ネットワーク,VoIP(IP-PBX)
+ネットワーク,広域Ethernet
+ネットワーク,無線LAN
+OS,AIX
+OS,Android
+OS,BREW
+OS,BSD
+OS,HITACHI系汎用OS
+OS,HP-UX
+OS,IBM系汎用OS
+OS,iOS
+OS,Linux
+OS,Mac OS
+OS,MS-DOS
+OS,NEC系汎用OS
+OS,Solaris
+OS,Symbian OS
+OS,TRON
+OS,Windows 2000
+OS,Windows 2000 Server
+OS,Windows 2003 Server
+OS,Windows 2008 Server
+OS,Windows 2012 Server
+OS,Windows 2016 Server
+OS,Windows 2019 Server
+OS,Windows 2022 Server
+OS,Windows 7
+OS,Windows Mobile
+OS,Windows NT Server
+OS,Windows Vista
+OS,Windows XP
+OS,WindowsCE
+OS,富士通系汎用OS
+開発言語,ABAP
+開発言語,ActionScript
+開発言語,Air/Flex
+開発言語,Angular JS
+開発言語,AppleScript
+開発言語,ASP.NET
+開発言語,awk
+開発言語,B Shell
+開発言語,C
+開発言語,C Shell
+開発言語,C#
+開発言語,C++
+開発言語,CASL
+開発言語,COBOL
+開発言語,ColdFusion
+開発言語,Delphi
+開発言語,Developer2000
+開発言語,FORTRAN
+開発言語,HOLON
+開発言語,Java
+開発言語,Java Script
+開発言語,Kotlin
+開発言語,LISP
+開発言語,LOGO
+開発言語,LotusScript
+開発言語,Objective-C
+開発言語,Pascal
+開発言語,Perl
+開発言語,PHP
+開発言語,PL/I
+開発言語,PL/SQL
+開発言語,Power Shell
+開発言語,PowerBuilder
+開発言語,Python
+開発言語,RPG
+開発言語,Ruby
+開発言語,Scala
+開発言語,sed
+開発言語,Shell
+開発言語,Silverlight
+開発言語,SQL
+開発言語,TeX
+開発言語,Type Script
+開発言語,VB
+開発言語,VB.NET
+開発言語,VBA
+開発言語,VBScript
+開発言語,VC++
+開発言語,Windows PowerShell
+開発言語,アセンブラ
+データベース,Access
+データベース,DB2
+データベース,DB2 10.X
+データベース,DB2 11.X
+データベース,DB2 7.2
+データベース,DB2 8.X
+データベース,DB2 9.X
+データベース,MySQL
+データベース,MySQL 4.X
+データベース,MySQL 5.X
+データベース,MySQL 8.X
+データベース,NoSQL
+データベース,ORACLE
+データベース,ORACLE 10.X
+データベース,ORACLE 11.X
+データベース,ORACLE 12.X
+データベース,ORACLE 18.X
+データベース,ORACLE 19.X
+データベース,PostgreSQL
+データベース,PostgreSQL 10.X
+データベース,PostgreSQL 11.X
+データベース,PostgreSQL 12.X
+データベース,PostgreSQL 13.X
+データベース,PostgreSQL 6.X
+データベース,PostgreSQL 7.X
+データベース,PostgreSQL 8.X
+データベース,PostgreSQL 9.X
+データベース,SQLserver
+データベース,SQLserver 2000
+データベース,SQLserver 2005
+データベース,SQLserver 2008
+データベース,SQLserver 2012
+データベース,SQLserver 2014
+データベース,SQLserver 2016
+データベース,SQLserver 2017
+データベース,SQLserver 2019
+データベース,Symfoware
+ツール,Ansible
+ツール,Apache Struts
+ツール,Apache Wicket
+ツール,Chef
+ツール,CodWarrior
+ツール,Eclipse
+ツール,GitHUB
+ツール,GWT(GoogleWebToolkit)
+ツール,Hibemate
+ツール,Hibernate
+ツール,Jakarta EE(旧 Java EE)
+ツール,Jenckins
+ツール,JSF(JavaServer Faces)
+ツール,JSF(JavaServerFaces)
+ツール,Laravel
+ツール,NetBeans
+ツール,Play Framework
+ツール,SAStruts (Super Agile Struts)
+ツール,Spark Framework
+ツール,Spring
+ツール,Spring Framework
+ツール,subversion
+ツール,Teraterm
+ツール,Uipath（RPA)
+ツール,Visual Studio
+ツール,WinActor（RPA)
+設計,CORBA
+設計,ER
+設計,SOA
+設計,UML
+開発手法,DevOps
+開発手法,アジャイル/スクラム
+開発手法,ウォーターフォール
+開発手法,スパイラル
+Web技術,Ajax
+Web技術,ASP
+Web技術,CMS
+Web技術,CSS
+Web技術,EJB
+Web技術,Flash
+Web技術,HTML
+Web技術,HTML5/CSS3
+Web技術,JAVA Servlet
+Web技術,JQurey
+Web技術,JSP
+Web技術,Nginx
+Web技術,RSS
+Web技術,SNS
+Web技術,SOAP
+Web技術,Wiki
+Web技術,XML
+ERP,BAAN
+ERP,fujitsu GLOVIA
+ERP,HITACHI GEMPLANET
+ERP,Microsoft Dynamics AX
+ERP,NEC EXPLANNER
+ERP,Oracle APPS
+ERP,Oracle EBS
+ERP,SAP Basic
+ERP,SAP R/3
+ERP,勘定奉行
+業種,アパレル
+業種,カード/信販/クレジット
+業種,医療
+業種,飲食業
+業種,運輸
+業種,教育/学校
+業種,銀行
+業種,建築
+業種,公共企業
+業種,自治体
+業種,小売
+業種,省庁
+業種,証券
+業種,情報処理
+業種,人材派遣
+業種,生保
+業種,製造
+業種,損保
+業種,通信
+業種,電気/ガス/石油
+業種,不動産
+業種,報道出版
+業種,旅行
+その他,FAXシステム
+その他,ITILサービスデスク（運用）
+その他,ITIL構成管理（運用）
+その他,ITIL変更管理（運用）
+その他,ITIL問題管理（運用）
+その他,システム仮想化
+その他,システム冗長化
+その他,ナレッジシステム
+その他,バックアップ・リストア
+その他,ワークフローシステム
+その他,監視システム
+その他,管理会計システム
+その他,企業LAN構築
+その他,企業WAN構築
+その他,勤怠管理システム
+その他,顧客管理システム
+その他,購買・調達管理システム
+その他,在庫管理システム
+その他,財務会計システム
+その他,情報共有
+その他,人事管理システム
+その他,生産管理システム
+その他,組込み製品（AV機器）
+その他,組込み製品（カーナビ）
+その他,組込み製品（その他）
+その他,組込み製品（携帯）
+その他,電話システム
+その他,販売管理システム
+その他,品質管理システム
+その他,労務管理システム

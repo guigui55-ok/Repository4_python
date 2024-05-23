@@ -337,9 +337,9 @@ import datetime,shutil
 
 class BasicLogger(metaclass=ABCMeta):
     """
-    
-    log管理を、コンソールのみ、テキストのみ、htmlとテキスト
-    など使い分けるための基本クラス    
+    BasicLogger
+        log管理を、コンソールのみ、テキストのみ、htmlとテキスト
+         など使い分けるための基本クラス    
     """
     def __init__(
         self,

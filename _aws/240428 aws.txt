@@ -644,9 +644,7 @@ ECDSA key fingerprint is SHA256:ZoFUQWQT0HTcxUaWN0vKiR2DGWEDjrLXVVlrr+IUK0s.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? y
 Please type 'yes', 'no' or the fingerprint: yes
 Warning: Permanently added 'ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com,52.194.229.11' (ECDSA) to the list of known hosts.
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 Permissions for 'NeckoWebServer3_KeyPair.pem' are too open.
 It is required that your private key files are NOT accessible by others.
 This private key will be ignored.
@@ -715,7 +713,7 @@ vi ~/.bash_profile
 
 export PATH=LOCAL_PATH:$PATH
 
-export PATH=L~/.local/bin:$PATH
+export PATH=~/.local/bin:$PATH
 
 source ~/.bash_profile
 
@@ -724,7 +722,6 @@ pip install awsebcli --upgrade --user
 
 eb --version
 
-pip install awsebcli --upgrade --user
 
 ##########
 pip install virtualenv
@@ -742,18 +739,12 @@ git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
 
 python ./aws-elastic-beanstalk-cli-setup/scripts/ebcli_installer.py
 
-
 [ec2-user@ip-172-31-10-129 work]$ eb --version
 EB CLI 3.20.10 (Python 3.9.16 (main, Mar 28 2024, 00:00:00) 
 [GCC 11.4.1 20230605 (Red Hat 11.4.1-2)])
 
-
-
-
 EB CLI をインストールし、プロジェクトディレクトリを設定したら、1 つのコマンドで環境を作成できます。
 ~/my-app$ eb create my-env
-
-
 
 AWS EC2でpythonプログラムを実行する環境構築
 https://qiita.com/jesuissuyaa/items/b0932540cc16edec6f03
@@ -766,14 +757,9 @@ workフォルダに
 git clone https://gist.github.com/22ddcd47b03e11b92ce916ce35889f3f.git
 
 
-
-
-
-
-
 /////////////
 /////////////
-# vi
+#vi
 ■viの使い方
 https://docs.oracle.com/cd/E19253-01/816-3946/6ma6m5bnf/index.html
 https://www.gi.ce.t.kyoto-u.ac.jp/user/susaki/command/vi.html
@@ -826,6 +812,34 @@ A:その行の最後にテキストを追加
 
 /////////////
 
+
+######################################################################
+
+https://qiita.com/morikaz/items/4da0ed2428cb1f9f9444#ssh%E6%8E%A5%E7%B6%9A%E3%81%AE%E8%A8%AD%E5%AE%9A
+
+AWS Systems Manager
+Fleet Manager
+https://dev.classmethod.jp/articles/aws-systems-manager-fleet-manager-released/
+
+AWS Systems Manager でのデータ保護
+https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/data-protection.html
+
+データを保護するため、AWS アカウント 認証情報を保護し、AWS IAM Identity Center または AWS Identity and Access Management (IAM) を使用して個々のユーザーをセットアップすることをお勧めします。この方法により、それぞれのジョブを遂行するために必要な権限のみが各ユーザーに付与されます。また、次の方法でデータを保護することもお勧めします:
+
+各アカウントで多要素認証 (MFA) を使用します。
+
+SSL/TLS を使用して AWS リソースと通信します。TLS 1.2 は必須であり TLS 1.3 がお勧めです。
+
+
+Systems Manager のセキュリティに関するベストプラクティス
+https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/security-best-practices.html
+
+AWS Systems Manager セッションマネージャー
+https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
+
+？？？？
+
+
 ######################################################################
 AWS開発環境
 
@@ -842,6 +856,17 @@ https://business.ntt-east.co.jp/content/cloudsolution/ih_column-95.html
 既存のコンピューティング
 
 
+SSH 環境の作成
+https://docs.aws.amazon.com/cloud9/latest/user-guide/create-environment-ssh.html
+
+
+パブリック IPv4 DNS
+ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com
+
+ターゲットリソースの現在の状態との競合があるため、リクエストは失敗しました。プロパティを変更して、もう一度試してください。
+SSH サーバー necko562@ec2-52-194-229-11.ap-northeast-1.compute.amazonaws.com に接続できません。ユーザー、ホスト、ポート番号が正しいことを確認してください。
+
+別インスタンでの起動が必要？
 
 
 
@@ -1914,7 +1939,419 @@ AWSでのスナップショットは、Amazon Elastic Block Store (EBS)・Amazon S3で使うバッ
 https://qiita.com/hagiohagi/items/480befc6e31b2e257d1e
 
 
+######################################################################
+※未調査
+Amazon CloudWatch
+-
+Systems Manager
+https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/security-best-practices.html
+[速報] AWS Systems Manager Fleet Manager がリリースされました
+https://dev.classmethod.jp/articles/aws-systems-manager-fleet-manager-released/
+EC2への接続に22番ポートの開放はやめてSystems Managerを使おう
+https://qiita.com/morikaz/items/4da0ed2428cb1f9f9444#ssh%E6%8E%A5%E7%B6%9A%E3%81%AE%E8%A8%AD%E5%AE%9A
 
+
+#cloud9
+
+##########
+@@@
+SSH接続ができない
+https://docs.aws.amazon.com/ja_jp/cloud9/latest/user-guide/create-environment-ssh.html
+独自のサーバーに接続するには、SSH を使用します。SSH は macOS および Linux オペレーティングシステムに既にインストールされています。Windows で SSH を使用してサーバーに接続するには、PuTTY をインストールする必要があります。
+
+※Teratermでもよい
+
+SSH公開キーの設定・秘密キーの取得
+Amazon EC2 を使用してキーペアを作成する
+https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/create-key-pairs.html
+
+PuTTY
+https://rakkoserver.com/knowledge/2999/
+PuTTYを起動し、左メニューの「SSH」をダブルクリック（または＋マークをクリック）してメニューを展開します
+3. 秘密キーの選択
+①展開したメニューの中から「Auth」の＋をクリックして展開、
+「Credentials」をクリック
+②画面右側「Private key file for authentication」でPPK形式の秘密鍵を選択します（Browseをクリックするとファイル選択可能）。
+4. アカウント情報の設定
+
+パブリック IPv4 DNS
+ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+login as: necko562
+Server refused our key
+Dialog
+No supported authentication methods available ( server sent:publickey.gssapi-keyex,gssapi-with-mic)
+
+=====
+ポート 22 (SSH) は認可されていません
+ポート 22 (SSH) は現在、セキュリティグループによって認可されていません。EC2 Instance Connect を使用するには、リージョン内の EC2 Instance Connect サービスの IP アドレスのポート 22 を認可する必要があります: 3.112.23.0/29。詳細をご覧ください。
+
+
+Session Manager の使用:
+SSH キー、踏み台ホスト、またはインバウンドポートを開かずにインスタンスに接続します。
+
+https://ap-northeast-1.console.aws.amazon.com/ec2/home?region=ap-northeast-1#ConnectToInstance:instanceId=i-08bb47aff9b538ae8
+
+ssh -i "NeckoWebServer3_KeyPair.pem" ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+https://ap-northeast-1.console.aws.amazon.com/ec2/home?region=ap-northeast-1#ConnectToInstance:instanceId=i-08bb47aff9b538ae8
+
+Systems Manager Explorer 料金
+Explorer を有効にしても追加料金はかかりません。
+
+
+https://repost.aws/ja/knowledge-center/ec2-linux-resolve-ssh-connection-errors
+方法 2: AWS Systems Manager Session Manager を使用する
+
+
+https://ap-northeast-1.console.aws.amazon.com/systems-manager/session-manager?region=ap-northeast-1#
+Session Manager を使用するようにインスタンスを設定する
+2
+インスタンスへのアクセスを制御する IAM ポリシーをユーザーに割り当てる
+3
+セッションログのアカウントオプションを指定する
+4
+bash または shell ターミナルを起動して、インスタンスでセッションを開始する
+>>必須の IAM ロールに関連付けられているインスタンスがありません。
+
+ステップ 1: Systems Manager にインスタンスのアクセス許可を設定する
+https://docs.aws.amazon.com/ja_jp/systems-manager/latest/userguide/setup-instance-permissions.html
+「AWS マネージドポリシー: AmazonSSMManagedEC2InstanceDefaultPolicy」
+
+---------
+aws ポート 22 (SSH) は認可されていません 接続
+SSH を使用して EC2 インスタンスへの接続を試みると、「接続が拒否されました」または「接続がタイムアウトしました」というエラーが表示されます。これを解決する方法を教えてください。
+https://repost.aws/ja/knowledge-center/ec2-linux-resolve-ssh-connection-errors
+
+インスタンスのセキュリティグループが TCP ポート 22 における受信トラフィックを許可している。
+インスタンスサブネットのネットワーク ACL が、TCP ポート 22 における受信トラフィックと送信トラフィック向けのエフェメラルポートを許可している。
+
+ネットワーク ACL の動作
+以下のタスクでは、Amazon VPC コンソールを使用してネットワーク ACL を操作する方法を示しています。
+
+★
+https://qiita.com/tkmd35/items/2cbb08cd64e6fa748294
+セキュリティグループでSSH、マイIPのインバウンドルールを作成する。
+ElasticIPでないときは、インスタンス再起動でIPアドレスが変わるので
+たぶん都度変更が必要。
+
+
+EC2 Instance Connect サービスの IP アドレスは認可されていません
+ポート 22 (SSH) はセキュリティグループで認可されています。ただし、EC2 Instance Connect を使用するには、リージョン内の EC2 Instance Connect サービスの IP アドレスのポート 22 も認可する必要があります: 3.112.23.0/29。詳細をご覧ください。
+
+コマンドプロンプトから
+C:\ZMyFolder\newDoc\0ProgramingAll\aws>ssh -i "NeckoWebServer3_KeyPair.pem" ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+The authenticity of host 'ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com (43.207.198.188)' can't be established.
+ECDSA key fingerprint is SHA256:ZoFUQWQT0HTcxUaWN0vKiR2DGWEDjrLXVVlrr+IUK0s.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com,43.207.198.188' (ECDSA) to the list of known hosts.
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+Permissions for 'NeckoWebServer3_KeyPair.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "NeckoWebServer3_KeyPair.pem": bad permissions
+ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com: Permission denied (publickey,gssapi-keyex,gssapi-with-mic)
+
+インスタンスに接続
+https://ap-northeast-1.console.aws.amazon.com/ec2/home?region=ap-northeast-1#ConnectToInstance:instanceId=i-08bb47aff9b538ae8
+
+ssh -i "NeckoWebServer4_KeyPair.pem.pem" ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+awsにssh接続が拒否された。
+https://qiita.com/hanlio/items/c8a89244be67b1ec5b63
+
+※
+Windows、pemファイル右クリック、許可するをチェックして適用する。
+>>変わらず
+
+
+chmod 600
+所有者「読み書き可」グループ・その他「なし」（実行許可なし）
+1桁目（左）	所有者のアクセス権限
+2桁目（中）	グループのアクセス権限
+3桁目（右）	その他のユーザーのアクセス権限
+4	読み出し許可
+2	書き込み許可
+1	実行許可
+0	権限なし
+
+https://xtech.nikkei.com/it/atcl/column/15/042000103/080400025/
+Windowsでのcmod
+
+cacls ファイル名 /g ユーザー名:アクセス権
+
+N アクセス権無し
+R 読み取り
+W 書き込み
+C 変更
+F フルアクセス
+
+cacls "NeckoWebServer4_KeyPair.pem.pem" /g OK:RW
+Icacls "NeckoWebServer4_KeyPair.pem.pem" /g OK:RW
+
+https://learn.microsoft.com/ja-jp/windows-server/administration/windows-commands/icacls
+
+Icacls "NeckoWebServer4_KeyPair.pem.pem" /g OK:RW
+
+[/grant[:r] <sid>:<perm>[...]]
+/grant OK:(r,w)
+icacls "NeckoWebServer4_KeyPair.pem.pem" /grant OK:(r,w)
+
+C:\ZMyFolder\newDoc\0ProgramingAll\aws>
+icacls "NeckoWebServer4_KeyPair.pem.pem" /grant OK:(r,w)
+processed file: NeckoWebServer4_KeyPair.pem.pem
+Successfully processed 1 files; Failed processing 0 files
+
+>>変わらず
+
+-----
+https://ap-northeast-1.console.aws.amazon.com/ec2/home?region=ap-northeast-1#ConnectToInstance:instanceId=i-08bb47aff9b538ae8
+必要に応じて、このコマンドを実行して、キーが公開されていないことを確認します。
+chmod 400 "NeckoWebServer3_KeyPair.pem"
+
+icacls "NeckoWebServer3_KeyPair.pem" /grant OK:(r)
+
+ssh -i "NeckoWebServer3_KeyPair.pem" ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+
+https://techblog.techfirm.co.jp/entry/aws-connect-with-ec2-instance-connect-endpoint
+EC2 Instance Connect Endpointセキュリティグループ
+
+
+「VPC」→「エンドポイント」→「エンドポイントを作成」と遷移し、エンドポイント作成画面に移動します。
+エンドポイントの設定項目のサービスカテゴリは「EC2インスタンス接続エンドポイント」を選択します。
+
+ポイントとして、今回は接続元のIP制限をセキュリティグループで行いたいため、VPC選択時に追加設定メニューを開き、「クライアントIPの保持」メニューにある以下のチェックボックスをオンにします。
+
+*****
+240517
+
+ssh -i "NeckoWebServer3_KeyPair.pem" necko562@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+ WARNING: UNPROTECTED PRIVATE KEY FILE!
+ 
+ 
+chmod 600 "NeckoWebServer3_KeyPair.pem"
+'chmod' is not recognized as an internal or external command,
+operable program or batch file.
+
+icacls "NeckoWebServer4_KeyPair.pem.pem" /grant OK:(r,w)
+
+
+https://www.rail-c.com/ec2%E3%81%ABssh%E6%8E%A5%E7%B6%9A%E6%99%82unprotected-private-key-file%E8%AD%A6%E5%91%8A/
+
+★
+https://blog.y-yuki.net/entry/2021/04/11/100000
+対象のキーファイルをユーザフォルダの配下に
+
+C:\Users\OK\aws>ssh -i "NeckoWebServer3_KeyPair.pem" necko562@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+necko562@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+
+ssh -i "NeckoWebServer3_KeyPair.pem" ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+=====
+EC2 Instance Connect を使用するには、リージョン内の EC2 Instance Connect サービスの IP アドレスのポート 22 も認可する必要があります
+★
+https://dev.classmethod.jp/articles/tsnote-ec2connect-connecterror/
+
+インターネット経由でインスタンスに接続する場合:
+インスタンスにパブリックIPアドレスが付与されているか確認してください。
+
+●セキュリティグループの確認:
+インスタンスに関連づけられているセキュリティグループのインバウンドにて、22番ポートが許可されていることを確認してください。
+
+3.112.23.0/29。詳細をご覧ください。
+どこかのセキュリティグループのSSHで上記アドレスを追加して、再度接続でOKとなる
+
+
+
+*****
+
+VPCで発生する料金
+https://bftnagoya.hateblo.jp/entry/2022/04/07/101416
+VPC自体には料金は発生せず、サブネットやネットワークACL、セキュリティグループの作成についても同様です。
+以下で並べるVPCのオプション機能は、特に利用するシーンが多い有料要素になります。
+NATゲートウェイ
+エンドポイント(interface型)
+
+
+AWS SSL VCP
+https://dev.classmethod.jp/articles/ssl-introduction-for-aws-client-vpn/
+[AWS]踏み台をワンチャンなくせる！？VPC接続にClient VPNを使ってみよう
+https://dev.classmethod.jp/articles/vpc-client-vpn/
+???
+
+
+Failed to connect to your instance
+Error establishing SSH connection to your instance. Try again later.
+
+
+Failed to connect to your instance
+EC2 Instance Connect is unable to connect to your instance. Ensure your instance network settings are configured correctly for EC2 Instance Connect. For more information, see EC2 Instance Connect Prerequisites at https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-prerequisites.html.
+
+
+
+
+
+-----
+240512
+EC2コンソールに接続できない
+エンドポイントを削除
+
+セキュリティグループを削除（Default、launch-wizard1
+
+
+AWSのAvailability Zoneはどうやって確認する？
+アカウントのアベイラビリティーゾーンの AZ ID を表示するには
+AWS RAM コンソールで AWS RAM コンソール ページに移動します。
+[Your AZ ID] (お客様の AZ ID) の下に現在の AWS リージョン に関する AZ ID が表示されます。
+
+
+-----
+リージョン内の EC2 Instance Connect サービスの IP アドレスのポート 22 も認可する必要があります
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-prerequisites.html?icmpid=docs_ec2_console#ec2-instance-connect-setup-security-group
+
+
+
+######
+240518
+#Cloud9
+
+https://qiita.com/zumax/items/312d20594b7eecbd533d
+Cloud9でできること
+
+名前：Cloud9Main
+説明：MainEnv
+
+安全な接続を確立するには、パブリックキーを ~/.ssh/authorized_keys ファイルに追加し、以下のログイン認証情報を入力します。
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTPaBY5Z++Om6dgGy5pywF868aL51aaIOphxVF59Q5601S90DUrJ0M1+XiQgoWfY1lvDI4t4wRRvoqebfYGS/FgGW56ghNMJuXdOTSc3Q7azkh2+TQugSHpMj5JQerZ/ESGw+OE4dCqc8954qGAPVMo6j+5PyS0p0e0v6PKcH4sgCLiFRhA8RdtUcd6sUTbCMIEgrMweYiuSex82DogCVb4pl9HP3mZqoQNXZE3NA6tLYJxiHPnIfbTrI2nB2p4XPHH/NEGN+kh68KEmzHjLZaW6tM2rLC+Mc9Pm778LlVCaDU6bF+N6+VrK99yrRwqC6vwmnHMBFd7PLujXEvA1abQu7Ka0ptDh4UcsYgIlDC6guA0031tGWywFXc1RcEqMrYQj/S1x9CPbPT6K6g75RjDT7QJoGePE0KeN7wQxXDBpfojXA18rUB/9+yMAl4G4XdEW/hmsRzrV813/lXhh31/AC0BSPvlEPRnXLAdZq9fagI1eza7wKM4TlPmfC1VvChQqrNqkkRcJDZU9u87uOaIq32NofAl/CU3sgjAIO8CIX+zGQrG0LEDZaVEIE+EKengtAlBjtvILJu12jga7AkR3I9woxHjk7VxyRGV8NBSFF1hKMl1LQe82f3kK5HSDEuvlXUQafEg8deDZjJwz6Vx60WSJQ+CBQyrDSuY0eWLQ== root+211125549414@cloud9.amazon.com
+
+authorized_keys ファイルのパーミッションは 0600 に変更
+
+chmod 600 authorized_keys
+
+---
+このユーザーとURLで作成
+ec2-user@ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+→作成できず
+
+---
+ホスト
+インスタンスまたはサーバーのパブリック IP アドレス (推奨) またはホスト名。
+ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+
+---
+IPを変えてみるが×
+ec2-43-207-198-188.ap-northeast-1.compute.amazonaws.com
+↓
+3.112.23.0/29
+1 validation error detected: Value '3.112.23.0/29' at 'host' failed to satisfy constraint: Member must satisfy regular expression pattern: ^[a-zA-Z0-9][a-zA-Z0-9-.]+$
+
+
+--
+IPを変えてみる
+43.207.198.188 | オープンアドレス 
+
+SSH サーバー ec2-user@43.207.198.188 に接続できません。ユーザー、ホスト、ポート番号が正しいことを確認してください。
+
+---
+ユーザーを変えてみる
+necko562
+ERROR
+AWS Cloud9 couldn't connect to SSH server necko562@43.207.198.188.
+
+ターゲットリソースの現在の状態との競合があるため、リクエストは失敗しました。プロパティを変更して、もう一度試してください。
+
+別ユーザーならOK？
+
+閉じるとIPが変わってしまいそう。→ElasticIPが必要？
+
+
+----------
+https://dev.classmethod.jp/articles/tsnote-cloud9-how-do-i-fix-a-public-ip-address-for-cloud9/
+
+240518
+ElasticIPの取得は保留
+変動IPでも1度は接続できそう
+
+######################################################################
+#lambda
+*料金について
+https://zenn.dev/shimo_s3/articles/0263536627e377
+
+利用開始からの期間に関わらず、毎月付与される
+個人開発では、あまり課金されることはないかも。後述のネットワーク通信量が課金されたりするが、それも微少。
+1 か月あたり 100 万件の無料リクエストと、1 か月あたり 40 万 GB-s のコンピューティングタイムが含まれる
+
+Lambda エフェメラルストレージの料金
+512MBまでは無料
+GB-秒あたり 0.0000000309USD(最安・オハイオ、オレゴンなど)
+この料金はリージョン差がいろいろあり、東京・大阪だと0.000000037USD
+
+Provisioned Concurrency 料金
+Provisioned Concurrency を有効にしていた時間。5分単位で切り上げ
+https://qiita.com/momotaro98/items/f806971727386a8be34c
+Lambda関数を並行(水平方向)に実行する際のリソースとなる概念が同時並行性です。
+Provisioned Concurrency とは
+Provisioned Concurrencyは上述の同時並行数をリクエストが実際にくる前に事前に立ち上げておく機能です。
+
+たとえ同時実行数自体を予約していたとしても、Lambda関数には以下の課題があります。Provisioned Concurrencyは以下の課題を解決するための新機能です。
+
+---
+データ転送およびその他の料金
+EC2の場合と同じ。インは無料。アウトは課金。
+0.09USD / GB
+同一リージョン間であれば、無料になるサービス:S3、Amazon Glacier、DynamoDB、SES、SQS、Kinesis、ECR、SNS、EFS、SimpleD
+
+----
+Lambda@Edge の料金
+全リージョンで、同じ料金
+期間	リクエスト
+GB-秒あたり 0.00005001USD	リクエスト 100 万件あたり 0.60USD
+
+5分で読む！Lambda@Edge 設計のベストプラクティス
+https://dev.classmethod.jp/articles/lambda-edge-design-best-practices/
+
+---
+Lambda@Edgeとは
+https://techblog.zozo.com/entry/lambda-edge
+https://qiita.com/chii-08/items/1b8c7f9f876673b7aa20
+Lambda@Edgeとは
+Lambda@EdgeとはCloudFrontの機能の1つで、CloudFrontのエッジサーバでコードを実行するLambda関数のこと。ユーザーに近い場所でコードが実行されることでアプリケーションのパフォーマンスが向上する。
+CloudFrontのイベントをトリガーとしてコードを実行する。
+
+----
+https://www.cloudplex.jp/blog/cdn-service/amazon-cloudfront-estimated-price/
+従量課金モデルになります。
+
+CloudFrontでは、常時無料利用枠が用意されています。以下の項目内であれば常時無料となります。
+
+■｜1 か月あたり 1 TB のデータ転送
+■｜1 か月あたり 10,000,000 件の HTTP または HTTPS リクエスト
+■｜1 か月あたり 200 万件の CloudFront 関数呼び出し
+■｜無料の SSL 証明書
+-
+AWS 料金計算ツールで目安が分かる
+-
+2つ目のポイントは、CloudFrontを利用する際にオリジンサーバーをAWSのS3を使うことがある点です。
+CloudFrontを利用する場合、S3、EC2、ELBなどのAWSサービスからのデータ転送量（アウト）の費用はかかりません。CloudFrontからユーザーへのデータ転送とそれに関連するコストのみの支払いになります。
+
+https://www.cloudbric.jp/blog/2024/02/amazon-cloudfront/
+CloudFrontとS3の違い
+AWSのCDN（コンテンツデリバリネットワーク）サービスであるCloudFrontと違い、「Amazon S3（以下、S3）」は同じAWSでも、オブジェクトストレージサービスのことを指します。そのため、似ているようで目的が異なるサービスと認識しておく必要があります。
+
+通常、S3だけではオリジンサーバーのみでしかオブジェクトを配信できません。しかし、CloudFrontを併用することで、エッジサーバーを利用できるようになります。CloudFrontとS3とを併用して、Webサーバーとして使用する例はよく見られます。
+
+######################################################################
+#Lambda 使い方
+初めてのAWS Lambda
+https://qiita.com/idenrai/items/06ea75a935f26adbfc18
+
+
+######################################################################
+
+powershell.exe -File "C:\Users\OK\source\repos\Repository4_python\scraping_test.ps1"
 ######################################################################
 C:\ZMyFolder\newDoc\0ProgramingAll\aws
 
@@ -1947,7 +2384,8 @@ MFA_device
 admin_sc42a_b
 ***
 
-
+----------
+ec2-user
 ----------
 アカウント名
 necko562_ad

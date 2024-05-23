@@ -8,7 +8,10 @@ BAR = '########################################'
 import time
 import os
 import glob
-import pathlib,sys
+import pathlib
+import sys
+from pathlib import Path
+import shutil
 
 CHROME_DRIVER_PATH = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
 
@@ -61,14 +64,28 @@ class ObserberType():
     DIR_NAME = 4
 
 class DownloadDirectoryObserver():
-    """.crdownload があったらダウンロードが終わるまで監視する、ダウンロードがストップしたら終了する"""
+    """
+    TARGET_EXT(.crdownload) があったらダウンロードが終わるまで監視する、
+    ダウンロードがストップしたら終了する
+    """
     def __init__(self,observe_dir_path:str,logger:BasicLogger) -> None:
         self.dir_path = observe_dir_path
         self.ext = ''
         self.logger:BasicLogger = logger
+        #240522
+        # ダウンロード対象のファイル拡張子
+        # ダウンロード中ファイル[.crdownload]がないときでも、mp4があればダウンロード済みとする
+        # （実行前にmp4はすべて移動・削除しておくこと）
+        self.target_ext = '.mp4'
+        #240522
+        # ダウンロード後ファイル拡張子があれば、最初に移動しておく
+        # そのためのフォルダ
+        self.move_folder_path = Path(self.dir_path).joinpath('download_files')
+
     def set_conditions(self,value:str):
         self.target_type = value
         self.ext=value
+
     def init_dir(self):
         """監視対象のext（ダウンロード中）ファイルは消しておく"""
         if self.ext=='':return
@@ -76,6 +93,21 @@ class DownloadDirectoryObserver():
         for path in path_list:
             if path.endswith(self.ext):
                 os.remove(path)
+                self._print('removed = {}'.format(Path(path).name))
+    
+    def init_move_downloaded_file(self):
+        """
+        監視対象のフォルダに以前のダウンロード後ファイルがあれば移動しておく
+            (self.target_ext を含むファイルをすべて[download_files]フォルダに移動する)
+        """
+        Path(self.move_folder_path).mkdir(exist_ok=True)
+        match_files = glob.glob(str(self.dir_path) + '*' + self.target_ext)
+        for matchfile in match_files:
+            shutil.move(str(matchfile, str(self.move_folder_path)))
+            self._print('move_file = {}'.format(Path(matchfile).name))
+
+    def _print(self, value):
+        print(str(value))
     
     def is_exists_download_file(self,target_path:str):
         if os.path.exists(target_path):
@@ -84,12 +116,28 @@ class DownloadDirectoryObserver():
             flag = False
         self.logger.add_log('is Exists = {} , path = "{}"'.format(flag,target_path))
         return flag
+    
+    def is_exists_target_download_file_with_ext(self):
+        """
+        ダウンロード対象の拡張子（self.target_ext=mp4など）が存在するか判定する
+        """
+        checker = DirChecker(self.dir_path)
+        target_list = checker.get_target_ext(self.target_ext)
+        if len(target_list)<1:
+            self.logger.add_log('target_ext[{}] is len<1'.format(self.target_ext))
+            return False
+        else:
+            self.logger.add_log('target[{}] is Exists({})'.format(
+                self.target_ext, len(target_list)))
+            return True
+        
 
     def excute(self):
         # ダウンロードを押した後で実行する
         # ダウンロード中であるか、終わっている前提
         # delete_target_ext(path,TARGET_EXT)
         checker = DirChecker(self.dir_path)
+        self.logger.add_log('download folder'.format(self.dir_path))
         # now_list = checker.update_list()
         # no_count = 0
         # begin_wait_limit_times = 30
@@ -99,8 +147,13 @@ class DownloadDirectoryObserver():
         # print('check dir path.  path = {}'.format(path))
         target_list = checker.get_target_ext(self.ext)
         if len(target_list)<1:
-            self.logger.add_log('target[{}] is len<1 , return'.format(self.ext))
-            return False
+            self.logger.add_log('target[{}] is len<1'.format(self.ext))
+            # ダウンロード中ファイル(EndsWiths(self.ext))がない時は、すでにダウンロード済みの場合がある
+            # ダウンロード対象の拡張子のファイルがあればダウンロード済みとする
+            if self.is_exists_target_download_file_with_ext():
+                return True
+            else:
+                return False
         else:
             target = target_list[0]
 
@@ -162,8 +215,13 @@ class MovieDownloader():
         self.observer = observer
     
     def init_download_dir(self):
-        """ダウンロードフォルダを初期化する（ダウンロード中の拡張子をすべて削除）"""
+        """
+        ダウンロードフォルダを初期化する
+        （ダウンロード中の拡張子をすべて削除）
+         （ダウンロード対象の拡張子をすべて、ダウンロード済みフォルダに移動）
+        """
         self.observer.init_dir()
+        self.observer.init_move_downloaded_file()
     
     def make_file_list_from_dir(self):
         """対象ディレクトリのlnkリストを作成する"""
@@ -225,11 +283,18 @@ class MovieDownloader():
         is_registed = sql_lib.regist_url_when_success_download(lnk_path)
         return is_registed
 
+    def wait_for_access_restrictions(self, wait_max=60):
+        # アクセス制限　Access restrictions
+        print_interval_sec = 10
+        for i in range(int(wait_max//print_interval_sec)):
+            msg = 'Wait...[Access restrictions] [{} sec]'.format(i*print_interval_sec)
+            self.logger.add_log(msg)
+            time.sleep(print_interval_sec)
 
     def download_movie_main(self):
         """lnkが格納されているディレクトリのlnkからURLを読み取り、ダウンロードする。
         終わるまで待って、終わったらlnkを別ディレクトリに移動"""
-        for path in self.lnk_list:
+        for i, path in enumerate(self.lnk_list):
             if not self.not_check_db:
                 if self.path_is_donloaded(path):
                     self.add_log('**** path is donloaded.  lnk_path={}'.format(path))
@@ -274,6 +339,12 @@ class MovieDownloader():
                     self.move_link_file_finished(path)
             else:
                 self.add_log('is_downloaded = False, skip regist_to_db  , move_link')
+            if i!=len(self.lnk_list):
+                self.wait_for_access_restrictions(60)
+        #End For
+        msg = 'processed file_length = {}'.format(len(self.lnk_list))
+        self.add_log(msg)
+    #End Method download_movie_main
 
     def move_link_file_finished(self,path):
         """ダウンロードが終わったら、終わった用ディレクトリに移動する"""
@@ -297,6 +368,14 @@ class MovieDownloader():
         
     
     def wait_until_downloaded(self):
+        """
+        ダウンロードが終了するまで待つ
+         self.observer.excute
+         (DownloadDirectoryObserver)
+          ダウンロード中ファイルがなくなるまで待つorダウンロード済みのファイルがあればTrue
+           ダウンロード中ファイルが表示されっぱなし=>タイムアウトの場合はFalse
+            ダウンロード中ファイル、ダウンロード済みファイルがない場合もFalse
+        """
         return self.observer.excute()
 
     def get_url_from_link(self,lnk_path:str):
@@ -318,8 +397,8 @@ class MovieDownloader():
 
     def download_movie(self,url:str):
         """
-        ダウンロード債をを開いてURLを入力、STARTをクリックして、動画をWeb上で取得する。
-        その後、画面が切り替わったらダウンロードをクリックして、
+        ダウンロードサイトをを開いてURLを入力、STARTをクリックして、動画をWeb上で取得する。
+         その後、画面が切り替わったらダウンロードをクリックして、
         ポップアップした要素の（前とは別の）ダウンロードをクリックする。"""
         self.add_log(url)
         is_downloded:bool = False
@@ -347,37 +426,6 @@ class MovieDownloader():
         return self.downloader.is_need_observer
     def download_result(self):
         return self.downloader.download_result
-
-################################################################################
-################################################################################
-
-def main():
-    
-    path = r'C:\ZMyFolder\newDoc\新しいfiles\_test_movie'
-    path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
-    path = r'C:\Users\OK\Desktop\0704 you'
-    path = r'C:\Users\OK\Desktop\fas'
-    path = r'C:\Users\OK\Desktop\231123 youel\you'
-    donwload_dir = r'C:\Users\OK\Downloads'
-    log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
-    from html_log.html_logger import HtmlLogger
-    html_logger = HtmlLogger('MovieDownloader',log_dir_path)
-    downloader = MovieDownloader()
-    downloader.logger = html_logger
-    downloader.set_dir(path,log_dir_path)
-
-    downloader.not_check_db = True
-    downloader.not_check_db = False
-    observer = DownloadDirectoryObserver(donwload_dir,html_logger)
-    observer.set_conditions(TARGET_EXT)
-    downloader.set_download_dir_observer(observer)
-    downloader.make_file_list_from_dir()
-    #231124
-    # ダウンロード失敗時にもカウント＋１されるので、修正が必要
-    # 231124
-    # selenium_logを実行ごとに別フォルダに区切る（現状は連なっている）
-    downloader.download_movie_main()
-    html_logger.finish_to_create_html()
 
 
 
@@ -468,6 +516,53 @@ def check_dir_test(path = 'F:\ZDOWNLOAD', ext = TARGET_EXT):
     if os.path.exists(buf):
         print('is exists = True')
     print('done.')
+
+
+
+################################################################################
+################################################################################
+
+def main():
+    
+    # path = r'C:\ZMyFolder\newDoc\新しいfiles\_test_movie'
+    # path = r'C:\ZMyFolder\newDoc\新しいfiles\0fashon'
+    # path = r'C:\Users\OK\Desktop\0704 you'
+    # path = r'C:\Users\OK\Desktop\fas'
+    # path = r'C:\Users\OK\Desktop\231123 youel\you'
+    path = r'C:\Users\OK\Desktop\240519_el_test'
+    if not Path(path).exists():
+        raise FileNotFoundError(path)
+    #/
+    donwload_dir = r'C:\Users\OK\Downloads'
+    # donwload_dir = r'J:\ZDOWNLOAD\movie_downloads'
+    # 240521  ChromeDriverでダウンロードすると、デフォルトはWindowsのダウンロードフォルダとなる
+    # 変更するには別途処理が必要と思われる（未対応）
+    # log_dir_path = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
+    log_dir_path = r'C:\Users\OK\source\repos\Repository4_python\scraping_test\selenium_utility\__log_selenium\log'
+    from html_log.html_logger import HtmlLogger
+    html_logger = HtmlLogger('MovieDownloader',log_dir_path)
+    downloader = MovieDownloader()
+    downloader.logger = html_logger
+    downloader.set_dir(path,log_dir_path)
+
+    downloader.not_check_db = True
+    downloader.not_check_db = False
+    observer = DownloadDirectoryObserver(donwload_dir,html_logger)
+    observer.set_conditions(TARGET_EXT)
+    downloader.set_download_dir_observer(observer)
+    downloader.make_file_list_from_dir()
+    #231124
+    # ダウンロード失敗時にもカウント＋１されるので、修正が必要
+    # 231124
+    # selenium_logを実行ごとに別フォルダに区切る（現状は連なっている）
+    ##########
+    # main
+    ##########
+    downloader.download_movie_main()
+    ##########
+    html_logger.finish_to_create_html()
+
+
 
 #####################################
 # check_dir_test()

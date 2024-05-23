@@ -378,3 +378,4 @@ __download_file_*.*
 log.txt
 __log*/
 __test_*.txt
+__img_*/

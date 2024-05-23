@@ -48,6 +48,7 @@ class DonwloadSite():
         self.is_need_observer = True
         self.download_result = False
         self.logger = html_logger
+
     def set_log_path(self,dir_path:str):
         # self.chrome.selenium_log.set_log_dir(dir_path)
         self.log_dir_path = dir_path
@@ -98,7 +99,9 @@ class DonwloadSite():
 class YouTube(DonwloadSite):
     def __init__(self, chrome_driver_path: str = '',logger:HtmlLogger=None) -> None:
         super().__init__(chrome_driver_path, logger)
-        self.downloader_url = 'https://www.y2mate.com/jp/youtube'
+        # self.downloader_url = 'https://www.y2mate.com/jp/youtube'
+        # 240521
+        self.downloader_url = 'https://www.y2mate.com/jp852'
 
     def excute_download_movie(self,movie_url):
         """
@@ -107,6 +110,9 @@ class YouTube(DonwloadSite):
         ポップアップした要素の（前とは別の）ダウンロードをクリックする。"""
         flag = super().open_web_site()
         if not flag:return
+        from pathlib import Path
+        path = Path(__file__).parent.joinpath('image/__img_movie_download')
+        self.chrome.image_dir = path
         flag = self.input_movie_url(movie_url)
         if not flag:return
         self.movie_url = movie_url
@@ -139,7 +145,8 @@ class YouTube(DonwloadSite):
     def input_movie_url(self,movie_url):
         chrome = self.chrome
         # input_el = chrome.driver.find_element_by_tag_name('input')
-        input_el = chrome.driver.find_element(By.CSS_SELECTOR, "input")
+        # input_el = chrome.driver.find_element(By.CSS_SELECTOR, "input")
+        input_el = chrome.find_element(By.CSS_SELECTOR, "input")
         input_el.click()
         chrome.timer.wait_short()
         for _ in range(int(2)):
@@ -191,12 +198,19 @@ class YouTube(DonwloadSite):
         # 231123 サムネイルが増えたためダウンロードまでの移動回数を追加
         # count = 50
         count = 70
+        # ダウンロードボタンの何個目をクリックするか
+        # target_button_count = 1
+        # 240521
+        # 以前は一番上が最高画質だったが、
+        # 一番上にAutoQualityボタンが追加されたので、その次の最高画質をクリックする
+        target_button_count = 2
         for _ in range(count):
             self.chrome.timer.wait_little()
             element = self.chrome.driver.switch_to.active_element
             el_text = WebElementUtility(element).get_attribute('text')
             # if 'download' in el_text.lower():
             #     print()
+            
             if el_text.find('ダウンロード')>=0:
                 # self.chrome.save_page_source_and_screenshot('click_download')
                 word_count+=1
@@ -207,8 +221,10 @@ class YouTube(DonwloadSite):
             else:
                 # print('[{}]'.format(WebElementUtility(element).get_attribute('text')))
                 pass
-            if word_count>=1:
-                element.click()
+            # if word_count>=1:
+            if word_count>=target_button_count:
+                # element.click()
+                self.chrome.click(element)
                 return True
             element.send_keys(Keys.TAB)
         else:
@@ -240,6 +256,13 @@ class YouTube(DonwloadSite):
                 self.chrome.timer.wait()
                 self.add_log('waiting download button.[{}]'.format(i))
             else:
+                # 240521
+                # モーダルポップアップが追加されている
+                # ソースから要素が取得できないため画像で対応
+                # 閉じた後繰り返し表示される（3回？）
+                # self.chrome.timer.wait()
+                for i in range(3):
+                    self.close_ad_popup_a()
                 self.add_log('prepared download button.')
                 return ConstResult.OK
         else:
@@ -250,18 +273,45 @@ class YouTube(DonwloadSite):
             self.print_result(ConstResult.ERROR,msg,self.movie_url)
             return ConstResult.ERROR
 
+    def close_ad_popup_a(self):
+        temp_path = self.chrome.image_dir.joinpath('ad_modal_close_button.jpg')
+        is_clicked = self.chrome.click_by_image(temp_path)
+        if is_clicked:
+            return
+        self.chrome.timer.wait()
+
+    def click_download_button(self):
+        temp_path = self.chrome.image_dir.joinpath('download_button_left.jpg')
+        self.chrome.click_by_image(temp_path)
+        self.chrome.timer.wait()
+
     def click_download(self):
         """
         ダウンロードボタンをクリックする
         """
         # elements = self.chrome.driver.find_elements_by_tag_name('a')
-        elements = self.chrome.driver.find_elements(By.CSS_SELECTOR, "a")
+        # elements = self.chrome.driver.find_elements(By.CSS_SELECTOR, "a")
+        elements = self.chrome.find_elements(By.CSS_SELECTOR, "a")
+
         for element in elements:
             cls = WebElementUtility(element).get_attribute('class')
             if cls == 'btn btn-success btn-file':
                 href = WebElementUtility(element).get_attribute('href')
                 self.add_log(href)
-                element.click()
+                # 240521
+                # 広告が表示される
+                self.chrome.timer.wait()
+                self.close_ad_popup_a()
+                # element.click()
+                # 240521
+                # self.chrome.click(element)
+                # 240521 
+                # ダウンロードボタンがタップできない（広告に邪魔されて要素が取れないか、、？）
+                self.click_download_button()
+                # 240521
+                # 広告が表示される
+                self.chrome.timer.wait()
+                self.close_ad_popup_a()
                 self.chrome.timer.wait()
                 return True
         return False
