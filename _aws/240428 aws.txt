@@ -2349,6 +2349,26 @@ AWSのCDN（コンテンツデリバリネットワーク）サービスであるCloudFrontと違い、「Amaz
 https://qiita.com/idenrai/items/06ea75a935f26adbfc18
 
 
+関数ブループリント
+すでにソースコードが完成されてあるため、環境変数を設定するなどの簡単な操作だけで開発できる。
+アプリケーションテンプレート
+
+-----
+LambdaからDynamoDBへの接続は最初禁止となってる…
+なので、IAM ConsoleでLambdaがDynamoDBを触れるようにRoleを追加しよう。
+
+
+
+Lambda Layer
+https://qiita.com/__DASHi__/items/268062f0dba0e93170f2
+	Cloud9
+
+
+
+
+
+
+
 ######################################################################
 
 powershell.exe -File "C:\Users\OK\source\repos\Repository4_python\scraping_test.ps1"

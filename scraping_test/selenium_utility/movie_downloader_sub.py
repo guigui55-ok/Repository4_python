@@ -126,7 +126,7 @@ class YouTube(DonwloadSite):
         ret_int = self.wait_shown_until_download_button()
         if not flag:return
         #ENTER後にサイズが更新される
-        self.chrome.driver.set_window_size(800,800)
+        # self.chrome.driver.set_window_size(800,800)
         if ret_int == ConstResult.ERROR or ret_int == ConstResult.NOTHING: return
         flag = self.click_download()
         return flag
@@ -244,17 +244,21 @@ class YouTube(DonwloadSite):
         prepared_value = 'form-group has-success has-feedback'
         limit = 60
         for i in range(limit):
-            if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
-                msg = 'ERROR__shown error screen NOTHING'
-                self.add_log('ERROR')
-                self.add_log(msg)
-                self.chrome.save_page_source_and_screenshot(msg)
-                #ファイルを移動するためにTrueで返す
-                self.print_result(ConstResult.NOTHING,msg,self.movie_url)
-                return ConstResult.NOTHING
-            if not self.chrome.page_source_ex.is_exists_find_all(prepared_value):
-                self.chrome.timer.wait()
-                self.add_log('waiting download button.[{}]'.format(i))
+
+            # エラーチェックすると遅くなるのでこれは後にする
+            # if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
+            #     msg = 'ERROR__shown error screen NOTHING'
+            #     self.add_log('ERROR')
+            #     self.add_log(msg)
+            #     self.chrome.save_page_source_and_screenshot(msg)
+            #     #ファイルを移動するためにTrueで返す
+            #     self.print_result(ConstResult.NOTHING,msg,self.movie_url)
+            #     return ConstResult.NOTHING
+            # if not self.chrome.page_source_ex.is_exists_find_all(prepared_value):
+            #     self.chrome.timer.wait()
+            #     self.add_log('waiting download button.[{}]'.format(i))
+            if False:
+                pass
             else:
                 # 240521
                 # モーダルポップアップが追加されている
@@ -262,7 +266,9 @@ class YouTube(DonwloadSite):
                 # 閉じた後繰り返し表示される（3回？）
                 # self.chrome.timer.wait()
                 for i in range(3):
-                    self.close_ad_popup_a()
+                    is_clicked = self.close_ad_popup_a()
+                    if is_clicked:
+                        break
                 self.add_log('prepared download button.')
                 return ConstResult.OK
         else:
@@ -272,20 +278,88 @@ class YouTube(DonwloadSite):
             self.chrome.save_page_source_and_screenshot(msg)
             self.print_result(ConstResult.ERROR,msg,self.movie_url)
             return ConstResult.ERROR
+        if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
+            msg = 'ERROR__shown error screen NOTHING'
+            self.add_log('ERROR')
+            self.add_log(msg)
+            self.chrome.save_page_source_and_screenshot(msg)
+            #ファイルを移動するためにTrueで返す
+            self.print_result(ConstResult.NOTHING,msg,self.movie_url)
+            return ConstResult.NOTHING
 
-    def close_ad_popup_a(self):
+    def close_ad_popup_a(self, log=True):
         temp_path = self.chrome.image_dir.joinpath('ad_modal_close_button.jpg')
-        is_clicked = self.chrome.click_by_image(temp_path)
+        is_clicked = self.chrome.click_by_image(temp_path, log_image=False)
         if is_clicked:
-            return
-        self.chrome.timer.wait()
+            return True
+        else:
+            self.chrome.timer.wait()
+            return False
 
     def click_download_button(self):
-        temp_path = self.chrome.image_dir.joinpath('download_button_left.jpg')
-        self.chrome.click_by_image(temp_path)
-        self.chrome.timer.wait()
+        """
+        """
+        """
+        2024-05-26 23:56:07      temp image[download_button_left.jpg]
+        2024-05-26 23:56:09      rect = {'x': 285, 'y': 100, 'width': 81, 'height': 41}
+        2024-05-26 23:56:10      click_point(325,120)
+        """
+        self.chrome.click_point(325, 120)
+        return True
+        # temp_path = self.chrome.image_dir.joinpath('download_button_left.jpg')
+        # is_clicked = self.chrome.click_by_image(temp_path)
+        # if is_clicked:
+        #     self.chrome.timer.wait()
+        # return is_clicked
+    
+    def is_not_shown_popup_before_click_download(self):
+        """
+        ダウンロードボタンクリック前に、ポップアップが表示されていないか判定する
+        """
+        not_show_popup_str = 'height: 190px !important; opacity: 1 !important; max-width: 420px'
+        if not_show_popup_str in self.chrome.driver.page_source:
+            is_show = False
+        else:
+            is_show = True
+        self.add_log('popup is_show={}'.format(is_show))
+        return not is_show
+        # show_popup_str = 'height: 100% !important; opacity: 1 !important; max-width: 100%'
+
 
     def click_download(self):
+        """
+        ダウンロードボタンをクリックする
+         ボタンの検索処理を除外（遅くなるので）
+        """
+        for i in range(3):
+            # 以下のclick_download_button実行時にポップアップが出るので
+            # いったんwaitして、ポップアップを出してclose_popupを実行する
+            # self.chrome.timer.wait_long()
+            # self.close_ad_popup_a()
+            # self.chrome.timer.wait_short()
+            # 240531
+            # 画像検索での対応だと、処理が遅すぎて次のポップアップが出てしまうので、別の処理に変更
+            if self.is_not_shown_popup_before_click_download():
+                # 240527
+                # 以下のDLボタンクリックを座標指定にして、上記を除外する
+                self.add_log('click download button[{}]'.format(i))
+                is_clicked = self.click_download_button()
+                if is_clicked:
+                    break
+            else:
+                self.close_ad_popup_a()
+                self.chrome.timer.wait_short()
+                self.add_log('click download button[{}]'.format(i))
+                is_clicked = self.click_download_button()
+                if is_clicked:
+                    break
+        self.add_log('is_clicked = {}'.format(is_clicked))
+        if is_clicked:
+            self.chrome.timer.wait_long()
+        return is_clicked
+
+
+    def click_download_(self):
         """
         ダウンロードボタンをクリックする
         """
@@ -300,20 +374,44 @@ class YouTube(DonwloadSite):
                 self.add_log(href)
                 # 240521
                 # 広告が表示される
-                self.chrome.timer.wait()
-                self.close_ad_popup_a()
+                # self.chrome.timer.wait()
+                # is_clicked = self.close_ad_popup_a()
                 # element.click()
                 # 240521
                 # self.chrome.click(element)
                 # 240521 
                 # ダウンロードボタンがタップできない（広告に邪魔されて要素が取れないか、、？）
-                self.click_download_button()
-                # 240521
-                # 広告が表示される
-                self.chrome.timer.wait()
-                self.close_ad_popup_a()
-                self.chrome.timer.wait()
-                return True
+                # is_clicked = self.click_download_button()
+                # # 240521
+                # # 広告が表示される
+                # self.chrome.timer.wait()
+                # self.close_ad_popup_a()
+                # self.chrome.timer.wait()
+                # 240524
+                # 繰り返しに変更
+                for i in range(3):
+                    # 以下のclick_download_button実行時にポップアップが出るので
+                    # いったんwaitして、ポップアップを出してclose_popupを実行する
+                    # self.chrome.timer.wait_long()
+                    # self.close_ad_popup_a()
+                    # self.chrome.timer.wait_short()
+                    # 240531
+                    # 画像検索での対応だと、処理が遅すぎて次のポップアップが出てしまうので、別の処理に変更
+                    if self.is_not_shown_popup_before_click_download():
+                        # 240527
+                        # 以下のDLボタンクリックを座標指定にして、上記を除外する
+                        self.add_log('click download button[{}]'.format(i))
+                        is_clicked = self.click_download_button()
+                        if is_clicked:
+                            break
+                    else:
+                        self.close_ad_popup_a()
+                        self.chrome.timer.wait_short()
+                        self.add_log('click download button[{}]'.format(i))
+                        is_clicked = self.click_download_button()
+                        if is_clicked:
+                            break
+                return is_clicked
         return False
 
     def download_movie_bef(self,url):
@@ -883,7 +981,7 @@ class VdSite(DonwloadSite):
     
     def wait_shown_until_download_button(self):
         """
-        ダウンロードボタンが出るまで待つ（ポップアップで出る）
+        ダウンロードボタンが出るまで待つ（ポップアップが出る）
         """
         # wait_value = 'Please wait while the file is being prepared for downloading'
         prepared_value = 'form-group has-success has-feedback'
@@ -946,7 +1044,6 @@ def main():
 
     from download_directoy_observer import DownloadDirectoryObserver,DEFAULT_DONLOAD_DIR
     observer = DownloadDirectoryObserver(DEFAULT_DONLOAD_DIR,logger)
-    observer
     is_downloded:bool = False
     chrome_driver_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
     if url.startswith('https://www.youtube.com/'):
@@ -966,6 +1063,7 @@ def main():
     or isinstance(downloader,DonwloadSite):
         # downloader.set_log_path(log_dir_path)
         is_downloded = downloader.excute_download_movie(url)
+        observer.init_move_downloaded_file()
     flag = observer.excute()
     downloader.close()
     if flag:

@@ -59,7 +59,16 @@ class DownloadDirectoryObserver():
             flag = False
         self.add_log('is Exists = {} , path = "{}"'.format(flag,target_path))
         return flag
-
+    def init_move_downloaded_file(self):
+        """
+        監視対象のフォルダに以前のダウンロード後ファイルがあれば移動しておく
+            (self.target_ext を含むファイルをすべて[download_files]フォルダに移動する)
+        """
+        Path(self.move_folder_path).mkdir(exist_ok=True)
+        match_files = glob.glob(str(self.dir_path) + '*' + self.target_ext)
+        for matchfile in match_files:
+            shutil.move(str(matchfile, str(self.move_folder_path)))
+            self._print('move_file = {}'.format(Path(matchfile).name))
     def excute(self):
         # ダウンロードを押した後で実行する
         # ダウンロード中であるか、終わっている前提

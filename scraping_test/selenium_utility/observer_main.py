@@ -87,9 +87,10 @@ class DownloadDirectoryObserver():
             (self.target_ext を含むファイルをすべて[download_files]フォルダに移動する)
         """
         Path(self.move_folder_path).mkdir(exist_ok=True)
-        match_files = glob.glob(str(self.dir_path) + '*' + self.target_ext)
+        match_files = glob.glob(str(self.dir_path) + '/*' + self.target_ext)
         for matchfile in match_files:
-            shutil.move(str(matchfile, str(self.move_folder_path)))
+            # shutil.move(str(matchfile), str(self.move_folder_path))
+            _move_file(str(matchfile), str(self.move_folder_path))
             self._print('move_file = {}'.format(Path(matchfile).name))
 
     def _print(self, value):
@@ -117,13 +118,27 @@ class DownloadDirectoryObserver():
                 self.target_ext, len(target_list)))
             return True
         
+    def is_exists_download_file_or_temp_file(self):
+        """ダウンロード対象のファイル（拡張子が合致したもの）orダウンロード中ファイルがあるか判定する"""
+        checker = DirChecker(self.dir_path)
+        target_list = checker.get_target_ext(self.ext)
+        if len(target_list)<1:
+            self.logger.add_log('target[{}] is len<1'.format(self.ext))
+            # ダウンロード中ファイル(EndsWiths(self.ext))がない時は、すでにダウンロード済みの場合がある
+            # ダウンロード対象の拡張子のファイルがあればダウンロード済みとする
+            if self.is_exists_target_download_file_with_ext():
+                return True
+            else:
+                return False
+        else:
+            target = target_list[0]
 
     def excute(self):
         # ダウンロードを押した後で実行する
         # ダウンロード中であるか、終わっている前提
         # delete_target_ext(path,TARGET_EXT)
         checker = DirChecker(self.dir_path)
-        self.logger.add_log('download folder'.format(self.dir_path))
+        self.logger.add_log('download folder = {}'.format(self.dir_path))
         # now_list = checker.update_list()
         # no_count = 0
         # begin_wait_limit_times = 30
@@ -178,3 +193,32 @@ class DownloadDirectoryObserver():
         time.sleep(3)
         flag = self.is_exists_download_file(os.path.splitext(target)[0])
         return flag
+
+
+def _move_file(src_path, dist_path, exists_rename:bool=True):
+    if Path(dist_path).is_dir():
+        dist_path_b = Path(dist_path).joinpath(Path(src_path).name)
+    else:
+        dist_path_b = Path(dist_path)
+    if exists_rename:
+        if Path(dist_path_b).exists():
+            new_file_name = _create_rename_file(dist_path_b)
+            dist_path_b = Path(dist_path).joinpath(new_file_name)
+    
+    shutil.move(str(src_path), str(dist_path_b))
+    # _move_file(str(src_path), str(dist_path_b))
+    # FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\OK\\Downloads\\download_movie_files\\y2matOn Haul  Transparent Lingerie and Clothes_1440p(1).mp4'
+    
+
+import re
+def _create_rename_file(path):
+    re_ret = re.match(r'$(\d)', Path(path).stem)
+    if re_ret!=None:
+        buf = re_ret.group()
+        num = int(buf)
+        num += 1
+        new_file_name = Path(path).stem.replace(buf,'')
+        new_file_name += '({})'.format(num) + Path(path).suffix
+    else:
+        new_file_name = Path(path).stem + '(1)' + Path(path).suffix
+    return new_file_name

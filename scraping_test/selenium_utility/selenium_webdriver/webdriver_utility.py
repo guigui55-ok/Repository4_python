@@ -153,6 +153,7 @@ class PageSourceUtility():
         self.page_source を更新する
         """
         self.page_source = self.webdriver.page_source
+
     def is_exists_find_all(self,value:str,is_update:bool=None):
         """
         self.page_source の中に文言が含まれるか判定する
@@ -314,10 +315,10 @@ class WebDriverUtility():
         shutil.copy(src_path, str(dist_path))
         return dist_path
     
-    def click_by_image(self, templete_image_path):
+    def click_by_image(self, templete_image_path, log_image:bool=True):
         #####
         # 画像検索をして、clickする
-        image_path = self.save_page_source_and_screenshot()
+        image_path = self.save_page_source_and_screenshot(do_page_source=False)
         self.selenium_log.add_log('main_image_path = {}'.format(image_path))
         # C:\Users\OK\source\repos\Repository4_python\scraping_test\selenium_utility\selenium_test.py
         # image_dir = Path(__file__).parent.joinpath('image/__img_selenium_test')
@@ -329,7 +330,8 @@ class WebDriverUtility():
         if self.rect_is_zero(rect):
             return False
         else:
-            self.draw_rect(image_path, rect)
+            if log_image:
+                self.draw_rect(image_path, rect)
             x,y = self.get_rect_center(rect)
             self.click_point(x,y)
             return True
@@ -405,7 +407,12 @@ class WebDriverUtility():
         self.options = webdriver.ChromeOptions()
         self.options.add_argument(f'load-extension={extension_path}')
         
-    def save_page_source_and_screenshot_with_log(self,add_str:str='',dir_path:str='',log_level:int=199):
+    def save_page_source_and_screenshot_with_log(
+            self,add_str:str='',
+            dir_path:str='',
+            log_level:int=199,
+            do_screenshot:bool=True,
+            do_page_source:bool=True):
         """
         スクリーンショットとpage_sourceを出力する
 
@@ -413,19 +420,23 @@ class WebDriverUtility():
             image_path
         """
         add_str = _repair_to_file_name(add_str)
-        ext='_chrome_image.png'
-        image_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
-        self.screenshot(image_path)
-        ext='_chrome_source.html.txt'
-        source_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
-        self.write_page_source(source_path)
         print()
         print()
         print('*****')
+        image_path = ''
+        source_path = ''
         if log_level < 199:
+            if do_screenshot:
+                ext='_chrome_image.png'
+                image_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
+                self.screenshot(image_path)
+            if do_page_source:
+                ext='_chrome_source.html.txt'
+                source_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
+                self.write_page_source(source_path)
             self.selenium_log.add_log('save_page_source_and_screenshot',log_level=log_level)
             self.selenium_log.add_log('source = {}'.format(source_path),log_level=log_level)
-            self.selenium_log.add_log_screenshot(image_path,'save_page_source_and_screenshot',log_level=log_level)
+            # self.selenium_log.add_log_screenshot(image_path,'save_page_source_and_screenshot',log_level=log_level)
         else:
             print('save_page_source_and_screenshot')
             print('source = {}'.format(source_path))
@@ -433,14 +444,22 @@ class WebDriverUtility():
         print()
         return image_path
     
-    def save_page_source_and_screenshot(self,add_str:str='',dir_path:str='',):
+    def save_page_source_and_screenshot(
+            self,add_str:str='',
+            dir_path:str='',
+            do_screenshot:bool=True,
+            do_page_source:bool=True):
         """
         スクリーンショットとpage_sourceを出力する
 
         Returns:
             image_path
         """
-        return self.save_page_source_and_screenshot_with_log(add_str,dir_path, self.selenium_log.log_level)
+        return self.save_page_source_and_screenshot_with_log(
+            add_str,dir_path,
+            self.selenium_log.log_level,
+            do_screenshot=do_screenshot,
+            do_page_source=do_page_source)
         # ext='_chrome_image.png'
         # image_path = self.get_save_path(base_name='', add_str=add_str, ext=ext, dir_path=dir_path)
         # self.screenshot(image_path)
