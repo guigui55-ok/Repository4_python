@@ -1,5 +1,7 @@
 """
-pandas DataFrame列追加、計算
+pandas DataFrame列追加、
+時間計算
+時間の型変換
 """
 import pandas as pd
 import numpy as np
