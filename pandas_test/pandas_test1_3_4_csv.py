@@ -3,6 +3,7 @@
 import pandas as pd
 from pathlib import Path
 import datetime
+import numpy as np
 
 TIME_FORMAT = '%Y/%m/%d %H:%M:%S'
 NEW_LINE = '\n'
@@ -103,9 +104,10 @@ class TimeFilter():
         # Filter by start_time < now_time
         df_filtered = self.df[self.df[ConstKeys.START_TIME] < self.now_time].copy()
         # Adjust end_time for records where end_time > now_time
-        df_filtered.loc[df_filtered[ConstKeys.END_TIME] > self.now_time, ConstKeys.END_TIME] = self.now_time
+        # df_filtered.loc[df_filtered[ConstKeys.END_TIME] > self.now_time, ConstKeys.END_TIME] = self.now_time
+        df_filtered.loc[df_filtered[ConstKeys.END_TIME] > self.now_time, ConstKeys.END_TIME] = np.nan
         # Sort by start_time
-        df_sorted = df_filtered.sort_values(by="start_time").reset_index(drop=True)
+        df_sorted = df_filtered.sort_values(by=ConstKeys.START_TIME).reset_index(drop=True)
         self.df = df_sorted
     
     def convert_type_str_to_date(self):
@@ -175,6 +177,21 @@ class MainTimeFilter():
             activity_time = datetime.timedelta(0)
         print('activity_time_now = {}'.format(activity_time))
 
+
+        #/
+        now_activity_excess_time = self.df.iloc[-1]
+    
+    # def is_activity_now(self):
+    #     if self.df.shape[0]>0:
+    #         last_endt_time = self.df.iloc[-1][ConstKeys.ACTIVE_END_TIME]
+    #     else:
+    #         return False
+
+    # def get_last_record(self):
+    #     if self.df.shape[0]>0:
+    #         return self.df.iloc[-1]
+    #     else:
+    #         return None
 
 
 
