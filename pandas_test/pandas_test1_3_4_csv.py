@@ -239,6 +239,16 @@ class ResultFilter():
     def __init__(self, logger:SampleLogger) -> None:
         self.logger = logger
         self.last_ret_list = []
+    
+    def append(self, ret_data:ResultData):
+        self_data:ResultData=None
+        for i, self_data in enumerate(self.last_ret_list):
+            k = ConstKeys.MAIN_CD
+            if self_data.data_dict[k] == ret_data.data_dict[k]:
+                self_data.update(ret_data.data_dict)
+                break
+        else:
+            self.last_ret_list.append(ret_data)
 
     def excute(self,ret_data_list:list[ResultData], setting:Setting):
         match_condition_values = []
@@ -325,6 +335,7 @@ def main():
     logger.info('df.rows={},  time_filter.df.rows={}'.format(df.shape[0], time_filter.df.shape[0]))
     df = time_filter.df
 
+    last_ret_data = ResultFilter(logger)
     main_cd_list = main_cd_list[:1]
     logger.info('begin_time, end_time = {}  ~  {}'.format(
         setting.begin_time, setting.end_time))
@@ -351,7 +362,6 @@ def main():
         logger.info(ret_data.data_dict)
 
     logger.info('##########')
-    last_ret_data = ResultFilter(logger)
     last_ret_data.excute(ret_data_list, setting)
     last_ret_data.debug_print()
     last_ret_data.write_to_file()
