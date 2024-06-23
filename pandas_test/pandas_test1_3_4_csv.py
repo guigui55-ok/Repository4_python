@@ -246,6 +246,7 @@ class ResultFilter():
             k = ConstKeys.MAIN_CD
             if self_data.data_dict[k] == ret_data.data_dict[k]:
                 self_data.update(ret_data.data_dict)
+                self.last_ret_list[i] = self_data
                 break
         else:
             self.last_ret_list.append(ret_data)
@@ -335,6 +336,7 @@ def main():
     logger.info('df.rows={},  time_filter.df.rows={}'.format(df.shape[0], time_filter.df.shape[0]))
     df = time_filter.df
 
+    mode = 2
     last_ret_data = ResultFilter(logger)
     main_cd_list = main_cd_list[:1]
     logger.info('begin_time, end_time = {}  ~  {}'.format(
@@ -357,6 +359,9 @@ def main():
         ret_data.data_dict.update({ConstKeys.MAIN_CD:main_cd})
         ret_data.data_dict.update({ConstKeys.INIT_ROWS:filter.init_rows})
         ret_data.data_dict.update({ConstKeys.MATCH_ROWS:filter.df.shape[0]})
+        last_ret_data.append(ret_data)
+        if mode==2:
+            pass
         ret_data.count_data(setting)
         ret_data_list.append(ret_data)
         logger.info(ret_data.data_dict)
@@ -365,7 +370,9 @@ def main():
     last_ret_data.excute(ret_data_list, setting)
     last_ret_data.debug_print()
     last_ret_data.write_to_file()
-
+    #時間ごとの集計 log__begin__end
+    #読み込みfile
+    #seibi,mode_switch_case分類
 
 if __name__ == '__main__':
     main()
