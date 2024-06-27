@@ -68,6 +68,13 @@ class ConstKeys():
     # 合計回数
     # 合計時間
     MATCH_CONDITIONS = '合致条件名'
+    RANK = 'ランク'
+
+RANK_DICT = {
+    1:'A',
+    2:'B',
+    3:'C'
+}
 
 class SampleLogger():
     def __init__(self) -> None:
@@ -229,6 +236,8 @@ class ResultData():
         else:
             self.data_dict.update( {key : value} )
     
+
+    
     def count_data(self, setting:Setting):
         activity_total = self.df[ConstKeys.ADD_ACTIVITY_TIME].sum()
         self.update( {ConstKeys.ACTIVITY_TIME_TOTAL : activity_total} )
@@ -241,6 +250,22 @@ class ResultData():
         self.update( {ConstKeys.ACTIVITY_EXCESS_TIME : activity_excess_time} )
         continue_count = (self.df[ConstKeys.ADD_INTERVAL_NOT_FLAG] == True).sum()
         self.update( {ConstKeys.CONTINUE_TIMES : continue_count} )
+        self._set_rank(setting)
+
+    def _set_rank(self, setting:Setting):
+        """ count_data の後の実行する """
+        total_time = self.data_dict[ConstKeys.ACTIVITY_TIME_TOTAL]
+        # buf_time = parse_timedelta(buf)
+        time_diff = total_time - setting.activity_total_border
+        num = 3
+        if datetime.timedelta(minutes=20) < time_diff:
+            num = 2
+        elif datetime.timedelta(minutes=40) < time_diff:
+            num = 1
+        # print('time_diff = {}'.format(time_diff))
+        # print('num = {}'.format(num))
+        self.update( {ConstKeys.RANK : RANK_DICT[num]} )
+        buf = ''
 
 
 class ResultFilter():
@@ -333,7 +358,9 @@ def main():
     # logger.info(df)
     logger.info('rows = {}'.format(df.shape[0]))
 
-    setting.now_time = datetime.datetime.strptime('2022/8/1 15:00:00', TIME_FORMAT)
+    end_time_str = '2022/8/1 15:00:00'
+    end_time_str = '2022/8/1 17:00:00'
+    setting.now_time = datetime.datetime.strptime(end_time_str, TIME_FORMAT)
     setting.end_time = setting.now_time
     setting.begin_time = setting.now_time - datetime.timedelta(hours=6)
     time_filter = TimeFilter()
