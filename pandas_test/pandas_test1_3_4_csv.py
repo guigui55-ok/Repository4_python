@@ -166,6 +166,14 @@ class MainTimeFilter():
         self.df[ConstKeys.ACTIVITY_EXCESS_TIME] = setting.activity_total_border - self.df[ConstKeys.ADD_ACTIVITY_TIME]
         # print('@@@ = {}'.format(self.df[ConstKeys.ACTIVITY_EXCESS_TIME].dtype))
         # print()
+        #/
+        # self.df.to_csv('__debug.csv', encoding='sjis')
+        #/
+        # 間隔無しTrueの最後の時刻を取得
+        df = self.df[self.df[ConstKeys.ADD_INTERVAL_NOT_FLAG]==True]
+        df_b = df[ConstKeys.ACTIVE_END_TIME]
+        self.continue_activity_max_end_time = df_b.max()
+
 
     def check_last_record(self, setting:Setting):
         if self.df.shape[0]>0:
