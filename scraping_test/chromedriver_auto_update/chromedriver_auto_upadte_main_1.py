@@ -1,7 +1,6 @@
 """
 chromedriver の binary を更新するスクリプト
-
-
+（旧）
 """
 import urllib
 import zipfile

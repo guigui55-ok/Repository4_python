@@ -1,4 +1,7 @@
-
+"""
+Popenで非同期テスト1
+loop_test.loop_method　を追加
+"""
 import subprocess
 import traceback
 # from subprocess import PIPE

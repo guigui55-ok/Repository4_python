@@ -1,4 +1,6 @@
-
+"""
+Popenで非同期テスト0
+"""
 import subprocess
 import traceback
 # from subprocess import PIPE
@@ -35,4 +37,5 @@ def popen_test():
 def main():
     popen_test()
 
-main()
+if __name__ == '__main__':
+    main()

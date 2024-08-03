@@ -1,3 +1,7 @@
+"""
+For文で行を繰り返し処理
+"""
+
 import pandas as pd
 
 # サンプルDataFrameの作成

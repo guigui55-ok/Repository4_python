@@ -160,7 +160,10 @@ class DownloadDirectoryObserver():
 
         self.logger.add_log('Start to observe file.  path = {}'.format(target))
         start = time.time()
-        before_size = os.path.getsize(target)
+        if Path(target).exists():
+            before_size = os.path.getsize(target)
+        else:
+            self.logger.add_log('file not exists [{}]'.format(target))
         time_log_flag = False
         count = 0
         while checker.is_exists(target):

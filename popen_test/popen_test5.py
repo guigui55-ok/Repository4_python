@@ -1,3 +1,9 @@
+
+"""
+Popenでコマンド実行テスト
+    結果を文字列で取得
+"""
+
 import sys
 import subprocess
 

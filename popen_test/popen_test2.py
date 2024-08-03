@@ -1,14 +1,18 @@
 
+"""
+Popenでコマンド実行テスト
+
+"""
 import subprocess
 import traceback
 # from subprocess import PIPE
 
 def popen_test():
     try:
-        file = './popen_out.txt'
-        cmd = 'python popen_test.py'
-        cmd = 'popen_test.py' # おわらない
-        cmd = 'loop_test.py'
+        # file = './popen_out.txt'
+        # cmd = 'python popen_test.py'
+        # cmd = 'popen_test.py' # おわらない
+        # cmd = 'loop_test.py'
         cmd = 'dir'
         # サブプロセスをスタート
         # proc = subprocess.Popen(cmd, shell=True, stdout=file, stderr=file, text=True)        

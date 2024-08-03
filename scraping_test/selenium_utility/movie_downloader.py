@@ -24,6 +24,7 @@ path = str(pathlib.Path(__file__).parent.parent)
 sys.path.append(path)
 import import_init
 from html_log.html_logger import HtmlLogger,BasicLogger
+from movie_downloader_sub import ConstDownloadResult
 
 class ConstResult():
     OK = 1
@@ -312,8 +313,10 @@ class MovieDownloader():
             time.sleep(print_interval_sec)
 
     def download_movie_main(self):
-        """lnkが格納されているディレクトリのlnkからURLを読み取り、ダウンロードする。
-        終わるまで待って、終わったらlnkを別ディレクトリに移動"""
+        """
+        lnkが格納されているディレクトリのlnkからURLを読み取り、ダウンロードする。
+        終わるまで待って、終わったらlnkを別ディレクトリに移動
+        """
         for i, path in enumerate(self.lnk_list):
             if not self.not_check_db:
                 if self.path_is_donloaded(path):
@@ -323,6 +326,7 @@ class MovieDownloader():
                     # 現状は手動コメントアウトで対応
                     # self.move_link_file_finished(path)
                     # continue
+            self.add_log('##begin now lnk_path={}'.format(path))
             url = self.get_url_from_link(path)
             # if not self.url_is_valid(url): continue
             self.init_download_dir()
@@ -331,6 +335,8 @@ class MovieDownloader():
             #########
             self.wait_not_click_download_button = WAIT_NOT_CLICK_DOWNLOAD_BUTTON
             is_downloading = self.download_movie(url, path)
+            if is_downloading==ConstDownloadResult.NOTHING:
+                self.move_link_file_when_nothing_movie(path)
             #########
             if self.is_need_observer():
                 if is_downloading:
@@ -343,7 +349,7 @@ class MovieDownloader():
                         print('')
                         for i in range(1, 11):
                             if 2 % i:
-                                print('BREAK')
+                                # print('BREAK')
                                 for_break = ''
                             else:
                                 print('.', end='')
@@ -364,6 +370,7 @@ class MovieDownloader():
                     self.print_result(ConstResult.OK,'SUCCESS',url)
                 else:
                     self.print_result(ConstResult.NG,'NG',url)
+            self.add_log('###[i={}, end] now lnk_path={}'.format(i, path))
 
             self.close_donwloader()
             if is_downloaded:
@@ -380,6 +387,7 @@ class MovieDownloader():
             if i!=len(self.lnk_list):
                 self.add_log('Wait [Access restrictions] Wait Time = {}'.format(DOWNLOAD_FILE_WAIT_INTERVAL))
                 self.wait_for_access_restrictions(DOWNLOAD_FILE_WAIT_INTERVAL) 
+            self.add_log('##[i={}, end] now lnk_path={}'.format(i, path))
         #End For
         msg = 'processed file_length = {}'.format(len(self.lnk_list))
         self.add_log(msg)
@@ -394,9 +402,24 @@ class MovieDownloader():
         file_name = os.path.basename(src_path)
         dist_path = os.path.join(end_dir_path,file_name)
         shutil.move(src_path,dist_path)
+        
+    def move_link_file_when_nothing_movie(self, path):
+        """ダウンロード失敗用フォルダに移動する"""
+        if not os.path.exists(path): return
+        dist_dir_path = os.path.join(self.path, self.failed_folder_name)
+        dist_dir_path = self.get_end_dir(dist_dir_path)
+        src_path = path
+        file_name = os.path.basename(src_path)
+        dist_path = os.path.join(dist_dir_path, file_name)
+        shutil.move(src_path,dist_path)
+        msg = 'Download Failed. Move File To dir({})'.format(self.failed_folder_name)
+        self.add_log(msg)
     
     def get_end_dir(self,dir_path):
-        """lnkを格納するendディレクトリを取得する（無ければ作る）"""
+        """
+        lnkを格納するendディレクトリを取得する（無ければ作る）
+        """
+        # ディレクトリではなく、同名のファイルがあれば削除する
         if os.path.exists(dir_path):
             if os.path.isfile(dir_path):
                 os.remove(dir_path)
@@ -573,7 +596,11 @@ def main():
     # path = r'C:\Users\OK\Desktop\0704 you'
     # path = r'C:\Users\OK\Desktop\fas'
     # path = r'C:\Users\OK\Desktop\231123 youel\you'
-    path = r'C:\Users\OK\Desktop\240519_el_test'
+    # path = r'C:\Users\OK\Desktop\240519_el_test'
+    # path = r'C:\Users\OK\Desktop\240704 el you'
+    # path = r'C:\ZMyFolder\newDoc\Memo2\240522 el mi'
+    # path = r'C:\ZMyFolder\newDoc\Memo2\240512 el you'
+    path = r'C:\ZMyFolder\newDoc\Memo2\240113 you el'
     if not Path(path).exists():
         raise FileNotFoundError(path)
     #/
@@ -606,6 +633,7 @@ def main():
     ##########
     # main
     ##########
+    
     downloader.download_movie_main()
     ##########
     html_logger.finish_to_create_html()

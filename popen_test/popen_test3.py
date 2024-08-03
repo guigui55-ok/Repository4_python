@@ -1,4 +1,8 @@
 
+"""
+Popenで非同期テスト　　adbイベント取得用
+"""
+
 import subprocess
 import traceback
 # from subprocess import PIPE
@@ -11,11 +15,11 @@ def popen_test():
         path = os.path.join(path,'adb_getevent_analyze','adb_getevent_analyze.py')
         print(path)
 
-        file = './popen_out.txt'
-        cmd = 'python popen_test.py'
-        cmd = 'popen_test.py' # おわらない
-        cmd = 'loop_test.py'
-        cmd = 'dir'
+        # file = './popen_out.txt'
+        # cmd = 'python popen_test.py'
+        # cmd = 'popen_test.py' # おわらない
+        # cmd = 'loop_test.py'
+        # cmd = 'dir'
         cmd = 'adb shell getevent /dev/input/event2'
         # サブプロセスをスタート
         # proc = subprocess.Popen(cmd, shell=True, stdout=file, stderr=file, text=True)        

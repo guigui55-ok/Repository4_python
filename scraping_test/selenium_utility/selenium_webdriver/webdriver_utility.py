@@ -31,6 +31,9 @@ import numpy as np
 #/
 from pathlib import Path
 import shutil
+#/
+import urllib3
+import urllib3.connection
 
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
 # from selenium_utility.selenium_webdriver.selenium_log import SeleniumLogger
@@ -177,7 +180,7 @@ class PageSourceUtility():
 class WebDriverUtility():
     def __init__(self,webdriver_path:str,logger) -> None:
         if webdriver_path != '':
-            if not os.path.exists:
+            if not os.path.exists(str(webdriver_path)):
                 raise Exception('path not exists. [path={}]'.format(webdriver_path))
             self.driver = webdriver.Chrome(webdriver_path)
             self.page_source_ex = PageSourceUtility(self.driver)
@@ -335,6 +338,7 @@ class WebDriverUtility():
             x,y = self.get_rect_center(rect)
             self.click_point(x,y)
             return True
+    
 
     ##########
     def set_logger(self,any_logger):
@@ -358,8 +362,16 @@ class WebDriverUtility():
 
     def close(self):
         """ driver.close -> driver.quit"""
-        self.driver.close()
-        self.driver.quit()
+        try:
+            self.driver.close()
+            self.driver.quit()
+        except urllib3.exceptions.MaxRetryError:
+            self.selenium_log.add_log(str(e))
+            # Youtube以外のURLの時ｓ
+            #     raise MaxRetryError(_pool, url, error or ResponseError(cause))
+            #urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=50573): Max retries exceeded with url: /session/45fe966c4a2647f04de5e042b125430a/window (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000019FBC0B79D0>: Failed to establish a new connection: [WinError 10061] 対象のコンピューターによって拒否されたため、接続できませんでした。'))
+        except Exception as e:
+            raise e
     
     def click_by_position(self,x, y) -> None:
         # from selenium.webdriver.common.action_chains import ActionChains

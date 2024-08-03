@@ -34,6 +34,16 @@ def get_vd_site_url2():
         buf = f.read()
     return buf
 
+class ConstDownloadResult():
+    NONE = 0
+    OK = 1
+    NG = 2
+    ERROR = 3
+    NOTHING = 4
+    #/
+    NOTHING_MOVIE = 4
+    UNEXPECTED_ERROR = 6
+
 class DonwloadSite():
     def __init__(self,chrome_driver_path:str,html_logger:HtmlLogger) -> None:
         self.downloader_url = 'https://www.y2mate.com/jp/youtube/' #YouTubeDownloader
@@ -48,6 +58,7 @@ class DonwloadSite():
         self.is_need_observer = True
         self.download_result = False
         self.logger = html_logger
+        self.result_int = 0
 
     def set_log_path(self,dir_path:str):
         # self.chrome.selenium_log.set_log_dir(dir_path)
@@ -122,7 +133,7 @@ class YouTube(DonwloadSite):
         if not flag:return
         # self.chrome.save_page_source_and_screenshot('test')
         flag = self.select_quality_download_movie()
-        if not flag:return
+        if not flag==ConstDownloadResult.OK:return flag
         ret_int = self.wait_shown_until_download_button()
         if not flag:return
         #ENTER後にサイズが更新される
@@ -175,7 +186,7 @@ class YouTube(DonwloadSite):
                 self.chrome.timer.wait()
                 self.add_log('waiting select movie(after send url).')
             else:
-                self.add_log('prepared select movie(after send url).')
+                self.add_log('prepared select movie(after send url).') # 表示されていないときはすぐここに来る Sorry! An error has occurred. が表示されるがソースには表示されない
                 return True
         else:
             msg = 'ERROR__prepared select movie(after send url)'
@@ -208,35 +219,32 @@ class YouTube(DonwloadSite):
             self.chrome.timer.wait_little()
             element = self.chrome.driver.switch_to.active_element
             el_text = WebElementUtility(element).get_attribute('text')
-            # if 'download' in el_text.lower():
-            #     print()
             
             if el_text.find('ダウンロード')>=0:
-                # self.chrome.save_page_source_and_screenshot('click_download')
                 word_count+=1
             elif el_text.find(' \xa0 Download ') >= 0:
                 word_count+=1
             elif el_text.find('  Download') >= 0: #231123
                 word_count+=1
+            elif el_text.find('About') >= 0:
+                msg = 'ダウンロードボタンがない。'
+                self.chrome.save_page_source_and_screenshot(msg)
+                self.add_log(msg)
+                return ConstDownloadResult.NOTHING_MOVIE
             else:
-                # print('[{}]'.format(WebElementUtility(element).get_attribute('text')))
                 pass
-            # if word_count>=1:
             if word_count>=target_button_count:
-                # element.click()
                 self.chrome.click(element)
-                return True
+                return ConstDownloadResult.OK
             element.send_keys(Keys.TAB)
         else:
             msg = 'ダウンロードボタンがない。'
             self.chrome.save_page_source_and_screenshot(msg)
             self.add_log(msg)
-            return False
-        self.chrome.timer.wait(0.2)
-        # chrome.save_page_source_and_screenshot('waiting_save_button')
+            return ConstDownloadResult.NOTHING
         return False
     
-    def wait_shown_until_download_button(self):
+    def wait_shown_until_download_button_before(self):
         """
         ダウンロードボタンが出るまで待つ（ポップアップで出る）
         """
@@ -286,6 +294,53 @@ class YouTube(DonwloadSite):
             #ファイルを移動するためにTrueで返す
             self.print_result(ConstResult.NOTHING,msg,self.movie_url)
             return ConstResult.NOTHING
+        
+    def wait_shown_until_download_button(self):
+        """
+        ダウンロードボタンが出るまで待つ（ポップアップで出る）
+         -240724
+        """
+        # wait_value = 'Please wait while the file is being prepared for downloading'
+        prepared_value = 'form-group has-success has-feedback'
+        limit = 60
+        for i in range(limit):
+
+            # エラーチェックすると遅くなるのでこれは後にする
+            # if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
+            # if not self.chrome.page_source_ex.is_exists_find_all(prepared_value):
+            if False:
+                pass
+            else:
+                # 240521
+                # モーダルポップアップが追加されている
+                # ソースから要素が取得できないため画像で対応
+                # 閉じた後繰り返し表示される（3回？）
+                # self.chrome.timer.wait()
+                # 240725
+                # 前ボタンクリック後少しラグがある
+                self.chrome.timer.wait(1.5)
+                for i in range(3):
+                    # is_clicked = self.close_ad_popup_a()
+                    is_clicked = self.close_ad_popup_a_and_click_dl_button(log=False)
+                    if is_clicked:
+                        break
+                self.add_log('prepared download button.')
+                return ConstResult.OK
+        else:
+            msg = 'ERROR__not prepared download button'
+            self.add_log('ERROR')
+            self.add_log(msg)
+            self.chrome.save_page_source_and_screenshot(msg)
+            self.print_result(ConstResult.ERROR,msg,self.movie_url)
+            return ConstResult.ERROR
+        if self.chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
+            msg = 'ERROR__shown error screen NOTHING'
+            self.add_log('ERROR')
+            self.add_log(msg)
+            self.chrome.save_page_source_and_screenshot(msg)
+            #ファイルを移動するためにTrueで返す
+            self.print_result(ConstResult.NOTHING,msg,self.movie_url)
+            return ConstResult.NOTHING
 
     def close_ad_popup_a(self, log=True):
         temp_path = self.chrome.image_dir.joinpath('ad_modal_close_button.jpg')
@@ -295,6 +350,40 @@ class YouTube(DonwloadSite):
         else:
             self.chrome.timer.wait()
             return False
+
+    def close_ad_popup_a_and_click_dl_button(self, log=True):
+        
+        image_path = self.chrome.save_page_source_and_screenshot(do_page_source=False)
+        self.chrome.selenium_log.add_log('main_image_path = {}'.format(image_path))
+        close_btn_image_path = self.chrome.image_dir.joinpath('ad_modal_close_button.jpg')
+        dl_btn_image_path = self.chrome.image_dir.joinpath('download_button_gray_out.png')
+        # rect={'height': 5, 'width': 840, 'x': 36, 'y': 514}
+        # 240724
+        # 画像close_buttonをクリックしてから、find_imageすると時間がかかり、
+        # またモーダルダイアログが表示される （1-2秒くらいでまた表示される）
+        # なので、あらかじめグレーアウトしているダウンロードボタンの座標を取得しておいて、
+        # 一気に2つのボタンをクリックする
+        rect_a = self.chrome.find_image(
+            image_path, close_btn_image_path)
+        if self.chrome.rect_is_zero(rect_a):
+            return False
+        rect_b = self.chrome.find_image(
+            image_path, dl_btn_image_path)
+        if log:
+            self.chrome.draw_rect(image_path, rect_a)
+        x,y = self.chrome.get_rect_center(rect_a)
+        self.chrome.click_point(x,y)
+        if self.chrome.rect_is_zero(rect_b):
+            return False
+        # self.chrome.timer.wait(0.5)
+        self.chrome.timer.wait(0.9)
+        # ボタンの左上の方をタップする
+        x,y = rect_b['x'] +10, rect_b['y'] +10
+        self.chrome.click_point(x,y)
+        if log:
+            self.chrome.draw_rect(image_path, rect_b)
+        return True
+
 
     def click_download_button(self):
         """
