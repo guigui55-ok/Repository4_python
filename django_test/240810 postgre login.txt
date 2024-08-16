@@ -1,0 +1,206 @@
+
+PostgreSQL サーバの起動と停止
+https://qiita.com/domodomodomo/items/12fe7555513de6b078db
+
+*****
+コマンドプロンプト（管理者）
+# 起動
+net start postgresql-x64-16
+
+# 停止
+net stop postgresql-x64-16
+
+*****
+Postgreサービスを起動
+Win+R > services.msc
+
+*****
+PostgreSQL サーバーを起動:
+
+PostgreSQL のインストールディレクトリに移動します。デフォルトのインストールパスは以下のようになります：
+bash
+コードをコピーする
+cd "C:\Program Files\PostgreSQL\XX\data"  (XX はバージョン番号)
+以下のコマンドを実行して PostgreSQL サーバーを起動します：
+mathematica
+コードをコピーする
+pg_ctl start -D "C:\Program Files\PostgreSQL\XX\data"
+これにより、サーバーがバックグラウンドで起動します。
+
+pg_ctl start -D "C:\Program Files\PostgreSQL\16\data"
+
+*****
+https://qiita.com/Riku-smile/items/7ed3b35cda47ea3c2d3b
+'pg_ctl' は、内部コマンドまたは外部コマンド、操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+パスを通す
+C:\Program Files\PostgreSQL\16\bin
+
+
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\PostgreSQL 16
+C:\Program Files\PostgreSQL\16
+
+*****
+サービス名
+postgresql-x64-16
+表示名
+postgresql-x64-16 - PostgreSQL Server 16
+実行ファイルのパス
+"C:\Program Files\PostgreSQL\16\bin\pg_ctl.exe" runservice -N "postgresql-x64-16" -D "C:\Program Files\PostgreSQL\16\data" -w
+
+
+********
+PostgresSQL 16
+
+PostgreSQLデータベースパスワードはオペレーティングシステムのユーザパスワードとも別のものです。 
+各データベースユーザのパスワードは pg_authid システムカタログテーブルの中に格納されます。
+
+
+
+psql での PostgreSQL サーバーへのログインと接続
+https://qiita.com/domodomodomo/items/04026157b75324e4ea27
+
+
+
+
+**************
+https://alsifaq.dga.jp/faq_detail.html?id=4994
+1. パスワードなしでログイン可能にする。
+   1-1.C:\program files\PostgreSQL\x.x\data\pg_hba.confをメモ帳などで開きます。
+        ※x.xはPostgreSQLのバージョンNoです
+    1-2.以下に該当する行の「md5」を 「trust」に変更し、保存します。
+      -----------------------------------------------------
+      host   all    all  127.0.0.1/32    md5
+      host   all    all        ::1/128      md5
+      -----------------------------------------------------
+                                             ↓ ↓ ↓
+      -----------------------------------------------------
+      host   all    all  127.0.0.1/32    trust
+      host   all    all        ::1/128      trust
+      -----------------------------------------------------
+
+
+***********
+https://ftpdocs.broadcom.com/cadocs/0/CA%20Application%20Performance%20Management%209%205-JPN/Bookshelf_Files/HTML/APM_9.5--Installation%20and%20Upgrade%20Guide/1530131.html
+
+ヒント： pgAdmin を使用して、PostgreSQL データベースにアクセスしたり、パスワードの変更などを行うこともできます。
+
+以下の手順に従います。
+
+psql を使用してデータベースに接続します。
+Windows では、［スタート］ > ［プログラム］ > ［PostgreSQL <バージョン>］ > ［SQL Shell (psql)］の順にクリックします。
+Linux では、以下のように入力します。
+psql -U username -d databasename
+コマンド ライン ウィンドウが開き、パスワードの入力を求められます。
+
+インストール中に指定した PostgreSQL 管理者のパスワードを入力します。
+パスワードが正しい場合は、起動画面といくつかのコマンド情報が表示されます。また、コマンド プロンプトが「postgres=#」に変わります。
+
+以下の情報を入力します。
+ALTER USER postgres WITH PASSWORD ‘newpassword’;
+各項目の説明： newpassword は新しいパスワードを表します。 このパスワードは、ユーザの組織のパスワード セキュリティ要件に従う必要があります。
+
+Enter キーを押して変更をコミットします。
+正常に変更されると、確認メッセージとして ALTER ROLE が表示されます。
+
+
+****************
+C:\Program Files\PostgreSQL\16\data\pg_hba.conf
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            trust
+# IPv6 local connections:
+host    all             all             ::1/128                 trust
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     trust
+host    replication     all             127.0.0.1/32            trust
+host    replication     all             ::1/128                 trust
+
+
+**********
+ログの場所
+C:\Program Files\PostgreSQL\16\data\log
+
+**********
+パスワード不明時のログ
+2024-08-11 01:30:50.344 JST [29016] LOG:  データベースシステムは中断されました: 2024-07-24 08:27:14 JST まで動作していたことは確認できます
+2024-08-11 01:30:51.283 JST [29016] LOG:  データベースシステムは正しくシャットダウンされていません; 自動リカバリを実行中
+2024-08-11 01:30:51.289 JST [29016] LOG:  REDOを0/1EFD410から開始します
+2024-08-11 01:30:51.289 JST [29016] LOG:  0/1EFD4F8のレコード長が不正です:長さは最低でも24を期待していましたが、実際は0でした
+2024-08-11 01:30:51.289 JST [29016] LOG:  REDOが0/1EFD4C0で終了しました、システム使用状況: CPU: ユーザー: 0.00秒、システム: 0.00秒、経過時間: 0.00秒
+2024-08-11 01:30:51.295 JST [4132] LOG:  チェックポイント開始: end-of-recovery immediate wait
+2024-08-11 01:30:51.311 JST [4132] LOG:  チェックポイント完了: 3個のバッファを出力 (0.0%); 0個のWALファイルを追加、0個を削除、0個を再利用; 書き出し=0.002秒, 同期=0.002秒, 全体=0.019秒; 同期したファイル=2, 最長=0.002秒, 平均=0.001秒; 距離=0 kB, 予測=0 kB; lsn=0/1EFD4F8, 再生lsn=0/1EFD4F8
+2024-08-11 01:33:27.723 JST [6128] FATAL:  ユーザー"postgres"のパスワード認証に失敗しました
+2024-08-11 01:33:27.723 JST [6128] 詳細:  接続はファイルC:/Program Files/PostgreSQL/16/data/pg_hba.confの行117に一致しました: "host    all             all             ::1/128                 scram-sha-256"
+2024-08-11 01:38:12.819 JST [22296] FATAL:  ユーザー"postgres"のパスワード認証に失敗しました
+2024-08-11 01:38:12.819 JST [22296] 詳細:  接続はファイルC:/Program Files/PostgreSQL/16/data/pg_hba.confの行117に一致しました: "host    all             all             ::1/128                 scram-sha-256"
+2024-08-11 03:40:44.726 JST [10552] FATAL:  ユーザー"postgres"のパスワード認証に失敗しました
+2024-08-11 03:40:44.726 JST [10552] 詳細:  接続はファイルC:/Program Files/PostgreSQL/16/data/pg_hba.confの行117に一致しました: "host    all             all             ::1/128                 scram-sha-256"
+2024-08-11 04:56:37.833 JST [17768] LOG:  繧ｯ繝ｩ繧､繧｢繝ｳ繝医°繧峨ョ繝ｼ繧ｿ繧貞女菫｡縺ｧ縺阪∪縺帙ｓ縺ｧ縺励◆: An existing connection was forcibly closed by the remote host.
+
+	
+2024-08-11 05:00:10.974 JST [27444] LOG:  繧ｯ繝ｩ繧､繧｢繝ｳ繝医°繧峨ョ繝ｼ繧ｿ繧貞女菫｡縺ｧ縺阪∪縺帙ｓ縺ｧ縺励◆: An existing connection was forcibly closed by the remote host.
+
+	
+*********
+すでにposgreサービスが起動済みの時のログ
+2024-08-11 05:33:52.709 JST [2516] LOG:  PostgreSQL 16.3, compiled by Visual C++ build 1939, 64-bit を起動しています
+2024-08-11 05:33:52.711 JST [2516] LOG:  IPv6アドレス"::"のbindに失敗しました: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+	
+2024-08-11 05:33:52.711 JST [2516] ヒント:  すでに他にpostmasterがポート5432で稼動していませんか? 稼動していなければ数秒待ってから再試行してください。
+2024-08-11 05:33:52.711 JST [2516] LOG:  IPv4アドレス"0.0.0.0"のbindに失敗しました: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+
+	
+2024-08-11 05:33:52.711 JST [2516] ヒント:  すでに他にpostmasterがポート5432で稼動していませんか? 稼動していなければ数秒待ってから再試行してください。
+2024-08-11 05:33:52.711 JST [2516] WARNING:  "*"に関する監視用ソケットを作成できませんでした
+2024-08-11 05:33:52.711 JST [2516] FATAL:  TCP/IPソケットを作成できませんでした
+2024-08-11 05:33:52.713 JST [2516] LOG:  データベースシステムはシャットダウンしました
+
+
+
+
+************
+PostgreSQLのパスワードはどこにありますか？
+PostgreSQLデータベースパスワードはオペレーティングシステムのユーザパスワードとも別のものです。 
+各データベースユーザのパスワードは pg_authid システムカタログテーブルの中に格納されます。
+
+
+https://torajirousan.hatenadiary.jp/entry/2019/06/23/234700
+まずデータベース接続に無条件で接続できるように認証設定ファイルpg_hba.confを編集してpostgresqlに接続する
+
+
+
+
+PostgreSQL（pgAdmin4） について
+pgAdmin4でServersからテスト用に新しく環境を構築しようかと考えています。
+Server名を「ServerA」としました
+次にホスト名/アドレスの入力が必要なのですが、一般的にどのようなものが考えられますか？
+ChatGPT
+pgAdmin 4で新しいサーバー環境を構築する際に、「ホスト名/アドレス」を入力する必要があります。以下は一般的に考えられるオプションです：
+
+ローカル環境での接続:
+
+ホスト名/アドレス: localhost または 127.0.0.1
+これは、PostgreSQLがローカルマシン（同じPC）で動作している場合に使用します。
+リモートサーバーへの接続:
+
+ホスト名/アドレス: リモートサーバーのIPアドレスやドメイン名
+例: 192.168.1.100 や your-server-domain.com
+これは、別のマシンやリモートサーバーでPostgreSQLが動作している場合に使用します。
+Dockerコンテナでの使用:
+
+ホスト名/アドレス: コンテナの内部ネットワーク名
+例: postgres（Docker Composeで定義されたサービス名）
+Dockerコンテナ内でPostgreSQLを動作させている場合は、Dockerネットワーク内でのホスト名を使用します。
+クラウド環境での接続:
+
+ホスト名/アドレス: クラウドプロバイダーが提供する接続情報
+例: your-cloud-db-host.amazonaws.com
+これは、AWS RDSやGCP Cloud SQLなどのクラウドサービスでホストされているPostgreSQLに接続する場合に使用します。
+ローカル環境で試す場合は localhost または 127.0.0.1 を入力してみてください。リモートのサーバーに接続する場合は、サーバーのIPアドレスやドメイン名を使用します。
+
