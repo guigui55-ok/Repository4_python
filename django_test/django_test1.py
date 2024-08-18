@@ -31,7 +31,42 @@ https://qiita.com/prg_mt/items/c5c8edbf45dfe87b54ef
 
 
 
+SQLiteの場合
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+PostgreSQLの場合
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': [database_name],
+        'USER': [user_name],
+        'PASSWORD': [password],
+        'HOST': ***.amazonaws.com,
+        'PORT': '5432'
+    }
+}
+
+cd test_project1
+python manage.py dbshell
+
+*****
+PS C:\Users\OK\source\repos\Repository4_python\django_test\test_project1> python manage.py dbshell
+psql (16.3)
+"help"でヘルプを表示します。
+
+sampledb=# exit
+
+******
+
+pip install psycopg2
+
+python manage.py makemigrations
+
 
 """
 

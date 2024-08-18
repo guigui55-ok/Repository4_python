@@ -1377,6 +1377,10 @@ class ExcelSheetDataUtil():
         self.debug = debug
         self.set_workbook(file_path, data_only)
         self.set_sheet(sheet_name)
+        self._init_param_after_set_sheet()
+    
+    def _init_param_after_set_sheet(self):
+        # シートセット以降の初期化を行う
         self._update_valid_cell_in_sheet()
         self.address = 'A1'
         self.range_address = 'A1'
@@ -1447,7 +1451,9 @@ class ExcelSheetDataUtil():
         self._update_valid_cell_in_sheet()
     
     def set_workbook(self, file_path:Union[str,Workbook], data_only:bool):
-        """ open excel file (openpyxl.load_workbook) """
+        """
+        open excel file (openpyxl.load_workbook)
+        """
         if isinstance(file_path, Workbook):
             self.book = file_path
             self.file_path = None
@@ -1459,6 +1465,12 @@ class ExcelSheetDataUtil():
             if not Path(file_path).exists():
                 raise FileNotFoundError(file_path)
             self.book = openpyxl.load_workbook(file_path, data_only=data_only)
+            # 例外が発生しました: InvalidFileException
+            #openpyxl does not support binary format .xlsb, please convert this file to .xlsx format if you want to open it with openpyxl
+            # > xlsb ファイルはopenpyxlでは扱えない（他のパッケージでは取り扱えるものがある、未確認）240818
+            # 例外が発生しました: PermissionError
+            # [Errno 13] Permission denied: 'C:\\ZMyFolder\\after to base\\disk_240800\\~$__test_list_DISK0__HDD_VIDEO_MEDIA.xlsx'
+            # > ファイルを開いていると、エラーとなる
         else:
             if self.debug:
                 print('# read_file_path = {}'.format(None))
@@ -2165,6 +2177,13 @@ class ExcelSheetDataUtil():
             return buf[-1]
         else:
             return self.address
+        
+    def _get_end_address(self, address:str):
+        if ':' in address:
+            buf = address.split(':')
+            return buf[-1]
+        else:
+            return address
     
     def get_row(self):
         row, col = get_row_and_col_from_a1_address(self.address)
@@ -2314,6 +2333,8 @@ class ExcelSheetDataUtil():
             range_address : 'A1:B2'
             columns:
                 df.columnsに指定する行（この次の行からdfとして扱う）
+                0以上：その数値の行をcolumnとする
+                None or (-1以下):columnを設定しない
             mode:
                 エクセルから読み取ったときにdfの中の値の型を指定する
                     ConstExcelで指定する
@@ -2323,7 +2344,24 @@ class ExcelSheetDataUtil():
         import pandas as pd
         cell_values_np = self.get_values_from_range_address_np(
             range_address, mode=mode)
-        if columns!=None and 0<=columns:
+        if columns==None:
+            columns = -1
+        if 0<=columns:
+            columns_np = cell_values_np[0]
+            cell_values_np = cell_values_np[1:]
+        elif columns<0:
+            columns_np = []
+            col_amount = cell_values_np.shape[0]
+            # columns_np = ['' for x in range(col_amount)]
+            columns_np = np.full(col_amount, '', dtype='<U1')
+            # 240818 
+            # 暫定修正
+            # エクセルの途中の行読み取り時、columns=Noneだと、以下の形状不一致エラーとなる            
+            # ValueError: Shape of passed values is (5, 1), indices imply (5, 0)
+            # columnsを指定しない場合、空の配列を作成して、
+            # いったん無理やり形状を合わせて処理を進める
+            #行方向に連結する
+            cell_values_np = np.vstack((columns_np, cell_values_np))
             columns_np = cell_values_np[0]
             cell_values_np = cell_values_np[1:]
         else:
@@ -2384,6 +2422,9 @@ class ExcelSheetDataUtil():
     def find_entire_row_in_range(self, index_row:int, keyrowd, debug=None):
         """ 
         self.addredd の行を指定してkeywordに合致するCellを取得する
+
+        Memo:
+            1行目はindex_row=0とする。
         """
         debug = self._get_debug(debug)
         row, begin_col = self.get_row_and_col_begin()
@@ -2430,21 +2471,24 @@ class ExcelSheetDataUtil():
     def find_entire_col_in_range(self, index_col:int, keyrowd):
         """ 
         self.addredd の行を指定してkeywordに合致するCellを取得する
+            最初に一致したCellのみを返却する
         """
         begin_row, col = self.get_row_and_col_begin()
-        col += index_col
+        # col += index_col
+        # 240818
+        col = index_col
         end_row, _ = self.get_row_and_col_end()
         cells_2d = self._get_iter_cells_by_r1c1(
             self.sheet,
             begin_row, col, end_row, col,
             Direction.DOWN & Direction.RIGHT)
         cell:Cell=None
-        for cell_list in cells_2d:
-            for cell in cell_list:
+        for i, cell_list in enumerate(cells_2d):
+            for j, cell in enumerate(cell_list):
                 val = _get_cell_value(cell)
                 # print('cell[{}, {}]'.format(cell.row, cell.column))
                 add = get_a1_address_from_row_and_col(cell.row, cell.column)
-                print('cell[{}]={}'.format(add, val))
+                # print('cell[{}]={}'.format(add, val))
                 if keyrowd in val:
                     return cell
         return None

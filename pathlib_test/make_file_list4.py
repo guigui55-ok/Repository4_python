@@ -1,4 +1,7 @@
-
+"""
+特定のフォルダの中のファイルリストを取得、
+また、ファイルの情報（サイズ(バイト数、計算したバイト数KB,MB)、パス、ファイル名）などをリストで取得してCSVに出力する
+"""
 from pathlib import Path
 import glob
 import datetime
@@ -7,7 +10,7 @@ import pandas as pd
 
 
 def _test_main():
-    device_name = 'BACKUP5'
+    device_name = 'DISK0__HDD_VIDEO_MEDIA'
     path = r'I:'
     #/
     start_time = datetime.datetime.now()

@@ -73,12 +73,18 @@ WSGI_APPLICATION = 'test_project1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
+# デフォルト設定（SQLite）
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# postgreSQL
+from test_project1.__test_my_info_postgre import get_database_info_postgre_default
+DATABASES = get_database_info_postgre_default()
 
 
 # Password validation

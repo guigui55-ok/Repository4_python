@@ -1,0 +1,55 @@
+
+シンプルなログインシステムのテーブル設計
+
+
+*****
+1. Users テーブル
+このテーブルは、ユーザーの基本情報を管理します。
+
+UserID (int, Primary Key, Auto Increment): ユーザーを一意に識別するID。
+Username (varchar, Unique): ログインに使用するユーザー名。
+PasswordHash (varchar): ユーザーのパスワードのハッシュ値（パスワードは平文で保存しない）。
+Email (varchar, Unique, Optional): ユーザーのメールアドレス。
+CreatedAt (datetime): ユーザーアカウントが作成された日時。
+LastLoginAt (datetime, Optional): ユーザーが最後にログインした日時。
+
+------
+pgAdmin4
+VARCHAR => CHARACTER VARYING
+datetime => timestamp with time zone
+------
+
+*****
+2. UserRoles テーブル (Optional)
+複数のユーザーに異なるロールを割り当てる必要がある場合に使用します。
+
+RoleID (int, Primary Key, Auto Increment): ロールを一意に識別するID。
+RoleName (varchar, Unique): ロール名（例: "Admin", "User"）。
+Description (varchar, Optional): ロールの説明。
+
+*****
+3. UserRolesMapping テーブル (Optional)
+ユーザーとロールの関係を管理します。
+
+UserID (int, Foreign Key): Users テーブルの UserID。
+RoleID (int, Foreign Key): UserRoles テーブルの RoleID。
+
+*****
+4. AuditLogs テーブル (Optional)
+ログインシステムの操作履歴を記録する場合に使用します。
+
+LogID (int, Primary Key, Auto Increment): ログを一意に識別するID。
+UserID (int, Foreign Key): Users テーブルの UserID。
+Action (varchar): ログインやログアウトなどのアクションの種類。
+Timestamp (datetime): アクションが発生した日時。
+
+
+*****
+必要なカラムの概要:
+UserID: 全てのユーザーを一意に識別するために使用。
+Username: ユーザーのログイン時の識別子。
+PasswordHash: セキュリティのために、パスワードはハッシュ化して保存。
+Email: メールアドレスを使用したパスワードリセットや通知機能のために使用。
+CreatedAt: アカウント作成のタイムスタンプ。
+LastLoginAt: ユーザーの最後のログイン日時を記録。
+RoleID: ロールベースのアクセス制御を行う場合に使用。
