@@ -1,0 +1,15 @@
+TinyPy: Exception
+
+Exception: error: invalid statement
+2: adm = Avidemux()
+^
+
+BackTrack:
+File: py2bc.py, line 51
+File: py2bc.py, line 10
+File: parse.py, line 424
+File: parse.py, line 414
+File: parse.py, line 200
+File: parse.py, line 55
+File: parse.py, line 58
+File: tokenize.py, line 13

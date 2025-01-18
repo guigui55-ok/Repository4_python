@@ -327,7 +327,6 @@ def test_main3():
     image_path = _take_screenshot_driver(driver, logger, 'スクリーンショットを保存')
     logger.put_log('image_path = {}'.format(image_path))
     #/
-    # driver.switch_to.frame(driver.find_element_by_tag_name("iframe"))
     driver.switch_to.frame(driver.find_element(By.XPATH ,"//iframe"))
     # フレーム内で要素を検索
     #/

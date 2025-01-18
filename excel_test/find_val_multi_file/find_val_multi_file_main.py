@@ -1,4 +1,19 @@
+"""
+複数のエクセルファイルの任意のカラムのレコードデータに対し、
+    検索文字列が含まれるレコードをすべて抽出する。
 
+Memo:
+    それぞれのエクセルファイルはCSVから変換されたものを使用（左上から連続したデータであること）
+    各ファイルのカラムの並びは同じ方が良い（並び順が異なっても、設定のカラム名があれば動作するが、結果出力時にずれて表示される）
+    このソースファイル内 "@実行設定" でいろいろ設定変更可能
+        エクセルファイルは、設定値によって、検索対象の絞り込みが可能
+        検索値は[__test_setting_value.txt]内に、スラッシュ区切りで指定する
+        検索結果はCSVで出力される、出力場所はoutput_dirで変更可能
+
+実行Memo:
+    エクセル 5ファイル、約10万件くらいのデータに対し、1つの文字列を検索
+    pass_time = 0:01:05.642723
+"""
 import sys
 from pathlib import Path
 import pandas as pd
@@ -44,6 +59,8 @@ def execute_find_main(find_value_list = None):
         find_value_list = [
             'test'
         ]
+    #/
+    ### @実行設定 ###
     #/
     excel_file_dir = r'C:\ZMyFolder\after to base\disk_240800'
     include_conditions_regix_pattern = [r'__test_list_.*.xlsx']

@@ -1,0 +1,10 @@
+
+ユーザー作成時に作成できない
+
+エラーメッセージ
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+
+
+このdjangoのログインシステムでユーザー作成すると、「This password is too common.」と表示され登録されません。登録するにはどうしたらよいでしょうか？
+（ソースコードなど不足しているものがあれば要望してください）

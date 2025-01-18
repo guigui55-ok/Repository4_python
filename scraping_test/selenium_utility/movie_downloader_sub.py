@@ -21,15 +21,19 @@ from selenium.webdriver.common.by import By
 from selenium_webdriver.webdriver_utility import WebDriverUtility,WebElementUtility
 
 from html_log.html_logger import HtmlLogger,BasicLogger
+from pathlib import Path
 
+TEXT_DIR_PATH = Path(r'C:\Users\OK\source\repos\test_media_files\movie_data')
+WEB_DRIVER_PATH = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
 
 def get_vd_site_url():
-    path = r'C:\Users\OK\source\repos\Test\movie_data\vd_main_url.txt'
+    path = str(TEXT_DIR_PATH.joinpath('vd_main_url.txt'))
     with open(path,'r',encoding='utf-8')as f:
         buf = f.read()
     return buf
 def get_vd_site_url2():
-    path = r'C:\Users\OK\source\repos\Test\movie_data\vd_main_url2.txt'
+    # path = r'C:\Users\OK\source\repos\Test\movie_data\vd_main_url2.txt'
+    path = str(TEXT_DIR_PATH.joinpath('vd_main_url2.txt'))
     with open(path,'r',encoding='utf-8')as f:
         buf = f.read()
     return buf
@@ -59,6 +63,11 @@ class DonwloadSite():
         self.download_result = False
         self.logger = html_logger
         self.result_int = 0
+        #/
+        #240827
+        # ダウンロードサイトによっては、クラス内でダウンロードするので、ダウンロード先を保持する
+        self.download_dir_path = ''
+
 
     def set_log_path(self,dir_path:str):
         # self.chrome.selenium_log.set_log_dir(dir_path)
@@ -155,8 +164,6 @@ class YouTube(DonwloadSite):
 
     def input_movie_url(self,movie_url):
         chrome = self.chrome
-        # input_el = chrome.driver.find_element_by_tag_name('input')
-        # input_el = chrome.driver.find_element(By.CSS_SELECTOR, "input")
         input_el = chrome.find_element(By.CSS_SELECTOR, "input")
         input_el.click()
         chrome.timer.wait_short()
@@ -509,167 +516,27 @@ class YouTube(DonwloadSite):
         その後、画面が切り替わったらダウンロードをクリックして、
         ポップアップした要素の（前とは別の）ダウンロードをクリックする。"""
         self.add_log(url)
-        # import time
-        # from selenium.webdriver.remote.webdriver import WebElement
-        # from selenium.webdriver.common.keys import Keys
-        # from selenium.webdriver.common.by import By
-        # from selenium_webdriver.webdriver_utility import WebDriverUtility
-        # from selenium_webdriver.webdriver_utility import WebElementUtility
-        # # from selenium_webdriver.webdriver_utility import WebElement
-        # # from selenium_webdriver.webdriver_utility import By
-        # # from selenium_webdriver.webdriver_utility import keys
-        # is_downloded:bool = False
-        # chrome_driver_path = self.chrome_driver_path
-        # chrome = WebDriverUtility(chrome_driver_path)
-        # try:
-        #     chrome.driver.set_window_size(800,800)
-        #     downloader_url=self.downloader_url
-        #     chrome.driver.get(downloader_url)
-        #     chrome.timer.wait()
-
-        #     input_el = chrome.driver.find_element_by_tag_name('input')
-        #     input_el.click()
-        #     chrome.timer.wait_short()
-        #     for _ in range(int(3)):
-        #         input_el.send_keys(Keys.DELETE)
-        #         chrome.timer.wait_short()
-        #         if WebElementUtility(input_el).util.get_value()=='':
-        #             break
-        #     chrome.timer.wait()
-        #     input_el.send_keys(url)
-        #     chrome.timer.wait()
-        #     # self.wait_long()
-        #     # value = 'Start'
-        #     # # button_el = chrome.driver.find_element_by_tag_name('button')
-        #     # buttons = chrome.driver.find_elements_by_tag_name('button')
-        #     # button:WebElement=None
-        #     # for button in buttons:
-        #     #     if chrome.get_webelement_attribute(button,'value') == 'Start':
-        #     #         button.click()
-        #     #         break
-        #     input_el.send_keys(Keys.ENTER)
-        #     chrome.timer.wait()
-        #     chrome.timer.wait()
-
-        #     #ENTER後にサイズが更新される
-        #     chrome.driver.set_window_size(800,800)
-
-        #     # chrome.save_page_source_and_screenshot('after_enter2')
-
-
-        #     # StartをENTER後に、動画が取得されていなければ、一番下まで行くことがある（TABを押しているので）
-        #     # 動画を取得（画面が更新される）まで待つ
-        #     # <div id="result"></div>がなければ、動画を取得している
-        #     prepared_value_after_enter = '<div id="result"></div>'
-        #     limit = 20
-        #     for _ in range(limit):
-        #         if chrome.page_source_ex.is_exists_find_all(prepared_value_after_enter):
-        #             chrome.timer.wait()
-        #             print('waiting select movie(after send url).')
-        #         else:
-        #             print('prepared select movie(after send url).')
-        #             break
-        #     else:
-        #         msg = 'ERROR__prepared select movie(after send url)'
-        #         print('ERROR')
-        #         print(msg)
-        #         chrome.save_page_source_and_screenshot(msg)
-        #         self.print_result(ConstResult.ERROR,msg,url)
-        #         return False
-
-        #     element:WebElement=None
-        #     count = 20
-        #     for _ in range(count):
-        #         chrome.timer.wait_little()
-        #         element = chrome.driver.switch_to.active_element
-        #         if WebElementUtility(element).get_attribute('text').find('ダウンロード')>=0:
-        #             chrome.save_page_source_and_screenshot('click_download')
-        #             element.click()
-        #             break
-        #         element.send_keys(Keys.TAB)
-        #     chrome.timer.wait(0.2)
-        #     # chrome.save_page_source_and_screenshot('waiting_save_button')
-
-        #     # wait_value = 'Please wait while the file is being prepared for downloading'
-        #     prepared_value = 'form-group has-success has-feedback'
-        #     limit = 60
-        #     for i in range(limit):
-        #         if chrome.page_source_ex.is_exists_find_all('<span class="sr-only">Error:',False):
-        #             msg = 'ERROR__shown error screen NOTHING'
-        #             print('ERROR')
-        #             print(msg)
-        #             chrome.save_page_source_and_screenshot(msg)
-        #             #ファイルを移動するためにTrueで返す
-        #             self.print_result(ConstResult.NOTHING,msg,url)
-        #             return True
-        #         if not chrome.page_source_ex.is_exists_find_all(prepared_value):
-        #             chrome.timer.wait()
-        #             print('waiting download button.[{}]'.format(i))
-        #         else:
-        #             print('prepared download button.')
-        #             break
-        #     else:
-        #         msg = 'ERROR__not prepared download button'
-        #         print('ERROR')
-        #         print(msg)
-        #         chrome.save_page_source_and_screenshot(msg)
-        #         self.print_result(ConstResult.ERROR,msg,url)
-        #         return False
-
-
-        #     # self.wait(10)
-        #     # import pathlib
-        #     # path = str(pathlib.Path(__file__).parent.joinpath('page_source.txt'))
-        #     # chrome.write_page_source(path)
-
-        #     elements = chrome.driver.find_elements_by_tag_name('a')
-        #     for element in elements:
-        #         cls = WebElementUtility(element).get_attribute('class')
-        #         if cls == 'btn btn-success btn-file':
-        #             href = WebElementUtility(element).get_attribute('href')
-        #             print(href)
-        #             element.click()
-        #     # value = 'form-group has-success has-feedback'
-        #     # element = chrome.driver.find_element_by_class_name(value)
-        #     #Message: no such element: Unable to locate element: {"method":"css selector","selector":".form-group has-success has-feedback"}
-        #     #(Session info: chrome=102.0.5005.63)
-        #     return is_downloded
-        #     # if not is_downloded:
-        #     #     return is_downloded
-        #     # is_downloded = True
-
-        #     # while(True):
-        #     #     if text_is_false():
-        #     #         break
-        #     #     self.wait(20)
-        # except Exception as e:
-        #     # print(str(e))
-        #     import traceback
-        #     print()
-        #     print(BAR)
-        #     traceback.print_exc()
-        #     self.print_result(ConstResult.ERROR,str(e))
-        #     is_downloded = False
-        #     return is_downloded
-        # finally:
-        #     chrome.close()
-        #     return is_downloded
-
 
 
 class VdSite(DonwloadSite):
     def __init__(self, chrome_driver_path: str = '',logger:HtmlLogger=None) -> None:
-        super().__init__(chrome_driver_path,logger,logger)
+        super().__init__(chrome_driver_path, logger)
         self.chrome_driver_path = chrome_driver_path
         self.downloader_url = self.read_url()
 
     def read_url(self):
-        path = r'C:\Users\OK\source\repos\Test\movie_data\vd_url.txt'
+        # path = r'C:\Users\OK\source\repos\Test\movie_data\vd_url.txt'
+        path = str(TEXT_DIR_PATH.joinpath('vd_url.txt'))
         with open(path,'r',encoding='utf-8')as f:
             buf = f.read()
         return buf
     def url_is_vd_main(self,url:str):
         chk = get_vd_site_url()
+        if url.startswith(chk):
+            return True
+        return False
+    def url_is_vd_main2(self,url:str):
+        chk = get_vd_site_url2()
         if url.startswith(chk):
             return True
         return False
@@ -684,6 +551,7 @@ class VdSite(DonwloadSite):
         flag = super().open_web_site()
         if not flag:return
         # wait
+        # is_show = self.is_show_xv_site()
         new_url = self.is_shown_implemented_error_screen()
         if new_url!='':
             self.downloader_url = new_url
@@ -694,6 +562,12 @@ class VdSite(DonwloadSite):
             flag = self.download_movie_vd_main()
         elif self.url_is_vd_main(movie_url):
             flag = self.download_movie_vd_main()
+        elif self.url_is_vd_main2(movie_url):
+            flag = self.download_movie_vd_main_b()
+        else:
+            self.logger.info('url is unexpected')
+            self.logger.info(movie_url)
+            flag = False
 
         # self.chrome.save_page_source_and_screenshot('_test')
         self.is_need_observer = False
@@ -716,6 +590,49 @@ class VdSite(DonwloadSite):
         # if ret_int == ConstResult.ERROR or ret_int == ConstResult.NOTHING: return
         # flag = self.click_download()
         return flag
+
+    def is_show_xv_site(self):
+        # el = self.chrome.driver.find_element(By.XPATH, value="//*[contains(@*, 高画質)]")
+        # el = self.chrome.driver.find_element(By.XPATH, value="//*[@text='ダウンロード（高画質）']")
+        xpath = "//*[@class='btn btn-success btn-lg']"
+        el = self.chrome.driver.find_element(By.XPATH, value=xpath)
+        if not el == None:
+            dl_file_name = el.text + '.mp4'
+            dl_file_path = str(Path(self.download_dir_path).joinpath(dl_file_name))
+            print(el.text)
+            #/
+            # get_title
+            xpath = "//*[@class='float-left _right-container']/*[@class='_title']"
+            title_el = self.chrome.driver.find_element(By.XPATH, value=xpath)
+            if title_el != None:
+                print(title_el.text)
+            #/
+            el.click()
+            self.chrome.timer.wait_short()
+            #/
+            # 動画が表示される、真ん中をタップして、動画を止める
+            pos_dict = self.chrome.driver.get_window_rect()
+            self.logger.info('pos_dict = {}'.format(pos_dict))
+            # x,y = int(pos_dict['x']//2), int(pos_dict['y']//2)
+            html_el = self.chrome.driver.find_element(By.TAG_NAME, "html")
+            elu = WebElementUtility(html_el)
+            x,y = elu.get_center_position()
+            # x,y = elu.get_size()
+            x = x//2
+            y = y//2
+            x = pos_dict['width']//2
+            y = pos_dict['height']//2
+            # self.chrome.click_by_position(x, y)
+            self.logger.info('x, y = {}, {}'.format(x, y))
+            self.chrome.click_point(x, y)
+            self.chrome.timer.wait_short()
+            #/
+            cur_url = self.chrome.driver.current_url
+            import urllib.request
+            urllib.request.urlretrieve(cur_url, dl_file_path)
+            # 240827
+            # 403 errorとなる 
+        buf = ''
         
     def url_is_valid(self,url:str):
         """
@@ -731,9 +648,12 @@ class VdSite(DonwloadSite):
         return False
     
     def install_addon(self,path:str='',id:str=''):
+        #ストリームレコーダー2.1.8
         path = r'C:\Users\OK\AppData\Local\Google\Chrome\User Data\Default\Extensions\iogidnfllpdhagebkblkgbfijkbkjdmm\1.3.8_0'
+        # 240826
+        path = r'C:\Users\OK\AppData\Local\Google\Chrome\User Data\Default\Extensions\iogidnfllpdhagebkblkgbfijkbkjdmm\2.1.8_0'
         # self.chrome = WebDriverUtility()
-        self.chrome = WebDriverUtility()
+        self.chrome = WebDriverUtility(WEB_DRIVER_PATH, self.logger)
         self.chrome.install_addon(path)
         self.chrome.set_driver(self.chrome_driver_path)
         # ID: iogidnfllpdhagebkblkgbfijkbkjdmm
@@ -742,8 +662,75 @@ class VdSite(DonwloadSite):
         # Windows
         # C:\Users\<ユーザ名>\AppData\Local\Google\Chrome\User\Data\Default\Extensions
         # https://yuki.world/selenium-load-chrome-extension/
+    #########
 
+    def download_movie_vd_main_b(self):
+        # flag = self.tap_play_b()
+        # if not flag: return
+        print()      
+        self.chrome.timer.wait()
+        flag = self.run_chrome_extention_b()
+        if not flag: return
+        self.chrome.timer.wait(2)
+        flag = self.download_stream_recorder()
+        if not flag: return
+        flag = self.tap_save_button()
+        self.chrome.save_page_source_and_screenshot('_down_after_ext')
+        return flag
 
+    def tap_play_b(self):
+        movie_class = 'video-bg-pic'
+        #240826
+        el = self.chrome.driver.find_element(By.CLASS_NAME, movie_class)
+        x,y = WebElementUtility(el).get_center_position()
+        self.add_log('tap ({} , {})'.format(x,y))
+        self.chrome.click_by_position(x ,y)
+        ###
+        self.chrome.save_page_source_and_screenshot('_after_play1')
+        self.chrome.timer.wait_long()
+        self.chrome.save_page_source_and_screenshot('_after_play2')
+        self.chrome.timer.wait_long()
+        self.chrome.save_page_source_and_screenshot('_after_play3')
+        for _ in range(3):
+            cl_name = 'videoad-skip-txt'
+            try:
+                el = self.chrome.driver.find_element(By.CLASS_NAME, cl_name)
+                el.click()
+                break
+            except:
+                pass
+            self.chrome.save_page_source_and_screenshot('_after_play4')
+            self.chrome.timer.wait()
+        self.chrome.timer.wait_long()
+        self.chrome.save_page_source_and_screenshot('_after_play5')
+        return True
+
+    def run_chrome_extention_b(self):
+        #マウスポインタが、拡張機能のメニュー内にあると
+        #Downキーでメニュー選択した際に、違うメニューが選択され、目的のボタンが押せないので注意
+        # 場合によっては、マウスポインタの移動も必要（対応保留）
+        def wait_this():
+            # self.chrome.timer.wait_short()
+            self.chrome.timer.wait(0.3)
+        import pyautogui
+        pyautogui.hotkey('alt','shift','t')
+        wait_this()
+        for _ in range(3):
+            pyautogui.hotkey('left')
+            wait_this()
+            
+        pyautogui.hotkey('enter')
+        wait_this()
+        for _ in range(2):
+            pyautogui.hotkey('down')
+            wait_this()
+        
+        pyautogui.hotkey('enter')
+        wait_this()
+
+        self.chrome.change_tab(1)
+        return True
+    #########
 
     def download_movie_vd_main(self):
         flag = self.tap_play()
@@ -761,7 +748,8 @@ class VdSite(DonwloadSite):
 
     def tap_play(self):
         movie_class = 'video-bg-pic'
-        el = self.chrome.driver.find_element_by_class_name(movie_class)
+        #240826
+        el = self.chrome.driver.find_element(By.CLASS_NAME, movie_class)
         x,y = WebElementUtility(el).get_center_position()
         self.add_log('tap ({} , {})'.format(x,y))
         self.chrome.click_by_position(x ,y)
@@ -774,7 +762,7 @@ class VdSite(DonwloadSite):
         for _ in range(3):
             cl_name = 'videoad-skip-txt'
             try:
-                el = self.chrome.driver.find_element_by_class_name(cl_name)
+                el = self.chrome.driver.find_element(By.CLASS_NAME, cl_name)
                 el.click()
                 break
             except:
@@ -791,11 +779,11 @@ class VdSite(DonwloadSite):
         # None   video-bg-pic         [[0, 151], [734, 598]]
         #play
         # tap_value = 'mobile-only-show ad-footer ad-support-desktop'
-        # play_el = self.chrome.driver.find_element_by_class_name(value)
+        # play_el = self.chrome.driver.find_element(By.CLASS_NAME, value)
         # play_el = self.find_by_tab_key(tap_value,'class',110)
         # label_main_value = 'btn btn-default label main uploader-tag hover-name'
         # click_title = '再生'
-        ## el = self.chrome.driver.find_element_by_link_text('再生') # Unable to locate element
+        ## el = self.chrome.driver.link('再生') # Unable to locate element
         # els = self.chrome.driver.find_elements_by_xpath('//*')
         # for el in els:
         #     # text = self.chrome.get_webelement_attribute(el,'text')
@@ -846,11 +834,11 @@ class VdSite(DonwloadSite):
         # Message: no such element: Unable to locate element: {"method":"link text","selector":"保存"}
         # 'Message: no such element: Unable to locate element: {"method":"link text","selector":"停止"}\n  (Session info: chrome=102.0.5005.63)\n'
         try:
-            # el = self.chrome.driver.find_element_by_link_text('保存')
+            # el = self.chrome.driver.link('保存')
             # value = 'saveButton btn btn-primary'
-            # el = self.chrome.driver.find_element_by_class_name(value)
+            # el = self.chrome.driver.find_element(By.CLASS_NAME, value)
             # value = '停止'
-            # el = self.chrome.driver.find_element_by_link_text('停止')
+            # el = self.chrome.driver.link('停止')
             # none_val = 'display:none'
             # style = WebElementUtility(el).get_attribute('style')
             # if style == none_val:
@@ -858,7 +846,7 @@ class VdSite(DonwloadSite):
             
 
             value = 'progress'
-            cl_el= self.chrome.driver.find_element_by_class_name(value)
+            cl_el= self.chrome.driver.find_element(By.CLASS_NAME, value)
             cl_val = WebElementUtility(cl_el).get_attribute('style')
             val = WebElementUtility(cl_el).get_attribute('value')
             max = WebElementUtility(cl_el).get_attribute('max')
@@ -879,7 +867,7 @@ class VdSite(DonwloadSite):
             #     return True
             # return False
             # value = 'progressLabel'
-            # cl_el= self.chrome.driver.find_element_by_class_name(value)
+            # cl_el= self.chrome.driver.find_element(By.CLASS_NAME, value)
             # # cl_el = cl_parent_el.find_element(value)
             # cl_val = cl_el.get_attribute('text')
             # cl_val = WebElementUtility(cl_el).get_attribute('text')
@@ -903,7 +891,9 @@ class VdSite(DonwloadSite):
     def is_shown_save_button_in_download_page_(self):
         # Message: no such element: Unable to locate element: {"method":"link text","selector":"保存"}
         try:
-            el = self.chrome.driver.find_element_by_link_text('保存')
+            # el = self.chrome.driver.find_element(By.LINK_TEXT, '保存')
+            xpath = '//*[@class="saveButton btn btn-primary"]'
+            el = self.chrome.driver.find_element(By.XPATH, xpath)
             none_val = 'display:none'
             style = WebElementUtility(el).get_attribute('style')
             if style == none_val:
@@ -913,11 +903,27 @@ class VdSite(DonwloadSite):
             return False
     
     def download_stream_recorder(self):
-        el = self.chrome.driver.find_element_by_link_text('ストレコ')
-        if el == None:
+        # el = self.chrome.driver.find_element(By.LINK_TEXT, 'ストレコ')
+        # el = self.chrome.driver.find_element(By.TAG_NAME, 'title')
+        # 240827
+        driver = self.chrome.driver
+        # 2つあるはずなので、2つ目を選択する
+        for i, window_handle in enumerate(driver.window_handles):
+            if True:
+                driver.switch_to.window(window_handle)
+                self.chrome.timer.wait_short()
+        self.chrome.save_page_source_and_screenshot('ストレコ') # timeout
+
+        # xpath ='//*[@class="navbar-section"]/a'
+        # xpath ='//*[@class="navbar-section"]'
+        # el = self.chrome.driver.find_element(By.XPATH, xpath)        
+        # is_show = 'ストレコ' in el.text
+        el = self.chrome.driver.find_element(By.XPATH, "//*[@class='saveButton btn btn-primary']") 
+        is_show = el != None
+        if not is_show:
             self.add_log('ストレコが起動していない。')
             return False
-        el = self.chrome.driver.find_element_by_class_name('titleLabel')
+        el = self.chrome.driver.find_element(By.CLASS_NAME, 'titleLabel')
         title = WebElementUtility(el).get_attribute('text')
         self.add_log('title [{}]'.format(title))
         time_log_flag = False
@@ -970,16 +976,20 @@ class VdSite(DonwloadSite):
         """
         element:WebElement=None
         count = tab_retry
-        for _ in range(count):
+        for i in range(count):
             self.chrome.timer.wait_little()
             element = self.chrome.driver.switch_to.active_element
             el_text = WebElementUtility(element).get_attribute(attr_name)
             if el_text.find(find_value)>=0:
                 # self.chrome.save_page_source_and_screenshot('click_download')
                 # element.click()
+                print()
+                WebElementUtility(element).print_attributes_for_analyze()
+                self.logger.info('count = {}'.format(count))
                 return element
             else:
-                WebElementUtility(element).print_attributes_for_analyze()
+                # WebElementUtility(element).print_attributes_for_analyze()
+                print('.', end='')
                 # print('[{}]'.format(WebElementUtility(element).get_attribute(attr_name)))
                 pass
             element.send_keys(Keys.TAB)
@@ -988,18 +998,33 @@ class VdSite(DonwloadSite):
             return None
     
     def is_shown_implemented_error_screen(self):
-        value = '<strong>予期せぬエラーが発生しました'
-        if self.chrome.page_source_ex.is_exists_find_all(value,True):
-            el = self.chrome.driver.find_element_by_class_name('_on-error')
-            # a_tag = el.find_element_by_tag_name('a')
+        # value = '<strong>予期せぬエラーが発生しました'
+        # is_shown = self.chrome.page_source_ex.is_exists_find_all(value, True)
+        # 240827
+        # page_source内にすべてエラーが含まれるため、styleで判定
+        is_shown = False
+        #/
+        xpath = '//*[@class="_on-error"]'
+        el = self.chrome.find_element(By.XPATH , xpath)
+        attr = self.chrome.get_webelement_attribute(el, 'style')
+        if 'display:none' in attr:
+            is_shown = is_shown or False
+        #/
+        xpath = '//*[@class="_on-deleted"]'
+        el = self.chrome.find_element(By.XPATH , xpath)
+        attr = self.chrome.get_webelement_attribute(el, 'style')
+        if 'display:none' in attr:
+            is_shown = is_shown or False
+        if is_shown:
+            el = self.chrome.driver.find_element(By.CLASS_NAME , '_on-error')
             a_tag = self.chrome.driver.find_element(By.CSS_SELECTOR, "a")
             url = self.chrome.get_webelement_attribute(a_tag,'href')
             return url
         return ''
 
+
     def input_movie_url(self,movie_url):
         chrome = self.chrome
-        # input_el = chrome.driver.find_element_by_tag_name('input')
         input_el = self.chrome.driver.find_element(By.CSS_SELECTOR, "input")
         input_el.click()
         chrome.timer.wait_short()
@@ -1122,6 +1147,8 @@ def main():
     file_name = r'test.url'
     # file_name = r'.url'
     path = os.path.join(dir_path,file_name)
+    if not Path(path).exists():
+        raise FileNotFoundError(path)
     import pathlib
     # log_dir_path = str(pathlib.Path(__file__).parent.joinpath('log')) 
     selenium_log_dir = r'C:\Users\OK\source\repos\test_media_files\selenium_log'
@@ -1134,7 +1161,7 @@ def main():
     from download_directoy_observer import DownloadDirectoryObserver,DEFAULT_DONLOAD_DIR
     observer = DownloadDirectoryObserver(DEFAULT_DONLOAD_DIR,logger)
     is_downloded:bool = False
-    chrome_driver_path = r'C:\Users\OK\source\programs\chromedriver_win32\chromedriver'
+    chrome_driver_path = WEB_DRIVER_PATH
     if url.startswith('https://www.youtube.com/'):
         downloader:YouTube = YouTube(chrome_driver_path,logger)
     elif url.startswith(get_vd_site_url()):

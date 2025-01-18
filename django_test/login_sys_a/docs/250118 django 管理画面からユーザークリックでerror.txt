@@ -1,0 +1,319 @@
+管理画面から、スーパーユーザーリンクをクリックすると以下のエラーが発生します。
+管理画面から、変更したい場合どうしたらよいでしょうか？
+
+
+
+User: pass, Authenticated: True
+[18/Jan/2025 12:39:49] "GET / HTTP/1.1" 200 1072
+[18/Jan/2025 12:41:21] "GET /admin/ HTTP/1.1" 200 5095
+[18/Jan/2025 12:41:25] "GET /admin/accounts/user/ HTTP/1.1" 200 10281
+[18/Jan/2025 12:41:26] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[18/Jan/2025 12:41:26] "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+[18/Jan/2025 12:41:26] "GET /static/admin/css/changelists.css HTTP/1.1" 200 6811
+[18/Jan/2025 12:41:26] "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9042
+[18/Jan/2025 12:41:26] "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+[18/Jan/2025 12:41:26] "GET /static/admin/js/actions.js HTTP/1.1" 200 8067
+[18/Jan/2025 12:41:26] "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+[18/Jan/2025 12:41:26] "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+[18/Jan/2025 12:41:26] "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+[18/Jan/2025 12:41:26] "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+[18/Jan/2025 12:41:26] "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+[18/Jan/2025 12:41:26] "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+[18/Jan/2025 12:41:26] "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+[18/Jan/2025 12:41:26] "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+[18/Jan/2025 12:41:26] "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+[18/Jan/2025 12:41:26] "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+[18/Jan/2025 12:41:36] "GET /admin/accounts/user/ HTTP/1.1" 200 10281
+[18/Jan/2025 12:41:36] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[18/Jan/2025 12:41:36] "GET /admin/accounts/ HTTP/1.1" 200 5047
+[18/Jan/2025 12:41:39] "GET /admin/accounts/user/ HTTP/1.1" 200 10281
+[18/Jan/2025 12:41:39] "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+Internal Server Error: /admin/accounts/user/1/change/
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 837, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 652, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 310, in __new__
+    fields = fields_for_model(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 205, in fields_for_model
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for User model form as it is a non-editable field
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1948, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1804, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1839, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 839, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for User model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class UserAdmin.
+[18/Jan/2025 12:43:40] "GET /admin/accounts/user/1/change/ HTTP/1.1" 500 160200
+[18/Jan/2025 12:43:44] "GET /admin/accounts/user/ HTTP/1.1" 200 10281
+Internal Server Error: /admin/accounts/user/1/change/
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 837, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 652, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 310, in __new__
+    fields = fields_for_model(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 205, in fields_for_model
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for User model form as it is a non-editable field
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1948, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1804, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1839, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 839, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for User model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class UserAdmin.
+[18/Jan/2025 12:43:45] "GET /admin/accounts/user/1/change/ HTTP/1.1" 500 160200
+[18/Jan/2025 12:44:21] "GET /admin/accounts/user/ HTTP/1.1" 200 10281
+Internal Server Error: /admin/accounts/user/1/change/
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 837, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 652, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 310, in __new__
+    fields = fields_for_model(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\models.py", line 205, in fields_for_model
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for User model form as it is a non-editable field
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 716, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\sites.py", line 240, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1948, in change_view
+    return self.changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1804, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 1839, in _changeform_view
+    ModelForm = self.get_form(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\admin.py", line 98, in get_form
+    return super().get_form(request, obj, **defaults)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\admin\options.py", line 839, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: 'created_at' cannot be specified for User model form as it is a non-editable field. Check fields/fieldsets/exclude attributes of class UserAdmin.
+[18/Jan/2025 12:44:31] "GET /admin/accounts/user/1/change/ HTTP/1.1" 500 160200
+
+
+************
+
+エラーの原因は、`created_at` フィールドが **非編集可能** (`editable=False`) に設定されているため、Django 管理画面でのモデルフォームに使用できないことです。
+
+Djangoの管理画面では、`UserAdmin` クラスで指定されている `fieldsets` または `fields` にリストアップされたフィールドは編集可能である必要があります。
+
+---
+
+### **解決方法**
+
+以下の手順で問題を解決できます：
+
+---
+
+#### **1. `UserAdmin` クラスの `fieldsets` または `fields` を修正**
+
+`created_at` フィールドをフォームから除外します。
+
+##### **`admin.py` の修正**
+```python
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import User
+
+class CustomUserAdmin(UserAdmin):
+    # 必要なフィールドのみ指定
+    fieldsets = (
+        (None, {"fields": ("account_id", "password")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "email", "birth_date")}),
+        ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Important dates", {"fields": ("last_login",)}),
+    )
+    # リストに表示するフィールド
+    list_display = ("account_id", "email", "first_name", "last_name", "is_staff")
+    search_fields = ("account_id", "email", "first_name", "last_name")
+    ordering = ("account_id",)
+
+# UserAdmin をカスタマイズ
+admin.site.register(User, CustomUserAdmin)
+```
+
+---
+
+#### **2. `readonly_fields` を使用して表示専用にする**
+
+管理画面で `created_at` を表示したい場合は、編集不可のフィールドとして指定できます。
+
+##### **`admin.py` の修正**
+```python
+class CustomUserAdmin(UserAdmin):
+    fieldsets = (
+        (None, {"fields": ("account_id", "password")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "email", "birth_date")}),
+        ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Important dates", {"fields": ("last_login", "created_at")}),
+    )
+    readonly_fields = ("created_at",)  # 編集不可に設定
+```
+
+---
+
+#### **3. エラーの解消を確認**
+
+1. **サーバーを再起動**:
+   ```bash
+   python manage.py runserver
+   ```
+
+2. **管理画面にアクセス**:
+   `http://127.0.0.1:8000/admin/accounts/user/`
+
+3. スーパーユーザーの編集画面でエラーが解消し、`created_at` フィールドが表示されない、または編集不可として表示されていることを確認します。
+
+---
+
+### **その他の注意点**
+
+- **カスタムモデルの完全なチェック**:
+  他のフィールドでも同様に `editable=False` が設定されている場合は、同じエラーが発生する可能性があります。
+  - 対策: `fieldsets` から編集不可のフィールドを除外します。
+
+- **新たなフィールドを追加する場合**:
+  モデルにフィールドを追加する際は、管理画面で編集可能かどうかを考慮して `editable` 属性を設定してください。
+
+これで問題が解決し、スーパーユーザーの管理画面からの編集が正常に行えるはずです！ 😊
+
+
+***********
+admin.py の変更
+
+
+# from django.contrib import admin
+
+# Register your models here.
+from django.contrib import admin
+from django.contrib.auth.models import Group
+
+
+from .models import User
+from django.contrib.auth.admin import UserAdmin  # UserAdmin をインポート
+# Django では、UserAdmin は標準的な User モデルの管理画面を提供するためのクラスとして定義されています。
+# このクラスをインポートすることで、Django 管理画面にカスタムユーザーモデルを登録できるようになります。
+
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
+class UserAdmin(BaseUserAdmin):
+    # 管理画面で使用するフィールドのカスタマイズ
+    ordering = ['account_id']  # デフォルトの並び順
+    list_display = ['account_id', 'email', 'is_staff', 'is_active']  # リストビューのカラム
+    search_fields = ['account_id', 'email']  # 検索可能なフィールド
+
+    # # フォームのレイアウトをカスタマイズ
+    # fieldsets = (
+    #     (None, {'fields': ('account_id', 'email', 'password')}),
+    #     ('Personal Info', {'fields': ('first_name', 'last_name', 'birth_date')}),
+    #     ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    #     ('Important dates', {'fields': ('last_login', 'created_at', 'updated_at')}),
+    # )
+    # add_fieldsets = (
+    #     (None, {
+    #         'classes': ('wide',),
+    #         'fields': ('account_id', 'email', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
+    #     }),
+    # )
+
+    # 必要なフィールドのみ指定
+    fieldsets = (
+        (None, {"fields": ("account_id", "password")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "email", "birth_date")}),
+        ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Important dates", {"fields": ("last_login",)}),
+    )
+    # リストに表示するフィールド
+    list_display = ("account_id", "email", "first_name", "last_name", "is_staff")
+    search_fields = ("account_id", "email", "first_name", "last_name")
+    ordering = ("account_id",)
+    
+    readonly_fields = ("created_at",)  # 編集不可に設定
+
+
+admin.site.register(User, UserAdmin)  # Userモデルを登録
+admin.site.unregister(Group)  # Groupモデルは不要のため非表示にします
+
+

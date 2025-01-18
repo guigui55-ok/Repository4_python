@@ -1,0 +1,96 @@
+UserAdmin が username フィールドをデフォルトで使用していることから、djungoの思想として、usernameを使用することが自然な流れかと思いましたが、そうではないですか？
+
+
+**********
+
+Djangoのデフォルトでは、`username` フィールドが存在することを前提としていますが、これはあくまで標準的なデザインであり、必須ではありません。実際に、カスタムユーザーモデルを使うことで `username` フィールドを省略したり、別のフィールド（たとえば `email` や `account_id`）をログイン名に使用することは、Djangoの公式ドキュメントでも推奨されている柔軟な設計の一部です。
+
+---
+
+### **Djangoでの「username」の役割と思想**
+
+1. **標準的な`username`フィールド**
+   - Djangoの組み込みユーザーモデル (`AbstractUser`) では、`username` が一意の識別子として設計されています。
+   - ただし、すべてのアプリケーションが `username` を必要とするわけではありません。
+   - 例えば、企業向けシステムやB2Cのアプリケーションでは、`email` を一意の識別子とする方が自然です。
+
+2. **カスタムユーザーモデルの推奨**
+   - Djangoは、`AbstractBaseUser` を使用したカスタムユーザーモデルを作成し、`username` に代わるフィールドを設定する方法を推奨しています。
+   - 例えば、`account_id` や `email` を `USERNAME_FIELD` に設定することで、ログイン名として使用することができます。
+
+3. **Djangoの思想: 柔軟性**
+   - Djangoは「バッテリ内蔵（多機能を標準で備える）」を謳っていますが、同時に柔軟性を重視しており、プロジェクトに応じてカスタマイズすることを前提としています。
+   - `username` に限らず、アプリケーションの要件に応じたフィールドを設計するのが自然です。
+
+---
+
+### **`username` を再導入する場合**
+
+もし「Djangoのデフォルトに寄せたい」という理由で `username` を再導入したい場合、以下のコードを追加してください。
+
+#### 修正例 (`models.py`)
+
+```python
+class User(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(
+        verbose_name=_("username"),
+        max_length=150,
+        unique=True,
+        null=True,
+        blank=True,  # 空を許容（必要に応じて変更）
+    )
+    account_id = models.CharField(
+        verbose_name=_("account_id"),
+        unique=True,
+        max_length=10
+    )
+    email = models.EmailField(
+        verbose_name=_("email"),
+        unique=True
+    )
+    # その他のフィールドはそのまま
+    USERNAME_FIELD = 'username'  # username をログイン名として使用
+    REQUIRED_FIELDS = ['email', 'account_id']  # username以外に必須のフィールド
+```
+
+#### 修正例 (`admin.py`)
+
+```python
+class UserAdmin(BaseUserAdmin):
+    ordering = ['username']
+    list_display = ['username', 'email', 'account_id', 'is_staff', 'is_active']
+    search_fields = ['username', 'email', 'account_id']
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'account_id', 'password')}),
+        ('Personal Info', {'fields': ('first_name', 'last_name', 'birth_date')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'created_at', 'updated_at')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'account_id', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
+        }),
+    )
+```
+
+---
+
+### **`username` を導入するべきかの判断基準**
+
+- **導入すべき場合**
+  - プロジェクトの要件が `username` に依存している場合。
+  - ユーザーが任意の名前を指定することが重要な場合（例えばSNSやフォーラムなど）。
+  - Djangoのデフォルトに寄せてシンプルな設定を保ちたい場合。
+
+- **導入しない方が良い場合**
+  - `email` や `account_id` など、既存のフィールドで十分に一意の識別子を管理できる場合。
+  - 不要なフィールドを増やしてデータベースや管理画面が複雑になるのを避けたい場合。
+
+---
+
+### **結論**
+
+Djangoの思想として、`username` の使用はデフォルトで提供されますが、それに拘束される必要はありません。現在の設計で `account_id` や `email` を使う方法は、Djangoの推奨する柔軟なカスタム設計に沿っています。
+
+そのため、要件に合わせて `username` を導入するかどうかを判断するのが良いでしょう。どちらの方向でもサポートできますので、必要に応じて具体的なアドバイスを提供します！

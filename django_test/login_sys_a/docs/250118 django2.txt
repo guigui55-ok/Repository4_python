@@ -1,0 +1,446 @@
+django-admin startproject project .
+
+settings.pyを編集します。
+
+project/setting.py
+...
+
+ALLOWED_HOSTS = ['*']
+...
+
+
+開発用サーバーを起動してみましょう。
+
+(venv)% python manage.py runserver
+
+
+http://127.0.0.1:8000
+ブラウザでhttp://127.0.0.1:8000にアクセスし、デフォルト画面が表示されたらOKです！
+
+
+カスタムユーザーの作成
+accountsアプリを作成します。
+(venv)% python manage.py startapp accounts
+
+settings.pyのINSTALLED_APPSにaccountsを追加します。
+
+
+...
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'accounts' # 追加
+]
+
+AUTH_USER_MODEL = "accounts.User" # カスタムユーザーを認証用ユーザーとして登録
+
+...
+
+
+カスタムユーザーモデルを作成します。
+
+
+
+*******************
+from django.db import models
+from django.contrib.auth.models import (BaseUserManager,
+                                        AbstractBaseUser,
+                                        PermissionsMixin)
+from django.utils.translation import gettext_lazy as _
+
+
+class UserManager(BaseUserManager):
+    def _create_user(self, email, account_id, password, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, account_id=account_id, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_user(self, email, account_id, password=None, **extra_fields):
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(
+            email=email,
+            account_id=account_id,
+            password=password,
+            **extra_fields,
+        )
+
+    def create_superuser(self, email, account_id, password, **extra_fields):
+        extra_fields['is_active'] = True
+        extra_fields['is_staff'] = True
+        extra_fields['is_superuser'] = True
+        return self._create_user(
+            email=email,
+            account_id=account_id,
+            password=password,
+            **extra_fields,
+        )
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+
+    account_id = models.CharField(
+        verbose_name=_("account_id"),
+        unique=True,
+        max_length=10
+    )
+    email = models.EmailField(
+        verbose_name=_("email"),
+        unique=True
+    )
+    first_name = models.CharField(
+        verbose_name=_("first_name"),
+        max_length=150,
+        null=True,
+        blank=False
+    )
+    last_name = models.CharField(
+        verbose_name=_("last_name"),
+        max_length=150,
+        null=True,
+        blank=False
+    )
+    birth_date = models.DateField(
+        verbose_name=_("birth_date"),
+        blank=True,
+        null=True
+    )
+    is_superuser = models.BooleanField(
+        verbose_name=_("is_superuer"),
+        default=False
+    )
+    is_staff = models.BooleanField(
+        verbose_name=_('staff status'),
+        default=False,
+    )
+    is_active = models.BooleanField(
+        verbose_name=_('active'),
+        default=True,
+    )
+    created_at = models.DateTimeField(
+        verbose_name=_("created_at"),
+        auto_now_add=True
+    )
+    updated_at = models.DateTimeField(
+        verbose_name=_("updateded_at"),
+        auto_now=True
+    )
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'account_id' # ログイン時、ユーザー名の代わりにaccount_idを使用
+    REQUIRED_FIELDS = ['email']  # スーパーユーザー作成時にemailも設定する
+
+    def __str__(self):
+        return self.account_id
+
+**********************
+
+管理画面でユーザー登録を行ってみましょう。
+管理画面でカスタムユーザーの編集をできるよう、admin.pyに設定を追加します。
+
+
+from django.contrib import admin
+from django.contrib.auth.models import Group
+
+from .models import User
+from django.contrib.auth.admin import UserAdmin  # UserAdmin をインポート
+# Django では、UserAdmin は標準的な User モデルの管理画面を提供するためのクラスとして定義されています。
+# このクラスをインポートすることで、Django 管理画面にカスタムユーザーモデルを登録できるようになります。
+
+admin.site.register(User, UserAdmin)  # Userモデルを登録
+admin.site.unregister(Group)  # Groupモデルは不要のため非表示にします
+
+****************
+
+マイグレーションします。
+
+python manage.py makemigrations
+python manage.py migrate
+
+管理画面にログインするため、スーパーユーザーを作成します。
+
+(venv)% python manage.py createsuperuser
+pass, utauinu nifty, pass, pass
+
+
+開発用サーバーを起動します
+
+(venv)% python manage.py runserver
+
+
+http://127.0.0.1:8000/admin
+ブラウザで、http://127.0.0.1:8000/adminにアクセスし、作成したスーパーユーザーアカウントでログインします。
+
+
+**************
+ユーザー登録機能の実装
+
+accountsディレクトリ以下にforms.pyを作成してください。
+
+
+---------------
+accounts/forms.py
+from django.contrib.auth.forms import UserCreationForm
+
+from .models import User
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = (
+            "account_id",
+            "email",
+            "first_name",
+            "last_name",
+            "birth_date",
+        )
+----------------
+
+
+続いて、ビューを作成します。
+---------------
+accounts:view.py
+from django.contrib.auth import login, authenticate
+from django.views.generic import TemplateView, CreateView
+from django.urls import reverse_lazy
+from .forms import SignUpForm
+
+
+class IndexView(TemplateView):
+    """ ホームビュー """
+    template_name = "index.html"
+
+
+class SignupView(CreateView):
+    """ ユーザー登録用ビュー """
+    form_class = SignUpForm # 作成した登録用フォームを設定
+    template_name = "accounts/signup.html" 
+    success_url = reverse_lazy("accounts:index") # ユーザー作成後のリダイレクト先ページ
+
+    def form_valid(self, form):
+        # ユーザー作成後にそのままログイン状態にする設定
+        response = super().form_valid(form)
+        account_id = form.cleaned_data.get("account_id")
+        password = form.cleaned_data.get("password1")
+        user = authenticate(account_id=account_id, password=password)
+        login(self.request, user)
+        return response
+----------------
+
+
+テンプレートを作成します。
+manage.pyと同じ階層にtemplatesディレクトリを作成し、その中にテンプレートファイルを配置します。
+
+---------------
+templates/base.html
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bootstrap5のCDNを設定 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <title>Account</title>
+</head>
+
+<body>
+  <div class="container mx-auto text-center">
+    {% block title %}
+    {% endblock %}
+    {% block content %}
+    {% endblock %}
+  </div>
+</body>
+
+</html>
+-----------------
+index.htmlを作成します。
+
+-----------------
+templates/index.html
+{% extends 'base.html' %}
+
+{% block title %}
+{% if user.is_authenticated %}
+<div class="h1">MyPage</div>
+{% else %}
+<div class="h1">Main</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="h2">Welcome {{ user.first_name }} {{ user.last_name }}</div>
+{% else %}
+<a href="{% url 'accounts:signup' %}" class="btn btn-primary">Signup</a>
+{% endif %}
+{% endblock %}
+
+-------------------
+今回は、ログインの有無で、トップページの表示内容が異なるように実装します。
+具体的には、以下の内容を表示します。
+
+状態	タイトル	コンテンツ
+非ログイン時	Main	SignUp, Loginボタン表示
+ログイン時	MyPage	ユーザー情報表示
+では、肝心のユーザー登録用画面のテンプレートを作成します。
+
+-------------------
+templates/accounts/signup.html
+{% extends 'base.html' %}
+
+{% block title %}
+<div class="h1">Create account</div>
+{% endblock %}
+
+{% block content %}
+<div>
+  <br>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+    {{ field.label }}
+    {{ field }}
+    {{ field.errors }}
+    <br>
+    {% endfor %}
+    <div class="mt-3">
+      <button type="submit" class="btn btn-primary">Create</button>
+      <a href="{% url 'accounts:index' %}" class="btn btn-secondary">Back</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+-----------------------
+
+
+
+{% block ... %}: Djangoの制御構文（テンプレートタグ）。
+{{ ... }}: データ埋め込み用の変数出力。
+
+
+ここで、テンプレートファイルを配置しているディレクトリをsettings.pyに設定します。
+
+-------------------
+project/settings.py
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'], # templatesディレクトリを設定
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+-------------------
+ブラウザから登録フォームを操作できるよう、ルーティングを作成します。
+
+----------------
+project/urls.py
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include("accounts.urls")) # accounts.urls.pyを読み込むための設定を追加
+]
+-------------------
+accountsディレクトリにurls.pyを新規作成し、設定を記述します。
+
+--------------------
+accounts:urls.py
+from django.urls import path
+
+from . import views
+
+app_name = "accounts"
+
+urlpatterns = [
+    path("", views.IndexView.as_view(), name="index"),
+    path('signup/', views.SignupView.as_view(), name="signup"),
+]
+---------------
+開発用サーバーを起動して、ブラウザでhttp://127.0.0.1:8000にアクセスし、Mainページが表示されるか確認します。
+(venv)% python manage.py runserver
+http://127.0.0.1:8000
+
+
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+
+
+
+
+**************
+view.pyで作成した ～Viewクラスの templete_name に渡したhtmlのパスでクラスとhtmlを紐づける。
+
+①get_template_names をオーバーライド:条件に応じてテンプレートを切り替える
+②お手軽対応：template_name を動的に設定
+③対応ケースが多い場合：1つのViewクラスで複数のhtmlにしたい場合は
+　継承させる　Baseクラス＞目的別クラス
+
+
+クラスベースビューへのリクエストがDjangoに届くと、dispatch メソッドが最初に実行されます。
+
+
+###########
+ユーザー登録のフローの検討
+  初期画面（サインアップボタン）
+　ユーザー登録画面（アカウント作成画面）
+　　　（各入力欄）、送信ボタン、戻るボタン(index)
+　ログイン画面
+　ログアウト画面
+必要なフィールドの決定
+画面の決定
+  base.html, index.html, signup.html
+各ページとビューの状態やフローの検討
+　　例）ユーザー作成後ログイン状態にするなど
+　　この処理はViewクラスで処理する？
+***
+models.pyでUserクラスを実装（システム要件、仕様より）
+forms.pyで使用するフィールドとモデルクラス(Userクラス)を決定
+view.pyでFormクラス、テンプレートhtmlを紐づけ
+テンプレートhtmlの作成
+対象の機能（フォルダ）のurlを登録（account/urls.py)
+このURLをProjectフォルダurls.pyにも登録
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

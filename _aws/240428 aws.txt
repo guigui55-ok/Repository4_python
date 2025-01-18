@@ -2366,7 +2366,31 @@ https://qiita.com/__DASHi__/items/268062f0dba0e93170f2
 
 
 
+#################
+240901
+AWSログインできない
 
+https://signin.aws.amazon.com/oauth?redirect_uri=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome%3FhashArgs%3D%2523%26isauthcode%3Dtrue%26sc_icampaign%3Dadp_jp_header_v3_default_202205%26sc_ichannel%3Dha%26sc_icontent%3Dawssm_10926%26sc_iplace%3Dcta%26state%3DhashArgsFromTB_ap-southeast-2_8761435386167500%26trk%3Dha_adp_jp_header_v3_default_202205&client_id=arn%3Aaws%3Asignin%3A%3A%3Aconsole%2Fcanvas&response_type=code&iam_user=true&account=TestUser1&code_challenge=6LqJbkkRYRBR1KacSC8cniQTxedG8mTTGzFymes8Wsk&code_challenge_method=SHA-256&flowStarted=1#
+
+
+E メールアドレス
+utauinu8102@gmail.com
+AWS アカウント名
+necko562
+PW
+Fav_at_aws
+
+
+アカウント名
+necko562
+アカウント ID
+211125549414
+E メール
+utauinu8102@gmail.com
+
+
+https://qiita.com/bezeklik/items/7174992ec267e2c7d10f
+＞メールアドレス間違え（nifty、gmail注意）
 
 
 ######################################################################

@@ -1,0 +1,271 @@
+django-admin startproject project .
+
+settings.pyを編集します。
+
+project/setting.py
+...
+
+ALLOWED_HOSTS = ['*']
+...
+
+
+開発用サーバーを起動してみましょう。
+
+(venv)% python manage.py runserver
+
+
+http://127.0.0.1:8000
+ブラウザでhttp://127.0.0.1:8000にアクセスし、デフォルト画面が表示されたらOKです！
+
+
+カスタムユーザーの作成
+accountsアプリを作成します。
+(venv)% python manage.py startapp accounts
+
+settings.pyのINSTALLED_APPSにaccountsを追加します。
+
+
+...
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'accounts' # 追加
+]
+
+AUTH_USER_MODEL = "accounts.User" # カスタムユーザーを認証用ユーザーとして登録
+
+...
+
+
+カスタムユーザーモデルを作成します。
+
+
+
+*******************
+from django.db import models
+from django.contrib.auth.models import (BaseUserManager,
+                                        AbstractBaseUser,
+                                        PermissionsMixin)
+from django.utils.translation import gettext_lazy as _
+
+
+class UserManager(BaseUserManager):
+    def _create_user(self, email, account_id, password, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, account_id=account_id, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_user(self, email, account_id, password=None, **extra_fields):
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(
+            email=email,
+            account_id=account_id,
+            password=password,
+            **extra_fields,
+        )
+
+    def create_superuser(self, email, account_id, password, **extra_fields):
+        extra_fields['is_active'] = True
+        extra_fields['is_staff'] = True
+        extra_fields['is_superuser'] = True
+        return self._create_user(
+            email=email,
+            account_id=account_id,
+            password=password,
+            **extra_fields,
+        )
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+
+    account_id = models.CharField(
+        verbose_name=_("account_id"),
+        unique=True,
+        max_length=10
+    )
+    email = models.EmailField(
+        verbose_name=_("email"),
+        unique=True
+    )
+    first_name = models.CharField(
+        verbose_name=_("first_name"),
+        max_length=150,
+        null=True,
+        blank=False
+    )
+    last_name = models.CharField(
+        verbose_name=_("last_name"),
+        max_length=150,
+        null=True,
+        blank=False
+    )
+    birth_date = models.DateField(
+        verbose_name=_("birth_date"),
+        blank=True,
+        null=True
+    )
+    is_superuser = models.BooleanField(
+        verbose_name=_("is_superuer"),
+        default=False
+    )
+    is_staff = models.BooleanField(
+        verbose_name=_('staff status'),
+        default=False,
+    )
+    is_active = models.BooleanField(
+        verbose_name=_('active'),
+        default=True,
+    )
+    created_at = models.DateTimeField(
+        verbose_name=_("created_at"),
+        auto_now_add=True
+    )
+    updated_at = models.DateTimeField(
+        verbose_name=_("updateded_at"),
+        auto_now=True
+    )
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'account_id' # ログイン時、ユーザー名の代わりにaccount_idを使用
+    REQUIRED_FIELDS = ['email']  # スーパーユーザー作成時にemailも設定する
+
+    def __str__(self):
+        return self.account_id
+
+**********************
+
+管理画面でユーザー登録を行ってみましょう。
+管理画面でカスタムユーザーの編集をできるよう、admin.pyに設定を追加します。
+
+
+from django.contrib import admin
+from django.contrib.auth.models import Group
+
+from .models import User
+from django.contrib.auth.admin import UserAdmin  # UserAdmin をインポート
+# Django では、UserAdmin は標準的な User モデルの管理画面を提供するためのクラスとして定義されています。
+# このクラスをインポートすることで、Django 管理画面にカスタムユーザーモデルを登録できるようになります。
+
+admin.site.register(User, UserAdmin)  # Userモデルを登録
+admin.site.unregister(Group)  # Groupモデルは不要のため非表示にします
+
+****************
+
+マイグレーションします。
+
+python manage.py makemigrations
+python manage.py migrate
+
+管理画面にログインするため、スーパーユーザーを作成します。
+
+(venv)% python manage.py createsuperuser
+pass, utauinu nifty, pass, pass
+
+
+開発用サーバーを起動します
+
+(venv)% python manage.py runserver
+
+
+http://127.0.0.1:8000/admin
+ブラウザで、http://127.0.0.1:8000/adminにアクセスし、作成したスーパーユーザーアカウントでログインします。
+
+
+**************
+ユーザー登録機能の実装
+
+accountsディレクトリ以下にforms.pyを作成してください。
+
+
+---------------
+accounts/forms.py
+from django.contrib.auth.forms import UserCreationForm
+
+from .models import User
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = (
+            "account_id",
+            "email",
+            "first_name",
+            "last_name",
+            "birth_date",
+        )
+----------------
+
+
+続いて、ビューを作成します。
+---------------
+accounts:view.py
+from django.contrib.auth import login, authenticate
+from django.views.generic import TemplateView, CreateView
+from django.urls import reverse_lazy
+from .forms import SignUpForm
+
+
+class IndexView(TemplateView):
+    """ ホームビュー """
+    template_name = "index.html"
+
+
+class SignupView(CreateView):
+    """ ユーザー登録用ビュー """
+    form_class = SignUpForm # 作成した登録用フォームを設定
+    template_name = "accounts/signup.html" 
+    success_url = reverse_lazy("accounts:index") # ユーザー作成後のリダイレクト先ページ
+
+    def form_valid(self, form):
+        # ユーザー作成後にそのままログイン状態にする設定
+        response = super().form_valid(form)
+        account_id = form.cleaned_data.get("account_id")
+        password = form.cleaned_data.get("password1")
+        user = authenticate(account_id=account_id, password=password)
+        login(self.request, user)
+        return response
+----------------
+
+
+テンプレートを作成します。
+manage.pyと同じ階層にtemplatesディレクトリを作成し、その中にテンプレートファイルを配置します。
+
+---------------
+
+
+今回は、ログインの有無で、トップページの表示内容が異なるように実装します。
+具体的には、以下の内容を表示します。
+
+状態	タイトル	コンテンツ
+非ログイン時	Main	SignUp, Loginボタン表示
+ログイン時	MyPage	ユーザー情報表示
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

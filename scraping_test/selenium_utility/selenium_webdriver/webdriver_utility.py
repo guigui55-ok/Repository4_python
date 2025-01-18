@@ -102,21 +102,25 @@ class WebElementUtility():
             return ''
     
     def get_center_position(self):
+        """ center_x, center_y """
         x,y = self.get_position()
         width ,height = self.get_size()
         c_x = x + (width//2)
         c_y = y + (height//2)
         return c_x,c_y
     def get_rect(self):
+        "[[x,y],[width,height]]"
         if self.__is_none(): return
         x,y = self.get_position()
         width ,height = self.get_size()
         return [[x,y],[width,height]]
     def get_size(self):
+        """ width, height """
         width = self.element.size['width']
         height = self.element.size['height']
         return width,height
     def get_position(self):
+        """ x, y """
         x = self.element.location['x']
         y = self.element.location['y']
         return x,y
@@ -229,6 +233,11 @@ class WebDriverUtility():
         return element
 
     def click_point(self, x, y):
+        #/
+        # Window外の座標を指定すると以下のエラーとなる
+        # 例外が発生しました: MoveTargetOutOfBoundsException
+        #Message: move target out of bounds  (Session info: chrome=128.0.6613.84)
+        #/
         # ActionChainsを使用して座標を指定し、クリックを実行
         ActionChains(self.driver).move_by_offset(x, y).click().perform()
         # 次のアクションのためにマウスを元の位置に戻す
@@ -376,24 +385,18 @@ class WebDriverUtility():
     def click_by_position(self,x, y) -> None:
         # from selenium.webdriver.common.action_chains import ActionChains
         actions = ActionChains(self.driver)
-
-        # MOVE TO TOP_LEFT (`move_to_element` will guide you to the CENTER of the element)
-        whole_page = self.driver.find_element_by_tag_name("html")
-        # whole_page = self.driver.find_element_by_tag_name("body")
+        whole_page = self.driver.find_element(By.TAG_NAME, "html")
         rect = WebElementUtility(whole_page).get_rect()
         print(rect)
         actions.move_to_element_with_offset(whole_page, 0, 0)
-
         # MOVE TO DESIRED POSITION THEN CLICK
         actions.move_by_offset(x, y)
         actions.click()
-
         actions.perform()
 
     def click_by_position_(self,x,y):
         actions = ActionChains(self.driver)
-        # el = self.driver.find_element_by_tag_name('body')
-        el = self.driver.find_element_by_tag_name('html')
+        el = self.driver.find_element(By.TAG_NAME, "html")
         rect = WebElementUtility(el).get_rect()
         print(rect)
         actions.move_to_element_with_offset(el, x, y).click().perform()
@@ -412,6 +415,10 @@ class WebDriverUtility():
         self.driver.switch_to.window(self.driver.window_handles[0])
 
     def change_tab(self,num):
+        #/
+        # 別の画面や、違うウィンドウがアクティブになっていると以下のエラーとなる
+        #例外が発生しました: IndexError:list index out of range
+        #/
         #前のタブに切り替え
         self.driver.switch_to.window(self.driver.window_handles[num])
     
@@ -539,9 +546,6 @@ class WebDriverUtility():
         # get width and height of the page
         # w = driver.execute_script("return document.body.scrollWidth;")
         # h = driver.execute_script("return document.body.scrollHeight;") # Windowがリサイズされる
-        # 231123 
-        # AttributeError: 'WebDriver' object has no attribute 'find_element_by_tag_name'
-        # html_el = driver.find_element_by_tag_name('body') 
         # kw_search = browser.find_element(By.CSS_SELECTOR, "#sbtc > div > div.a4bIc > input")# example
         html_el = driver.find_element(By.CSS_SELECTOR, "body")
         w = html_el.size['width']

@@ -3,6 +3,7 @@ NEW_LINE = '\n'
 
 import datetime
 from lib2to3.pgen2.token import NEWLINE
+from pathlib import Path
 
 from matplotlib.pyplot import table
 class MovieLinkInfo():
@@ -149,17 +150,21 @@ class MovieLinkInfo():
         print('time = ' + str(self.time))
         return
     def replace_url(self,url:str):
-        path = r'C:\Users\OK\source\repos\Test\movie_data\vtest_rep_bef.txt'
+        text_dir_path = Path(r'C:\Users\OK\source\repos\test_media_files\movie_data')
+        path = text_dir_path.joinpath('vtest_rep_bef.txt')
         with open(path,'r',encoding='utf-8')as f:
             bef = f.read()
-        path = r'C:\Users\OK\source\repos\Test\movie_data\vtest_rep_aft.txt'
+        # path = r'C:\Users\OK\source\repos\Test\movie_data\vtest_rep_aft.txt'
+        path = text_dir_path.joinpath('vtest_rep_aft.txt')
         with open(path,'r',encoding='utf-8')as f:
             aft = f.read()
         url = url.replace(bef,aft)
         return url
     def get_movie_id(self,url:str):
         ###
-        path = r'C:\Users\OK\source\repos\Test\movie_data\vtest.txt'
+        text_dir_path = Path(r'C:\Users\OK\source\repos\test_media_files\movie_data')
+        # path = r'C:\Users\OK\source\repos\Test\movie_data\vtest.txt'
+        path = text_dir_path.joinpath('vtest_rep_aft.txt')
         with open(path,'r',encoding='utf-8')as f:
             buf = f.read()
         ###

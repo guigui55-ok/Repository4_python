@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webdriver import WebElement
 from html_log.html_logger import HtmlLogger as WdLogger
 import os
+from selenium.webdriver.common.by import By
 
 IMAGE_TAG_EDGE_GRAY = 'log-image-gray-edge'
 
@@ -52,7 +53,7 @@ class TestFlaskDriver():
         path = str(pathlib.Path(__file__).parent.joinpath(file_name))
         # ファイルを選択するボタンを取得して、ファイルパスを入力
         value = 'select-file-button'
-        el = self.chrome.driver.find_element_by_class_name(value)
+        el = self.chrome.driver.find_element(By.CLASS_NAME, value)
         self.chrome.timer.wait()
         msg = 'send file path = {}'.format(path)
         self.logger.add_log(msg)
@@ -68,7 +69,7 @@ class TestFlaskDriver():
             ss_path,css_add_class_name=IMAGE_TAG_EDGE_GRAY)
 
         value = 'styled'
-        el = self.chrome.driver.find_element_by_class_name(value)
+        el = self.chrome.driver.find_element(By.CLASS_NAME, value)
         el.click()
         self.chrome.timer.wait()
         # search_bar = self.chrome.driver.find_element_by_name("q")

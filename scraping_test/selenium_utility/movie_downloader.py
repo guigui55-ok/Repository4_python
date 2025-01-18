@@ -334,6 +334,8 @@ class MovieDownloader():
             # dounload main
             #########
             self.wait_not_click_download_button = WAIT_NOT_CLICK_DOWNLOAD_BUTTON
+            #/
+            # ここでダウンロードサイト別にオブジェクトをスイッチする
             is_downloading = self.download_movie(url, path)
             if is_downloading==ConstDownloadResult.NOTHING:
                 self.move_link_file_when_nothing_movie(path)
@@ -472,6 +474,7 @@ class MovieDownloader():
             downloader:YouTube = YouTube(chrome_driver_path, self.logger)
         elif url.startswith(get_vd_site_url()) or url.startswith(get_vd_site_url2()):
             downloader:VdSite = VdSite(chrome_driver_path, self.logger)
+            downloader.download_dir_path = self.observer.dir_path
         else:
             msg = 'ERROR: 未実装のURL種類  url={}'.format(url)
             self.add_log(msg)
@@ -601,6 +604,7 @@ def main():
     # path = r'C:\ZMyFolder\newDoc\Memo2\240522 el mi'
     # path = r'C:\ZMyFolder\newDoc\Memo2\240512 el you'
     path = r'C:\ZMyFolder\newDoc\Memo2\240113 you el'
+    path = r'C:\Users\OK\Desktop\240824'
     if not Path(path).exists():
         raise FileNotFoundError(path)
     #/

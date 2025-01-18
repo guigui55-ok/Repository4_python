@@ -1,0 +1,74 @@
+https://avidemux.sourceforge.net/
+
+
+C:\Program Files\Avidemux 2.8 VC++ 64bits
+
+
+
+1. Avidemux のスクリプトファイルを作成
+Avidemux には、GUIから編集手順を記録し、Python スクリプト (.py) ファイルにエクスポートする機能があります。
+まず GUI で編集を行い、スクリプトとして保存することで自動化の土台を作ります。
+
+Avidemux を開き、動画ファイルをロード。
+必要な編集（カット、エンコード設定など）を行います。
+メニューの「ファイル」→「プロジェクトをスクリプトとして保存」を選択し、Python スクリプトを保存します。
+
+
+
+avidemux3_cli --load input.mp4 --start <開始秒> --end <終了秒> --save output_cut.mp4 --output-format MP4
+
+
+1. 基本的なコマンドライン構文
+Avidemuxのコマンドラインは以下のように記述します。
+
+bash
+コードをコピーする
+avidemux3_cli --load <入力ファイル> --save <出力ファイル> --output-format <フォーマット>
+--load <入力ファイル>：処理対象の動画ファイルを指定します。
+--save <出力ファイル>：変換後の動画ファイルの保存先とファイル名を指定します。
+--output-format <フォーマット>：出力フォーマットを指定します（例: MP4, AVI）。
+2. ビデオ・オーディオコーデックの設定
+--video-codec <コーデック名>: ビデオのコーデックを指定します（例: x264）。
+--audio-codec <コーデック名>: オーディオのコーデックを指定します（例: AAC）。
+たとえば、MP4形式に変換してH.264ビデオコーデックを使う場合、以下のようになります。
+
+bash
+コードをコピーする
+avidemux3_cli --load input.avi --video-codec x264 --audio-codec AAC --save output.mp4 --output-format MP4
+3. 動画のカット
+指定したタイムスタンプで動画をカットするには、--startと--endオプションを使います。
+
+bash
+コードをコピーする
+avidemux3_cli --load input.mp4 --start <開始秒> --end <終了秒> --save output_cut.mp4 --output-format MP4
+例として、動画の最初の30秒間を残してカットしたい場合、次のように記述します：
+
+bash
+コードをコピーする
+avidemux3_cli --load input.mp4 --start 0 --end 30 --save output_cut.mp4 --output-format MP4
+4. バッチスクリプトでの自動処理
+複数の動画ファイルを一括で変換・編集するには、バッチスクリプトやシェルスクリプトを作成すると便利です。
+
+Windowsのバッチスクリプト例
+batch
+コードをコピーする
+@echo off
+for %%f in (*.avi) do (
+    avidemux3_cli --load "%%f" --video-codec x264 --audio-codec AAC --save "%%~nf_output.mp4" --output-format MP4
+)
+Linuxシェルスクリプト例
+bash
+コードをコピーする
+#!/bin/bash
+for file in *.avi; do
+    avidemux3_cli --load "$file" --video-codec x264 --audio-codec AAC --save "${file%.*}_output.mp4" --output-format MP4
+done
+5. 参考情報
+さらに詳細なコマンドオプションについては、公式のコマンドライン使用ガイドを参照すると、細かいオプションの意味や活用例が記載されています。
+
+これらの手順で、Avidemuxを使ったバッチ処理の動画変換が実現できるでしょう。
+
+
+
+Avidemuxのキュー機能とavidemux_jobs.exe
+

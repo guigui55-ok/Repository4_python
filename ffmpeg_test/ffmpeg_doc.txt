@@ -1,0 +1,3 @@
+https://qiita.com/studio_haneya/items/a2a6664c155cfa90ddcf
+
+pip install ffmpeg-python

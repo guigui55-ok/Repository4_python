@@ -1,0 +1,117 @@
+C:\Users\OK\source\repos\Repository4_python\django_test\login_sys_a>python manage.py startapp accounts
+
+C:\Users\OK\source\repos\Repository4_python\django_test\login_sys_a> python manage.py makemigrations
+SystemCheckError: System check identified some issues:
+
+ERRORS:
+<class 'django.contrib.auth.admin.UserAdmin'>: (admin.E033) The value of 'ordering[0]' refers to 'username', which is not a field of 'accounts.User'.
+<class 'django.contrib.auth.admin.UserAdmin'>: (admin.E108) The value of 'list_display[0]' refers to 'username', which is not a callable, an attribute of 'UserAdmin', or an attribute or method on 'accounts.User'.
+
+***************
+
+このエラーは、Djangoのカスタムユーザーモデルを作成した場合に発生する一般的な問題です。エラーの原因は、`UserAdmin` クラスの `ordering` や `list_display` が、カスタムユーザーモデルで存在しない `username` フィールドに依存していることです。
+
+以下の手順で解決できます。
+
+---
+
+### 解決方法
+
+1. **カスタムユーザーモデルのフィールドを確認**
+   - `models.py` のカスタムユーザーモデル (`accounts.User` など) を確認してください。
+   - `username` フィールドがない場合、代わりに識別用として使用するフィールド (例: `email`) を特定します。
+
+2. **`UserAdmin` をカスタマイズ**
+   - `admin.py` で `UserAdmin` をカスタマイズして、`ordering` や `list_display` で `username` を参照しないように変更します。
+
+以下は修正例です。
+
+### 修正後のコード
+
+#### `admin.py`
+```python
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .models import User
+
+class UserAdmin(BaseUserAdmin):
+    # 'username' の代わりに 'email' を使用
+    ordering = ['email']
+    list_display = ['email', 'is_staff', 'is_active']  # 必要なフィールドを指定
+
+    # 必要に応じて追加の設定を行う
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active'),
+        }),
+    )
+
+admin.site.register(User, UserAdmin)
+```
+
+---
+
+### 詳細解説
+
+- **`ordering`**
+  - 管理画面でデフォルトの並び順を設定するオプションです。`email` フィールドを使用するように変更しました。
+- **`list_display`**
+  - 管理画面のリストビューに表示するフィールドを指定します。存在するフィールド (`email`, `is_staff`, `is_active` など) を指定してください。
+- **`fieldsets`**
+  - 管理画面の詳細表示でのレイアウトを定義します。
+- **`add_fieldsets`**
+  - 新規ユーザー作成フォームのレイアウトを定義します。
+
+---
+
+### 追加確認
+
+1. **カスタムユーザーモデルの定義を確認**
+   - `AbstractUser` または `AbstractBaseUser` を継承している場合、フィールドの定義に注意してください。
+
+#### 例: `models.py` のカスタムユーザーモデル
+```python
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
+
+class User(AbstractBaseUser):
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'  # ログインに使用するフィールド
+    REQUIRED_FIELDS = []  # スーパーユーザー作成時に追加で必要なフィールド
+```
+
+2. **データベースをリセット**
+   - マイグレーションファイルを削除し、以下を実行してリセットする必要がある場合があります。
+     ```bash
+     python manage.py makemigrations
+     python manage.py migrate
+     ```
+
+この修正でエラーが解消されるはずです。さらにサポートが必要であれば、教えてください！
+
+
