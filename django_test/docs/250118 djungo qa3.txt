@@ -1,0 +1,28 @@
+https://qiita.com/ryo-keima/items/e6ce42bb4c11432ea829
+上記のURLの以下の手順について質問です。
+-------s
+手順：
+テンプレートを作成します。
+manage.pyと同じ階層にtemplatesディレクトリを作成し、その中にテンプレートファイルを配置します。
+
+
+現在の私のフォルダ構成は以下のようになっています。
+[django project root]
+  L accounts
+        __init__.py
+        admin.py
+        apps.py
+        forms.py
+        models.py
+        tests.py
+        view.py
+        views.py
+    L migrations
+        __init__.py
+        0001_initial.py
+  L project
+        __init__.py
+        asgi.py
+        settings.py
+        urls.py
+        wsgi.py

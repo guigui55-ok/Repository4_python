@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts' # 追加
+    # 'accounts' # 追加
+    'accounts',  # フルパスでアプリ名を追加
 ]
 
 # 追加

@@ -95,5 +95,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'account_id' # ログイン時、ユーザー名の代わりにaccount_idを使用
     REQUIRED_FIELDS = ['email']  # スーパーユーザー作成時にemailも設定する
 
+    class Meta:
+        app_label = 'accounts'  # AppConfigのラベルと一致させる
+
     def __str__(self):
         return self.account_id

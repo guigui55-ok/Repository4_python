@@ -1,0 +1,1872 @@
+*****
+input_file = J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023年
+01月21日19時32分51秒(84336008).ts
+Done.
+PS C:\Users\OK\source\repos\Repository4_python\avidemux_test>  c:; cd 'c:\Users\OK\source\repos\Repository4_python\avidemux_test'; & 'c:\Program Files\Python\Python310\python.exe' 'c:\Users\OK\.vscode\extensions\ms-python.debugpy-2024.12.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher' '59990' '--' 'c:\Users\OK\source\repos\Repository4_python\avidemux_test\avidemux_sample--' 'c:\Users\OK\source\repos\Repository4_python\avidemux_test\avidemux_sample2.py' 
+*****
+input_file = J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023年
+01月21日19時32分51秒(84336008).ts
+01月21日19時32分51秒(84336008).ts
+'avidemux3_cli' は、内部コマンドまたは外部コマンド、
+操作可能なプログラムまたはバッチ ファイルとして認識されていません。
+Done.
+PS C:\Users\OK\source\repos\Repository4_python\avidemux_test>  c:; cd 'c:\Users\OK\source\repos\Repository4_python\avidemux_test'; & 'c:\Program Files\Python\Python310\python.exe' 'c:\Users\OK\.vscode\extensions\ms-python.debugpy-2024.12.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher' '60008' '--' 'c:\Users\OK\source\repos\Repository4_python\avidemux_test\avidemux_sample2.py' 
+*****
+input_file = J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023年
+01月21日19時32分51秒(84336008).ts
+Using C:\Users\OK\AppData\Roaming\avidemux\ as base directory for prefs, jobs, etc.
+Using C:\Users\OK\AppData\Local\avidemux\ as log directory.
+*************************
+  Avidemux v2.8.1
+*************************
+ http://www.avidemux.org
+ Code      : Mean, JSC, Grant Pedersen,eumagga0x2a
+ GFX       : Nestor Di, nestordi@augcyl.org
+ Design    : Jakub Misak
+ FreeBSD   : Anish Mistry, amistry@am-productions.biz
+ Audio     : Mihail Zenkov
+ Mac OS X  : Kuisathaverat, Harry van der Wolf
+ Win32     : Grant Pedersen
+
+Build Target: Microsoft Windows (x86-64)
+User Interface: CLI
+Operating System: Microsoft Windows (6.2.9200; 64-bit)
+Time: Sun Oct 27 09:45:21 2024
+
+0: avidemux_cli
+1: --load
+2: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023陝ｷ・ｴ01隴帙
+・1隴鯉ｽ･19隴弱・2陋ｻ繝ｻ1驕倥・84336008).ts
+3: --start
+4: 100
+5: --end
+6: 120
+7: --video-codec
+8: x264
+9: --audio-codec
+10: AAC
+11: --save
+12: J:\avidemux_files\avidemux_output\_ss 84336008ss013 2023陝ｷ・ｴ01隴帙・1隴 
+鯉ｽ･19隴弱・2陋ｻ繝ｻ1驕倥・84336008).ts
+13: --output-format
+14: MP4
+
+Initialising prefs
+[preferences::load] 00:45:21-237 Loading prefs from C:\Users\OK\AppData\Roaming\avidemux\config3
+[preferences::load] 00:45:21-238 Preferences found and loaded
+[CpuCaps] Checking CPU capabilities
+                MMX detected
+                MMXEXT detected
+                SSE detected
+                SSE2 detected
+                SSE3 detected
+                SSSE3 detected
+                SSE4 detected
+                SSE42 detected
+                AVX detected
+                AVX2 detected
+[CpuCaps::init] 00:45:21-240 [CpuCaps] End of CPU capabilities check (cpuCaps: 0x00003de6, cpuMask: 0xffffffff)
+[CpuCaps::setMask] 00:45:21-241 [CpuCaps] Setting mask to 0x7fffffff
+[CpuCaps::setMask] 00:45:21-241 [CpuCaps] Forcing lav cpu flags 0x0000c3db    
+Initializing WinSock
+WinSock ok
+Initializing Dithering tables
+[UI Toolkit] Running version 02:00
+[Script] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines
+[Script] Tinypy INFO - Registering group addons
+[Script] Tinypy INFO -  Registering: help
+[Script] Tinypy INFO -  Registering: get_folder_content
+[Script] Tinypy INFO -  Registering: get_file_size
+[Script] Tinypy INFO -  Registering: basename
+[Script] Tinypy INFO -  Registering: dirname
+[Script] Tinypy INFO -  Registering: splitext
+[Script] Tinypy INFO - Registering class: Avidemux
+[Script] Tinypy INFO - Registering class: Editor
+[Script] Tinypy INFO - Registering class: Gui
+[Script] Tinypy INFO - Registering class: DFToggle
+[Script] Tinypy INFO - Registering class: DFInteger
+[Script] Tinypy INFO - Registering class: DFMenu
+[Script] Tinypy INFO - Registering class: DFTimeStamp
+[Script] Tinypy INFO - Registering class: DialogFactory
+[Script] Tinypy INFO - Registering group test
+[Script] Tinypy INFO -  Registering: testAssert
+[Script] Tinypy INFO -  Registering: testCrash
+[Script] Tinypy INFO -  Registering: testSub
+[Script] Tinypy INFO - Registering static class os
+[Script] Tinypy INFO -  Registering: environ
+[Script] Tinypy INFO - Python initialised
+[Script] loaded C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines\libADM_script_tinyPy.dll
+[Script] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines/cli
+[buildDirectoryContent] 00:45:21-253 Cannot list content of C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines/cli
+[ADM_ad_loadPlugins] 00:45:21-253 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDecoder
+[tryLoadingAudioPlugin] 00:45:21-255 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_Mad.dll, desc: LibMad decoder plugin for avidemux (c) Mean 
+
+[tryLoadingAudioPlugin] 00:45:21-257 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_a52.dll, desc: LibAC3 decoder plugin for avidemux (c) Mean 
+
+[tryLoadingAudioPlugin] 00:45:21-258 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_alaw.dll, desc: A-law decoder plugin for avidemux (c) Mean 
+
+[tryLoadingAudioPlugin] 00:45:21-260 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ima_adpcm.dll, desc: IMA ADPCM decoder plugin for avidemux 
+(c) Mean
+
+[tryLoadingAudioPlugin] 00:45:21-262 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_lav.dll, desc: Lavcodec decoder plugin for avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 00:45:21-264 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ms_adpcm.dll, desc: Ulaw decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 00:45:21-266 [ADM_ad_plugin] Plugin loaded version 1.0.0, name libADM_ad_opencore_amrnb.dll, desc: opencore-amrnb decoder plugin for Avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 00:45:21-267 [ADM_ad_plugin] Plugin loaded version 1.0.0, name libADM_ad_opencore_amrwb.dll, desc: opencore-amrwb decoder plugin for Avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 00:45:21-270 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_opus.dll, desc: libOpus decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 00:45:21-272 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ulaw.dll, desc: Ulaw decoder plugin for avidemux (c) Mean  
+
+[tryLoadingAudioPlugin] 00:45:21-275 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_vorbis.dll, desc: libVorbis decoder plugin for avidemux (c) Mean
+
+[ADM_ad_loadPlugins] 00:45:21-276 Scanning done, found 11 audio decoders      
+[ADM_av_loadPlugins] 00:45:21-276 [ADM_av_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDevices
+[ADM_AudioDevices::ADM_AudioDevices] 00:45:21-277 Name :Win32 ApiVersion :2   
+[tryLoadingFilterPlugin] 00:45:21-277 [Filters] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDevices\libADM_av_win32.dll as  Win32 audio device (c) mean
+[ADM_av_loadPlugins] 00:45:21-278 [ADM_av_plugin] Scanning done
+[ADM_ae_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders
+[AudioEncoder] Loaded Aften version 01.00.00 wavTag :0x2000
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_aften.dll as  Aften AC3 encoder plugin Mean/Gruntster 2008
+[AudioEncoder] Loaded FDK_AAC version 01.00.00 wavTag :0xff
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_fdk_aac.dll as  FDK AAC encoder plugin Mean 2016 
+[AudioEncoder] Loaded Lame version 01.00.00 wavTag :0x55
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lame.dll as  Lame MP3 encoder plugin Mean 2009   
+[AudioEncoder] Loaded LavAAC version 01.00.00 wavTag :0xff
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_aac.dll as  AAC LavCodec encoder plugin Mean 
+2008/2016
+[AudioEncoder] Loaded LavAC3 version 01.00.00 wavTag :0x2000
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_ac3.dll as  AC3 LavCodec encoder plugin Mean 
+2008/2009
+[AudioEncoder] Loaded LavMP2 version 01.00.00 wavTag :0x50
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_mp2.dll as  MP2 LavCodec encoder plugin Mean 
+2008/2009
+[AudioEncoder] Loaded Opus version 01.00.00 wavTag :0x26ae
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_opus.dll as  Opus encoder plugin Mean 2017       
+[AudioEncoder] Loaded PCM version 01.00.00 wavTag :0x1
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_pcm.dll as  PCM encoder plugin Mean 2008
+[AudioEncoder] Loaded TwoLame version 01.00.00 wavTag :0x50
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_twolame.dll as  TwoLame MP2 encoder plugin Mean 2008
+[AudioEncoder] Loaded Vorbis version 01.00.00 wavTag :0x676f
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_vorbis.dll as  Vorbis encoder plugin Mean 2008   
+[ADM_ae_plugin] Scanning done
+[ADM_dm_loadPlugins] 00:45:21-296 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers
+[Demuxer]Name :asf ApiVersion :3 Description :asf/wmv demuxer plugin (c) Mean 
+2007/2009
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_asf.dll as  asf/wmv demuxer plugin (c) Mean 2007/2009     
+[Demuxer]Name :avs ApiVersion :3 Description :avsProxy demuxer plugin (c) Mean 2007/2010
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_avsproxy.dll as  avsProxy demuxer plugin (c) Mean 2007/2010
+[Demuxer]Name :flv ApiVersion :3 Description :flash demuxer plugin (c) Mean 2007/2007
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_flv.dll as  flash demuxer plugin (c) Mean 2007/2007       
+[Demuxer]Name :mkv ApiVersion :3 Description :Matroska demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_matroska.dll as  Matroska demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :mp4 ApiVersion :3 Description :Mp4/Mov/3GP demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_mp4.dll as  Mp4/Mov/3GP demuxer plugin (c) Mean 2007/2008 
+[Demuxer]Name :MXF ApiVersion :3 Description :MXF demuxer plugin (c) Mean 2010[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_mxf.dll as  MXF demuxer plugin (c) Mean 2010
+[Demuxer]Name :navs ApiVersion :3 Description :native avs demuxer plugin (c) Mean 2018
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_nativeAvs.dll as  native avs demuxer plugin (c) Mean 2018 
+[Demuxer]Name :openDml ApiVersion :3 Description :AVI/OpenDML demuxer plugin (c) Mean 2007/2007
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_opendml.dll as  AVI/OpenDML demuxer plugin (c) Mean 2007/2007
+[Demuxer]Name :picture ApiVersion :3 Description :Picture demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_pic.dll as  Picture demuxer plugin (c) Mean 2007/2008     
+[Demuxer]Name :ps ApiVersion :3 Description :mpeg ps demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_ps.dll as  mpeg ps demuxer plugin (c) Mean 2007/2008      
+[Demuxer]Name :ts ApiVersion :3 Description :mpeg ts demuxer plugin (c) Mean 2007/2009
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_ts.dll as  mpeg ts demuxer plugin (c) Mean 2007/2009      
+[Demuxer]Name :vs ApiVersion :3 Description :VapourSynth demuxer plugin (c) Mean 2015
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_vapoursynth.dll as  VapourSynth demuxer plugin (c) Mean 2015
+[ADM_dm_loadPlugins] 00:45:21-316 Demuxer plugin : ts, priority :90
+[ADM_dm_loadPlugins] 00:45:21-316 Demuxer plugin : avs, priority :50
+[ADM_dm_loadPlugins] 00:45:21-316 Demuxer plugin : flv, priority :50
+[ADM_dm_loadPlugins] 00:45:21-316 Demuxer plugin : mkv, priority :50
+[ADM_dm_loadPlugins] 00:45:21-316 Demuxer plugin : mp4, priority :50
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : MXF, priority :50
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : navs, priority :50
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : openDml, priority :50      
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : picture, priority :50      
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : asf, priority :50
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : vs, priority :50
+[ADM_dm_loadPlugins] 00:45:21-317 Demuxer plugin : ps, priority :10
+[ADM_dm_loadPlugins] 00:45:21-317 Scanning done, 12 demuxers found
+[ADM_mx_loadPlugins] 00:45:21-317 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers
+[Muxer]Name :AVI ApiVersion :9 Description :AVI muxer plugin (c) Mean 2008    
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_avi.dll as  AVI muxer plugin (c) Mean 2008
+[Muxer]Name :dummy ApiVersion :9 Description :dummy2 muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_dummy.dll as  dummy2 muxer plugin (c) Mean 2008
+[Muxer]Name :ffPS ApiVersion :9 Description :ffMpeg PS muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_ffPS.dll as  ffMpeg PS muxer plugin (c) Mean 2009
+[Muxer]Name :ffTS ApiVersion :9 Description :ffMpeg TS muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_ffTS.dll as  ffMpeg TS muxer plugin (c) Mean 2009
+[Muxer]Name :FLV ApiVersion :9 Description :FLV muxer plugin (c) Mean 2008    
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_flv.dll as  FLV muxer plugin (c) Mean 2008
+[Muxer]Name :MKV ApiVersion :9 Description :Matroska muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mkv.dll as  Matroska muxer plugin (c) Mean 2009
+[Muxer]Name :MOV ApiVersion :9 Description :MOV muxer plugin (c) Mean 2009    
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mov.dll as  MOV muxer plugin (c) Mean 2009
+[Muxer]Name :MP4 ApiVersion :9 Description :MP4 muxer plugin (c) Mean 2009    
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mp4.dll as  MP4 muxer plugin (c) Mean 2009
+[Muxer]Name :RAW ApiVersion :9 Description :RAW muxer plugin (c) Mean 2008    
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_raw.dll as  RAW muxer plugin (c) Mean 2008
+[Muxer]Name :WEBM ApiVersion :9 Description :WebM muxer plugin (c) Mean 2009  
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_webm.dll as  WebM muxer plugin (c) Mean 2009
+[ADM_mx_plugin] Scanning done
+[ADM_mx_loadPlugins] 00:45:21-334 Scanning done, 10 muxers found
+[ADM_vd6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoDecoders
+[videoDecoder6]Name :aom ApiVersion :1 Description :Decoder using libaom (c) mean 2010 / eumagga0x2a 2019
+[VideoDecoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoDecoders\libADM_vd_aom.dll as  Decoder using libaom (c) mean 2010 / eumagga0x2a 2019
+[ADM_vd6_plugin] Scanning done
+[ADM_ve6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders
+[videoEncoder6]Name :ffDv ApiVersion :7 Description :Simple ffmpeg based DV Encoder (c) 2013 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffDv.dll as  Simple ffmpeg based DV Encoder (c) 
+2013 Mean
+[videoEncoder6]Name :ffFlv1 ApiVersion :7 Description :Simple ffmpeg based Flv1 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffFlv1.dll as  Simple ffmpeg based Flv1 Encoder 
+(c) 2009 Mean
+[videoEncoder6]Name :ffMpeg2 ApiVersion :7 Description :Simple ffmpeg based Mpeg2 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffMpeg2.dll as  Simple ffmpeg based Mpeg2 Encoder (c) 2009 Mean
+[videoEncoder6]Name :ffNvEncH264 ApiVersion :7 Description :Nvidia hw encoder 
+[nvCheckDll] 00:45:21-346        checking nvcuda.dll-> 0
+[nvEncProbe] 00:45:21-347 Cannot load cuda dll
+C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffNvencH264.dll:ProbingFailed
+[videoEncoder6]Name :ffNvEncHEVC ApiVersion :7 Description :Nvidia hw encoder 
+[nvCheckDll] 00:45:21-350        checking nvcuda.dll-> 0
+[nvEncProbe] 00:45:21-350 Cannot load cuda dll
+C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffNvencHEVC.dll:ProbingFailed
+[videoEncoder6]Name :FFV1 ApiVersion :7 Description :FFV1 (c) 2021 szlldm
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffv1.dll as  FFV1 (c) 2021 szlldm
+[videoEncoder6]Name :HUFFYUV ApiVersion :7 Description :FF Huffyuv (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_huff.dll as  FF Huffyuv (c) 2009 Mean
+[videoEncoder6]Name :Mjpeg ApiVersion :7 Description :Simple jpeg Encoder (c) 
+2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_jpeg.dll as  Simple jpeg Encoder (c) 2009 Mean  
+[videoEncoder6]Name :null ApiVersion :7 Description :Null Encoder (c) 2010 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_null.dll as  Null Encoder (c) 2010 Mean
+[videoEncoder6]Name :utvideo ApiVersion :7 Description :Ut Video (c) 2020 Mean[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_utvideo.dll as  Ut Video (c) 2020 Mean
+[videoEncoder6]Name :vp9 ApiVersion :7 Description :libvpx based VP9 Encoder  
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_vp9.dll as  libvpx based VP9 Encoder
+[videoEncoder6]Name :x264 ApiVersion :7 Description :x264 based mpeg4 AVC Encoder (c) 2010 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_x264_other.dll as  x264 based mpeg4 AVC Encoder 
+(c) 2010 Mean/Gruntster
+[videoEncoder6]Name :x265 ApiVersion :7 Description :x265 based HEVC Encoder (c) 2014 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_x265_other.dll as  x265 based HEVC Encoder (c) 2014 Mean/Gruntster
+[videoEncoder6]Name :xvid4 ApiVersion :7 Description :Xvid4 based mpeg4 Encoder (c) 2010 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_xvid4.dll as  Xvid4 based mpeg4 Encoder (c) 2010 Mean/Gruntster
+[videoEncoder6]Name :YV12Encoder ApiVersion :7 Description :Simple YV12 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_yv12.dll as  Simple YV12 Encoder (c) 2009 Mean  
+[ADM_ve6_plugin] Scanning done
+[ADM_ve6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders/cli
+[buildDirectoryContent] 00:45:21-373 Cannot list content of C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders/cli
+[ADM_ve6_plugin] Scanning done
+[ADM_vf_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoFilters
+[parseOneFolder] 00:45:21-374 Feature Mask = 0x0
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name dgbob/dgbob
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name aarotate/Arbitrary Rotate   
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name addBorder/Add Borders       
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name admIvtc/ADM ivtc.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name AsciiView/Ascii View        
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name black/Black
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blend/Blend Frames
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name changeFps/Change FPS        
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorYuv/Avisynth color filter.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name decimateFrame/Decimate      
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name MplayerDenoise3D/Mplayer Denoise 3D
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name MplayerDenoise3DHQ/Mplayer Denoise 3D HQ
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name dummy/Dummy
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeTo/Fade
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeToBlack/Fade to black   
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Gaussian/Gaussian convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name hzstackfield/Horizontal Stack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name ivtcRemover/Remove IVTC dupe.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name kerndelDeint/Kernel Deint.  
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name largeMedian/Large Median (5x5).
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lavdeint/Libavdec Deinterlacers
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lumaonly/GreyScale
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Mean/Mean convolution.      
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Median/Median convolution.  
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name mergefields/Merge Fields    
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name invplane/Negative
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name printInfo/PrintInfo
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name rplane/Remove  Plane        
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name resampleFps/Resample FPS    
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name rotate/Rotate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name SeparateFields/Separate Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Sharpen/Sharpen convolution.[ADM_vf_plugin] Plugin loaded version 1.0.1, name ssa/SSA/ASS/SRT
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name stackField/Stack Fields     
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name stillimage/Still Image      
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name swapUV/Swap UV
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name unstackField/Unstack Fields 
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name yadif/Yadif
+[ADM_vf_plugin] Scanning done, found 38 video filters so far
+[parseOneFolder] 00:45:21-424 Feature Mask = 0x0
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name crop/Crop
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name hue/Mplayer Hue
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name zoom/Zoom
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name analyzer/Analyzer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artCartoon/Cartoon
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artCharcoal/Charcoal / Chalkboard
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artChromaHold/Chroma Hold   
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artChromaKey/Chroma Key     
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artColorEffect/Color Effect 
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artDynThreshold/Dynamic Threshold
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artGrid/Grid
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artMirror/Mirror
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artPixelize/Pixelize        
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artPosterize/Posterize      
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artVHS/VHS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artVignette/Vignette        
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blackenBorder/Blacken Borders
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blur/Blur
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name chromashift/ChromaShift     
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorBalance/Color balance
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorTemp/Color temperature 
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name contrast/Contrast
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name cubicLUT/3D LUT
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name deband/Deband
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name delogoHQ/DelogoHQ
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name eq2/MPlayer eq2
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeFromImage/Fade from first image
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeIn/Fade in
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeOut/Fade out
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeThrough/Fade through    
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name fitToSize/Fit to size       
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name flip/Flip
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name imageStab/Image stabilizer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name addLogo/Add logo
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lumaStab/Luma stabilizer    
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name mpdelogo2/MPlayer delogo2   
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name msharpen/Msharpen
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name quadTrans/Quadrilateral transformation
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name swscale/swsResize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name waveletDenoise/Wavelet denoiser
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name waveletSharp/Wavelet sharpener
+[ADM_vf_plugin] Scanning done, found 79 video filters so far
+[win32AudioDevice::win32AudioDevice] 00:45:21-474 [Win32] Creating audio device
+
+ *** Automated : 19 entries*************
+load-->1
+
+ Unknown command :--start
+
+ Found garbage 100
+
+ Unknown command :--end
+
+ Found garbage 120
+video-codec-->1
+[videoEncoder6_SetCurrentEncoder] 00:45:21-475 x264 selected
+audio-codec-->1
+[audioCodecSetByName] 00:45:21-475 Setting AAC audio codec for track 0        
+[audioCodecSetByName] 00:45:21-475 Cannot set codec for track 0
+save-->1
+output-format-->1
+[ADM_Composer::setContainer] 00:45:21-476 setting container as index 5        
+
+ ********** Automation ended***********
+*********************************
+*********************************
+End of program..
+*********************************
+*********************************
+[preferences::save] 00:45:21-476 Saving prefs to C:\Users\OK\AppData\Roaming\avidemux\config3.tmp
+[admPreview::destroy] 00:45:21-479 Destroying preview
+[ADM_EditorSegment::deleteAll] 00:45:21-479 [Editor] Deleting all videos      
+[ADM_EditorSegment::deleteAll] 00:45:21-479 [Editor] Deleting all videos      
+Normal exit
+[abortExitHandler] 00:45:21-479 already done, nothing to do
+Done.
+PS C:\Users\OK\source\repos\Repository4_python\avidemux_test> 
+
+$$$$$$$$$$$$$$$$$
+y\launcher' '50239' '--' 'c:\Users\OK\source\repos\Repository4_python\avidemux_test\avidemux_sample2.py' K\x5csource\x5crepos\x5cRepository4_python\x5cavidemux_test\x5cavidemux_sample2.py' ;91b9a393-38dc-4711-8739-502a6295315c
+*****
+input_file = J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023年01月21日19時32分51秒(84336008).ts
+Using C:\Users\OK\AppData\Roaming\avidemux\ as base directory for prefs, jobs, etc.
+Using C:\Users\OK\AppData\Local\avidemux\ as log directory.
+*************************
+  Avidemux v2.8.1
+*************************
+ http://www.avidemux.org
+ Code      : Mean, JSC, Grant Pedersen,eumagga0x2a
+ GFX       : Nestor Di, nestordi@augcyl.org
+ Design    : Jakub Misak
+ FreeBSD   : Anish Mistry, amistry@am-productions.biz
+ Audio     : Mihail Zenkov
+ Mac OS X  : Kuisathaverat, Harry van der Wolf
+ Win32     : Grant Pedersen
+
+Build Target: Microsoft Windows (x86-64)
+User Interface: CLI
+Operating System: Microsoft Windows (6.2.9200; 64-bit)
+Time: Sun Oct 27 13:00:24 2024
+
+0: avidemux_cli
+1: --load
+2: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts
+3: --start
+4: 418500000
+5: --end
+6: 720500000
+7: --save
+8: J:\avidemux_files\avidemux_output\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008)_241027_130024.ts
+
+Initialising prefs
+[preferences::load] 04:00:24-225 Loading prefs from C:\Users\OK\AppData\Roaming\avidemux\config3
+[preferences::load] 04:00:24-226 Preferences found and loaded
+[CpuCaps] Checking CPU capabilities
+                MMX detected
+                MMXEXT detected
+                SSE detected
+                SSE2 detected
+                SSE3 detected
+                SSSE3 detected
+                SSE4 detected
+                SSE42 detected
+                AVX detected
+                AVX2 detected
+[CpuCaps::init] 04:00:24-228 [CpuCaps] End of CPU capabilities check (cpuCaps: 0x00003de6, cpuMask: 0xffffffff)
+[CpuCaps::setMask] 04:00:24-228 [CpuCaps] Setting mask to 0x7fffffff
+[CpuCaps::setMask] 04:00:24-229 [CpuCaps] Forcing lav cpu flags 0x0000c3db
+Initializing WinSock
+WinSock ok
+Initializing Dithering tables
+[UI Toolkit] Running version 02:00
+[Script] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines
+[Script] Tinypy INFO - Registering group addons
+[Script] Tinypy INFO -  Registering: help
+[Script] Tinypy INFO -  Registering: get_folder_content
+[Script] Tinypy INFO -  Registering: get_file_size
+[Script] Tinypy INFO -  Registering: basename
+[Script] Tinypy INFO -  Registering: dirname
+[Script] Tinypy INFO -  Registering: splitext
+[Script] Tinypy INFO - Registering class: Avidemux
+[Script] Tinypy INFO - Registering class: Editor
+[Script] Tinypy INFO - Registering class: Gui
+[Script] Tinypy INFO - Registering class: DFToggle
+[Script] Tinypy INFO - Registering class: DFInteger
+[Script] Tinypy INFO - Registering class: DFMenu
+[Script] Tinypy INFO - Registering class: DFTimeStamp
+[Script] Tinypy INFO - Registering class: DialogFactory
+[Script] Tinypy INFO - Registering group test
+[Script] Tinypy INFO -  Registering: testAssert
+[Script] Tinypy INFO -  Registering: testCrash
+[Script] Tinypy INFO -  Registering: testSub
+[Script] Tinypy INFO - Registering static class os
+[Script] Tinypy INFO -  Registering: environ
+[Script] Tinypy INFO - Python initialised
+[Script] loaded C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines\libADM_script_tinyPy.dll
+[Script] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines/cli
+[buildDirectoryContent] 04:00:24-239 Cannot list content of C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines/cli
+[ADM_ad_loadPlugins] 04:00:24-240 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDecoder
+[tryLoadingAudioPlugin] 04:00:24-241 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_Mad.dll, desc: LibMad decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-242 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_a52.dll, desc: LibAC3 decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-243 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_alaw.dll, desc: A-law decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-244 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ima_adpcm.dll, desc: IMA ADPCM decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-245 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_lav.dll, desc: Lavcodec decoder plugin for avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 04:00:24-246 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ms_adpcm.dll, desc: Ulaw decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-247 [ADM_ad_plugin] Plugin loaded version 1.0.0, name libADM_ad_opencore_amrnb.dll, desc: opencore-amrnb decoder plugin for Avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 04:00:24-248 [ADM_ad_plugin] Plugin loaded version 1.0.0, name libADM_ad_opencore_amrwb.dll, desc: opencore-amrwb decoder plugin for Avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 04:00:24-249 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_opus.dll, desc: libOpus decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-250 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ulaw.dll, desc: Ulaw decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:00:24-252 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_vorbis.dll, desc: libVorbis decoder plugin for avidemux (c) Mean
+
+[ADM_ad_loadPlugins] 04:00:24-253 Scanning done, found 11 audio decoders
+[ADM_av_loadPlugins] 04:00:24-253 [ADM_av_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDevices        
+[ADM_AudioDevices::ADM_AudioDevices] 04:00:24-254 Name :Win32 ApiVersion :2
+[tryLoadingFilterPlugin] 04:00:24-255 [Filters] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDevices\libADM_av_win32.dll as  Win32 audio device (c) mean
+[ADM_av_loadPlugins] 04:00:24-255 [ADM_av_plugin] Scanning done
+[ADM_ae_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders
+[AudioEncoder] Loaded Aften version 01.00.00 wavTag :0x2000
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_aften.dll as  Aften AC3 encoder 
+plugin Mean/Gruntster 2008
+[AudioEncoder] Loaded FDK_AAC version 01.00.00 wavTag :0xff
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_fdk_aac.dll as  FDK AAC encoder 
+plugin Mean 2016
+[AudioEncoder] Loaded Lame version 01.00.00 wavTag :0x55
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lame.dll as  Lame MP3 encoder plugin Mean 2009
+[AudioEncoder] Loaded LavAAC version 01.00.00 wavTag :0xff
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_aac.dll as  AAC LavCodec encoder plugin Mean 2008/2016
+[AudioEncoder] Loaded LavAC3 version 01.00.00 wavTag :0x2000
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_ac3.dll as  AC3 LavCodec encoder plugin Mean 2008/2009
+[AudioEncoder] Loaded LavMP2 version 01.00.00 wavTag :0x50
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_mp2.dll as  MP2 LavCodec encoder plugin Mean 2008/2009
+[AudioEncoder] Loaded Opus version 01.00.00 wavTag :0x26ae
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_opus.dll as  Opus encoder plugin Mean 2017
+[AudioEncoder] Loaded PCM version 01.00.00 wavTag :0x1
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_pcm.dll as  PCM encoder plugin Mean 2008
+[AudioEncoder] Loaded TwoLame version 01.00.00 wavTag :0x50
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_twolame.dll as  TwoLame MP2 encoder plugin Mean 2008
+[AudioEncoder] Loaded Vorbis version 01.00.00 wavTag :0x676f
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_vorbis.dll as  Vorbis encoder plugin Mean 2008
+[ADM_ae_plugin] Scanning done
+[ADM_dm_loadPlugins] 04:00:24-267 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers
+[Demuxer]Name :asf ApiVersion :3 Description :asf/wmv demuxer plugin (c) Mean 2007/2009
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_asf.dll as  asf/wmv demuxer plugin (c) Mean 2007/2009
+[Demuxer]Name :avs ApiVersion :3 Description :avsProxy demuxer plugin (c) Mean 2007/2010
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_avsproxy.dll as  avsProxy demuxer plugin 
+(c) Mean 2007/2010
+[Demuxer]Name :flv ApiVersion :3 Description :flash demuxer plugin (c) Mean 2007/2007
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_flv.dll as  flash demuxer plugin (c) Mean 2007/2007
+[Demuxer]Name :mkv ApiVersion :3 Description :Matroska demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_matroska.dll as  Matroska demuxer plugin 
+(c) Mean 2007/2008
+[Demuxer]Name :mp4 ApiVersion :3 Description :Mp4/Mov/3GP demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_mp4.dll as  Mp4/Mov/3GP demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :MXF ApiVersion :3 Description :MXF demuxer plugin (c) Mean 2010
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_mxf.dll as  MXF demuxer plugin (c) Mean 2010
+[Demuxer]Name :navs ApiVersion :3 Description :native avs demuxer plugin (c) Mean 2018
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_nativeAvs.dll as  native avs demuxer plugin (c) Mean 2018
+[Demuxer]Name :openDml ApiVersion :3 Description :AVI/OpenDML demuxer plugin (c) Mean 2007/2007
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_opendml.dll as  AVI/OpenDML demuxer plugin (c) Mean 2007/2007
+[Demuxer]Name :picture ApiVersion :3 Description :Picture demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_pic.dll as  Picture demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :ps ApiVersion :3 Description :mpeg ps demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_ps.dll as  mpeg ps demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :ts ApiVersion :3 Description :mpeg ts demuxer plugin (c) Mean 2007/2009
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_ts.dll as  mpeg ts demuxer plugin (c) Mean 2007/2009
+[Demuxer]Name :vs ApiVersion :3 Description :VapourSynth demuxer plugin (c) Mean 2015
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_vapoursynth.dll as  VapourSynth demuxer plugin (c) Mean 2015
+[ADM_dm_loadPlugins] 04:00:24-279 Demuxer plugin : ts, priority :90
+[ADM_dm_loadPlugins] 04:00:24-279 Demuxer plugin : avs, priority :50
+[ADM_dm_loadPlugins] 04:00:24-279 Demuxer plugin : flv, priority :50
+[ADM_dm_loadPlugins] 04:00:24-279 Demuxer plugin : mkv, priority :50
+[ADM_dm_loadPlugins] 04:00:24-279 Demuxer plugin : mp4, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : MXF, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : navs, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : openDml, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : picture, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : asf, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : vs, priority :50
+[ADM_dm_loadPlugins] 04:00:24-280 Demuxer plugin : ps, priority :10
+[ADM_dm_loadPlugins] 04:00:24-281 Scanning done, 12 demuxers found
+[ADM_mx_loadPlugins] 04:00:24-281 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers
+[Muxer]Name :AVI ApiVersion :9 Description :AVI muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_avi.dll as  AVI muxer plugin (c) Mean 2008   
+[Muxer]Name :dummy ApiVersion :9 Description :dummy2 muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_dummy.dll as  dummy2 muxer plugin (c) Mean 2008
+[Muxer]Name :ffPS ApiVersion :9 Description :ffMpeg PS muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_ffPS.dll as  ffMpeg PS muxer plugin (c) Mean 
+2009
+[Muxer]Name :ffTS ApiVersion :9 Description :ffMpeg TS muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_ffTS.dll as  ffMpeg TS muxer plugin (c) Mean 
+2009
+[Muxer]Name :FLV ApiVersion :9 Description :FLV muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_flv.dll as  FLV muxer plugin (c) Mean 2008   
+[Muxer]Name :MKV ApiVersion :9 Description :Matroska muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mkv.dll as  Matroska muxer plugin (c) Mean 2009
+[Muxer]Name :MOV ApiVersion :9 Description :MOV muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mov.dll as  MOV muxer plugin (c) Mean 2009   
+[Muxer]Name :MP4 ApiVersion :9 Description :MP4 muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mp4.dll as  MP4 muxer plugin (c) Mean 2009   
+[Muxer]Name :RAW ApiVersion :9 Description :RAW muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_raw.dll as  RAW muxer plugin (c) Mean 2008   
+[Muxer]Name :WEBM ApiVersion :9 Description :WebM muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_webm.dll as  WebM muxer plugin (c) Mean 2009 
+[ADM_mx_plugin] Scanning done
+[ADM_mx_loadPlugins] 04:00:24-291 Scanning done, 10 muxers found
+[ADM_vd6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoDecoders
+[videoDecoder6]Name :aom ApiVersion :1 Description :Decoder using libaom (c) mean 2010 / eumagga0x2a 2019
+[VideoDecoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoDecoders\libADM_vd_aom.dll as  Decoder using libaom (c) mean 2010 / eumagga0x2a 2019
+[ADM_vd6_plugin] Scanning done
+[ADM_ve6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders
+[videoEncoder6]Name :ffDv ApiVersion :7 Description :Simple ffmpeg based DV Encoder (c) 2013 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffDv.dll as  Simple ffmpeg based DV Encoder (c) 2013 Mean
+[videoEncoder6]Name :ffFlv1 ApiVersion :7 Description :Simple ffmpeg based Flv1 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffFlv1.dll as  Simple ffmpeg based Flv1 Encoder (c) 2009 Mean
+[videoEncoder6]Name :ffMpeg2 ApiVersion :7 Description :Simple ffmpeg based Mpeg2 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffMpeg2.dll as  Simple ffmpeg based Mpeg2 Encoder (c) 2009 Mean
+[videoEncoder6]Name :ffNvEncH264 ApiVersion :7 Description :Nvidia hw encoder
+[nvCheckDll] 04:00:24-298        checking nvcuda.dll-> 0
+[nvEncProbe] 04:00:24-298 Cannot load cuda dll
+C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffNvencH264.dll:ProbingFailed
+[videoEncoder6]Name :ffNvEncHEVC ApiVersion :7 Description :Nvidia hw encoder
+[nvCheckDll] 04:00:24-302        checking nvcuda.dll-> 0
+[nvEncProbe] 04:00:24-302 Cannot load cuda dll
+C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffNvencHEVC.dll:ProbingFailed
+[videoEncoder6]Name :FFV1 ApiVersion :7 Description :FFV1 (c) 2021 szlldm
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffv1.dll as  FFV1 (c) 2021 szlldm
+[videoEncoder6]Name :HUFFYUV ApiVersion :7 Description :FF Huffyuv (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_huff.dll as  FF Huffyuv (c) 2009 Mean
+[videoEncoder6]Name :Mjpeg ApiVersion :7 Description :Simple jpeg Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_jpeg.dll as  Simple jpeg Encoder (c) 2009 Mean
+[videoEncoder6]Name :null ApiVersion :7 Description :Null Encoder (c) 2010 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_null.dll as  Null Encoder (c) 2010 Mean
+[videoEncoder6]Name :utvideo ApiVersion :7 Description :Ut Video (c) 2020 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_utvideo.dll as  Ut Video (c) 2020 Mean
+[videoEncoder6]Name :vp9 ApiVersion :7 Description :libvpx based VP9 Encoder
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_vp9.dll as  libvpx based VP9 Encoder
+[videoEncoder6]Name :x264 ApiVersion :7 Description :x264 based mpeg4 AVC Encoder (c) 2010 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_x264_other.dll as  x264 based mpeg4 AVC Encoder (c) 2010 Mean/Gruntster
+[videoEncoder6]Name :x265 ApiVersion :7 Description :x265 based HEVC Encoder (c) 2014 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_x265_other.dll as  x265 based HEVC Encoder (c) 2014 Mean/Gruntster
+[videoEncoder6]Name :xvid4 ApiVersion :7 Description :Xvid4 based mpeg4 Encoder (c) 2010 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_xvid4.dll as  Xvid4 based mpeg4 Encoder (c) 2010 Mean/Gruntster
+[videoEncoder6]Name :YV12Encoder ApiVersion :7 Description :Simple YV12 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_yv12.dll as  Simple YV12 Encoder (c) 2009 Mean
+[ADM_ve6_plugin] Scanning done
+[ADM_ve6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders/cli
+[buildDirectoryContent] 04:00:24-314 Cannot list content of C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders/cli
+[ADM_ve6_plugin] Scanning done
+[ADM_vf_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoFilters
+[parseOneFolder] 04:00:24-315 Feature Mask = 0x0
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name dgbob/dgbob
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name aarotate/Arbitrary Rotate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name addBorder/Add Borders
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name admIvtc/ADM ivtc.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name AsciiView/Ascii View
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name black/Black
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blend/Blend Frames
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name changeFps/Change FPS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorYuv/Avisynth color filter.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name decimateFrame/Decimate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name MplayerDenoise3D/Mplayer Denoise 3D
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name MplayerDenoise3DHQ/Mplayer Denoise 3D HQ
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name dummy/Dummy
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeTo/Fade
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeToBlack/Fade to black
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Gaussian/Gaussian convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name hzstackfield/Horizontal Stack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name ivtcRemover/Remove IVTC dupe.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name kerndelDeint/Kernel Deint.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name largeMedian/Large Median (5x5).
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lavdeint/Libavdec Deinterlacers
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lumaonly/GreyScale
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Mean/Mean convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Median/Median convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name mergefields/Merge Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name invplane/Negative
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name printInfo/PrintInfo
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name rplane/Remove  Plane
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name resampleFps/Resample FPS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name rotate/Rotate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name SeparateFields/Separate Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Sharpen/Sharpen convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name ssa/SSA/ASS/SRT
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name stackField/Stack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name stillimage/Still Image
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name swapUV/Swap UV
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name unstackField/Unstack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name yadif/Yadif
+[ADM_vf_plugin] Scanning done, found 38 video filters so far
+[parseOneFolder] 04:00:24-339 Feature Mask = 0x0
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name crop/Crop
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name hue/Mplayer Hue
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name zoom/Zoom
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name analyzer/Analyzer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artCartoon/Cartoon
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artCharcoal/Charcoal / Chalkboard
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artChromaHold/Chroma Hold
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artChromaKey/Chroma Key
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artColorEffect/Color Effect
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artDynThreshold/Dynamic Threshold
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artGrid/Grid
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artMirror/Mirror
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artPixelize/Pixelize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artPosterize/Posterize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artVHS/VHS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artVignette/Vignette
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blackenBorder/Blacken Borders
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blur/Blur
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name chromashift/ChromaShift
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorBalance/Color balance
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorTemp/Color temperature
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name contrast/Contrast
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name cubicLUT/3D LUT
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name deband/Deband
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name delogoHQ/DelogoHQ
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name eq2/MPlayer eq2
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeFromImage/Fade from first image
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeIn/Fade in
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeOut/Fade out
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeThrough/Fade through
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name fitToSize/Fit to size
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name flip/Flip
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name imageStab/Image stabilizer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name addLogo/Add logo
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lumaStab/Luma stabilizer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name mpdelogo2/MPlayer delogo2
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name msharpen/Msharpen
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name quadTrans/Quadrilateral transformation
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name swscale/swsResize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name waveletDenoise/Wavelet denoiser
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name waveletSharp/Wavelet sharpener
+[ADM_vf_plugin] Scanning done, found 79 video filters so far
+[win32AudioDevice::win32AudioDevice] 04:00:24-365 [Win32] Creating audio device
+
+ *** Automated : 19 entries*************
+load-->1
+[TS Demuxer] Probing...
+[checkMarker] 04:00:24-367 [Ts Demuxer] Sync ok :5577 Sync ko :0
+[detectTs] 04:00:24-367 [TS Demuxer] 188 bytes packet detected
+ [avsProxy] Cannot open that
+ [flvHeader] Cannot open that
+ [mkvHeader] Cannot open that
+ [MP4] Cannot open that...
+ [mxfHeader] Cannot open that (10114047)
+[probe] 04:00:24-368  [avsProxy] Cannot open that
+ [openDML] Cannot open that
+[probe] 04:00:24-368  [picHeader] Cannot open that
+[probe] 04:00:24-368 [asfHeader] Cannot open that
+[vsDynaLoader::vsInit] 04:00:24-370 Cannot load the vapoursynth-script library
+ match :134 / 455 (probeSize:1048576)
+[tsDemux] Append=0
+
+Simple loading:
+ file: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts, size: 551164488
+ found 1 files
+Done
+[TsDemuxerer] Reading Video
+[TsIndex] codec :<H264>
+[indexFile] Token ExtraData not found
+  [0]Version
+  [1]Type
+  [2]File
+  [3]Append
+  [4]Width
+  [5]Height
+  [6]Fps
+  [7]Interlaced
+  [8]AR
+  [9]Pid
+  [10]VideoCodec
+[tsDemux] Video pid is 0x100 256
+[psDemuxer] Reading Audio
+00:fq=48000
+00:br=16000
+00:chan=2
+00:codec=255
+00:pid=257
+00:muxing=1
+Language=und
+[tsDemux] Found 2 bytes of video extra data (2)
+
+Simple loading:
+ file: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts, size: 551164488
+ found 1 files
+Done
+[TsPacket] Detecting TS/TS2...
+[tsPacket::open] Sync byte found at offset 0
+[TsPacket] Score : 188:20, 192:0 out of 20
+[TsPacket] Probably TS1 (188)...
+[tsPacket::open] Sync established at offset 0
+[ADM_tsAccess::ADM_tsAccess] 04:00:24-377 Creating audio track, pid=101, muxing =1
+[ADM_tsAccess::ADM_tsAccess] 04:00:24-377 Creating ts audio access with 2 bytes of extradata.
+ 0000 : ..                 11 90
+[TsDemuxerer] Reading index
+[TsDemuxer] Found 204 I, 26977 B, 34445 P
+[TsH264] Found 4402 IDR
+[TsH264] Remapping IDR to I and I TO P
+[tsDemux] Found 66028 video frames
+
+Simple loading:
+ file: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts, size: 551164488
+ found 1 files
+Done
+[TsPacket] Detecting TS/TS2...
+[tsPacket::open] Sync byte found at offset 0
+[TsPacket] Score : 188:20, 192:0 out of 20
+[TsPacket] Probably TS1 (188)...
+[tsPacket::open] Sync established at offset 0
+[tsDemuxer] open() returned 1
+[ADM_PP::ADM_PP] 04:00:24-439 Initializing postproc
+[ADM_PP::cleanup] 04:00:24-439 Deleting post proc
+[ADM_PP::update] 04:00:24-439 updating post proc
+[ADM_PP::update] 04:00:24-440 Enabled type:3 strength:3
+[ADM_Composer::addFile] 04:00:24-440 Clearing video filters
+[ADM_vf_clearFilters] 04:00:24-440 clear filters
+[ADM_ad_searchCodec] 04:00:24-441 [ADM_ad_plugin]Format 0xff : probing libADM_ad_Mad.dll score 0
+[ADM_ad_searchCodec] 04:00:24-441 [ADM_ad_plugin]Format 0xff : probing libADM_ad_a52.dll score 0
+[ADM_ad_searchCodec] 04:00:24-441 [ADM_ad_plugin]Format 0xff : probing libADM_ad_alaw.dll score 0
+[ADM_ad_searchCodec] 04:00:24-441 [ADM_ad_plugin]Format 0xff : probing libADM_ad_ima_adpcm.dll score 0
+[ADM_ad_searchCodec] 04:00:24-441 [ADM_ad_plugin]Format 0xff : probing libADM_ad_lav.dll score 150
+[ADM_ad_searchCodec] 04:00:24-441 [ADM_ad_plugin]Format 0xff : probing libADM_ad_ms_adpcm.dll score 0
+[ADM_ad_searchCodec] 04:00:24-442 [ADM_ad_plugin]Format 0xff : probing libADM_ad_opencore_amrnb.dll score 0
+[ADM_ad_searchCodec] 04:00:24-442 [ADM_ad_plugin]Format 0xff : probing libADM_ad_opencore_amrwb.dll score 0
+[ADM_ad_searchCodec] 04:00:24-442 [ADM_ad_plugin]Format 0xff : probing libADM_ad_opus.dll score 0
+[ADM_ad_searchCodec] 04:00:24-442 [ADM_ad_plugin]Format 0xff : probing libADM_ad_ulaw.dll score 0
+[ADM_ad_searchCodec] 04:00:24-442 [ADM_ad_plugin]Format 0xff : probing libADM_ad_vorbis.dll score 0
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:00:24-442  [ADM_AD_LAV] Using decoder for type 0xff
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:00:24-442  [ADM_AD_LAV] #of channels 2
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:00:24-443 [ADM_AD_LAV] Using 2 bytes of extra header data, 2 channels
+
+ 0000 : ..                 11 90
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:00:24-445 Decoder created using float planar...
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:00:24-445 [ADM_ad_lav] init successful (blockalign 1), channels=2
+[ADM_edAudioTrackFromVideo::ADM_edAudioTrackFromVideo] 04:00:24-446 Creating edAudio from video track 0 at 5fb45010
+[ADM_EditorSegment::addReferenceVideo] Video FCC: H264 (34363248)
+[ADM_getDecoder] 04:00:24-446 Searching decoder in plugins
+[tryCreatingVideoDecoder] 04:00:24-446 No decoder found in plugin
+[ADM_getDecoder] 04:00:24-447 Searching decoder in coreVideoCodec(1024 x 768, extradataSize:0)...
+[ADM_coreCodecGetDecoder] 04:00:24-447 Searching decoder in coreVideoCodec(1024 x 768, extradataSize:0)...
+[lavc] Build: 3835492
+[lavc] Enabling MT decoder with 8 threads
+[decoderFFH264::decoderFFH264] 04:00:24-447 [lavc] Initializing H264 decoder with 0 extradata
+[decoderFFH264::decoderFFH264] 04:00:24-448 [lavc] Decoder init: AV_CODEC_ID_H264 video decoder initialized! (H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)
+[EditorCache::EditorCache] 04:00:24-448 Video cache instance created at 000002135FA20F00
+[EditorCache::createBuffers] 04:00:24-449 Added 16 video cache buffers, 16 total.
+[ADM_EditorSegment::addReferenceVideo] 04:00:24-449 Original frame increment 00:00:00,033 = 33333 us
+[ADM_EditorSegment::addReferenceVideo] 04:00:24-451 min increment 00:00:00,033 = 33333 us for frame 3
+[ADM_EditorSegment::addReferenceVideo] 04:00:24-451 max increment 00:00:00,033 = 33334 us for frame 2
+[ADM_EditorSegment::addReferenceVideo] 04:00:24-451 About 33333 microseconds per frame, 66028 frames
+[ADM_EditorSegment::addReferenceVideo] 04:00:24-451 The first frame DTS = 0 ms
+[ADM_EditorSegment::addReferenceVideo] 04:00:24-451 The first frame has a PTS > 0, adjusting to 66 ms
+[ADM_EditorSegment::updateStartTime] 04:00:24-451 Setting DTS start in ref to 00:00:00,000
+[ADM_EditorSegment::updateStartTime] 04:00:24-452 New total duration = 00:36:41,033
+[ADM_verifyDts] 04:00:24-452 Verifying DTS....
+[ADM_verifyDts] 04:00:24-452 Checking from 1 to 66028
+[ADM_verifyDts] 04:00:24-453 Pass 2..
+[ADM_verifyDts] 04:00:24-455 DTS verified
+[Editor] B- frame possible with that codec
+[ADM_Composer::addFile] 04:00:24-455 [Editor] This is H264, check if we can fill missing PTS
+[ADM_setH264MissingPts] 04:00:24-456 We have 0 missing PTS
+[ADM_Composer::addFile] 04:00:24-457 H264 sometimes has invalid timestamps which confuse avidemux, checking
+[ADM_Composer::seektoTime] 04:00:24-457 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:00:24-458 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:00:24-458 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:00:24-459 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:00:24-477 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us
+[ADM_Composer::checkForValidPts] 04:00:24-477 Checking file for broken PTS...
+[ADM_Composer::checkForValidPts] 04:00:24-477 Checking 100 frames out of 66028.
+  1% done, elapsed:   14 ms
+  2% done, elapsed:   19 ms
+  3% done, elapsed:   27 ms
+  4% done, elapsed:   37 ms
+  5% done, elapsed:   45 ms
+  6% done, elapsed:   51 ms
+  7% done, elapsed:   56 ms
+  8% done, elapsed:   63 ms
+  9% done, elapsed:   69 ms
+ 10% done, elapsed:   74 ms
+ 11% done, elapsed:   81 ms
+ 12% done, elapsed:   87 ms
+ 13% done, elapsed:   93 ms
+ 14% done, elapsed:   99 ms
+ 15% done, elapsed:  104 ms
+ 16% done, elapsed:  111 ms
+ 17% done, elapsed:  117 ms
+ 18% done, elapsed:  122 ms
+ 19% done, elapsed:  127 ms
+ 20% done, elapsed:  132 ms
+ 21% done, elapsed:  138 ms
+ 22% done, elapsed:  143 ms
+ 23% done, elapsed:  149 ms
+ 24% done, elapsed:  154 ms
+ 25% done, elapsed:  159 ms
+ 26% done, elapsed:  165 ms
+ 27% done, elapsed:  171 ms
+ 28% done, elapsed:  176 ms
+ 29% done, elapsed:  182 ms
+ 30% done, elapsed:  188 ms
+ 31% done, elapsed:  194 ms
+ 32% done, elapsed:  199 ms
+ 33% done, elapsed:  207 ms
+ 34% done, elapsed:  212 ms
+ 35% done, elapsed:  219 ms
+ 36% done, elapsed:  224 ms
+ 37% done, elapsed:  233 ms
+ 38% done, elapsed:  239 ms
+ 39% done, elapsed:  244 ms
+ 40% done, elapsed:  251 ms
+ 41% done, elapsed:  256 ms
+ 42% done, elapsed:  262 ms
+ 43% done, elapsed:  270 ms
+ 44% done, elapsed:  275 ms
+ 45% done, elapsed:  281 ms
+ 46% done, elapsed:  286 ms
+ 47% done, elapsed:  291 ms
+ 48% done, elapsed:  298 ms
+ 49% done, elapsed:  303 ms
+ 50% done, elapsed:  308 ms
+ 51% done, elapsed:  314 ms
+ 52% done, elapsed:  319 ms
+ 53% done, elapsed:  325 ms
+ 54% done, elapsed:  332 ms
+ 55% done, elapsed:  336 ms
+ 56% done, elapsed:  344 ms
+ 57% done, elapsed:  349 ms
+ 58% done, elapsed:  355 ms
+ 59% done, elapsed:  360 ms
+ 60% done, elapsed:  366 ms
+ 61% done, elapsed:  371 ms
+ 62% done, elapsed:  377 ms
+ 63% done, elapsed:  384 ms
+ 64% done, elapsed:  389 ms
+ 65% done, elapsed:  396 ms
+ 66% done, elapsed:  402 ms
+ 67% done, elapsed:  407 ms
+ 68% done, elapsed:  414 ms
+ 69% done, elapsed:  420 ms
+ 70% done, elapsed:  426 ms
+ 71% done, elapsed:  432 ms
+ 72% done, elapsed:  437 ms
+ 73% done, elapsed:  443 ms
+ 74% done, elapsed:  452 ms
+ 75% done, elapsed:  457 ms
+ 76% done, elapsed:  462 ms
+ 77% done, elapsed:  468 ms
+ 78% done, elapsed:  473 ms
+ 79% done, elapsed:  479 ms
+ 80% done, elapsed:  487 ms
+ 81% done, elapsed:  493 ms
+ 82% done, elapsed:  500 ms
+ 83% done, elapsed:  505 ms
+ 84% done, elapsed:  510 ms
+ 85% done, elapsed:  518 ms
+ 86% done, elapsed:  524 ms
+ 87% done, elapsed:  530 ms
+ 88% done, elapsed:  536 ms
+ 89% done, elapsed:  541 ms
+ 90% done, elapsed:  546 ms
+ 91% done, elapsed:  555 ms
+ 92% done, elapsed:  560 ms
+ 93% done, elapsed:  566 ms
+ 94% done, elapsed:  571 ms
+ 95% done, elapsed:  577 ms
+ 96% done, elapsed:  583 ms
+ 97% done, elapsed:  589 ms
+ 98% done, elapsed:  594 ms
+ 99% done, elapsed:  600 ms
+[ADM_Composer::seektoTime] 04:00:25-078 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:00:25-078 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:00:25-078 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:00:25-079 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:00:25-089 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us      
+[ADM_Composer::checkForValidPts] 04:00:25-090 -------- Stats :----------
+[ADM_Composer::checkForValidPts] 04:00:25-090 nbBFrames:41
+[ADM_Composer::checkForValidPts] 04:00:25-090 nbPFrames:53
+[ADM_Composer::checkForValidPts] 04:00:25-090 nbIFrames:6
+[ADM_Composer::checkForValidPts] 04:00:25-090 nbNoImage:0
+[ADM_Composer::checkForValidPts] 04:00:25-091 nbPtsgoingBack:0
+[ADM_Composer::checkForValidPts] 04:00:25-091 -------- /Stats ----------
+[ADM_Composer::seektoTime] 04:00:25-091 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:00:25-091 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:00:25-091 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:00:25-093 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:00:25-103 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us      
+[ADM_Composer::checkForDoubledFps] 04:00:25-103 Checking for doubled FPS.., time increment ceiling = 59999
+[ADM_Composer::checkForDoubledFps] 04:00:25-108 Checking DTS...
+[checkTiming] 04:00:25-108      Good : 7464
+[checkTiming] 04:00:25-109      Bad  : 50023
+[ADM_Composer::checkForDoubledFps] 04:00:25-109 Checking sorted PTS...
+[checkTiming] 04:00:25-109      Good : 1
+[checkTiming] 04:00:25-109      Bad  : 66026
+[ADM_Composer::checkForDoubledFps] 04:00:25-109 Cannot halve fps
+[admPreview::destroy] 04:00:25-109 Destroying preview
+[renderDisplayResize] 04:00:25-109 Render to 1024x768 zoom=0.0000, old one =0 x 0, zoom=1.0000, renderer=0000000000000000
+[nullRender::nullRender] 04:00:25-109 Starting null renderer
+[renderCompleteRedrawRequest] 04:00:25-109 RedrawRequest
+[A_ResetMarkers] 04:00:25-109 Video Total duration : 00:36:41,033 ms
+[ADM_Composer::setMarkerBPts] 04:00:25-109 Selection's end point set to 00:36:41,033 (2201033332 us)
+[ADM_Composer::rewind] 04:00:25-109 Rewinding
+[ADM_Composer::switchToSegment] 04:00:25-109 Trying to switch to seg 0 with startTime in reference pic= 66 ms
+[ADM_Composer::seektoTime] 04:00:25-110 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:00:25-110 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:00:25-110 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:00:25-111 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::switchToSegment] 04:00:25-121 Switched ok to segment 0 (dontdecode=0)
+[admPreview::start] 04:00:25-122 admPreview,starting
+[updateLoaded] 04:00:25-122  conf updated
+[AudioEncoder] Selected copy for index 0, tag 0x0
+
+ Unknown command :--start
+
+ Found garbage 418500000
+
+ Unknown command :--end
+
+ Found garbage 720500000
+save-->1
+[UI_GetCurrentFormat] 04:00:25-124 Output format not specified or invalid. Trying MKV as fallback.
+[admSaver::admSaver] 04:00:25-124 [Save] Encoder index=0
+[admSaver::save] 04:00:25-124 Audio starting time 00:00:00,000
+[admSaver::save] 04:00:25-124 [A_Save] Saving..
+[ADM_Composer::checkCutsAreOnIntra] 04:00:25-124 Checking cuts start on keyframe..
+[checkCodec] 04:00:25-125 Codecs identified by isH264Compatible() as matching
+[muxerMkv::muxerMkv] 04:00:25-125 Creating Matroska muxer.
+[admSaver::dealWithH26x] 04:00:25-125 Input is probably AnnexB bitstream, convert it to mp4
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:00:25-125 Creating copy video stream, start time: 00:00:00,000
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:00:25-125 End time: 00:36:41,033
+[ADM_Composer::getTimeBase] 04:00:25-125 Ref video 0 is frame-encoded, copy mode: 1
+[ADM_Composer::getTimeBase] 04:00:25-125 Timebase set to 1000 / 30000
+[ADM_Composer::getFrameNumFromPtsOrBefore] 04:00:25-126 Best candidate for time 00:00:00,066 in reference is frame 0
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:00:25-126 PTS/DTS delta=66667 us
+[ADM_Composer::getOpenGopDelayForSegment] 04:00:25-126 Pts delta = 33333
+[ADM_Composer::getOpenGopDelayForSegment] 04:00:25-126 Pts delta = 100000
+[ADM_Composer::getOpenGopDelayForSegment] 04:00:25-126 Pts delta = 66666
+[ADM_Composer::getOpenGopDelayForSegment] 04:00:25-126 Not a bframe, stopping (4)
+[ADM_Composer::getNonClosedGopDelay] 04:00:25-126 Found maximum non closed gop delay = 0
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:00:25-127 Dts is too early, delaying everything by 66667 us
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:00:25-127  Fixating start time by 0
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:00:25-127  Starting DTS=0, PTS=0 ms
+[ADM_videoStreamCopyFromAnnexB::ADM_videoStreamCopyFromAnnexB] 04:00:25-127 AnnexB to iso filter
+[ADM_videoStreamCopyFromAnnexB::extractExtraDataH264Internal] 04:00:25-127 PPS removed zero filler 3 -> 3
+[ADM_videoStreamCopyFromAnnexB::extractExtraDataH264Internal] 04:00:25-128 Copy from annexB: Found sps=24, pps=3.
+[ADM_videoStreamCopyFromAnnexB::extractExtraDataH264Internal] 04:00:25-128 generated 40 bytes of extradata.
+
+ 0000 : .M@)....gM@).(..   01 4d 40 29 ff e1 00 19 67 4d 40 29 e4 28 08 00
+ 0010 : .`".........y.0c   c3 60 22 00 00 03 00 02 00 00 03 00 79 1e 30 63
+ 0020 : ,...h..            2c 01 00 04 68 cf 97 20
+[ADM_edAudioTrackFromVideo::goToTime] 04:00:25-129 [edAudioTrackFromVideo] Seeking to 00:00:00,000
+[ADM_edAudioTrackFromVideo::goToTime] 04:00:25-129 [edAudioTrackFromVideo] => seg 0, rel time 00:00:00,000
+[ADM_tsAccess::updateExtraData] 04:00:25-129 AAC ADTS extradata:
+
+ 0000 : ..                 11 90
+[admSaver::setupAudio] 04:00:25-129 Setting up 1 audio track(s)
+[admSaver::setupAudio] 04:00:25-130 [audioTrack 0] Creating audio encoding stream, starttime 00:00:00,000(copy)
+[audioCreateCopyStream] 04:00:25-130 Creating audio stream copy with compensation : startTime=00:00:00,000
+[audioCreateCopyStream] 04:00:25-130 and shift =00:00:00,000
+[ADM_audioStreamCopy::ADM_audioStreamCopy] 04:00:25-130 Creating copy stream, startTime=00:00:00,000, shift=0
+[ADM_edAudioTrackFromVideo::goToTime] 04:00:25-130 [edAudioTrackFromVideo] Seeking to 00:00:00,000
+[ADM_edAudioTrackFromVideo::goToTime] 04:00:25-130 [edAudioTrackFromVideo] => seg 0, rel time 00:00:00,000
+[ADM_tsAccess::updateExtraData] 04:00:25-130 AAC ADTS extradata:
+
+ 0000 : ..                 11 90
+[ADM_edAudioTrackFromVideo::goToTime] 04:00:25-131 [edAudioTrackFromVideo] Seeking to 00:00:00,000
+[ADM_edAudioTrackFromVideo::goToTime] 04:00:25-131 [edAudioTrackFromVideo] => seg 0, rel time 00:00:00,000
+[ADM_tsAccess::updateExtraData] 04:00:25-131 AAC ADTS extradata:
+
+ 0000 : ..                 11 90
+[FF] Muxer opened
+[muxerFFmpeg::initVideo] Initial audio delay: 66 ms
+[FF] Using 40 bytes for video extradata
+[muxerFFmpeg::initVideo] 04:00:25-132 Video has extradata and muxer requires globalHeader, assuming it is done so.
+[muxerFFmpeg::initVideo] Video initialized
+[rescaleFps] 04:00:25-132  TimeBase for video 1000/30000
+[FF] Bitrate 128
+[muxerFFmpeg::initAudio] 04:00:25-133 Using default channel layout 0x3 for 2 channels
+[muxerFFmpeg::initAudio] 04:00:25-133 Audio has extradata and muxer requires globalHeader, assuming it is done so.
+[muxerFFmpeg::initAudio] 04:00:25-133 Language for track 0 is und
+[FF] Audio initialized
+[muxerMkv::open] 04:00:25-134 Timebase codec = 1/1000
+[muxerMkv::open] 04:00:25-134 Timebase codec2 = 1000/30000
+[FF] Saving
+[muxerFFmpeg::saveLoop] 04:00:25-134 avg fps=30000
+[ADM_muxer::initUI] 04:00:25-134 Muxer, creating UI, video duration is 00:36:41,099
+Encoding Phase        : Saving
+Encoding Audio codec  : AAC
+Encoding Container        : Matroska
+[muxerFFmpeg::saveLoop] Final audio delay: 66 ms
+[ADM_edAudioTrackFromVideo::getPacket] 04:00:25-135 Audio packet is too early 6667 ms, this segment starts at 66667ms
+[audioClock] Drift detected :149333 vs 177333, delta=28000
+ 52% done       frames: 34531   elapsed: 00:00:01,001
+[tsPacket::getSinglePacket] Sync lost at 0x20da1a48 (value: 0x0)
+[tsPacket::getSinglePacket] End of file reached
+[ADM_edAudioTrackFromVideo::getPacket] 04:00:27-022 Audio getPacket failed, audioSegment=0
+[ADM_edAudioTrackFromVideo::getPacket] 04:00:27-022 ..and this is the last segment
+[muxerFFmpeg::saveLoop] 04:00:27-023 No more audio packets for audio track 0
+[ADM_Composer::getCompressedPicture] 04:00:27-023 Failed to get next frame for ref 0
+[ADM_Composer::switchToNextSegment] 04:00:27-023 This is the last segment (0)
+[ADM_Composer::getCompressedPicture] 04:00:27-023 Cannot update to new segment
+[ADM_videoStreamCopy::getPacket] 04:00:27-023 Get packet failed
+[muxerFFmpeg::saveLoop] 04:00:27-023 [FF] Wrote 66028 frames, nb audio streams 1
+[muxerFFmpeg::saveLoop] 04:00:27-024 [FF] Found 0 missing PTS / 66028 total frames
+[muxerMkv::close] 04:00:27-024 [Matroska] Closing
+[muxerMkv::~muxerMkv] 04:00:27-025 Destroying Matroska muxer.
+100% done       frames: 66028   elapsed: 00:00:01,890
+[DIA_encodingBase::~DIA_encodingBase] 04:00:27-025 DiaEncodingBase: Destroying
+[ADM_videoStreamCopyFromAnnexB::~ADM_videoStreamCopyFromAnnexB] 04:00:27-025 Destroying AnnexB to iso filtet
+[ADM_Composer::rewind] 04:00:27-025 Rewinding
+[ADM_Composer::switchToSegment] 04:00:27-026 Trying to switch to seg 0 with startTime in reference pic= 66 ms
+[ADM_Composer::seektoTime] 04:00:27-026 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:00:27-026 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:00:27-026 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:00:27-027 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::switchToSegment] 04:00:27-038 Switched ok to segment 0 (dontdecode=0)
+[admPreview::start] 04:00:27-038 admPreview,starting
+[ADM_Composer::seektoTime] 04:00:27-038 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:00:27-038 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:00:27-038 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:00:27-039 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:00:27-049 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us      
+[saveCB] 04:00:27-050 Updating last write folder with J:\avidemux_files\avidemux_output\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・
+84336008)_241027_130024.ts
+
+ ********** Automation ended***********
+*********************************
+*********************************
+End of program..
+*********************************
+*********************************
+[preferences::save] 04:00:27-051 Saving prefs to C:\Users\OK\AppData\Roaming\avidemux\config3.tmp
+[admPreview::destroy] 04:00:27-053 Destroying preview
+[ADM_EditorSegment::deleteAll] 04:00:27-053 [Editor] Deleting all videos
+[lavc] Killing decoding threads
+[lavc] Destroyed
+[tsHeader::close] 04:00:27-058 Destroying TS demuxer
+[tsHeader::close] 04:00:27-061 Destroying TS demuxer
+[ADM_edAudioTrackFromVideo::~ADM_edAudioTrackFromVideo] 04:00:27-062 Destroying edAudio from video track 0 at 5fb45010
+[ADM_PP::cleanup] 04:00:27-062 Deleting post proc
+[ADM_EditorSegment::deleteAll] 04:00:27-062 [Editor] Deleting all videos
+Normal exit
+[abortExitHandler] 04:00:27-062 already done, nothing to do
+Done.
+
+
+
+
+##########################################################################################
+##########################################################################################
+##########################################################################################
+
+
+
+
+
+
+K\x5csource\x5crepos\x5cRepository4_python\x5cavidemux_test\x5cavidemux_sample2.py' ;bbd5dc1b-adcb-4d9e-82c6-fa91a235a168*****
+input_file = J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023年01月21日19時32分51秒(84336008).ts
+Using C:\Users\OK\AppData\Roaming\avidemux\ as base directory for prefs, jobs, etc.
+Using C:\Users\OK\AppData\Local\avidemux\ as log directory.
+*************************
+  Avidemux v2.8.1
+*************************
+ http://www.avidemux.org
+ Code      : Mean, JSC, Grant Pedersen,eumagga0x2a
+ GFX       : Nestor Di, nestordi@augcyl.org
+ Design    : Jakub Misak
+ FreeBSD   : Anish Mistry, amistry@am-productions.biz
+ Audio     : Mihail Zenkov
+ Mac OS X  : Kuisathaverat, Harry van der Wolf
+ Win32     : Grant Pedersen
+
+Build Target: Microsoft Windows (x86-64)
+User Interface: CLI
+Operating System: Microsoft Windows (6.2.9200; 64-bit)
+Time: Sun Oct 27 13:04:40 2024
+
+0: avidemux_cli
+1: --load
+2: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts
+3: --start
+4: 00:00.00.000
+5: --end
+6: 00:12.00:500
+7: --save
+8: J:\avidemux_files\avidemux_output\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008)_241027_130439.ts
+
+Initialising prefs
+[preferences::load] 04:04:40-041 Loading prefs from C:\Users\OK\AppData\Roaming\avidemux\config3
+[preferences::load] 04:04:40-042 Preferences found and loaded
+[CpuCaps] Checking CPU capabilities
+                MMX detected
+                MMXEXT detected
+                SSE detected
+                SSE2 detected
+                SSE3 detected
+                SSSE3 detected
+                SSE4 detected
+                SSE42 detected
+                AVX detected
+                AVX2 detected
+[CpuCaps::init] 04:04:40-044 [CpuCaps] End of CPU capabilities check (cpuCaps: 0x00003de6, cpuMask: 0xffffffff)
+[CpuCaps::setMask] 04:04:40-044 [CpuCaps] Setting mask to 0x7fffffff
+[CpuCaps::setMask] 04:04:40-044 [CpuCaps] Forcing lav cpu flags 0x0000c3db
+Initializing WinSock
+WinSock ok
+Initializing Dithering tables
+[UI Toolkit] Running version 02:00
+[Script] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines
+[Script] Tinypy INFO - Registering group addons
+[Script] Tinypy INFO -  Registering: help
+[Script] Tinypy INFO -  Registering: get_folder_content
+[Script] Tinypy INFO -  Registering: get_file_size
+[Script] Tinypy INFO -  Registering: basename
+[Script] Tinypy INFO -  Registering: dirname
+[Script] Tinypy INFO -  Registering: splitext
+[Script] Tinypy INFO - Registering class: Avidemux
+[Script] Tinypy INFO - Registering class: Editor
+[Script] Tinypy INFO - Registering class: Gui
+[Script] Tinypy INFO - Registering class: DFToggle
+[Script] Tinypy INFO - Registering class: DFInteger
+[Script] Tinypy INFO - Registering class: DFMenu
+[Script] Tinypy INFO - Registering class: DFTimeStamp
+[Script] Tinypy INFO - Registering class: DialogFactory
+[Script] Tinypy INFO - Registering group test
+[Script] Tinypy INFO -  Registering: testAssert
+[Script] Tinypy INFO -  Registering: testCrash
+[Script] Tinypy INFO -  Registering: testSub
+[Script] Tinypy INFO - Registering static class os
+[Script] Tinypy INFO -  Registering: environ
+[Script] Tinypy INFO - Python initialised
+[Script] loaded C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines\libADM_script_tinyPy.dll
+[Script] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines/cli
+[buildDirectoryContent] 04:04:40-053 Cannot list content of C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\scriptEngines/cli
+[ADM_ad_loadPlugins] 04:04:40-054 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDecoder
+[tryLoadingAudioPlugin] 04:04:40-054 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_Mad.dll, desc: LibMad decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-055 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_a52.dll, desc: LibAC3 decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-056 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_alaw.dll, desc: A-law decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-057 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ima_adpcm.dll, desc: IMA ADPCM decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-058 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_lav.dll, desc: Lavcodec decoder plugin for avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 04:04:40-059 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ms_adpcm.dll, desc: Ulaw decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-060 [ADM_ad_plugin] Plugin loaded version 1.0.0, name libADM_ad_opencore_amrnb.dll, desc: opencore-amrnb decoder plugin for Avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 04:04:40-060 [ADM_ad_plugin] Plugin loaded version 1.0.0, name libADM_ad_opencore_amrwb.dll, desc: opencore-amrwb decoder plugin for Avidemux (c) Mean/Gruntster
+
+[tryLoadingAudioPlugin] 04:04:40-062 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_opus.dll, desc: libOpus decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-063 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_ulaw.dll, desc: Ulaw decoder plugin for avidemux (c) Mean
+
+[tryLoadingAudioPlugin] 04:04:40-064 [ADM_ad_plugin] Plugin loaded version 0.0.1, name libADM_ad_vorbis.dll, desc: libVorbis decoder plugin for avidemux (c) Mean
+
+[ADM_ad_loadPlugins] 04:04:40-065 Scanning done, found 11 audio decoders
+[ADM_av_loadPlugins] 04:04:40-065 [ADM_av_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDevices        
+[ADM_AudioDevices::ADM_AudioDevices] 04:04:40-066 Name :Win32 ApiVersion :2
+[tryLoadingFilterPlugin] 04:04:40-066 [Filters] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioDevices\libADM_av_win32.dll as  Win32 audio device (c) mean
+[ADM_av_loadPlugins] 04:04:40-067 [ADM_av_plugin] Scanning done
+[ADM_ae_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders
+[AudioEncoder] Loaded Aften version 01.00.00 wavTag :0x2000
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_aften.dll as  Aften AC3 encoder 
+plugin Mean/Gruntster 2008
+[AudioEncoder] Loaded FDK_AAC version 01.00.00 wavTag :0xff
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_fdk_aac.dll as  FDK AAC encoder 
+plugin Mean 2016
+[AudioEncoder] Loaded Lame version 01.00.00 wavTag :0x55
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lame.dll as  Lame MP3 encoder plugin Mean 2009
+[AudioEncoder] Loaded LavAAC version 01.00.00 wavTag :0xff
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_aac.dll as  AAC LavCodec encoder plugin Mean 2008/2016
+[AudioEncoder] Loaded LavAC3 version 01.00.00 wavTag :0x2000
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_ac3.dll as  AC3 LavCodec encoder plugin Mean 2008/2009
+[AudioEncoder] Loaded LavMP2 version 01.00.00 wavTag :0x50
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_lav_mp2.dll as  MP2 LavCodec encoder plugin Mean 2008/2009
+[AudioEncoder] Loaded Opus version 01.00.00 wavTag :0x26ae
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_opus.dll as  Opus encoder plugin Mean 2017
+[AudioEncoder] Loaded PCM version 01.00.00 wavTag :0x1
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_pcm.dll as  PCM encoder plugin Mean 2008
+[AudioEncoder] Loaded TwoLame version 01.00.00 wavTag :0x50
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_twolame.dll as  TwoLame MP2 encoder plugin Mean 2008
+[AudioEncoder] Loaded Vorbis version 01.00.00 wavTag :0x676f
+[AudioEncoder] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\audioEncoders\libADM_ae_vorbis.dll as  Vorbis encoder plugin Mean 2008
+[ADM_ae_plugin] Scanning done
+[ADM_dm_loadPlugins] 04:04:40-079 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers
+[Demuxer]Name :asf ApiVersion :3 Description :asf/wmv demuxer plugin (c) Mean 2007/2009
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_asf.dll as  asf/wmv demuxer plugin (c) Mean 2007/2009
+[Demuxer]Name :avs ApiVersion :3 Description :avsProxy demuxer plugin (c) Mean 2007/2010
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_avsproxy.dll as  avsProxy demuxer plugin 
+(c) Mean 2007/2010
+[Demuxer]Name :flv ApiVersion :3 Description :flash demuxer plugin (c) Mean 2007/2007
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_flv.dll as  flash demuxer plugin (c) Mean 2007/2007
+[Demuxer]Name :mkv ApiVersion :3 Description :Matroska demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_matroska.dll as  Matroska demuxer plugin 
+(c) Mean 2007/2008
+[Demuxer]Name :mp4 ApiVersion :3 Description :Mp4/Mov/3GP demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_mp4.dll as  Mp4/Mov/3GP demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :MXF ApiVersion :3 Description :MXF demuxer plugin (c) Mean 2010
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_mxf.dll as  MXF demuxer plugin (c) Mean 2010
+[Demuxer]Name :navs ApiVersion :3 Description :native avs demuxer plugin (c) Mean 2018
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_nativeAvs.dll as  native avs demuxer plugin (c) Mean 2018
+[Demuxer]Name :openDml ApiVersion :3 Description :AVI/OpenDML demuxer plugin (c) Mean 2007/2007
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_opendml.dll as  AVI/OpenDML demuxer plugin (c) Mean 2007/2007
+[Demuxer]Name :picture ApiVersion :3 Description :Picture demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_pic.dll as  Picture demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :ps ApiVersion :3 Description :mpeg ps demuxer plugin (c) Mean 2007/2008
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_ps.dll as  mpeg ps demuxer plugin (c) Mean 2007/2008
+[Demuxer]Name :ts ApiVersion :3 Description :mpeg ts demuxer plugin (c) Mean 2007/2009
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_ts.dll as  mpeg ts demuxer plugin (c) Mean 2007/2009
+[Demuxer]Name :vs ApiVersion :3 Description :VapourSynth demuxer plugin (c) Mean 2015
+[Demuxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\demuxers\libADM_dm_vapoursynth.dll as  VapourSynth demuxer plugin (c) Mean 2015
+[ADM_dm_loadPlugins] 04:04:40-092 Demuxer plugin : ts, priority :90
+[ADM_dm_loadPlugins] 04:04:40-092 Demuxer plugin : avs, priority :50
+[ADM_dm_loadPlugins] 04:04:40-092 Demuxer plugin : flv, priority :50
+[ADM_dm_loadPlugins] 04:04:40-092 Demuxer plugin : mkv, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : mp4, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : MXF, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : navs, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : openDml, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : picture, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : asf, priority :50
+[ADM_dm_loadPlugins] 04:04:40-093 Demuxer plugin : vs, priority :50
+[ADM_dm_loadPlugins] 04:04:40-094 Demuxer plugin : ps, priority :10
+[ADM_dm_loadPlugins] 04:04:40-094 Scanning done, 12 demuxers found
+[ADM_mx_loadPlugins] 04:04:40-094 Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers
+[Muxer]Name :AVI ApiVersion :9 Description :AVI muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_avi.dll as  AVI muxer plugin (c) Mean 2008   
+[Muxer]Name :dummy ApiVersion :9 Description :dummy2 muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_dummy.dll as  dummy2 muxer plugin (c) Mean 2008
+[Muxer]Name :ffPS ApiVersion :9 Description :ffMpeg PS muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_ffPS.dll as  ffMpeg PS muxer plugin (c) Mean 
+2009
+[Muxer]Name :ffTS ApiVersion :9 Description :ffMpeg TS muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_ffTS.dll as  ffMpeg TS muxer plugin (c) Mean 
+2009
+[Muxer]Name :FLV ApiVersion :9 Description :FLV muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_flv.dll as  FLV muxer plugin (c) Mean 2008   
+[Muxer]Name :MKV ApiVersion :9 Description :Matroska muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mkv.dll as  Matroska muxer plugin (c) Mean 2009
+[Muxer]Name :MOV ApiVersion :9 Description :MOV muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mov.dll as  MOV muxer plugin (c) Mean 2009   
+[Muxer]Name :MP4 ApiVersion :9 Description :MP4 muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_mp4.dll as  MP4 muxer plugin (c) Mean 2009   
+[Muxer]Name :RAW ApiVersion :9 Description :RAW muxer plugin (c) Mean 2008
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_raw.dll as  RAW muxer plugin (c) Mean 2008   
+[Muxer]Name :WEBM ApiVersion :9 Description :WebM muxer plugin (c) Mean 2009
+[Muxers] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\muxers\libADM_mx_webm.dll as  WebM muxer plugin (c) Mean 2009 
+[ADM_mx_plugin] Scanning done
+[ADM_mx_loadPlugins] 04:04:40-102 Scanning done, 10 muxers found
+[ADM_vd6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoDecoders
+[videoDecoder6]Name :aom ApiVersion :1 Description :Decoder using libaom (c) mean 2010 / eumagga0x2a 2019
+[VideoDecoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoDecoders\libADM_vd_aom.dll as  Decoder using libaom (c) mean 2010 / eumagga0x2a 2019
+[ADM_vd6_plugin] Scanning done
+[ADM_ve6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders
+[videoEncoder6]Name :ffDv ApiVersion :7 Description :Simple ffmpeg based DV Encoder (c) 2013 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffDv.dll as  Simple ffmpeg based DV Encoder (c) 2013 Mean
+[videoEncoder6]Name :ffFlv1 ApiVersion :7 Description :Simple ffmpeg based Flv1 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffFlv1.dll as  Simple ffmpeg based Flv1 Encoder (c) 2009 Mean
+[videoEncoder6]Name :ffMpeg2 ApiVersion :7 Description :Simple ffmpeg based Mpeg2 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffMpeg2.dll as  Simple ffmpeg based Mpeg2 Encoder (c) 2009 Mean
+[videoEncoder6]Name :ffNvEncH264 ApiVersion :7 Description :Nvidia hw encoder
+[nvCheckDll] 04:04:40-109        checking nvcuda.dll-> 0
+[nvEncProbe] 04:04:40-110 Cannot load cuda dll
+C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffNvencH264.dll:ProbingFailed
+[videoEncoder6]Name :ffNvEncHEVC ApiVersion :7 Description :Nvidia hw encoder
+[nvCheckDll] 04:04:40-112        checking nvcuda.dll-> 0
+[nvEncProbe] 04:04:40-112 Cannot load cuda dll
+C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffNvencHEVC.dll:ProbingFailed
+[videoEncoder6]Name :FFV1 ApiVersion :7 Description :FFV1 (c) 2021 szlldm
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_ffv1.dll as  FFV1 (c) 2021 szlldm
+[videoEncoder6]Name :HUFFYUV ApiVersion :7 Description :FF Huffyuv (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_huff.dll as  FF Huffyuv (c) 2009 Mean
+[videoEncoder6]Name :Mjpeg ApiVersion :7 Description :Simple jpeg Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_jpeg.dll as  Simple jpeg Encoder (c) 2009 Mean
+[videoEncoder6]Name :null ApiVersion :7 Description :Null Encoder (c) 2010 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_null.dll as  Null Encoder (c) 2010 Mean
+[videoEncoder6]Name :utvideo ApiVersion :7 Description :Ut Video (c) 2020 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_utvideo.dll as  Ut Video (c) 2020 Mean
+[videoEncoder6]Name :vp9 ApiVersion :7 Description :libvpx based VP9 Encoder
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_vp9.dll as  libvpx based VP9 Encoder
+[videoEncoder6]Name :x264 ApiVersion :7 Description :x264 based mpeg4 AVC Encoder (c) 2010 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_x264_other.dll as  x264 based mpeg4 AVC Encoder (c) 2010 Mean/Gruntster
+[videoEncoder6]Name :x265 ApiVersion :7 Description :x265 based HEVC Encoder (c) 2014 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_x265_other.dll as  x265 based HEVC Encoder (c) 2014 Mean/Gruntster
+[videoEncoder6]Name :xvid4 ApiVersion :7 Description :Xvid4 based mpeg4 Encoder (c) 2010 Mean/Gruntster
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_xvid4.dll as  Xvid4 based mpeg4 Encoder (c) 2010 Mean/Gruntster
+[videoEncoder6]Name :YV12Encoder ApiVersion :7 Description :Simple YV12 Encoder (c) 2009 Mean
+[VideoEncoder6] Registered filter C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders\libADM_ve_yv12.dll as  Simple YV12 Encoder (c) 2009 Mean
+[ADM_ve6_plugin] Scanning done
+[ADM_ve6_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders/cli
+[buildDirectoryContent] 04:04:40-125 Cannot list content of C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoEncoders/cli
+[ADM_ve6_plugin] Scanning done
+[ADM_vf_plugin] Scanning directory C:\Program Files\Avidemux 2.8 VC++ 64bits\plugins\videoFilters
+[parseOneFolder] 04:04:40-126 Feature Mask = 0x0
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name dgbob/dgbob
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name aarotate/Arbitrary Rotate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name addBorder/Add Borders
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name admIvtc/ADM ivtc.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name AsciiView/Ascii View
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name black/Black
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blend/Blend Frames
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name changeFps/Change FPS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorYuv/Avisynth color filter.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name decimateFrame/Decimate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name MplayerDenoise3D/Mplayer Denoise 3D
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name MplayerDenoise3DHQ/Mplayer Denoise 3D HQ
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name dummy/Dummy
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeTo/Fade
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeToBlack/Fade to black
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Gaussian/Gaussian convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name hzstackfield/Horizontal Stack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name ivtcRemover/Remove IVTC dupe.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name kerndelDeint/Kernel Deint.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name largeMedian/Large Median (5x5).
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lavdeint/Libavdec Deinterlacers
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lumaonly/GreyScale
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Mean/Mean convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Median/Median convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name mergefields/Merge Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name invplane/Negative
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name printInfo/PrintInfo
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name rplane/Remove  Plane
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name resampleFps/Resample FPS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name rotate/Rotate
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name SeparateFields/Separate Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name Sharpen/Sharpen convolution.
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name ssa/SSA/ASS/SRT
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name stackField/Stack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name stillimage/Still Image
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name swapUV/Swap UV
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name unstackField/Unstack Fields
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name yadif/Yadif
+[ADM_vf_plugin] Scanning done, found 38 video filters so far
+[parseOneFolder] 04:04:40-189 Feature Mask = 0x0
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name crop/Crop
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name hue/Mplayer Hue
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name zoom/Zoom
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name analyzer/Analyzer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artCartoon/Cartoon
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artCharcoal/Charcoal / Chalkboard
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artChromaHold/Chroma Hold
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artChromaKey/Chroma Key
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artColorEffect/Color Effect
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artDynThreshold/Dynamic Threshold
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artGrid/Grid
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artMirror/Mirror
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artPixelize/Pixelize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artPosterize/Posterize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artVHS/VHS
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name artVignette/Vignette
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blackenBorder/Blacken Borders
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name blur/Blur
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name chromashift/ChromaShift
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorBalance/Color balance
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name colorTemp/Color temperature
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name contrast/Contrast
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name cubicLUT/3D LUT
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name deband/Deband
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name delogoHQ/DelogoHQ
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name eq2/MPlayer eq2
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeFromImage/Fade from first image
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeIn/Fade in
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeOut/Fade out
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name fadeThrough/Fade through
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name fitToSize/Fit to size
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name flip/Flip
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name imageStab/Image stabilizer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name addLogo/Add logo
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name lumaStab/Luma stabilizer
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name mpdelogo2/MPlayer delogo2
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name msharpen/Msharpen
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name quadTrans/Quadrilateral transformation
+[ADM_vf_plugin] Plugin loaded version 1.0.1, name swscale/swsResize
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name waveletDenoise/Wavelet denoiser
+[ADM_vf_plugin] Plugin loaded version 1.0.0, name waveletSharp/Wavelet sharpener
+[ADM_vf_plugin] Scanning done, found 79 video filters so far
+[win32AudioDevice::win32AudioDevice] 04:04:40-211 [Win32] Creating audio device
+
+ *** Automated : 19 entries*************
+load-->1
+[TS Demuxer] Probing...
+[checkMarker] 04:04:40-212 [Ts Demuxer] Sync ok :5577 Sync ko :0
+[detectTs] 04:04:40-212 [TS Demuxer] 188 bytes packet detected
+ [avsProxy] Cannot open that
+ [flvHeader] Cannot open that
+ [mkvHeader] Cannot open that
+ [MP4] Cannot open that...
+ [mxfHeader] Cannot open that (10114047)
+[probe] 04:04:40-213  [avsProxy] Cannot open that
+ [openDML] Cannot open that
+[probe] 04:04:40-213  [picHeader] Cannot open that
+[probe] 04:04:40-213 [asfHeader] Cannot open that
+[vsDynaLoader::vsInit] 04:04:40-215 Cannot load the vapoursynth-script library
+ match :134 / 455 (probeSize:1048576)
+[tsDemux] Append=0
+
+Simple loading:
+ file: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts, size: 551164488
+ found 1 files
+Done
+[TsDemuxerer] Reading Video
+[TsIndex] codec :<H264>
+[indexFile] Token ExtraData not found
+  [0]Version
+  [1]Type
+  [2]File
+  [3]Append
+  [4]Width
+  [5]Height
+  [6]Fps
+  [7]Interlaced
+  [8]AR
+  [9]Pid
+  [10]VideoCodec
+[tsDemux] Video pid is 0x100 256
+[psDemuxer] Reading Audio
+00:fq=48000
+00:br=16000
+00:chan=2
+00:codec=255
+00:pid=257
+00:muxing=1
+Language=und
+[tsDemux] Found 2 bytes of video extra data (2)
+
+Simple loading:
+ file: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts, size: 551164488
+ found 1 files
+Done
+[TsPacket] Detecting TS/TS2...
+[tsPacket::open] Sync byte found at offset 0
+[TsPacket] Score : 188:20, 192:0 out of 20
+[TsPacket] Probably TS1 (188)...
+[tsPacket::open] Sync established at offset 0
+[ADM_tsAccess::ADM_tsAccess] 04:04:40-222 Creating audio track, pid=101, muxing =1
+[ADM_tsAccess::ADM_tsAccess] 04:04:40-223 Creating ts audio access with 2 bytes of extradata.
+ 0000 : ..                 11 90
+[TsDemuxerer] Reading index
+[TsDemuxer] Found 204 I, 26977 B, 34445 P
+[TsH264] Found 4402 IDR
+[TsH264] Remapping IDR to I and I TO P
+[tsDemux] Found 66028 video frames
+
+Simple loading:
+ file: J:\_Write_Mi\roku_save_241006\_ss\rem ss\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・84336008).ts, size: 551164488
+ found 1 files
+Done
+[TsPacket] Detecting TS/TS2...
+[tsPacket::open] Sync byte found at offset 0
+[TsPacket] Score : 188:20, 192:0 out of 20
+[TsPacket] Probably TS1 (188)...
+[tsPacket::open] Sync established at offset 0
+[tsDemuxer] open() returned 1
+[ADM_PP::ADM_PP] 04:04:40-282 Initializing postproc
+[ADM_PP::cleanup] 04:04:40-282 Deleting post proc
+[ADM_PP::update] 04:04:40-282 updating post proc
+[ADM_PP::update] 04:04:40-284 Enabled type:3 strength:3
+[ADM_Composer::addFile] 04:04:40-284 Clearing video filters
+[ADM_vf_clearFilters] 04:04:40-284 clear filters
+[ADM_ad_searchCodec] 04:04:40-284 [ADM_ad_plugin]Format 0xff : probing libADM_ad_Mad.dll score 0
+[ADM_ad_searchCodec] 04:04:40-284 [ADM_ad_plugin]Format 0xff : probing libADM_ad_a52.dll score 0
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_alaw.dll score 0
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_ima_adpcm.dll score 0
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_lav.dll score 150
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_ms_adpcm.dll score 0
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_opencore_amrnb.dll score 0
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_opencore_amrwb.dll score 0
+[ADM_ad_searchCodec] 04:04:40-285 [ADM_ad_plugin]Format 0xff : probing libADM_ad_opus.dll score 0
+[ADM_ad_searchCodec] 04:04:40-286 [ADM_ad_plugin]Format 0xff : probing libADM_ad_ulaw.dll score 0
+[ADM_ad_searchCodec] 04:04:40-286 [ADM_ad_plugin]Format 0xff : probing libADM_ad_vorbis.dll score 0
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:04:40-286  [ADM_AD_LAV] Using decoder for type 0xff
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:04:40-286  [ADM_AD_LAV] #of channels 2
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:04:40-286 [ADM_AD_LAV] Using 2 bytes of extra header data, 2 channels
+
+ 0000 : ..                 11 90
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:04:40-288 Decoder created using float planar...
+[ADM_AudiocoderLavcodec::ADM_AudiocoderLavcodec] 04:04:40-288 [ADM_ad_lav] init successful (blockalign 1), channels=2
+[ADM_edAudioTrackFromVideo::ADM_edAudioTrackFromVideo] 04:04:40-289 Creating edAudio from video track 0 at 8929e510
+[ADM_EditorSegment::addReferenceVideo] Video FCC: H264 (34363248)
+[ADM_getDecoder] 04:04:40-289 Searching decoder in plugins
+[tryCreatingVideoDecoder] 04:04:40-289 No decoder found in plugin
+[ADM_getDecoder] 04:04:40-289 Searching decoder in coreVideoCodec(1024 x 768, extradataSize:0)...
+[ADM_coreCodecGetDecoder] 04:04:40-290 Searching decoder in coreVideoCodec(1024 x 768, extradataSize:0)...
+[lavc] Build: 3835492
+[lavc] Enabling MT decoder with 8 threads
+[decoderFFH264::decoderFFH264] 04:04:40-290 [lavc] Initializing H264 decoder with 0 extradata
+[decoderFFH264::decoderFFH264] 04:04:40-291 [lavc] Decoder init: AV_CODEC_ID_H264 video decoder initialized! (H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10)
+[EditorCache::EditorCache] 04:04:40-291 Video cache instance created at 000001EB88CDFBF0
+[EditorCache::createBuffers] 04:04:40-292 Added 16 video cache buffers, 16 total.
+[ADM_EditorSegment::addReferenceVideo] 04:04:40-292 Original frame increment 00:00:00,033 = 33333 us
+[ADM_EditorSegment::addReferenceVideo] 04:04:40-294 min increment 00:00:00,033 = 33333 us for frame 3
+[ADM_EditorSegment::addReferenceVideo] 04:04:40-294 max increment 00:00:00,033 = 33334 us for frame 2
+[ADM_EditorSegment::addReferenceVideo] 04:04:40-294 About 33333 microseconds per frame, 66028 frames
+[ADM_EditorSegment::addReferenceVideo] 04:04:40-294 The first frame DTS = 0 ms
+[ADM_EditorSegment::addReferenceVideo] 04:04:40-294 The first frame has a PTS > 0, adjusting to 66 ms
+[ADM_EditorSegment::updateStartTime] 04:04:40-294 Setting DTS start in ref to 00:00:00,000
+[ADM_EditorSegment::updateStartTime] 04:04:40-294 New total duration = 00:36:41,033
+[ADM_verifyDts] 04:04:40-295 Verifying DTS....
+[ADM_verifyDts] 04:04:40-295 Checking from 1 to 66028
+[ADM_verifyDts] 04:04:40-296 Pass 2..
+[ADM_verifyDts] 04:04:40-297 DTS verified
+[Editor] B- frame possible with that codec
+[ADM_Composer::addFile] 04:04:40-298 [Editor] This is H264, check if we can fill missing PTS
+[ADM_setH264MissingPts] 04:04:40-299 We have 0 missing PTS
+[ADM_Composer::addFile] 04:04:40-299 H264 sometimes has invalid timestamps which confuse avidemux, checking
+[ADM_Composer::seektoTime] 04:04:40-299 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:04:40-300 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:04:40-300 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:04:40-301 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:04:40-318 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us
+[ADM_Composer::checkForValidPts] 04:04:40-319 Checking file for broken PTS...
+[ADM_Composer::checkForValidPts] 04:04:40-319 Checking 100 frames out of 66028.
+  1% done, elapsed:   12 ms
+  2% done, elapsed:   18 ms
+  3% done, elapsed:   24 ms
+  4% done, elapsed:   30 ms
+  5% done, elapsed:   36 ms
+  6% done, elapsed:   43 ms
+  7% done, elapsed:   48 ms
+  8% done, elapsed:   54 ms
+  9% done, elapsed:   60 ms
+ 10% done, elapsed:   66 ms
+ 11% done, elapsed:   73 ms
+ 12% done, elapsed:   79 ms
+ 13% done, elapsed:   86 ms
+ 14% done, elapsed:   91 ms
+ 15% done, elapsed:   96 ms
+ 16% done, elapsed:  102 ms
+ 17% done, elapsed:  107 ms
+ 18% done, elapsed:  112 ms
+ 19% done, elapsed:  118 ms
+ 20% done, elapsed:  126 ms
+ 21% done, elapsed:  135 ms
+ 22% done, elapsed:  140 ms
+ 23% done, elapsed:  145 ms
+ 24% done, elapsed:  152 ms
+ 25% done, elapsed:  159 ms
+ 26% done, elapsed:  165 ms
+ 27% done, elapsed:  170 ms
+ 28% done, elapsed:  176 ms
+ 29% done, elapsed:  181 ms
+ 30% done, elapsed:  187 ms
+ 31% done, elapsed:  191 ms
+ 32% done, elapsed:  196 ms
+ 33% done, elapsed:  202 ms
+ 34% done, elapsed:  207 ms
+ 35% done, elapsed:  213 ms
+ 36% done, elapsed:  220 ms
+ 37% done, elapsed:  225 ms
+ 38% done, elapsed:  231 ms
+ 39% done, elapsed:  238 ms
+ 40% done, elapsed:  247 ms
+ 41% done, elapsed:  255 ms
+ 42% done, elapsed:  260 ms
+ 43% done, elapsed:  267 ms
+ 44% done, elapsed:  272 ms
+ 45% done, elapsed:  277 ms
+ 46% done, elapsed:  283 ms
+ 47% done, elapsed:  291 ms
+ 48% done, elapsed:  296 ms
+ 49% done, elapsed:  303 ms
+ 50% done, elapsed:  309 ms
+ 51% done, elapsed:  314 ms
+ 52% done, elapsed:  321 ms
+ 53% done, elapsed:  327 ms
+ 54% done, elapsed:  334 ms
+ 55% done, elapsed:  339 ms
+ 56% done, elapsed:  345 ms
+ 57% done, elapsed:  350 ms
+ 58% done, elapsed:  357 ms
+ 59% done, elapsed:  362 ms
+ 60% done, elapsed:  368 ms
+ 61% done, elapsed:  373 ms
+ 62% done, elapsed:  378 ms
+ 63% done, elapsed:  384 ms
+ 64% done, elapsed:  392 ms
+ 65% done, elapsed:  401 ms
+ 66% done, elapsed:  409 ms
+ 67% done, elapsed:  414 ms
+ 68% done, elapsed:  420 ms
+ 69% done, elapsed:  428 ms
+ 70% done, elapsed:  433 ms
+ 71% done, elapsed:  440 ms
+ 72% done, elapsed:  445 ms
+ 73% done, elapsed:  450 ms
+ 74% done, elapsed:  457 ms
+ 75% done, elapsed:  465 ms
+ 76% done, elapsed:  472 ms
+ 77% done, elapsed:  477 ms
+ 78% done, elapsed:  484 ms
+ 79% done, elapsed:  491 ms
+ 80% done, elapsed:  496 ms
+ 81% done, elapsed:  502 ms
+ 82% done, elapsed:  509 ms
+ 83% done, elapsed:  514 ms
+ 84% done, elapsed:  519 ms
+ 85% done, elapsed:  527 ms
+ 86% done, elapsed:  532 ms
+ 87% done, elapsed:  538 ms
+ 88% done, elapsed:  544 ms
+ 89% done, elapsed:  549 ms
+ 90% done, elapsed:  555 ms
+ 91% done, elapsed:  560 ms
+ 92% done, elapsed:  566 ms
+ 93% done, elapsed:  572 ms
+ 94% done, elapsed:  581 ms
+ 95% done, elapsed:  587 ms
+ 96% done, elapsed:  593 ms
+ 97% done, elapsed:  598 ms
+ 98% done, elapsed:  604 ms
+ 99% done, elapsed:  609 ms
+[ADM_Composer::seektoTime] 04:04:40-928 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:04:40-928 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:04:40-929 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:04:40-930 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:04:40-941 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us
+[ADM_Composer::checkForValidPts] 04:04:40-942 -------- Stats :----------
+[ADM_Composer::checkForValidPts] 04:04:40-942 nbBFrames:41
+[ADM_Composer::checkForValidPts] 04:04:40-942 nbPFrames:53
+[ADM_Composer::checkForValidPts] 04:04:40-942 nbIFrames:6
+[ADM_Composer::checkForValidPts] 04:04:40-942 nbNoImage:0
+[ADM_Composer::checkForValidPts] 04:04:40-942 nbPtsgoingBack:0
+[ADM_Composer::checkForValidPts] 04:04:40-942 -------- /Stats ----------
+[ADM_Composer::seektoTime] 04:04:40-943 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:04:40-943 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:04:40-943 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:04:40-944 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:04:40-954 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us
+[ADM_Composer::checkForDoubledFps] 04:04:40-955 Checking for doubled FPS.., time increment ceiling = 59999
+[ADM_Composer::checkForDoubledFps] 04:04:40-958 Checking DTS...
+[checkTiming] 04:04:40-958      Good : 7464
+[checkTiming] 04:04:40-959      Bad  : 50023
+[ADM_Composer::checkForDoubledFps] 04:04:40-959 Checking sorted PTS...
+[checkTiming] 04:04:40-959      Good : 1
+[checkTiming] 04:04:40-959      Bad  : 66026
+[ADM_Composer::checkForDoubledFps] 04:04:40-959 Cannot halve fps
+[admPreview::destroy] 04:04:40-960 Destroying preview
+[renderDisplayResize] 04:04:40-960 Render to 1024x768 zoom=0.0000, old one =0 x 0, zoom=1.0000, renderer=0000000000000000
+[nullRender::nullRender] 04:04:40-960 Starting null renderer
+[renderCompleteRedrawRequest] 04:04:40-960 RedrawRequest
+[A_ResetMarkers] 04:04:40-960 Video Total duration : 00:36:41,033 ms
+[ADM_Composer::setMarkerBPts] 04:04:40-960 Selection's end point set to 00:36:41,033 (2201033332 us)
+[ADM_Composer::rewind] 04:04:40-960 Rewinding
+[ADM_Composer::switchToSegment] 04:04:40-961 Trying to switch to seg 0 with startTime in reference pic= 66 ms
+[ADM_Composer::seektoTime] 04:04:40-961 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:04:40-961 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:04:40-961 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:04:40-962 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::switchToSegment] 04:04:40-972 Switched ok to segment 0 (dontdecode=0)
+[admPreview::start] 04:04:40-972 admPreview,starting
+[updateLoaded] 04:04:40-973  conf updated
+[AudioEncoder] Selected copy for index 0, tag 0x0
+
+ Unknown command :--start
+
+ Found garbage 00:00.00.000
+
+ Unknown command :--end
+
+ Found garbage 00:12.00:500
+save-->1
+[UI_GetCurrentFormat] 04:04:40-974 Output format not specified or invalid. Trying MKV as fallback.
+[admSaver::admSaver] 04:04:40-975 [Save] Encoder index=0
+[admSaver::save] 04:04:40-975 Audio starting time 00:00:00,000
+[admSaver::save] 04:04:40-975 [A_Save] Saving..
+[ADM_Composer::checkCutsAreOnIntra] 04:04:40-975 Checking cuts start on keyframe..
+[checkCodec] 04:04:40-975 Codecs identified by isH264Compatible() as matching
+[muxerMkv::muxerMkv] 04:04:40-975 Creating Matroska muxer.
+[admSaver::dealWithH26x] 04:04:40-975 Input is probably AnnexB bitstream, convert it to mp4
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:04:40-976 Creating copy video stream, start time: 00:00:00,000
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:04:40-976 End time: 00:36:41,033
+[ADM_Composer::getTimeBase] 04:04:40-976 Ref video 0 is frame-encoded, copy mode: 1
+[ADM_Composer::getTimeBase] 04:04:40-976 Timebase set to 1000 / 30000
+[ADM_Composer::getFrameNumFromPtsOrBefore] 04:04:40-976 Best candidate for time 00:00:00,066 in reference is frame 0
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:04:40-976 PTS/DTS delta=66667 us
+[ADM_Composer::getOpenGopDelayForSegment] 04:04:40-977 Pts delta = 33333
+[ADM_Composer::getOpenGopDelayForSegment] 04:04:40-977 Pts delta = 100000
+[ADM_Composer::getOpenGopDelayForSegment] 04:04:40-977 Pts delta = 66666
+[ADM_Composer::getOpenGopDelayForSegment] 04:04:40-977 Not a bframe, stopping (4)
+[ADM_Composer::getNonClosedGopDelay] 04:04:40-977 Found maximum non closed gop delay = 0
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:04:40-977 Dts is too early, delaying everything by 66667 us
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:04:40-977  Fixating start time by 0
+[ADM_videoStreamCopy::ADM_videoStreamCopy] 04:04:40-978  Starting DTS=0, PTS=0 ms
+[ADM_videoStreamCopyFromAnnexB::ADM_videoStreamCopyFromAnnexB] 04:04:40-978 AnnexB to iso filter
+[ADM_videoStreamCopyFromAnnexB::extractExtraDataH264Internal] 04:04:40-978 PPS removed zero filler 3 -> 3
+[ADM_videoStreamCopyFromAnnexB::extractExtraDataH264Internal] 04:04:40-978 Copy from annexB: Found sps=24, pps=3.
+[ADM_videoStreamCopyFromAnnexB::extractExtraDataH264Internal] 04:04:40-978 generated 40 bytes of extradata.
+
+ 0000 : .M@)....gM@).(..   01 4d 40 29 ff e1 00 19 67 4d 40 29 e4 28 08 00
+ 0010 : .`".........y.0c   c3 60 22 00 00 03 00 02 00 00 03 00 79 1e 30 63
+ 0020 : ,...h..            2c 01 00 04 68 cf 97 20
+[ADM_edAudioTrackFromVideo::goToTime] 04:04:40-979 [edAudioTrackFromVideo] Seeking to 00:00:00,000
+[ADM_edAudioTrackFromVideo::goToTime] 04:04:40-979 [edAudioTrackFromVideo] => seg 0, rel time 00:00:00,000
+[ADM_tsAccess::updateExtraData] 04:04:40-979 AAC ADTS extradata:
+
+ 0000 : ..                 11 90
+[admSaver::setupAudio] 04:04:40-980 Setting up 1 audio track(s)
+[admSaver::setupAudio] 04:04:40-980 [audioTrack 0] Creating audio encoding stream, starttime 00:00:00,000(copy)
+[audioCreateCopyStream] 04:04:40-980 Creating audio stream copy with compensation : startTime=00:00:00,000
+[audioCreateCopyStream] 04:04:40-980 and shift =00:00:00,000
+[ADM_audioStreamCopy::ADM_audioStreamCopy] 04:04:40-980 Creating copy stream, startTime=00:00:00,000, shift=0
+[ADM_edAudioTrackFromVideo::goToTime] 04:04:40-980 [edAudioTrackFromVideo] Seeking to 00:00:00,000
+[ADM_edAudioTrackFromVideo::goToTime] 04:04:40-981 [edAudioTrackFromVideo] => seg 0, rel time 00:00:00,000
+[ADM_tsAccess::updateExtraData] 04:04:40-981 AAC ADTS extradata:
+
+ 0000 : ..                 11 90
+[ADM_edAudioTrackFromVideo::goToTime] 04:04:40-981 [edAudioTrackFromVideo] Seeking to 00:00:00,000
+[ADM_edAudioTrackFromVideo::goToTime] 04:04:40-981 [edAudioTrackFromVideo] => seg 0, rel time 00:00:00,000
+[ADM_tsAccess::updateExtraData] 04:04:40-981 AAC ADTS extradata:
+
+ 0000 : ..                 11 90
+[FF] Muxer opened
+[muxerFFmpeg::initVideo] Initial audio delay: 66 ms
+[FF] Using 40 bytes for video extradata
+[muxerFFmpeg::initVideo] 04:04:40-982 Video has extradata and muxer requires globalHeader, assuming it is done so.
+[muxerFFmpeg::initVideo] Video initialized
+[rescaleFps] 04:04:40-982  TimeBase for video 1000/30000
+[FF] Bitrate 128
+[muxerFFmpeg::initAudio] 04:04:40-983 Using default channel layout 0x3 for 2 channels
+[muxerFFmpeg::initAudio] 04:04:40-983 Audio has extradata and muxer requires globalHeader, assuming it is done so.
+[muxerFFmpeg::initAudio] 04:04:40-983 Language for track 0 is und
+[FF] Audio initialized
+[muxerMkv::open] 04:04:40-984 Timebase codec = 1/1000
+[muxerMkv::open] 04:04:40-984 Timebase codec2 = 1000/30000
+[FF] Saving
+[muxerFFmpeg::saveLoop] 04:04:40-985 avg fps=30000
+[ADM_muxer::initUI] 04:04:40-985 Muxer, creating UI, video duration is 00:36:41,099
+Encoding Phase        : Saving
+Encoding Audio codec  : AAC
+Encoding Container        : Matroska
+[muxerFFmpeg::saveLoop] Final audio delay: 66 ms
+[ADM_edAudioTrackFromVideo::getPacket] 04:04:40-985 Audio packet is too early 6667 ms, this segment starts at 66667ms
+[audioClock] Drift detected :149333 vs 177333, delta=28000
+ 51% done       frames: 33813   elapsed: 00:00:01,001
+[tsPacket::getSinglePacket] Sync lost at 0x20da1a48 (value: 0x0)
+[tsPacket::getSinglePacket] End of file reached
+[ADM_edAudioTrackFromVideo::getPacket] 04:04:42-935 Audio getPacket failed, audioSegment=0
+[ADM_edAudioTrackFromVideo::getPacket] 04:04:42-935 ..and this is the last segment
+[muxerFFmpeg::saveLoop] 04:04:42-935 No more audio packets for audio track 0
+[ADM_Composer::getCompressedPicture] 04:04:42-936 Failed to get next frame for ref 0
+[ADM_Composer::switchToNextSegment] 04:04:42-936 This is the last segment (0)
+[ADM_Composer::getCompressedPicture] 04:04:42-936 Cannot update to new segment
+[ADM_videoStreamCopy::getPacket] 04:04:42-936 Get packet failed
+[muxerFFmpeg::saveLoop] 04:04:42-936 [FF] Wrote 66028 frames, nb audio streams 1
+[muxerFFmpeg::saveLoop] 04:04:42-936 [FF] Found 0 missing PTS / 66028 total frames
+[muxerMkv::close] 04:04:42-937 [Matroska] Closing
+[muxerMkv::~muxerMkv] 04:04:42-938 Destroying Matroska muxer.
+100% done       frames: 66028   elapsed: 00:00:01,953
+[DIA_encodingBase::~DIA_encodingBase] 04:04:42-938 DiaEncodingBase: Destroying
+[ADM_videoStreamCopyFromAnnexB::~ADM_videoStreamCopyFromAnnexB] 04:04:42-938 Destroying AnnexB to iso filtet
+[ADM_Composer::rewind] 04:04:42-939 Rewinding
+[ADM_Composer::switchToSegment] 04:04:42-939 Trying to switch to seg 0 with startTime in reference pic= 66 ms
+[ADM_Composer::seektoTime] 04:04:42-939 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:04:42-939 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:04:42-939 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:04:42-940 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::switchToSegment] 04:04:42-951 Switched ok to segment 0 (dontdecode=0)
+[admPreview::start] 04:04:42-951 admPreview,starting
+[ADM_Composer::seektoTime] 04:04:42-951 Seeking to a keyframe at 00:00:00,066
+[ADM_Composer::seektoTime] 04:04:42-951 Seeking to frame 0 at 00:00:00,066
+[ADM_Composer::DecodePictureUpToIntra] 04:04:42-952 Decoding up to intra frame 0, ref: 0
+[edCache] Flush
+[ADM_FFgetFormat] 04:04:42-953 Multithreading enabled, skipping hw accel lookup.
+[ADM_Composer::goToTimeVideo] 04:04:42-963 Seek done, decoded to 66667 us in ref (00:00:00,000 linear) with segment start at 66667 us
+[saveCB] 04:04:42-963 Updating last write folder with J:\avidemux_files\avidemux_output\_ss 84336008ss013 2023蟷ｴ01譛・1譌･19譎・2蛻・1遘・
+84336008)_241027_130439.ts
+
+ ********** Automation ended***********
+*********************************
+*********************************
+End of program..
+*********************************
+*********************************
+[preferences::save] 04:04:42-965 Saving prefs to C:\Users\OK\AppData\Roaming\avidemux\config3.tmp
+[admPreview::destroy] 04:04:42-967 Destroying preview
+[ADM_EditorSegment::deleteAll] 04:04:42-967 [Editor] Deleting all videos
+[lavc] Killing decoding threads
+[lavc] Destroyed
+[tsHeader::close] 04:04:42-972 Destroying TS demuxer
+[tsHeader::close] 04:04:42-975 Destroying TS demuxer
+[ADM_edAudioTrackFromVideo::~ADM_edAudioTrackFromVideo] 04:04:42-975 Destroying edAudio from video track 0 at 8929e510
+[ADM_PP::cleanup] 04:04:42-975 Deleting post proc
+[ADM_EditorSegment::deleteAll] 04:04:42-976 [Editor] Deleting all videos
+Normal exit
+[abortExitHandler] 04:04:42-976 already done, nothing to do
+Done.
+PS C:\Users\OK\source\repos\Repository4_python\avidemux_test> 
+
+
