@@ -74,6 +74,6 @@ def input():
     wbuf = wbuf[:-1]
     with open(path, 'w', encoding='utf-8')as f:
         f.write(wbuf)
-    print(ret)
+    # print(ret)
     return ret
     
