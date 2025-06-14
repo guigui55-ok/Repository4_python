@@ -1,16 +1,43 @@
 
 from pathlib import Path
-encoding_def = 'utf8'
+const_encoding = 'utf8'
+
+def get_movie_path_for_test():
+    # set path
+    dir_path = r"J:\avidemux_files"
+    file_name = r"_test_setting_cut_info.txt"
+    path = Path(dir_path).joinpath(file_name)
+    print("get_movie_path_for_test = {}".format(path))
+    # read
+    rpath = get_target_movie_file_text()    
+    with open(rpath , "r", encoding=const_encoding)as f:
+        ret = f.readline()
+    return ret
+
+def get_movie_time_for_test():
+    # set path
+    dir_path = r"J:\avidemux_files"
+    file_name = r"_test_setting__movie_time.txt"
+    path = Path(dir_path).joinpath(file_name)
+    print("get_movie_time_for_test = {}".format(path))
+    # read
+    rpath = get_target_movie_time_text()    
+    with open(rpath , "r", encoding=const_encoding)as f:
+        ret = f.read()
+    ret = ret.replace("\n", "")
+    return ret
+
 
 def get_target_movie_file_text():
     dir_path = r"J:\avidemux_files"
     file_name = r"target_movie_file.txt"
     path = Path(dir_path).joinpath(file_name)
+    print("get_target_movie_file_text = {}".format(path))
     return path
 
 def get_movie_path():
     rpath = get_target_movie_file_text()    
-    with open(rpath , "r", encoding=encoding_def)as f:
+    with open(rpath , "r", encoding=const_encoding)as f:
         ret = f.readline()
     return ret
 
@@ -18,17 +45,19 @@ def get_target_movie_time_text():
     dir_path = r"J:\avidemux_files"
     file_name = r"target_movie_time.txt"
     path = Path(dir_path).joinpath(file_name)
+    print("get_target_movie_time_text = {}".format(path))
     return path
 
 def get_movie_time():
     rpath = get_target_movie_time_text()    
-    with open(rpath , "r", encoding=encoding_def)as f:
+    with open(rpath , "r", encoding=const_encoding)as f:
         ret = f.read()
     ret = ret.replace("\n", "")
     return ret
 
 def get_write_dir_path():
     dir_path = r"J:\avidemux_files\ffmpeg_output"
+    print("get_write_dir_path = {}".format(dir_path))
     return Path(dir_path)
 
 def get_write_path(movie_path, add):
@@ -102,6 +131,8 @@ class MovieTimeInfo:
         self.end_time_str = ''
         self.begin_time:timedelta = None
         self.end_time:timedelta = None
+        self.option_str: str = ''
+        self.read_str:str = ''
 
     def time_is_invalid(self):
         if self.begin_time == None:
@@ -120,28 +151,40 @@ class MovieTimeInfo:
     def _print(self, value):
         print(value)
 
-    def set_value(self, time_str: str):
-        """ 文字列 [開始時間-終了時間] を受け取って 開始、終了時間を設定する """
+    def set_value(self, time_str: str, loop_count=-1):
+        """
+        文字列 [開始時間-終了時間] を受け取って 開始、終了時間を設定する 
+            ex ) 12.34-56.78
+        """
+        self.read_str = time_str
+        if loop_count < 0:
+            count_str = ''
+        else:
+            count_str = '[{}] '.format(str(loop_count))
         # 空白を削除し、ハイフンで分割
         time_str = time_str.replace(' ', '')
         # ピリオドはコロンに置き換え
         time_str = time_str.replace('.', ':')
         if '-' not in time_str:
-            msg = 'Invalid format: Time string must contain a hyphen. [{}]'.format(time_str)
+            msg = 'Invalid format: Time string must contain a hyphen. ({}{})'.format(count_str, time_str)
             # raise ValueError(msg)
             self._print(msg)
             return ConstMovieTime.ERR_PYPHEN_NONE
-        buf_list = time_str.split('-')        
-        if len(buf_list) != 2:
+        buf_list = time_str.split('-')
+        if time_str.endswith('--'):
+            pass
+            # 最後が--の場合は、別の処理で、最後の時間までという処理にするため許容する。
+        elif len(buf_list) != 2:
             msg = 'Invalid format: Time string must have exactly one hyphen and two parts.'
-            msg += ' [{}]'.format(time_str)
-            # raise ValueError(msg)
+            msg += ' ({}{})'.format(count_str, time_str)
             self._print(msg)
             return ConstMovieTime.ERR_LIST_LENGTH_IS_SINGLE
         self.begin_time_str = buf_list[0]
         if self.begin_time_str == '0':
             self.begin_time_str = '0:0'
         self.end_time_str = buf_list[1]
+        if self.end_time_str == '0':
+            self.end_time_str = '0:0'
         # それぞれの時間文字列を timedelta に変換
         self.begin_time = self.convert_time_str_to_timedelta(self.begin_time_str)
         self.end_time = self.convert_time_str_to_timedelta(self.end_time_str)
@@ -150,7 +193,8 @@ class MovieTimeInfo:
     def convert_time_str_to_timedelta(self, single_time_str):
         """ 時間文字列を timedelta に変換する """
         if not self.time_format_is_valid(single_time_str):
-            raise ValueError(f"Invalid time format: '{single_time_str}'")
+            # raise ValueError(f"Invalid time format: '{single_time_str}'")
+            return timedelta(hours=0, minutes=0, seconds=0)
         if len(single_time_str)==1 and single_time_str=='0':
             single_time_str = '0:0'
         time_parts = single_time_str.split(':')
@@ -184,6 +228,28 @@ class MovieTimeInfo:
         ret = str.format('{}-{}', begin_str, end_str)
         ret = '{}-{}'.format(begin_str, end_str)
         return ret
+    
+    def get_time_str(self):
+        """ begin と endのstrを文字列で取得する（確認用） """
+        begin_str = self.begin_time_str
+        end_str = self.end_time_str
+        ret = str.format('{}-{}', begin_str, end_str)
+        ret = '{}-{}'.format(begin_str, end_str)
+        return ret
+    
+    @classmethod
+    def get_log_timedelta(cls, time_info_list:'list[MovieTimeInfo]'):
+        _list = []
+        for _info in time_info_list:
+            _list.append(_info.get_time_delta_str())
+        return ', '.join(_list)
+    
+    @classmethod
+    def get_log_str(cls, time_info_list:'list[MovieTimeInfo]'):
+        _list = []
+        for _info in time_info_list:
+            _list.append(_info.get_time_str())
+        return ', '.join(_list)
 
 
 # # 使用例
@@ -198,8 +264,20 @@ class MovieTimeInfo:
 
 
 class MovieTimeInfoCollection:
-    info_list = []
-    time_str_base = ''
+    info_list : 'list[MovieTimeInfo]' = []
+    time_str_base :str = ''
+    logger = None
+
+    def __init__(self):
+        self.info_list = []
+        time_str_base = ''
+
+    def _print(self, value):
+        if self.logger != None:
+            self.logger.info(value)
+        else:
+            print(value)
+
     def set_time_list_by_str(self, time_str:str):
         """ 読み取り元time_str を MovieTimeInfoに変換する """
         self.time_str_base = time_str
@@ -210,23 +288,63 @@ class MovieTimeInfoCollection:
         time_str_list:'list[str]' = time_str.replace('   ', ',')
         #文字列をコンマで区切って、値の変換処理をする（それぞれ対になるように変換）
         time_str_list:'list[str]' = time_str.split(',')
-        for i in range(len(time_str_list)-1):            
+        for i in range(len(time_str_list)):
             time_str_list[i] = time_str_list[i].strip()
-            time_str_b = convert_hyphen_separated_string(time_str_list[i])
+            # 1つの要素に ハイフンが複数ある場合は、分割する
+            # index[1-2], [2-3], [3-4] ... となるようにする
+            time_str_b = convert_hyphen_separated_string(time_str_list[i])            
             time_str_list[i] = time_str_b
         
         #変換処理によって、split',' のリスト要素の中に 「0-3.11, 3.11-5.38」が作られるので
         #もう一度結合して、splitする
-        str_time_b = ','.join(time_str_list)
-        print('cnv_time_str = {}'.format(str_time_b))
+        str_time_b = ', '.join(time_str_list)
+        self._print('cnv_time_str = {}'.format(str_time_b))
         time_str_list_b :'list[str]' = str_time_b.split(',')
 
+        count = 0
         for time_str_buf in time_str_list_b:
+            count += 1
             info = MovieTimeInfo()
+            if time_str_buf.strip() == "":
+                continue
+            time_str_buf, extracted_str = extract_and_remove_underscore_text(time_str_buf)
+            info.option_str = extracted_str
             info.set_value(time_str_buf)
             buf = info.get_time_delta_str()
-            print('time_buf = {}'.format(buf))
+            self._print('time_buf = {}'.format(buf))
             self.info_list.append(info)
+
+
+def extract_and_remove_underscore_text(s):
+    """
+    pythonで文字列の中にアンダースコアに区切られた文字があった場合、そのアンダーバーの中の文字を抜き出して、
+    さらに、元の文字列から抜き出した文字を消す。
+    例）
+    処理前：_aaa_12.23-45.67 
+    処理後の元の文字列：12.23-45.67  ,処理後の抜き出した文字列：aaa
+    """
+    match = re.search(r'_(.*?)_', s)
+    if match:
+        extracted = match.group(1)
+        modified = s[:match.start()] + s[match.end():]
+        return modified, extracted
+    else:
+        return s, None  # アンダースコア囲みが見つからなければそのまま
+
+def convert_hyphen_ranges(input_str):
+    """
+    ハイフンが複数あったら、対になるように分割する
+    ---
+    ハイフンでsplit
+    隣り合う2要素ずつ結合して "a-b" の形にする
+    出力は文字列のリスト ["a-b", "b-c", ...]
+    """
+    parts = input_str.split("-")
+    result = []
+    for i in range(len(parts) - 1):
+        combined = f"{parts[i]}-{parts[i+1]}"
+        result.append(combined)
+    return result
 
 
 """

@@ -24,4 +24,6 @@ def get_new_file_name(file_path: str, add: str) -> Path:
     return new_file_path
 
 # 使用例
-print(get_new_file_name("example.txt", "_new"))
+print("\n*****")
+path = r"C:\Users\OK\source\repos\Repository4_python\ffmpeg_test\ffmpeg_tool1.py"
+print(get_new_file_name(path, "_new"))
