@@ -1,0 +1,100 @@
+■ゴールと目的の整理
+なぜ作るのか？（目的）
+Flask, WebAPIの理解を深めるため
+
+誰が使うのか？
+Python, Flask, WebAPI 学習者
+
+■要件定義
+(1) 機能要件
+・提供するエンドポイント一覧
+
+/test：アクセステスト用
+/endpoints：エンドポイント一覧を取得する
+/echo：クライアントが送ったJSONデータをそのまま返す（APIのPOST動作確認用）
+
+・入力と出力の形式
+    JSON形式（UTF-8）
+
+・エラー時のレスポンス仕様
+HTTPステータスコードを適切に設定
+200 OK：正常レスポンス
+400 Bad Request：リクエストJSONが不正な場合
+404 Not Found：存在しないエンドポイント
+500 Internal Server Error：サーバー側の予期せぬエラー
+
+JSON形式で以下を返す：
+{
+  "error": true,
+  "message": "エラーメッセージ内容"
+}
+
+■インターフェース仕様書（API設計書）
+1. GET /test
+概要：テストアクセス用
+リクエスト例：curl http://localhost:5000/test
+レスポンス例：
+{
+  "message": "API接続成功"
+}
+エラー例：
+{
+  "error": true,
+  "message": "サーバー内部エラー"
+}
+HTTPステータス：500
+
+2. GET /endpoints
+概要：提供されているエンドポイント一覧を取得する
+リクエスト例：
+curl http://localhost:5000/endpoints
+レスポンス例：
+{
+  "endpoints": [
+    "/test",
+    "/endpoints",
+    "/echo"
+  ]
+}
+エラー例：
+{
+  "error": true,
+  "message": "エンドポイント一覧取得に失敗しました"
+}
+HTTPステータス：500
+
+3. POST /echo
+概要：クライアントが送ったJSONデータをそのまま返す（POST動作確認）
+リクエスト例：
+curl -X POST http://localhost:5000/echo \
+-H "Content-Type: application/json" \
+-d '{"name":"Taro","age":30}'
+
+レスポンス例：
+{
+  "received_data": {
+    "name": "Taro",
+    "age": 30
+  }
+}
+エラー例：
+{
+  "error": true,
+  "message": "不正なJSON形式です"
+}
+HTTPステータス：400
+
+■設計
+Flaskでの構成方針
+ファイル構成：250801_flask_test_app.py 1ファイルのみ
+データ：サンプル固定データ（DB不使用）
+使用ライブラリ：Flask
+
+■実装・テスト
+上記仕様書に沿ってFlaskコードを作成
+curl または Postman を利用し、各エンドポイントに対してGET/POSTテストを実施
+
+■ドキュメント化
+README（環境構築・実行方法）
+API仕様書（上記内容）
+利用手順書（curl / Postman操作例付き）

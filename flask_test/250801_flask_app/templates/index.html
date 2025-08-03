@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask WebAPI テストページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            margin-top: 30px;
+        }
+        button {
+            margin: 5px 0;
+            padding: 5px 10px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Flask WebAPI テストページ</h1>
+
+    <!-- 1. /test API -->
+    <h2>1. アクセステストAPI</h2>
+    <button onclick="callTestAPI()">実行</button>
+    <pre id="result_test">結果がここに表示されます</pre>
+
+    <!-- 2. /endpoints API -->
+    <h2>2. エンドポイント一覧取得API</h2>
+    <button onclick="callEndpointsAPI()">実行</button>
+    <pre id="result_endpoints">結果がここに表示されます</pre>
+
+    <!-- 3. /echo API -->
+    <h2>3. JSONエコーAPI</h2>
+    <label>送信データ(JSON):</label><br>
+    <textarea id="input_echo" rows="4" cols="50">
+{
+    "name": "Taro",
+    "age": 30
+}
+    </textarea><br>
+    <button onclick="callEchoAPI()">実行</button>
+    <pre id="result_echo">結果がここに表示されます</pre>
+
+<script>
+    const BASE_URL = "";
+
+    // 1. /test
+    function callTestAPI() {
+        fetch(`${BASE_URL}/test`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result_test").textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById("result_test").textContent = "エラー: " + error;
+            });
+    }
+
+    // 2. /endpoints
+    function callEndpointsAPI() {
+        fetch(`${BASE_URL}/endpoints`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result_endpoints").textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById("result_endpoints").textContent = "エラー: " + error;
+            });
+    }
+
+    // 3. /echo
+    function callEchoAPI() {
+        let jsonData;
+        try {
+            jsonData = JSON.parse(document.getElementById("input_echo").value);
+        } catch (e) {
+            document.getElementById("result_echo").textContent = "入力がJSON形式ではありません";
+            return;
+        }
+
+        fetch(`${BASE_URL}/echo`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("result_echo").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            document.getElementById("result_echo").textContent = "エラー: " + error;
+        });
+    }
+</script>
+
+</body>
+</html>
