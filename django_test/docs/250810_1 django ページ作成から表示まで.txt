@@ -1,0 +1,145 @@
+C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\manage.py
+
+
+■開発用サーバーを起動
+(venv)%
+python manage.py runserver
+
+python ./test_project1/manage.py runserver
+⇒OK
+
+インストールは成功しました！おめでとうございます！
+このページは、設定ファイルでDEBUG=Trueが指定され、何もURLが設定されていない時に表示されます。
+
+
+■Djangoの管理画面（adminサイト）にアクセス
+http://[あなたの_IP_アドレス]:8000/admin/
+
+
+★管理者パスワードが不明のため、再セットを試みる
+
+Djangoで必要なデータベースが不足しているため、マイグレーションを実行
+python manage.py migrate
+
+再びシェルを開く（shell)
+
+管理者ユーザーの確認
+auth_userテーブルが作成されたら、以下のように管理者ユーザーを確認できるようになります。
+
+python
+コピーする
+from django.contrib.auth.models import User
+
+# 管理者ユーザーの一覧を取得
+users = User.objects.all()
+print(f'len(users) = {len(users )}')
+for user in users:
+    print(user.username)
+
+これで、管理者ユーザーの一覧が表示されるはずです。
+
+len(users) = 0
+
+
+■マイグレーション実行
+
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  No migrations to apply.
+⇒OK
+　　すべてのマイグレーションがすでに適用されており、現在の状態が最新である
+
+
+■ユーザーの作成
+python manage.py createsuperuser
+メールは架空のものでも可能だが、パスワードリセットなどで使用される
+パスワードは、最低 8 文字以上必要です。
+
+⇒管理者アカウントの作成OK
+
+================
+■ユーザーの作成
+　管理ページから作成
+
+
+
+
+================
+■ページを表示する
+
+「python manage.py runserver」を実行したのですが、
+以下のメッセージが表示されます。
+何かページを表示するにはどのようにしたらよいですか？
+
+メッセージ：
+インストールは成功しました！おめでとうございます！
+このページは、設定ファイルでDEBUG=Trueが指定され、何もURLが設定されていない時に表示されます。
+--------------
+Djangoの`runserver`コマンドを実行した際に表示される「インストールは成功しました！」というメッセージは、Djangoのプロジェクトが正常にインストールされていることを示しています。ただし、このページは「何もURLが設定されていない場合」に表示されるものです。つまり、まだ何もルートURLが設定されていない状態です。
+
+### ページを表示するためには以下のステップを行います：
+
+### 1. **URLパターンを設定する**
+
+Djangoのアプリケーションに対してURLパターンを設定する必要があります。
+
+#### ステップ 1.1: `urls.py` ファイルの作成
+
+まず、プロジェクトのURL設定ファイル（通常は`urls.py`）を設定します。
+
+プロジェクトのルートディレクトリに`urls.py`ファイルが存在しない場合、`urls.py`を作成します。通常、このファイルは`myproject/myproject/urls.py`のようなパスにあります（`myproject`はプロジェクト名）。
+
+例として、次の内容を`urls.py`に追加します：
+
+```python
+from django.contrib import admin
+from django.urls import path
+
+# viewをインポート
+from . import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),  # 管理サイト
+    path('', views.index),  # ルートURLにアクセスした時に`index`ビューを表示
+]
+```
+
+#### ステップ 1.2: ビューを作成
+
+次に、ビュー（`views.py`）を作成します。ビューは、URLが呼び出されたときに実行される処理を定義します。
+
+`views.py`（`myproject/myapp/views.py`など）に以下のような簡単なビューを作成します：
+
+```python
+from django.http import HttpResponse
+
+def index(request):
+    return HttpResponse("Hello, Django!")
+```
+
+これにより、ルートURLにアクセスすると「Hello, Django!」というテキストが表示されます。
+
+### 2. **サーバーを再起動**
+
+変更を加えたら、Djangoの開発サーバーを再起動します。ターミナルで`Ctrl+C`を押してサーバーを停止し、再度以下のコマンドを実行します：
+
+```bash
+python manage.py runserver
+```
+
+### 3. **ブラウザで確認**
+
+再度ブラウザを開き、`http://127.0.0.1:8000/`にアクセスします。このURLにアクセスすると、先程設定した`index`ビューが表示され、「Hello, Django!」というメッセージが表示されるはずです。
+
+### 4. **管理画面にアクセス**
+
+もし管理画面にアクセスしたい場合、`http://127.0.0.1:8000/admin/`にアクセスします。管理画面にログインするためには、`createsuperuser`コマンドで作成したスーパーユーザーの認証情報を使ってログインできます。
+
+```bash
+python manage.py createsuperuser
+```
+
+---
+
+この手順を実行すると、Djangoプロジェクトにページが表示されるようになります。

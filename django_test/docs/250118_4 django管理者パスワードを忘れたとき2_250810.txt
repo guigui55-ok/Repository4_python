@@ -1,0 +1,167 @@
+■Djangoの管理画面（adminサイト）にアクセス
+http://[あなたの_IP_アドレス]:8000/admin/
+
+管理者パスワードが不明のため、再セットを試みる
+
+
+250118 django管理者パスワードを忘れたとき.txt
+**1. 管理者アカウントのパスワードをリセット**　について
+
+シェルで1行ずつコードを入力していったところ、管理者ユーザーの取得でエラーとなってしまいます。
+管理者ユーザーの一覧を取得するような関数を作成して出力できませんか？
+
+エラー：
+
+In [8]: user = User.objects.get(username='admin')
+---------------------------------------------------------------------------
+UndefinedTable                            Traceback (most recent call last)
+C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py in _execute(self, sql, params, *ignored_wrapper_args)
+    104             else:
+--> 105                 return self.cursor.execute(sql, params)
+    106
+
+UndefinedTable: リレーション"auth_user"は存在しません
+LINE 1: ...user"."is_active", "auth_user"."date_joined" FROM "auth_user...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+ProgrammingError                          Traceback (most recent call last)
+<ipython-input-8-786851a44d27> in <module>
+----> 1 user = User.objects.get(username='admin')
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\models\manager.py in manager_method(self, *args, **kwargs)
+     85             @wraps(method)
+     86             def manager_method(self, *args, **kwargs):
+---> 87                 return getattr(self.get_queryset(), name)(*args, **kwargs)
+     88
+     89             return manager_method
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py in get(self, *args, **kwargs)
+    643             limit = MAX_GET_RESULTS
+    644             clone.query.set_limits(high=limit)
+--> 645         num = len(clone)
+    646         if num == 1:
+    647             return clone._result_cache[0]
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py in __len__(self)
+    380
+    381     def __len__(self):
+--> 382         self._fetch_all()
+    383         return len(self._result_cache)
+    384 
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py in _fetch_all(self)
+   1926     def _fetch_all(self):
+   1927         if self._result_cache is None:
+-> 1928             self._result_cache = list(self._iterable_class(self))
+   1929         if self._prefetch_related_lookups and not self._prefetch_done:
+   1930             self._prefetch_related_objects()
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py in __iter__(self)
+     89         # Execute the query. This will also fill compiler.select, klass_info,
+     90         # and annotations.
+---> 91         results = compiler.execute_sql(
+     92             chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+     93         )
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\models\sql\compiler.py in execute_sql(self, result_type, chunked_fetch, chunk_size)
+   1560             cursor = self.connection.cursor()
+   1561         try:
+-> 1562             cursor.execute(sql, params)
+   1563         except Exception:
+   1564             # Might fail for server-side cursors (e.g. connection closed)
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py in execute(self, sql, params)
+    120     def execute(self, sql, params=None):
+    121         with self.debug_sql(sql, params, use_last_executed_query=True):
+--> 122             return super().execute(sql, params)
+    123
+    124     def executemany(self, sql, param_list):
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py in execute(self, sql, params)
+     77
+     78     def execute(self, sql, params=None):
+---> 79         return self._execute_with_wrappers(
+     80             sql, params, many=False, executor=self._execute
+     81         )
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py in _execute_with_wrappers(self, sql, params, many, executor)  
+     90         for wrapper in reversed(self.db.execute_wrappers):
+     91             executor = functools.partial(wrapper, executor)
+---> 92         return executor(sql, params, many, context)
+     93
+     94     def _execute(self, sql, params, *ignored_wrapper_args):
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py in _execute(self, sql, params, *ignored_wrapper_args)
+     98             warnings.warn(self.APPS_NOT_READY_WARNING_MSG, category=RuntimeWarning)
+     99         self.db.validate_no_broken_transaction()
+--> 100         with self.db.wrap_database_errors:
+    101             if params is None:
+    102                 # params default might be backend specific.
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\utils.py in __exit__(self, exc_type, exc_value, traceback)
+     89                 if dj_exc_type not in (DataError, IntegrityError):
+     90                     self.wrapper.errors_occurred = True
+---> 91                 raise dj_exc_value.with_traceback(traceback) from exc_value
+     92
+     93     def __call__(self, func):
+
+C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py in _execute(self, sql, params, *ignored_wrapper_args)
+    103                 return self.cursor.execute(sql)
+    104             else:
+--> 105                 return self.cursor.execute(sql, params)
+    106
+    107     def _executemany(self, sql, param_list, *ignored_wrapper_args):
+
+ProgrammingError: リレーション"auth_user"は存在しません
+LINE 1: ...user"."is_active", "auth_user"."date_joined" FROM "auth_user...
+                                                             ^
+
+
+In [9]: 
+
+
+============================
+
+エラーの内容を見ると、`auth_user`テーブルが存在しないというエラーが発生しています。これは、Djangoがデータベースに必要なテーブルをまだ作成していないためです。この問題を解決するためには、まずデータベースのマイグレーションを実行する必要があります。
+
+### 手順：データベースのマイグレーションを実行する
+
+1. **マイグレーションを適用**
+   Djangoで使用しているデータベースに必要なテーブルを作成するために、マイグレーションを実行します。以下のコマンドをターミナルで実行してください。
+
+   ```bash
+   python manage.py migrate
+   ```
+
+   このコマンドを実行することで、`auth_user`テーブルなど、Djangoの認証システムに必要なテーブルがデータベースに作成されます。
+
+2. **シェルに再度アクセス**
+   マイグレーションが成功したら、再度Djangoのシェルを開きます。
+
+   ```bash
+   python manage.py shell
+   ```
+
+3. **管理者ユーザーの確認**
+   `auth_user`テーブルが作成されたら、以下のように管理者ユーザーを確認できるようになります。
+
+   ```python
+   from django.contrib.auth.models import User
+
+   # 管理者ユーザーの一覧を取得
+   users = User.objects.all()
+   for user in users:
+       print(user.username)
+   ```
+
+   これで、管理者ユーザーの一覧が表示されるはずです。
+
+### エラーの原因
+
+* **原因**: `auth_user`テーブルがまだ作成されていなかったため、`User.objects.get()`が失敗した。
+* **解決方法**: `python manage.py migrate`コマンドでデータベースをマイグレーションし、必要なテーブルを作成する。
+
+これで問題が解決するはずです。
