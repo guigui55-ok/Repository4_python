@@ -1,0 +1,70 @@
+index.htmlにアクセス時以下のエラーとなってしまいます。解決方法を教えてください。
+
+Error:
+ ※別ファイル参照
+　　250810_e3_indexアクセス時htmlのSyntaxError_内容_console.txt
+==============
+
+エラーメッセージに基づいて、`{% static %}`タグを使用する際にDjangoのテンプレートエンジンがそのタグを認識できていないことが原因です。このエラーは、`{% static %}`タグを使用する前に、適切に`static`タグを読み込む必要があるため発生しています。
+
+### **解決方法**
+
+`{% static %}`タグを使うためには、テンプレート内で`{% load static %}`を宣言する必要があります。このタグを`index.html`の`<head>`セクションに追加してください。
+
+### **修正方法**
+
+#### 1. `index.html`に`{% load static %}`を追加
+
+`index.html`の一番上に`{% load static %}`を追加して、`static`タグを正しく使用できるようにします。
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>djangoテストページ</title>
+    
+    <!-- staticタグを読み込む -->
+    {% load static %}
+
+    <!-- CSSファイルのリンク -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header>
+        <h1>djangoテストページ</h1>
+    </header>
+
+    <!-- コンテンツ -->
+    <div class="content">
+        <h2>当ページはPython Djangoのテストページです。</h2>
+        <p>こちらは、Djangoフレームワークを使ったテストページです。ここでは、Djangoを利用したWeb開発の実験が行われています。</p>
+        <a href="{% url 'login' %}" class="button">ログインページへ</a>
+    </div>
+
+    <!-- フッター -->
+    <footer>
+        <p>&copy; 2025 Django Test Page</p>
+    </footer>
+
+</body>
+</html>
+```
+
+#### 2. サーバーの再起動
+
+`{% load static %}`を追加した後、Djangoの開発サーバーを再起動します。
+
+```bash
+python manage.py runserver
+```
+
+### **説明**
+
+* `{% load static %}`: このタグは、Djangoテンプレートエンジンに`static`ファイルを扱うための機能を読み込ませます。これをテンプレートの最初に追加することで、`{% static %}`タグが正しく認識されます。
+* `href="{% static 'css/main_style.css' %}"`: これで、Djangoは`static`フォルダ内の`css/main_style.css`ファイルを正しく参照します。
+
+これで、`{% static %}`タグのエラーは解消されるはずです。再度ページをリロードして、問題が解決したか確認してください。

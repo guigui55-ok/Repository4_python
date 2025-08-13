@@ -1,0 +1,19 @@
+
+
+
+
+*******
+runserver実行時以下の警告が出力されます。
+これは何でしょうか？また、どのようにしたら解決できますか？
+
+WARNINGS:
+?: (staticfiles.W004) The directory 'C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\static' in the STATICFILES_DIRS setting does not exist.
+
+⇒staticフォルダのパスが違っていた（以下を修正）
+
+settings.py
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
+
+
+

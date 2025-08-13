@@ -1,0 +1,66 @@
+
+PS C:\Users\OK\source\repos\Repository4_python\django_test\test_project1> python manage.py runserver
+templetes dir = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\templates
+static dif = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\static
+templetes dir = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\templates
+static dif = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\static
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified some issues:
+
+WARNINGS:
+?: (staticfiles.W004) The directory 'C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\static' in
+
+System check identified 1 issue (0 silenced).
+August 10, 2025 - 13:52:58
+Django version 5.0.7, using settings 'test_project1.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+PS C:\Users\OK\source\repos\Repository4_python\django_test\test_project1> python manage.py runserver
+templetes dir = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\templates
+static dif = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\static
+templetes dir = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\templates
+static dif = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\static
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 10, 2025 - 13:53:45
+Django version 5.0.7, using settings 'test_project1.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+views.py > index
+Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner    
+    response = get_response(request)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\view_modules\views.py", line 7, in index
+    return render(request, 'index.html')
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string 
+    template = get_template(template_name, using=using)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\loader.py", line 15, in get_template     
+    return engine.get_template(template_name)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\engine.py", line 177, in get_template    
+    template, origin = self.find_template(template_name)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\engine.py", line 159, in find_template   
+    template = loader.get_template(name, skip=skip)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\loaders\base.py", line 23, in get_template
+    contents = self.get_contents(origin)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 26, in get_contents
+    return origin.loader.get_contents(origin)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\template\loaders\filesystem.py", line 23, in get_contents
+    return fp.read()
+  File "C:\Program Files\Python\Python310\lib\codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x83 in position 164: invalid start byte
+[10/Aug/2025 13:54:04] "GET / HTTP/1.1" 500 126134

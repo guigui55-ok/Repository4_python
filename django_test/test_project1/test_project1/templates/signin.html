@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サインインページ</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>サインインページ</h1>
+</header>
+
+<div class="content">
+    <form method="post">
+        {% csrf_token %}
+        <label for="email">メールアドレス:</label>
+        <input type="email" id="email" name="email" placeholder="メールアドレス" required>
+        
+        <label for="password">パスワード:</label>
+        <input type="password" id="password" name="password" placeholder="パスワード" required>
+        
+        <label for="password_confirm">パスワード（確認用）:</label>
+        <input type="password" id="password_confirm" name="password_confirm" placeholder="パスワード（確認用）" required>
+        
+        <button type="submit" class="button">サインイン</button>
+    </form>
+    
+    <p>既にアカウントをお持ちですか？ <a href="{% url 'login' %}">ログイン</a></p>
+</div>
+
+<footer>
+    <p>&copy; 2025 Django Test Page</p>
+</footer>
+
+</body>
+</html>

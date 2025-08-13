@@ -22,5 +22,11 @@ from .view_modules import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),  # ルートURLにアクセスした時に`index`ビューを表示
+    path('', views.index),  # ルートURLにアクセスした時に`index`ビューを表示    
+    path('', views.test_index, name='test'),
+    path('', views.index, name='index'),
+    path('login/', views.login_view, name='login'),
+    path('signin/', views.signin_view, name='signin'),
+    path('members/', views.members_view, name='members'),
+    path('logout/', views.logout_view, name='logout'),
 ]

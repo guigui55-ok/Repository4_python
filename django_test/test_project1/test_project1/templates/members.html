@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メンバー専用ページ</title>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>メンバー専用ページ</h1>
+</header>
+
+<div class="content">
+    <p>こんにちは、{{ user.username }} さん！</p>
+    <a href="{% url 'logout' %}" class="button">ログアウト</a>
+    
+    <p>ここでは、あなたのプロフィールやその他の個人情報を表示できます。</p>
+</div>
+
+<footer>
+    <p>&copy; 2025 Django Test Page</p>
+</footer>
+
+</body>
+</html>

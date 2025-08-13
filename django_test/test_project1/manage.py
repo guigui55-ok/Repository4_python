@@ -19,4 +19,7 @@ def main():
 
 
 if __name__ == '__main__':
+    # flag = True
+    # if flag:
+    #     sys.argv = [__file__, 'runserver']
     main()

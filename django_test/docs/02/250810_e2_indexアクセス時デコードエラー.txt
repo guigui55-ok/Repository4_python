@@ -1,0 +1,5 @@
+
+対処
+inidex.htmlの文字コードを変更（sjis⇒utf8）
+⇒OK
+
