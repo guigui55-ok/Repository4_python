@@ -1,0 +1,238 @@
+手動で動作確認をしていますが、ログイン時にエラーとなってしまいます。解決方法を教えてください。
+
+
+[13/Aug/2025 21:22:46] "GET /login/ HTTP/1.1" 200 1298
+Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py", line 105, in _execute      
+    return self.cursor.execute(sql, params)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\sqlite3\base.py", line 329, in execute    return super().execute(query, params)
+sqlite3.OperationalError: no such table: auth_user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner    
+    response = get_response(request)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 48, in _wrapper        
+    return bound_method(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\decorators\debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 48, in _wrapper        
+    return bound_method(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 188, in _view_wrapper  
+    result = _process_exception(request, e)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 186, in _view_wrapper  
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\decorators.py", line 48, in _wrapper        
+    return bound_method(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\views.py", line 88, in dispatch      
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\generic\base.py", line 143, in dispatch     
+    return handler(request, *args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\generic\edit.py", line 150, in post
+    if form.is_valid():
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\forms.py", line 192, in errors
+    self.full_clean()
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\forms.py", line 328, in full_clean
+    self._clean_form()
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\forms\forms.py", line 349, in _clean_form
+    cleaned_data = self.clean()
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\forms.py", line 250, in clean        
+    self.user_cache = authenticate(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\views\decorators\debug.py", line 75, in sensitive_variables_wrapper
+    return func(*func_args, **func_kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\__init__.py", line 79, in authenticate
+    user = backend.authenticate(request, **credentials)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\backends.py", line 42, in authenticate
+    user = UserModel._default_manager.get_by_natural_key(username)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\contrib\auth\base_user.py", line 56, in get_by_natural_key
+    return self.get(**{self.model.USERNAME_FIELD: username})
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\models\manager.py", line 87, in manager_method 
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py", line 645, in get
+    num = len(clone)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py", line 382, in __len__
+    self._fetch_all()
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py", line 1928, in _fetch_all     
+    self._result_cache = list(self._iterable_class(self))
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\models\sql\compiler.py", line 1562, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py", line 122, in execute       
+    return super().execute(sql, params)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py", line 79, in execute        
+    return self._execute_with_wrappers(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py", line 100, in _execute      
+    with self.db.wrap_database_errors:
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\utils.py", line 105, in _execute      
+    return self.cursor.execute(sql, params)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\db\backends\sqlite3\base.py", line 329, in execute    return super().execute(query, params)
+django.db.utils.OperationalError: no such table: auth_user
+[13/Aug/2025 21:22:53] "POST /login/ HTTP/1.1" 500 228809
+
+
+
+**************
+
+
+エラーの原因は、**DB に `auth_user` テーブル（Django のユーザーテーブル）が存在しない**ことです。
+＝＞ 認証処理（/login/）でユーザーを検索しようとしてコケています。
+
+まずは「どの DB を見ているか」「auth のマイグレーションが適用されているか」を確認し、必要ならマイグレーションを適用（または正しい DB を指すように設定）します。
+
+---
+
+## 1) まず現状の診断
+
+```bash
+# どのアプリのマイグレーションが適用済みか確認
+python manage.py showmigrations auth
+python manage.py showmigrations sessions
+python manage.py showmigrations contenttypes
+```
+
+**→ 先頭に \[X] が付いていなければ未適用です。**
+
+さらに、**今どの DB を参照しているか**を確認します：
+
+```bash
+python manage.py shell
+```
+
+```python
+from django.conf import settings
+from django.db import connection
+print("DB ENGINE:", settings.DATABASES["default"]["ENGINE"])
+print("DB NAME:", connection.settings_dict["NAME"])
+exit()
+```
+
+* SQLite の場合は `DB NAME` に **db.sqlite3 のフルパス**が出ます。
+  ここが想定と違うパス（別ディレクトリ）になっていると、**別の DB を見に行っている**＝テーブルがない、という事態になります。
+
+---
+
+## 2) 解決手順（標準的な SQLite 想定）
+
+1. **必要アプリが `INSTALLED_APPS` に入っているか確認（settings.py）**
+
+   ```python
+   INSTALLED_APPS = [
+       'django.contrib.admin',
+       'django.contrib.auth',
+       'django.contrib.contenttypes',
+       'django.contrib.sessions',
+       'django.contrib.messages',
+       'django.contrib.staticfiles',
+       # 自アプリ
+       'accounts',  # ←あなたのアプリ名
+   ]
+   ```
+
+2. **マイグレーションを適用**
+
+   ```bash
+   python manage.py migrate
+   # もしくはピンポイントで
+   python manage.py migrate contenttypes
+   python manage.py migrate auth
+   python manage.py migrate sessions
+   ```
+
+3. **管理ユーザーを作成（未作成なら）**
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+4. **サーバー再起動**
+
+   ```bash
+   python manage.py runserver
+   ```
+
+---
+
+## 3) それでも直らない時の“あるある”と対処
+
+### A. 「No migrations to apply」と出るのにテーブルが無い
+
+* **別の DB ファイルを参照している**可能性が高いです。
+  上のシェル出力で `DB NAME` を再確認してください。
+  `settings.py` の `DATABASES['default']['NAME']` が意図したパスか見直しを。
+
+  ```python
+  # 例: settings.py (SQLite)
+  from pathlib import Path
+  BASE_DIR = Path(__file__).resolve().parent.parent
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.sqlite3',
+          'NAME': BASE_DIR / 'db.sqlite3',   # ← ここがズレていないか
+      }
+  }
+  ```
+
+* 誤った場所に空の `db.sqlite3` ができていて、そっちを参照しているケースもよくあります。
+
+### B. カスタムユーザーモデルを途中で導入した／`AUTH_USER_MODEL` を後から変更した
+
+* 既にマイグレーションを切った後に `AUTH_USER_MODEL` を変えると整合が取れなくなります。
+  開発段階でデータが無いなら、**DB を削除してやり直す**のが早いです（SQLite なら `db.sqlite3` を削除 → `migrate`）。
+
+### C. `INSTALLED_APPS` に `django.contrib.auth` などが抜けている
+
+* 抜けていると当然テーブルが作られません。必ず入れてください。
+
+---
+
+## 4) クイック修復のコマンドまとめ
+
+```bash
+# 参照DB確認（前述の shell スニペット）
+python manage.py shell
+
+# 必要ならマイグレーション適用
+python manage.py migrate
+
+# 念のため auth だけ個別に
+python manage.py migrate auth
+
+# 管理ユーザー作成（未作成なら）
+python manage.py createsuperuser
+
+# 再起動
+python manage.py runserver
+```
+
+---
+
+ここまで済めば、`/login/` の POST で `auth_user` 参照時に 500 になる問題は解消できるはずです。
+もし `showmigrations` がすべて `[X]` で、DB パスも正しいのに再現する場合は、**実際の DB を一度削除して再作成**してみてください（開発環境でデータ不要なら最速です）。
+
+
+⇒
+DBのパスを治してOKとなる
+
+DB_PATH = str(BASE_DIR) + '/' + 'db.sqlite3'
+
+# デフォルト設定（SQLite）
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': DB_PATH,
+    }
+}

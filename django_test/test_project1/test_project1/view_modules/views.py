@@ -7,6 +7,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 import requests 
 
+from django.contrib.auth.decorators import login_required
+# from test_project1.test_project1.forms.auth_forms import LoginForm, SigninForm
+from ..forms.auth_forms import LoginForm, SigninForm
+from django.urls import reverse
+
 
 def hello_jango(request):
     print('views.py > index')
@@ -16,36 +21,49 @@ def test_index(request):
     print('views.py > index')
     return render(request, 'test_index.html')
 
+
+# ルートページ
 def index(request):
-    return render(request, 'index.html')
+    return render(request, "index.html")
 
+# ログインページ
 def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('members')  # メンバー専用ページへ
-        else:
-            messages.error(request, 'ログイン失敗：ユーザー名またはパスワードが間違っています。')
-            return render(request, 'login.html', {'error': 'ログイン失敗：ユーザー名またはパスワードが間違っています。'})
-    return render(request, 'login.html')
+    if request.user.is_authenticated:
+        return redirect("members")
 
-def signin_view(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+    if request.method == "POST":
+        form = LoginForm(request=request, data=request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.get_user()
             login(request, user)
-            return redirect('members')  # サインイン後、メンバー専用ページへ
+            return redirect("members")
     else:
-        form = UserCreationForm()
-    return render(request, 'signin.html', {'form': form})
+        form = LoginForm()
+    return render(request, "login.html", {"form": form})
 
+# 新規登録ページ
+def signin_view(request):
+    if request.user.is_authenticated:
+        return redirect("members")
+
+    if request.method == "POST":
+        form = SigninForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data["password1"])
+            user.save()
+            login(request, user)
+            return redirect("members")
+    else:
+        form = SigninForm()
+    return render(request, "signin.html", {"form": form})
+
+# ログアウト
 def logout_view(request):
     logout(request)
-    return redirect('index')  # ログインページにリダイレクト
+    return redirect("login")
 
+# ログイン後ページ
+@login_required
 def members_view(request):
-    return redirect('members')  # ログインページにリダイレクト
+    return render(request, "members.html")

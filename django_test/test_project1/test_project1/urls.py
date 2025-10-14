@@ -19,14 +19,17 @@ from django.urls import path
 
 # viewをインポート
 from .view_modules import views
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),  # ルートURLにアクセスした時に`index`ビューを表示    
     path('', views.test_index, name='test'),
     path('', views.index, name='index'),
-    path('login/', views.login_view, name='login'),
+    # path('login/', views.login_view, name='login'),
+    # path('logout/', views.logout_view, name='logout'),
     path('signin/', views.signin_view, name='signin'),
     path('members/', views.members_view, name='members'),
-    path('logout/', views.logout_view, name='logout'),
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
+    path("logout/", LogoutView.as_view(next_page="index"), name="logout"),
 ]

@@ -1,41 +1,33 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログインページ</title>
-
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+  <div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">ログイン</h2>
 
-<header>
-    <h1>ログインページ</h1>
-</header>
-
-<div class="content">
-    <form method="post">
-        {% csrf_token %}
-        <label for="username">ユーザーID（またはメールアドレス）:</label>
-        <input type="text" id="username" name="username" placeholder="ユーザーID" required>
-        
-        <label for="password">パスワード:</label>
-        <input type="password" id="password" name="password" placeholder="パスワード" required>
-        
-        <button type="submit" class="button">ログイン</button>
-    </form>
-    
-    <p>まだアカウントを作成していませんか？ <a href="{% url 'signin' %}">サインイン</a></p>
-    
-    {% if error %}
-        <div class="error">{{ error }}</div>
+    {% if form.errors %}
+      <div class="alert alert-danger">
+        ユーザー名またはパスワードが間違っています。
+      </div>
     {% endif %}
-</div>
 
-<footer>
-    <p>&copy; 2025 Django Test Page</p>
-</footer>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary w-100">ログイン</button>
+    </form>
 
+    <p class="mt-3 text-center">
+      アカウントをお持ちでない方は <a href="{% url 'signin' %}">新規登録</a>
+    </p>
+    <p class="mt-1 text-center">
+      <a href="{% url 'index' %}">トップに戻る</a>
+    </p>
+  </div>
 </body>
 </html>

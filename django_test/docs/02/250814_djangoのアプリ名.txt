@@ -1,0 +1,58 @@
+いいえ、ここで言う「自分のアプリ名」は、Djangoプロジェクト内で作成した**アプリケーションの名前**（`startapp` コマンドで作ったときに `apps.py` の `name` に記載される値）を指します。
+フォルダ名と一致する場合も多いですが、「必ずしもフォルダ名そのものとは限らない」です。
+
+---
+
+## 1. INSTALLED\_APPS に書く名前の意味
+
+Django では `settings.py` の `INSTALLED_APPS` に、
+**「アプリケーションのフルパス」または「アプリケーション名」** を記載します。
+
+例）アプリを作成
+
+```bash
+python manage.py startapp myapp
+```
+
+この場合、`myapp/apps.py` が作られ、その中に以下のようなクラスができます：
+
+```python
+from django.apps import AppConfig
+
+class MyappConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'myapp'
+```
+
+ここで **`name = 'myapp'`** がアプリ名になります。
+通常はフォルダ名（`myapp`）と一致しますが、複数階層にしている場合や別名を設定している場合は違うことがあります。
+
+---
+
+## 2. 設定例
+
+`settings.py` の `INSTALLED_APPS` に追加するのは、この名前です。
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    # ...
+    'myapp',  # ← apps.py の name と同じ
+]
+```
+
+もし apps.py の `name` が `myproject.myapp` のようになっている場合は、そのフルパスを書きます。
+
+---
+
+## 3. 注意点
+
+* **フォルダ名 = アプリ名** であれば混乱は少ないですが、Djangoは`apps.py`の`name`を基準に認識します。
+* アプリをサブフォルダに置いた場合（例：`apps/blog`）、`name`は`apps.blog`になることがあります。
+* `INSTALLED_APPS` に間違った名前を入れると「No installed app with label...」やImportErrorが発生します。
+
+---
+
+もし希望があれば、`startapp`した後の**自分のアプリ名を正確に確認する方法**もお伝えできます。
+それを使えば「フォルダ名と違う場合」でも迷わず登録できます。

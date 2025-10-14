@@ -1,0 +1,85 @@
+ログアウトボタンを押下した後「HTTP ERROR 405」が表示されてしまいます。
+これはどのようにかいけてしたらよいでしょう？
+**************
+
+「HTTP ERROR 405」は“そのURLでこのHTTPメソッドは許可されていない”という意味です。
+ログアウトのURLと、押しているボタン（リンク／フォーム）の**メソッド(GET/POST)** が食い違っているのが原因です。
+
+解決はどちらかに統一すればOKです。楽なのは以下の2パターンのどちらか。
+
+---
+
+## パターンA：POSTでログアウト（推奨）
+
+### urls.py
+
+```python
+from django.urls import path
+from django.contrib.auth.views import LogoutView
+
+urlpatterns = [
+    # …他
+    path("logout/", LogoutView.as_view(next_page="index"), name="logout"),
+]
+```
+
+### members.html（ログアウトボタン）
+
+```html
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="button">ログアウト</button>
+</form>
+```
+
+> フォームで **POST** を送る → `LogoutView` が受け付ける（CSRFトークン必須）。
+> これで 405 は出ません。
+
+---
+
+## パターンB：GETリンクでログアウト（簡易）
+
+### urls.py
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # …他
+    path("logout/", views.logout_view, name="logout"),
+]
+```
+
+### views.py
+
+```python
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)  # メソッドを限定していないので GET でも動く
+    return redirect("index")
+```
+
+### members.html（ログアウトリンク）
+
+```html
+<a href="{% url 'logout' %}" class="button">ログアウト</a>
+```
+
+> **GETでアクセス**しても処理できるので 405 は出ません（セキュリティポリシー的にはPOST推奨）。
+
+---
+
+## ありがちな落とし穴（どれか当てはまると405になりがち）
+
+* `urls.py` は `LogoutView`（POST想定）なのに、テンプレートは `<a>` の **GETリンク** を使っている
+* `@require_POST` を付けたカスタム `logout_view` に対して **GETリンク** を送っている
+* 逆に、**GETしか受けない** 自作 `logout_view` に **POSTフォーム** を投げている
+* 別URLに向けて送っている（`action` のURL名ミス）
+
+---
+
+上のどちらかのパターンに合わせて、**urls・views・テンプレート**をそろえてください。
+迷ったら **パターンA（POSTフォーム + `LogoutView`）** が安全でおすすめです。

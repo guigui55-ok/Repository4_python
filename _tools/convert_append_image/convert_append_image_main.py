@@ -9,7 +9,7 @@ def run_convert_append_image_main():
     ファイルA=左、ファイルB=右
     入力ディレクトリはAB同じ
     """
-    src_dir_path = Path(r"C:\Users\OK\Desktop\250304交通費image2_2")
+    src_dir_path = Path(r"C:\ZMyFolder\_job\_ost_pdf\250925\経路図")
     dist_dir_path = src_dir_path
 
     # src_file_name_a = "経路図_362037_大窪利之_241203_1.jpg"
@@ -39,9 +39,9 @@ def run_convert_append_image_main():
     # src_file_name_a = "経路図_362037_大窪利之_250228_1.jpg"
     # src_file_name_b = "経路図_362037_大窪利之_250228_2.jpg"
     # dist_file_name = "経路図_362037_大窪利之_250228.jpg"
-    src_file_name_a = "経路図_250228_1.jpg"
-    src_file_name_b = "経路図_250228_2.jpg"
-    dist_file_name = "経路図_250228.jpg"
+    src_file_name_a = "経路図_362037_大窪利之_250925_1.jpg"
+    src_file_name_b = "経路図_362037_大窪利之_250925_2.jpg"
+    dist_file_name = "経路図_2500925.jpg"
 
     src_path_a = src_dir_path / src_file_name_a
     src_path_b = src_dir_path / src_file_name_b

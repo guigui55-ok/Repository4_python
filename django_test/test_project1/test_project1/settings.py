@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'test_project1',
 ]
 
 MIDDLEWARE = [
@@ -77,18 +78,22 @@ WSGI_APPLICATION = 'test_project1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+DB_PATH = str(BASE_DIR) + '/' + 'db.sqlite3'
 
 # デフォルト設定（SQLite）
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': DB_PATH,
+    }
+}
+
+from pathlib import Path
+print(Path(DB_PATH).exists())
 
 # postgreSQL
-from test_project1.__test_my_info_postgre import get_database_info_postgre_default
-DATABASES = get_database_info_postgre_default()
+# from test_project1.__test_my_info_postgre import get_database_info_postgre_default
+# DATABASES = get_database_info_postgre_default()
 
 
 # Password validation
@@ -140,3 +145,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ログイン後どこへ行くか（メンバー画面 or トップなどお好みで）
+LOGIN_REDIRECT_URL = '/members/'   # 例: メンバー画面にしたい場合
+# または
+# LOGIN_REDIRECT_URL = '/'         # トップに戻したい場合
+
+# ログアウト後どこへ行くか
+LOGOUT_REDIRECT_URL = '/'          # トップに戻す例

@@ -1,0 +1,60 @@
+
+PS C:\Users\OK\source\repos\Repository4_python\django_test\test_project1> python manage.py runserver
+templetes dir = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\templates
+static dif = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\static
+templetes dir = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\templates
+static dif = C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\static
+Watching for file changes with StatReloader
+Performing system checks...
+
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "C:\Program Files\Python\Python310\lib\threading.py", line 1009, in _bootstrap_inner
+    self.run()
+  File "C:\Program Files\Python\Python310\lib\threading.py", line 946, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\management\commands\runserver.py", line 133, 
+in inner_run
+    self.check(display_num_errors=True)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\management\base.py", line 486, in check      
+    all_issues = checks.run_checks(
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\checks\registry.py", line 88, in run_checks  
+    new_errors = check(app_configs=app_configs, databases=databases)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\checks\urls.py", line 14, in check_url_config    return check_resolver(resolver)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\core\checks\urls.py", line 24, in check_resolver  
+    return check_method()
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 519, in check
+    for pattern in self.url_patterns:
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 738, in url_patterns     
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\utils\functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "C:\Program Files\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 731, in urlconf_module   
+    return import_module(self.urlconf_name)
+  File "C:\Program Files\Python\Python310\lib\importlib\__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\urls.py", line 21, in <module>
+    from .view_modules import views
+  File "C:\Users\OK\source\repos\Repository4_python\django_test\test_project1\test_project1\view_modules\views.py", line 11, in <module>
+    from forms import LoginForm, SigninForm
+ModuleNotFoundError: No module named 'forms'
+
+
+
+****************
+
+formsのインポートのパスの指定が異なるエラー
+　forms/auth_forms.pyが正しいパス
+
+
+

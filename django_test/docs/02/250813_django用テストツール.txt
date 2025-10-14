@@ -1,0 +1,55 @@
+**`tests.py` は Django アプリ直下（アプリフォルダ内）に置く必要があります**。
+
+整理すると：
+
+---
+
+### Django プロジェクト構成例
+
+```
+test_project1/       <- プロジェクトルート（manage.py がある場所）
+│
+├─ test_project1/    <- プロジェクト設定フォルダ
+│   ├─ settings.py
+│   ├─ urls.py
+│   └─ ...
+│
+├─ accounts/         <- 例: ログイン系アプリ
+│   ├─ views.py
+│   ├─ forms.py
+│   ├─ urls.py
+│   ├─ models.py
+│   ├─ tests.py     <- ここに置く
+│   └─ templates/
+│       └─ accounts/
+│           ├─ login.html
+│           ├─ signup.html
+│           └─ ...
+│
+└─ manage.py
+```
+
+---
+
+### ポイント
+
+1. **アプリ直下**に置くことで、Django の `python manage.py test <app_name>` が自動で検知してテストを実行できます。
+2. `manage.py` と同じ場所に置く必要はありません。プロジェクト全体のルートに置くのは推奨されません。
+3. 複数アプリがある場合は、各アプリ内に `tests.py` を作成するのが一般的です。
+4. `tests` フォルダとして複数ファイルに分けたい場合は、アプリ直下に `tests/` フォルダを作って `__init__.py` を置き、テストファイルを分割可能です。
+
+---
+
+💡 補足
+例えばアプリ名が `accounts` の場合、テスト実行はこうです：
+
+```bash
+python manage.py test accounts
+```
+
+Django が `accounts/tests.py` を自動で検出して実行します。
+
+---
+
+希望であれば、**テストを複数ファイルに分割する方法** も例付きで解説できます。
+やりますか？

@@ -1,77 +1,107 @@
 from django.test import TestCase, Client
-from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib.auth.models import User
 
-class SimpleLoginTests(TestCase):
+class AuthTestCase(TestCase):
 
     def setUp(self):
-        # テスト用ユーザーを作成
-        self.username = 'testuser'
-        self.password = 'TestPass123!'
-        self.user = User.objects.create_user(username=self.username, email='test@example.com', password=self.password)
+        """テスト用ユーザー作成"""
         self.client = Client()
+        self.test_user_email = "testuser@example.com"
+        self.test_user_password = "StrongPass123!"
+        self.user = User.objects.create_user(
+            username="testuser",
+            email=self.test_user_email,
+            password=self.test_user_password
+        )
 
-    def test_index_page_not_logged_in(self):
-        response = self.client.get(reverse('index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'ログイン')
-        self.assertContains(response, 'サインイン')
+    # -----------------------
+    # ユーザー登録（サインイン）
+    # -----------------------
+    def test_signup_success(self):
+        """正しい情報でサインイン成功"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'newuser',
+            'email': 'newuser@example.com',
+            'password1': 'NewStrongPass123!',
+            'password2': 'NewStrongPass123!'
+        })
+        self.assertEqual(response.status_code, 302)  # リダイレクト
+        self.assertTrue(User.objects.filter(username='newuser').exists())
 
-    def test_index_page_logged_in(self):
-        self.client.login(username=self.username, password=self.password)
-        response = self.client.get(reverse('index'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.username)
-        self.assertContains(response, 'メンバー専用ページへ')
-        self.assertContains(response, 'ログアウト')
+    def test_signup_password_mismatch(self):
+        """パスワード確認と不一致"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'user1',
+            'email': 'user1@example.com',
+            'password1': 'pass12345',
+            'password2': 'pass123'
+        })
+        self.assertContains(response, "パスワードが一致しません", html=True)
 
+    def test_signup_duplicate_email(self):
+        """メール重複チェック"""
+        response = self.client.post(reverse('signup'), {
+            'username': 'user2',
+            'email': self.test_user_email,  # 既存ユーザー
+            'password1': 'AnotherPass123!',
+            'password2': 'AnotherPass123!'
+        })
+        self.assertContains(response, "このメールアドレスは既に使用されています", html=True)
+
+    # -----------------------
+    # ログイン
+    # -----------------------
     def test_login_success(self):
-        response = self.client.post(reverse('login'), {'username': self.username, 'password': self.password})
-        self.assertRedirects(response, reverse('members'))
+        """正しい情報でログイン成功"""
+        response = self.client.post(reverse('login'), {
+            'username': self.test_user_email,
+            'password': self.test_user_password
+        })
+        self.assertEqual(response.status_code, 302)  # ログイン後リダイレクト
+        # セッションにユーザーがセットされているか確認
+        response = self.client.get(reverse('members'))
+        self.assertEqual(str(response.context['user']), 'testuser')
 
-    def test_login_failure(self):
-        response = self.client.post(reverse('login'), {'username': self.username, 'password': 'wrongpass'})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'ログイン失敗')
+    def test_login_wrong_password(self):
+        """パスワード間違い"""
+        response = self.client.post(reverse('login'), {
+            'username': self.test_user_email,
+            'password': 'WrongPass'
+        })
+        self.assertContains(response, "パスワードが違います", html=True)
 
+    def test_login_nonexistent_user(self):
+        """存在しないユーザー"""
+        response = self.client.post(reverse('login'), {
+            'username': 'notexist@example.com',
+            'password': 'anyPass123'
+        })
+        self.assertContains(response, "ユーザーが存在しません", html=True)
+
+    # -----------------------
+    # ログアウト
+    # -----------------------
     def test_logout(self):
-        self.client.login(username=self.username, password=self.password)
+        """ログアウト処理"""
+        self.client.login(username=self.test_user_email, password=self.test_user_password)
         response = self.client.get(reverse('logout'))
-        self.assertRedirects(response, reverse('index'))
-        # ログアウト後は未ログイン状態になる
-        response2 = self.client.get(reverse('index'))
-        self.assertContains(response2, 'ログイン')
-
-    def test_signin_success(self):
-        new_email = 'newuser@example.com'
-        new_username = 'newuser'
-        response = self.client.post(reverse('signin'), {
-            'username': new_username,
-            'email': new_email,
-            'password1': 'NewPass123!',
-            'password2': 'NewPass123!',
-        })
-        self.assertRedirects(response, reverse('members'))
-        # ユーザーが作成されていること
-        self.assertTrue(User.objects.filter(username=new_username).exists())
-
-    def test_signin_password_mismatch(self):
-        response = self.client.post(reverse('signin'), {
-            'username': 'anotheruser',
-            'email': 'another@example.com',
-            'password1': 'Pass123!',
-            'password2': 'Mismatch123!',
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'パスワード')
-
-    def test_members_page_requires_login(self):
+        self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('members'))
-        # 未ログイン時はリダイレクトされる想定
-        self.assertNotEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('login') + '?next=' + reverse('members'))
 
-        # ログインしたらアクセス可能
-        self.client.login(username=self.username, password=self.password)
+    # -----------------------
+    # アクセス制御
+    # -----------------------
+    def test_access_members_without_login(self):
+        """未ログインでメンバー画面にアクセス"""
+        response = self.client.get(reverse('members'))
+        self.assertRedirects(response, reverse('login') + '?next=' + reverse('members'))
+
+    def test_access_members_with_login(self):
+        """ログイン済みでメンバー画面にアクセス"""
+        self.client.login(username=self.test_user_email, password=self.test_user_password)
         response = self.client.get(reverse('members'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.username)
+        self.assertContains(response, "メンバー用ページ")  # テンプレート内の文言を確認
+

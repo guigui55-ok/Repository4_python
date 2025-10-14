@@ -419,12 +419,7 @@ https://docs.aws.amazon.com/ja_jp/codedeploy/latest/userguide/tutorials-windows-
 https://aws.amazon.com/jp/local/aws-beginner-six-points/
 無料アカウントを今すぐ作成
 
-E メールアドレス
-utauinu8102@gmail.com
-AWS アカウント名
-necko562
-PW
-Fav_at_aws
+$$$ Info0001 $$$
 
 2段階認証
 連絡先情報の入力
@@ -882,13 +877,7 @@ Rootユーザーの状態にて､下記のURLから AWS Biling のアカウントページにアクセスしま
 https://us-east-1.console.aws.amazon.com/billing/home#/account
 
 
-アカウント ID
-211125549414
-
-アカウント名
-necko562
-
-
+$$$ Info0002 $$$
 
 IAM ユーザーグループのリストの取得
 https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_groups_manage_list.html

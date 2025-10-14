@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>djangoテストページ</title>
-    
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サイトトップ</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+  <div class="container mt-5 text-center">
+    <h1>ようこそ！</h1>
+    <p>簡易ログインシステムのデモページです。</p>
 
-<header>
-    <h1>djangoテストページ</h1>
-</header>
-
-<div class="content">
     {% if user.is_authenticated %}
-        <p>ようこそ、{{ user.username }} さん！</p>
-        <a href="{% url 'members' %}" class="button">メンバー専用ページへ</a>
-        <a href="{% url 'logout' %}" class="button">ログアウト</a>
+      <a href="{% url 'members' %}" class="btn btn-primary">マイページへ</a>
+      <a href="{% url 'logout' %}" class="btn btn-secondary">ログアウト</a>
     {% else %}
-        <p>ログインしていません。</p>
-        <a href="{% url 'login' %}" class="button">ログイン</a>
-        <a href="{% url 'signin' %}" class="button">サインイン</a>
+      <a href="{% url 'login' %}" class="btn btn-primary">ログイン</a>
+      <a href="{% url 'signin' %}" class="btn btn-success">新規登録</a>
     {% endif %}
-</div>
-
-<footer>
-    <p>&copy; 2025 Django Test Page</p>
-</footer>
-
+  </div>
 </body>
 </html>

@@ -1,0 +1,119 @@
+Page not found (404)
+Request Method:	GET
+Request URL:	http://127.0.0.1:8000/accounts/profile/
+Using the URLconf defined in test_project1.urls, Django tried these URL patterns, in this order:
+
+admin/
+[name='test']
+[name='index']
+signin/ [name='signin']
+members/ [name='members']
+login/ [name='login']
+logout/ [name='logout']
+The current path, accounts/profile/, didn’t match any of these.
+
+You’re seeing this error because you have DEBUG = True in your Django settings file. Change that to False, and Django will display a standard 404 page.
+
+
+⇒djangoの規定設定（ログアウト後　/accounts/profile/へリダイレクト）の変更
+
+*******************
+
+エラーの正体は「ログアウト後（もしくはログイン後）のリダイレクト先が `/accounts/profile/` になっているのに、そのURLパターンをあなたの `urls.py` が持っていない」ことです。
+Djangoのデフォルトでは**ログイン成功後の遷移先**が `/accounts/profile/`（= `LOGIN_REDIRECT_URL` の既定値）なので、設定していないと今回の 404 になります。
+
+あなたの URL 一覧を見ると、
+
+```
+admin/
+[name='test']
+[name='index']
+signin/
+members/
+login/
+logout/
+```
+
+に **`accounts/profile/` が存在しません**。
+よって、以下のどちらかで解決します。
+
+---
+
+## 解決策A：リダイレクト先を設定で変える（おすすめ）
+
+### `settings.py` に追記
+
+```python
+# ログイン後どこへ行くか（メンバー画面 or トップなどお好みで）
+LOGIN_REDIRECT_URL = '/members/'   # 例: メンバー画面にしたい場合
+# または
+# LOGIN_REDIRECT_URL = '/'         # トップに戻したい場合
+
+# ログアウト後どこへ行くか
+LOGOUT_REDIRECT_URL = '/'          # トップに戻す例
+```
+
+> これで `/accounts/profile/` へのリダイレクトは発生しません。
+> すでに `LogoutView.as_view(next_page='…')` を使っているなら `LOGOUT_REDIRECT_URL` は不要ですが、**設定側で固定**しておくと迷いが減ります。
+
+また、`LoginView` を使わず自作ビューでログインしているなら、**ログイン成功時の `redirect()`** も見直してください。
+
+```python
+# 例: ログイン成功時
+return redirect('members')  # URL名で指定
+# もしくは
+return redirect('/')        # パスで指定
+```
+
+---
+
+## 解決策B：`/accounts/profile/` を用意する
+
+どうしても既定のままにしたいなら、そのURLを生やします。
+
+```python
+# urls.py（プロジェクト or アプリ）
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
+@login_required
+def dummy_profile(request):
+    return HttpResponse("This is /accounts/profile/")
+
+urlpatterns = [
+    # 既存パターン…
+    path('accounts/profile/', dummy_profile),
+]
+```
+
+> ただし通常は A の「設定を変える」ほうがスッキリします。
+
+---
+
+## 追加チェック（念のため）
+
+* **テンプレートのログアウトボタン**
+  `LogoutView` を使っていて `next_page` を渡していない場合、`settings.LOGOUT_REDIRECT_URL` が無いとテンプレート `registration/logged_out.html` を探します。確実にトップに戻したいなら、上記設定を入れてください。
+
+* **`next` パラメータ**
+  ログインフォームに `?next=/members/` を付けて送ると、その値が優先されます。テンプレートで `next` を隠しフィールドに入れている場合は値が意図通りか確認を。
+
+---
+
+### まとめ
+
+* 404 の原因：Djangoの既定リダイレクト先 `/accounts/profile/` が存在しない。
+* 対処：`settings.py` に
+
+  ```python
+  LOGIN_REDIRECT_URL = '/members/'  # or '/'
+  LOGOUT_REDIRECT_URL = '/'
+  ```
+
+  を設定する（推奨）
+  **または** `/accounts/profile/` のURLを作る。
+
+
+
+
+
